@@ -16,19 +16,32 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * OBU Application - Admin settings.
+ * OBU Application - Home page
  *
  * @package    obu_application
  * @category   local
- * @author     Peter Welham
+ * @author     Peter Welham (derived from '/login/index.php')
  * @copyright  2015, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
  */
+ 
+require('../../config.php');
+require_once('./locallib.php');
 
-defined('MOODLE_INTERNAL') || die;
+// Try to prevent searching for sites that allow sign-up.
+if (!isset($CFG->additionalhtmlhead)) {
+    $CFG->additionalhtmlhead = '';
+}
+$CFG->additionalhtmlhead .= '<meta name="robots" content="noindex" />';
 
-if ($hassiteconfig) {
-/*    $settings = new admin_settingpage(get_string('pluginname', 'local_obu_application'), get_string('title', 'local_obu_application'));
-    $ADMIN->add('localplugins', $settings);
-	$settings->add(new admin_setting_configcheckbox('local_obu_application/showbrisc', get_string('showbrisc', 'local_obu_application'), get_string('showbriscdesc', 'local_obu_application'), '0'));
-*/}
+require_obu_login();
+
+$heading = get_string('plugintitle', 'local_obu_application');
+$PAGE->set_title($heading . ': ' . 'Menu');
+$PAGE->set_heading($heading);
+
+echo $OUTPUT->header();
+inject_css();
+
+echo $OUTPUT->footer();
