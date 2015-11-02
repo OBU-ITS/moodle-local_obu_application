@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="local/obu_application/db" VERSION="20150424" COMMENT="XMLDB file for Moodle local/obu_application"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="local_obu_profile" COMMENT="OBU applicant profiles">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Moodle user ID"/>
+        <FIELD NAME="birthdate" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Date of birth"/>
+        <FIELD NAME="birthcountry" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Country of birth"/>
+        <FIELD NAME="firstentrydate" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Date of first entry to UK"/>
+        <FIELD NAME="lastentrydate" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Date of most recent entry to UK"/>
+        <FIELD NAME="residencedate" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Date granted permanent residence in the EU"/>
+        <FIELD NAME="support" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Preference for specific disability support"/>
+        <FIELD NAME="p16school" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Post 16 School name"/>
+        <FIELD NAME="p16schoolperiod" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Post 16 School period"/>
+        <FIELD NAME="p16fe" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Post 16 Further Education"/>
+        <FIELD NAME="p16feperiod" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Post 16 Further Education period"/>
+        <FIELD NAME="training" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="University/professional training body"/>
+        <FIELD NAME="trainingperiod" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Training period"/>
+        <FIELD NAME="prof_level" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Level of qualification"/>
+        <FIELD NAME="prof_award" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Award name"/>
+        <FIELD NAME="prof_date" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Date qualified"/>
+        <FIELD NAME="emp_place" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Place of employment"/>
+        <FIELD NAME="emp_area" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Clinical area"/>
+        <FIELD NAME="emp_title" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Job title"/>
+        <FIELD NAME="emp_prof" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Profession"/>
+        <FIELD NAME="reg_no" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Professional body registration number"/>
+        <FIELD NAME="criminal_record" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Criminal record?"/>
+        <FIELD NAME="update_date" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Date of last update"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="userid" UNIQUE="true" FIELDS="userid" COMMENT="Moodle user ID"/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>

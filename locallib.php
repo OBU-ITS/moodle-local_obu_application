@@ -24,8 +24,14 @@
  *
  */
  
-// Set our session cookie suffix
+// Set our login cookie suffix (too late for the session cookie)
 $CFG->sessioncookie = 'email';
+
+// Set our own standard page heading
+$CFG->pageheading = get_string('plugintitle', 'local_obu_application');
+
+$PAGE->set_headingmenu('<h1>' . $CFG->pageheading . '</h1>');
+$PAGE->set_heading($CFG->pageheading);
  
 require_once($CFG->libdir . '/password_compat/lib/password.php');
 require_once($CFG->dirroot . '/user/lib.php');
@@ -33,7 +39,7 @@ require_once($CFG->dirroot . '/user/profile/lib.php');
 
 function inject_css() {
 	echo "<script>
-		var css = '.langmenu, .usermenu, .logininfo, .homelink { display: none; }',
+		var css = '.langmenu, .usermenu, .logininfo, .homelink { display: none; } .nav { color: white; }',
 		head = document.head || document.getElementsByTagName('head')[0],
 		style = document.createElement('style');
 
@@ -85,9 +91,7 @@ function application_user_signup($user) { // Derived from email->user_signup
 		print_error('auth_emailnoemail', 'auth_email');
 	}
 	
-	$heading = get_string('plugintitle', 'local_obu_application');
-	$PAGE->set_title($heading . ': ' . get_string('emailconfirm'));
-	$PAGE->set_heading($heading);
+	$PAGE->set_title($CFG->pageheading . ': ' . get_string('emailconfirm'));
 	echo $OUTPUT->header();
 	inject_css();
 	notice(get_string('emailconfirmsent', '', $user->email), $CFG->wwwroot . '/local/obu_application/login.php');
@@ -324,10 +328,7 @@ function authenticate_application_user($username, $password, $ignorelockout = fa
 function display_message($header, $message) {
 	global $CFG, $PAGE, $OUTPUT;
 	
-	$heading = get_string('plugintitle', 'local_obu_application');
-	
-	$PAGE->set_title($heading);
-	$PAGE->set_heading($heading);
+	$PAGE->set_title($CFG->pageheading . ': Message');
 	echo $OUTPUT->header();
 	inject_css();
 	echo $OUTPUT->box_start('generalbox centerpara boxwidthnormal boxaligncenter');

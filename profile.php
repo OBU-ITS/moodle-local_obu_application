@@ -16,7 +16,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * OBU Application - Menu page
+ * OBU Application - Profile page
  *
  * @package    obu_application
  * @category   local
@@ -29,17 +29,40 @@
 require('../../config.php');
 require_once('./locallib.php');
 
-// Try to prevent searching for sites that allow sign-up.
-if (!isset($CFG->additionalhtmlhead)) {
-    $CFG->additionalhtmlhead = '';
-}
-$CFG->additionalhtmlhead .= '<meta name="robots" content="noindex" />';
-
 require_obu_login();
 
-$PAGE->set_title($CFG->pageheading . ': ' . 'Menu');
+$PAGE->set_title($CFG->pageheading . ': ' . get_string('profile', 'local_obu_application');
+
+// HTTPS is required in this page when $CFG->loginhttps enabled
+$PAGE->https_required();
+
+$PAGE->set_url('/local/obu_application/profile.php');
+$PAGE->set_context(context_system::instance());
+
+$parameters = [
+	'formref' => $formref,
+	'record' => $record
+];
+
+include('./profile_form.php');
+$mform = new profile_form(null, $parameters);
+
+if ($mform->is_cancelled()) {
+    redirect('/local/obu_application/');
+} else if ($profile = $mform->get_data()) {
+    $user->confirmed = 0;
+    $user->lang = current_language();
+    $user->firstaccess = time();
+    $user->timecreated = time();
+    $user->mnethostid = $CFG->mnet_localhost_id;
+    $user->secret = random_string(15);
+    $user->auth = 'email';
+	
+    application_user_signup($user); // prints notice and link to 'local/obu_application/index.php'
+    exit; //never reached
+}
 
 echo $OUTPUT->header();
 inject_css();
-
+$mform->display();
 echo $OUTPUT->footer();

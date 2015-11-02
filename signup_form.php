@@ -28,7 +28,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->libdir.'/formslib.php');
+require_once($CFG->libdir . '/formslib.php');
 
 class registration_form extends moodleform {
     function definition() {
@@ -53,7 +53,7 @@ class registration_form extends moodleform {
         $mform->setType('password', PARAM_RAW);
         $mform->addRule('password', get_string('missingpassword'), 'required', null, 'server');
 
-        $mform->addElement('header', 'supplyinfo', get_string('supplyinfo'),'');
+        $mform->addElement('header', 'supplyinfo', get_string('contactdetails', 'local_obu_application'), '');
 
 		$mform->addElement('text', 'idnumber', get_string('title', 'local_obu_application'), 'size="30" maxlength="100"');
 		$mform->setType('idnumber', PARAM_TEXT);
@@ -67,6 +67,14 @@ class registration_form extends moodleform {
 		$mform->setType('lastname', PARAM_TEXT);
 		$mform->addRule('lastname', null, 'required', null, 'server');
 		
+		$mform->addElement('textarea', 'address', get_string('address'), 'cols="40" rows="5"');
+		$mform->setType('address', PARAM_TEXT);
+		$mform->addRule('address', null, 'required', null, 'server');
+
+		$mform->addElement('text', 'city', get_string('postcode', 'local_obu_application'), 'size="15" maxlength="100"');
+		$mform->setType('city', PARAM_TEXT);
+		$mform->addRule('city', null, 'required', null, 'server');
+
 		$mform->addElement('text', 'phone1', get_string('phone', 'local_obu_application'), 'size="30" maxlength="100"');
 		$mform->setType('phone1', PARAM_TEXT);
 		$mform->addRule('phone1', null, 'required', null, 'server');

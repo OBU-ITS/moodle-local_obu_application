@@ -75,8 +75,6 @@ if (!empty($SESSION->has_timed_out)) {
 $frm  = false;
 $user = false;
 
-$heading = get_string('plugintitle', 'local_obu_application');
-
 $frm = data_submitted();
 
 // Check if the user has actually submitted login data to us
@@ -91,8 +89,7 @@ if ($frm and isset($frm->username)) { // Login WITH cookies
 
     // Intercept 'restored' users to provide them with info & reset password
     if (!$user and $frm and is_restored_user($frm->username)) {
-		$PAGE->set_title($heading . ': ' . get_string('restoredaccount'));
-		$PAGE->set_heading($heading);
+		$PAGE->set_title($CFG->pageheading . ': ' . get_string('restoredaccount'));
         echo $OUTPUT->header();
 		inject_css();
         echo $OUTPUT->heading(get_string('restoredaccount'));
@@ -111,8 +108,7 @@ if ($frm and isset($frm->username)) { // Login WITH cookies
 
     if ($user) {
         if (empty($user->confirmed)) { // This account was never confirmed
-			$PAGE->set_title($heading . ': ' . get_string('mustconfirm'));
-            $PAGE->set_heading($heading);
+			$PAGE->set_title($CFG->pageheading . ': ' . get_string('mustconfirm'));
             echo $OUTPUT->header();
 			inject_css();
             echo $OUTPUT->heading(get_string('mustconfirm'));
@@ -209,8 +205,7 @@ if (!empty($SESSION->loginerrormsg)) { // We had some errors before redirect, sh
     redirect(new moodle_url('/local/obu_application/login.php'));
 }
 
-$PAGE->set_title($heading . ': ' . get_string('login'));
-$PAGE->set_heading($heading);
+$PAGE->set_title($CFG->pageheading . ': ' . get_string('login'));
 
 echo $OUTPUT->header();
 inject_css();

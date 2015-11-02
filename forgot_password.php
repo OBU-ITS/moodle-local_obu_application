@@ -39,10 +39,7 @@ $PAGE->https_required();
 $PAGE->set_url('/local/obu_application/forgot_password.php');
 $systemcontext = context_system::instance();
 $PAGE->set_context($systemcontext);
-
-$heading = get_string('plugintitle', 'local_obu_application');
-$PAGE->set_title($heading . ': ' . get_string('passwordforgotten'));
-$PAGE->set_heading($heading);
+$PAGE->set_title($CFG->pageheading . ': ' . get_string('passwordforgotten'));
 
 // If you're logged in then you shouldn't be here!
 if (isloggedin() and !isguestuser()) {

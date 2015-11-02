@@ -27,8 +27,8 @@
  */
  
 require('../../config.php');
-require_once($CFG->dirroot . '/user/editlib.php');
 require_once('./locallib.php');
+require_once($CFG->dirroot . '/user/editlib.php');
 
 // Try to prevent searching for sites that allow sign-up.
 if (!isset($CFG->additionalhtmlhead)) {
@@ -41,8 +41,6 @@ $PAGE->https_required();
 
 $PAGE->set_url('/local/obu_application/signup.php');
 $PAGE->set_context(context_system::instance());
-
-$heading = get_string('plugintitle', 'local_obu_application');
 
 // Override wanted URL, we do not want to end up here again if user clicks "Login"
 $SESSION->wantsurl = $CFG->wwwroot . '/local/obu_application/';
@@ -88,8 +86,7 @@ if ($mform->is_cancelled()) {
 // make sure we really are on the https page when https login required
 $PAGE->verify_https_required();
 
-$PAGE->set_title($heading . ': ' . get_string('registration', 'local_obu_application'));
-$PAGE->set_heading($heading);
+$PAGE->set_title($CFG->pageheading . ': ' . get_string('registration', 'local_obu_application'));
 
 echo $OUTPUT->header();
 inject_css();
