@@ -29,14 +29,14 @@ function local_obu_application_extends_navigation($navigation) {
     global $CFG;
 /*
 	// The required grandparent node must already exist
-	$nodeProfile = $navigation->find('myprofile');
+	$nodeProfile = $navigation->find('myprofile', navigation_node::TYPE_UNKNOWN);
 	if (!$nodeProfile) {
 		return;
 	}
 	
 	// BRISC
 	if ((get_config('local_obu_apps', 'showbrisc') == '1') && has_capability('moodle/blog:create', context_system::instance())) { // Only show if allowed
-		$nodeEmpskills = $nodeProfile->get('empskills'); // Parent ('get' faster than 'find')
+		$nodeEmpskills = $nodeProfile->get('empskills', navigation_node::TYPE_UNKNOWN); // Parent ('get' faster than 'find')
 		if (!$nodeEmpskills) { // Add the parent if necessary
 			$nodeEmpskills = $nodeProfile->add(get_string('empskills', 'local_empskills'),
 				null, TYPE_CUSTOM, null, 'empskills', null); // The 'key' is 'empskills'

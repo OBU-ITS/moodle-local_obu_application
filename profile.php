@@ -28,10 +28,13 @@
  
 require('../../config.php');
 require_once('./locallib.php');
+require_once('./profile_form.php');
 
 require_obu_login();
 
-$PAGE->set_title($CFG->pageheading . ': ' . get_string('profile', 'local_obu_application');
+$url = new moodle_url('/local/obu_application/');
+
+$PAGE->set_title($CFG->pageheading . ': ' . get_string('profile', 'local_obu_application'));
 
 // HTTPS is required in this page when $CFG->loginhttps enabled
 $PAGE->https_required();
@@ -39,30 +42,33 @@ $PAGE->https_required();
 $PAGE->set_url('/local/obu_application/profile.php');
 $PAGE->set_context(context_system::instance());
 
+$message = '';
+
+$record = read_profile($USER->id);
+
 $parameters = [
-	'formref' => $formref,
 	'record' => $record
 ];
 
-include('./profile_form.php');
 $mform = new profile_form(null, $parameters);
 
 if ($mform->is_cancelled()) {
-    redirect('/local/obu_application/');
-} else if ($profile = $mform->get_data()) {
-    $user->confirmed = 0;
-    $user->lang = current_language();
-    $user->firstaccess = time();
-    $user->timecreated = time();
-    $user->mnethostid = $CFG->mnet_localhost_id;
-    $user->secret = random_string(15);
-    $user->auth = 'email';
-	
-    application_user_signup($user); // prints notice and link to 'local/obu_application/index.php'
-    exit; //never reached
-}
+    redirect($url);
+} 
+else if ($mform_data = $mform->get_data()) {
+	if ($mform_data->submitbutton == get_string('save', 'local_obu_application')) {
+		write_profile($USER->id, $mform_data);
+		redirect($url);
+    }
+}	
 
 echo $OUTPUT->header();
-inject_css();
-$mform->display();
+
+if ($message) {
+    notice($message, $url);    
+}
+else {
+    $mform->display();
+}
+
 echo $OUTPUT->footer();

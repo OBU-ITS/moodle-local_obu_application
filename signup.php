@@ -48,7 +48,6 @@ $SESSION->wantsurl = $CFG->wwwroot . '/local/obu_application/';
 // Prevent registering when already logged in
 if (isloggedin()) {
     echo $OUTPUT->header();
-	inject_css();
     echo $OUTPUT->box_start();
     $logout = new single_button(new moodle_url($CFG->httpswwwroot . '/local/obu_application/logout.php',
         array('sesskey' => sesskey(), 'loginpage' => 1)), get_string('logout'), 'post');
@@ -89,6 +88,5 @@ $PAGE->verify_https_required();
 $PAGE->set_title($CFG->pageheading . ': ' . get_string('registration', 'local_obu_application'));
 
 echo $OUTPUT->header();
-inject_css();
 $mform->display();
 echo $OUTPUT->footer();

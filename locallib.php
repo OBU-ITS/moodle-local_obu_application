@@ -27,32 +27,38 @@
 // Set our login cookie suffix (too late for the session cookie)
 $CFG->sessioncookie = 'email';
 
-// Set our own standard page heading
-$CFG->pageheading = get_string('plugintitle', 'local_obu_application');
+// Add our own CSS - mainly to hide the standard Moodle page elements
+$CFG->additionalhtmlhead .= '<style>.langmenu, .usermenu, .logininfo, .homelink, .helplink { display: none; } .nav { color: white; } a.brand { pointer-events: none; }</style>';
 
+// Add our own menu items for logged-in users
+if (isloggedin()) {
+	$CFG->custommenuitems = fullname($USER, true) . "
+	#####
+	Home|/local/obu_application/index.php
+	#####
+	Contact details|/local/obu_application/contact.php
+	#####
+	Profile|/local/obu_application/profile.php
+	#####
+	Apply|/local/obu_application/index.php
+	#####
+	My applications|/local/obu_application/index.php
+	#####
+	Log out|/local/obu_application/logout.php";
+}
+
+// Set our own page heading (non-standard $CFG variable)
+$CFG->pageheading = get_string('plugintitle', 'local_obu_application');
 $PAGE->set_headingmenu('<h1>' . $CFG->pageheading . '</h1>');
 $PAGE->set_heading($CFG->pageheading);
+
+// Add our own footer elements
+$CFG->additionalhtmlfooter .= '<center>©' . date('Y') . ', Oxford Brookes University</center>';
  
 require_once($CFG->libdir . '/password_compat/lib/password.php');
 require_once($CFG->dirroot . '/user/lib.php');
 require_once($CFG->dirroot . '/user/profile/lib.php');
-
-function inject_css() {
-	echo "<script>
-		var css = '.langmenu, .usermenu, .logininfo, .homelink { display: none; } .nav { color: white; }',
-		head = document.head || document.getElementsByTagName('head')[0],
-		style = document.createElement('style');
-
-		style.type = 'text/css';
-		if (style.styleSheet){
-		style.styleSheet.cssText = css;
-		} else {
-		style.appendChild(document.createTextNode(css));
-		}
-
-		head.appendChild(style);
-	</script>";
-}
+require_once($CFG->dirroot . '/local/obu_application/db_update.php');
 
 /**  Determine where a user should be redirected after they have been logged in.
  * @return string url the user should be redirected to.
@@ -93,7 +99,6 @@ function application_user_signup($user) { // Derived from email->user_signup
 	
 	$PAGE->set_title($CFG->pageheading . ': ' . get_string('emailconfirm'));
 	echo $OUTPUT->header();
-	inject_css();
 	notice(get_string('emailconfirmsent', '', $user->email), $CFG->wwwroot . '/local/obu_application/login.php');
 }
 
@@ -120,15 +125,14 @@ function application_user_confirm($username, $confirmsecret) { // Derived from e
 function send_application_confirmation_email($user) {
 	global $CFG;
 
-	$site = get_site();
 	$supportuser = core_user::get_support_user();
 
 	$data = new stdClass();
 	$data->firstname = fullname($user);
-	$data->sitename = format_string($site->fullname);
+	$data->sitename = format_string($CFG->pageheading);
 	$data->admin = generate_email_signoff();
 
-	$subject = get_string('emailconfirmationsubject', '', format_string($site->fullname));
+	$subject = get_string('emailconfirmationsubject', '', $data->sitename);
 	$username = urlencode($user->username);
 	$username = str_replace('.', '%2E', $username); // Prevent problems with trailing dots.
 	$data->link = $CFG->wwwroot . '/local/obu_application/confirm.php?data=' . $user->secret . '/' . $username;
@@ -330,7 +334,6 @@ function display_message($header, $message) {
 	
 	$PAGE->set_title($CFG->pageheading . ': Message');
 	echo $OUTPUT->header();
-	inject_css();
 	echo $OUTPUT->box_start('generalbox centerpara boxwidthnormal boxaligncenter');
 	echo '<h3>' . $header . '</h3>';
 	echo '<p>' . $message . '</p>';

@@ -32,7 +32,7 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 
     $result = true;
 
-    if ($oldversion < 2015101700) {
+    if ($oldversion < 2015102800) {
 
 		// Define table local_obu_users
 		$table = new xmldb_table('local_obu_profile');
@@ -59,7 +59,7 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		$table->add_field('emp_area', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('emp_title', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('emp_prof', XMLDB_TYPE_CHAR, '100', null, null, null, null);
-		$table->add_field('reg_no', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('prof_reg_no', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('criminal_record', XMLDB_TYPE_INTEGER, '1', null, null, null, '0');
 		$table->add_field('update_date', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
 
@@ -75,7 +75,7 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		}
 
         // obu_application savepoint reached
-        upgrade_plugin_savepoint(true, 2015101700, 'local', 'obu_application');
+        upgrade_plugin_savepoint(true, 2015102800, 'local', 'obu_application');
     }
     
     return $result;

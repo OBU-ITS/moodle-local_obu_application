@@ -35,12 +35,16 @@ $string['passwordforgotteninstructions'] = '<p>Only external users not using a B
 $string['registration'] = 'Registration';
 $string['registrationsteps'] = 'Hi! For access to this Brookes site you\'ll need to take a minute to register yourself. Here are the steps: <ol> <li>Fill out the <a href="{$a}">Registration</a> form with your details.</li> <li>An email will be immediately sent to your email address.</li> <li>Read your email, and click on the web link it contains.</li> <li>Your account will be confirmed and you will be logged in.</li> <li>You can now access the site. From now on you will only need to enter your personal email and password (in the form on this page) to log in to your account.</li> </ol>';
 $string['register'] = 'Register';
+$string['save'] = 'Save';
+$string['form_errors'] = 'Your form has errors (please see below).';
 $string['emailandpassword'] = 'Please enter your NHS (or preferred) email address and choose a password';
+$string['newemail'] = 'Email (Note - you would need to use any new address to log in)';
 $string['contactdetails'] = 'Contact details';
 $string['title'] = 'Title';
 $string['postcode'] = 'Postcode';
 $string['phone'] = 'Phone No';
 $string['profile'] = 'Profile';
+$string['birth_head'] = 'Date of birth';
 $string['birthdate'] = 'Date of birth';
 $string['birthcountry'] = 'Country of birth';
 $string['non_eu_head'] = 'Applicants Born Outside the European Union';

@@ -94,7 +94,6 @@ function password_reset_request() {
         // Any email has now been sent.
         // Next display results to requesting user if settings permit.
         echo $OUTPUT->header();
-		inject_css();
 
         if (!empty($CFG->protectusernames)) {
             // Neither confirm, nor deny existance of any username or email address in database.
@@ -142,7 +141,6 @@ function password_reset_request() {
     // DISPLAY FORM.
 
     echo $OUTPUT->header();
-	inject_css();
     echo $OUTPUT->box(get_string('passwordforgotteninstructions', 'local_obu_application'), 'generalbox boxwidthnormal boxaligncenter');
     $mform->display();
 
@@ -171,7 +169,6 @@ function password_set($token) {
         // (suspicious)
         // Direct the user to the forgot password page to request a password reset.
         echo $OUTPUT->header();
-		inject_css();
         notice(get_string('noresetrecord'), $forgotpasswordurl);
         die; // Never reached.
     }
@@ -180,7 +177,6 @@ function password_set($token) {
         // Direct the user to the forgot password page to request a password reset.
         $pwresetmins = floor($pwresettime / MINSECS);
         echo $OUTPUT->header();
-		inject_css();
         notice(get_string('resetrecordexpired', '', $pwresetmins), $forgotpasswordurl);
         die; // Never reached.
     }
@@ -188,7 +184,6 @@ function password_set($token) {
     if ($user->auth === 'nologin') {
         // Bad luck - user is not able to login, do not let them set password.
         echo $OUTPUT->header();
-		inject_css();
         print_error('forgotteninvalidurl');
         die; // Never reached.
     }
@@ -211,7 +206,6 @@ function password_set($token) {
         $mform->set_data($setdata);
         $PAGE->verify_https_required();
         echo $OUTPUT->header();
-		inject_css();
         echo $OUTPUT->box(get_string('setpasswordinstructions'), 'generalbox boxwidthnormal boxaligncenter');
         $mform->display();
         echo $OUTPUT->footer();

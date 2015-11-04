@@ -33,93 +33,117 @@ require_once($CFG->libdir . '/formslib.php');
 class profile_form extends moodleform {
 
     function definition() {
+        global $USER;
+		
         $mform =& $this->_form;
 
         $data = new stdClass();
-		$data->formref = $this->_customdata['formref'];
 		$data->record = $this->_customdata['record'];
 		
-		if ($data->record != null) {
-			$description['text'] = $data->record->description;
+		if ($data->record !== false) {
 			$fields = [
-				'name' => $data->record->name,
-				'description' => $description,
-				'student' => $data->record->student,
-				'visible' => $data->record->visible,
-				'auth_1_role' => $data->record->auth_1_role,
-				'auth_1_notes' => $data->record->auth_1_notes,
-				'auth_2_role' => $data->record->auth_2_role,
-				'auth_2_notes' => $data->record->auth_2_notes,
-				'auth_3_role' => $data->record->auth_3_role,
-				'auth_3_notes' => $data->record->auth_3_notes
+				'birthdate' => $data->record->birthdate,
+				'birthcountry' => $data->record->birthcountry,
+				'firstentrydate' => $data->record->firstentrydate,
+				'lastentrydate' => $data->record->lastentrydate,
+				'residencedate' => $data->record->residencedate,
+				'support' => $data->record->support,
+				'p16school' => $data->record->p16school,
+				'p16schoolperiod' => $data->record->p16schoolperiod,
+				'p16fe' => $data->record->p16fe,
+				'p16feperiod' => $data->record->p16feperiod,
+				'training' => $data->record->training,
+				'trainingperiod' => $data->record->trainingperiod,
+				'prof_level' => $data->record->prof_level,
+				'prof_award' => $data->record->prof_award,
+				'prof_date' => $data->record->prof_date,
+				'emp_place' => $data->record->emp_place,
+				'emp_area' => $data->record->emp_area,
+				'emp_title' => $data->record->emp_title,
+				'emp_prof' => $data->record->emp_prof,
+				'prof_reg_no' => $data->record->prof_reg_no,
+				'criminal_record' => $data->record->criminal_record
 			];
 			$this->set_data($fields);
 		}
 		
-		$mform->addElement('html', '<h2>' . get_string('amend_settings', 'local_obu_forms') . '</h2>');
+		$mform->addElement('html', '<h2>' . fullname($USER, true) . ' - ' .get_string('profile', 'local_obu_application') . '</h2>');
 
-		if ($data->formref == '') {
-			$mform->addElement('text', 'formref', get_string('form', 'local_obu_forms'), 'size="10" maxlength="10"');
-			$this->add_action_buttons(false, get_string('continue', 'local_obu_forms'));
-			return;
-		}
-		$mform->addElement('hidden', 'formref', strtoupper($data->formref));
-		$mform->addElement('static', null, get_string('form', 'local_obu_forms'), strtoupper($data->formref));
-		
-		$mform->addElement('text', 'name', get_string('form_name', 'local_obu_forms'), 'size="60" maxlength="60"');
-		$mform->addElement('editor', 'description', get_string('description', 'local_obu_forms'));
-		$mform->setType('description', PARAM_RAW);
-		$mform->addElement('advcheckbox', 'student', get_string('student_form', 'local_obu_forms'), null, null, array(0, 1));
-		$mform->addElement('advcheckbox', 'visible', get_string('form_visible', 'local_obu_forms'), null, null, array(0, 1));
-		
-		$authorisers = get_authorisers();
-		$select = $mform->addElement('select', 'auth_1_role', get_string('auth_1_role', 'local_obu_forms'), $authorisers, null);
-		$select->setSelected(auth_1_role);
-		$mform->addElement('text', 'auth_1_notes', get_string('auth_1_notes', 'local_obu_forms'), 'size="60" maxlength="200"');
-		$select = $mform->addElement('select', 'auth_2_role', get_string('auth_2_role', 'local_obu_forms'), $authorisers, null);
-		$select->setSelected(auth_2_role);
-		$mform->addElement('text', 'auth_2_notes', get_string('auth_2_notes', 'local_obu_forms'), 'size="60" maxlength="200"');
-		$select = $mform->addElement('select', 'auth_3_role', get_string('auth_3_role', 'local_obu_forms'), $authorisers, null);
-		$select->setSelected(auth_3_role);
-		$mform->addElement('text', 'auth_3_notes', get_string('auth_3_notes', 'local_obu_forms'), 'size="60" maxlength="200"');
+		// This 'dummy' element has two purposes:
+		// - To force open the Moodle Forms invisible fieldset outside of any table on the form (corrupts display otherwise)
+		// - To let us inform the user that there are validation errors without them having to scroll down further
+		$mform->addElement('static', 'form_errors');
 
-        $this->add_action_buttons(true, get_string('save', 'local_obu_forms'));
+        $mform->addElement('header', 'birth_head', get_string('birth_head', 'local_obu_application'), '');
+		$mform->setExpanded('birth_head');
+		$mform->addElement('date_selector', 'birthdate', get_string('birthdate', 'local_obu_application'));
+		$mform->addRule('birthdate', null, 'required', null, 'server');
+        $country = get_string_manager()->get_list_of_countries();
+        $default_country[''] = get_string('selectacountry');
+        $country = array_merge($default_country, $country);
+        $mform->addElement('select', 'birthcountry', get_string('birthcountry', 'local_obu_application'), $country);
+        if( !empty($CFG->country) ){
+            $mform->setDefault('country', $CFG->country);
+        }else{
+            $mform->setDefault('country', '');
+        }
+		$mform->addRule('birthcountry', null, 'required', null, 'server');
+        $mform->addElement('header', 'non_eu_head', get_string('non_eu_head', 'local_obu_application'), '');
+		$mform->setExpanded('non_eu_head');
+		$mform->addElement('text', 'firstentrydate', get_string('firstentrydate', 'local_obu_application'), 'size="40" maxlength="100"');
+		$mform->addElement('text', 'lastentrydate', get_string('lastentrydate', 'local_obu_application'), 'size="40" maxlength="100"');
+		$mform->addElement('text', 'residencedate', get_string('residencedate', 'local_obu_application'), 'size="40" maxlength="100"');
+        $mform->addElement('header', 'needs_head', get_string('needs_head', 'local_obu_application'), '');
+		$mform->setExpanded('needs_head');
+		$mform->addElement('text', 'support', get_string('support', 'local_obu_application'), 'size="40" maxlength="100"');
+        $mform->addElement('header', 'education_head', get_string('education_head', 'local_obu_application'), '');
+		$mform->setExpanded('education_head');
+		$mform->addElement('text', 'p16school', get_string('p16school', 'local_obu_application'), 'size="40" maxlength="100"');
+		$mform->addElement('text', 'p16schoolperiod', get_string('period', 'local_obu_application'), 'size="40" maxlength="100"');
+		$mform->addElement('text', 'p16fe', get_string('p16fe', 'local_obu_application'), 'size="40" maxlength="100"');
+		$mform->addElement('text', 'p16feperiod', get_string('period', 'local_obu_application'), 'size="40" maxlength="100"');
+		$mform->addElement('text', 'training', get_string('training', 'local_obu_application'), 'size="40" maxlength="100"');
+		$mform->addRule('training', null, 'required', null, 'server');
+		$mform->addElement('text', 'trainingperiod', get_string('period', 'local_obu_application'), 'size="40" maxlength="100"');
+		$mform->addRule('trainingperiod', null, 'required', null, 'server');
+        $mform->addElement('header', 'prof_qual_head', get_string('prof_qual_head', 'local_obu_application'), '');
+		$mform->setExpanded('prof_qual_head');
+		$mform->addElement('text', 'prof_level', get_string('prof_level', 'local_obu_application'), 'size="40" maxlength="100"');
+		$mform->addRule('prof_level', null, 'required', null, 'server');
+		$mform->addElement('text', 'prof_award', get_string('prof_award', 'local_obu_application'), 'size="40" maxlength="100"');
+		$mform->addRule('prof_award', null, 'required', null, 'server');
+		$mform->addElement('date_selector', 'prof_date', get_string('prof_date', 'local_obu_application'));
+		$mform->addRule('prof_date', null, 'required', null, 'server');
+        $mform->addElement('header', 'employment_head', get_string('employment_head', 'local_obu_application'), '');
+		$mform->setExpanded('employment_head');
+		$mform->addElement('text', 'emp_place', get_string('emp_place', 'local_obu_application'), 'size="40" maxlength="100"');
+		$mform->addElement('text', 'emp_area', get_string('emp_area', 'local_obu_application'), 'size="40" maxlength="100"');
+		$mform->addElement('text', 'emp_title', get_string('emp_title', 'local_obu_application'), 'size="40" maxlength="100"');
+		$mform->addElement('text', 'emp_prof', get_string('emp_prof', 'local_obu_application'), 'size="40" maxlength="100"');
+        $mform->addElement('header', 'prof_reg_head', get_string('prof_reg_head', 'local_obu_application'), '');
+		$mform->setExpanded('prof_reg_head');
+		$mform->addElement('text', 'prof_reg_no', get_string('prof_reg_no', 'local_obu_application'), 'size="40" maxlength="100"');
+		$mform->addRule('prof_reg_no', null, 'required', null, 'server');
+        $mform->addElement('header', 'criminal_record_head', get_string('criminal_record_head', 'local_obu_application'), '');
+		$mform->setExpanded('criminal_record_head');
+		$mform->addElement('selectyesno', 'criminal_record', get_string('criminal_record', 'local_obu_application'));
+		$mform->addElement('html', '</td></tr></tbody></table>');
+        $this->add_action_buttons(true, get_string('save', 'local_obu_application'));
     }
 
     function validation($data, $files) {
         global $CFG, $DB;
         $errors = parent::validation($data, $files);
-
-        if (!validate_email($data['username'])) {
-            $errors['username'] = get_string('invalidemail');
-        } else if ($DB->record_exists('user', array('email' => $data['username']))) {
-            $errors['username'] = get_string('emailexists') . ' <a href="forgot_password.php">' . get_string('newpassword') . '?</a>';
-        }
-		
+/*
         if (empty($data['email'])) {
             $errors['email'] = get_string('missingemail');
         } else if ($data['email'] != $data['username']) {
             $errors['email'] = get_string('invalidemail');
         }
-		
-        $errmsg = '';
-        if (!check_password_policy($data['password'], $errmsg)) {
-            $errors['password'] = $errmsg;
-        }
-
-        // If reCAPTCHA is setup we would have used it - so check it!
-		if (!empty($CFG->recaptchapublickey) && !empty($CFG->recaptchaprivatekey)) {
-            $recaptcha_element = $this->_form->getElement('recaptcha_element');
-            if (!empty($this->_form->_submitValues['recaptcha_challenge_field'])) {
-                $challenge_field = $this->_form->_submitValues['recaptcha_challenge_field'];
-                $response_field = $this->_form->_submitValues['recaptcha_response_field'];
-                if (true !== ($result = $recaptcha_element->verify($challenge_field, $response_field))) {
-                    $errors['recaptcha'] = $result;
-                }
-            } else {
-                $errors['recaptcha'] = get_string('missingrecaptchachallengefield');
-            }
-        }
+*/
+		if (!empty($errors)) {
+			$errors['form_errors'] = get_string('form_errors', 'local_obu_application');
+		}
 
         return $errors;
     }

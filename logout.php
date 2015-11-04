@@ -49,7 +49,6 @@ if (!isloggedin()) {
 } else if (!confirm_sesskey($sesskey)) {
     $PAGE->set_title($CFG->pageheading . ': Logout');
     echo $OUTPUT->header();
-	inject_css();
     echo $OUTPUT->confirm(get_string('logoutconfirm'), new moodle_url($PAGE->url, array('sesskey' => sesskey())), $redirect);
     echo $OUTPUT->footer();
     die;

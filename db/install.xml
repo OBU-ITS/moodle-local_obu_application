@@ -27,7 +27,7 @@
         <FIELD NAME="emp_area" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Clinical area"/>
         <FIELD NAME="emp_title" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Job title"/>
         <FIELD NAME="emp_prof" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Profession"/>
-        <FIELD NAME="reg_no" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Professional body registration number"/>
+        <FIELD NAME="prof_reg_no" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Professional body registration number"/>
         <FIELD NAME="criminal_record" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Criminal record?"/>
         <FIELD NAME="update_date" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Date of last update"/>
       </FIELDS>

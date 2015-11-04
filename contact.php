@@ -16,7 +16,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * OBU Application - Menu page
+ * OBU Application - Contact details
  *
  * @package    obu_application
  * @category   local
@@ -28,23 +28,47 @@
  
 require('../../config.php');
 require_once('./locallib.php');
-
-// Try to prevent searching for sites that allow sign-up.
-if (!isset($CFG->additionalhtmlhead)) {
-    $CFG->additionalhtmlhead = '';
-}
-$CFG->additionalhtmlhead .= '<meta name="robots" content="noindex" />';
+require_once('./contact_form.php');
 
 require_obu_login();
 
-$PAGE->set_title($CFG->pageheading . ': ' . 'Menu');
+$url = new moodle_url('/local/obu_application/');
+
+$PAGE->set_title($CFG->pageheading . ': ' . get_string('contactdetails', 'local_obu_application'));
+
+// HTTPS is required in this page when $CFG->loginhttps enabled
+$PAGE->https_required();
+
+$PAGE->set_url('/local/obu_application/contact.php');
+$PAGE->set_context(context_system::instance());
+
+$message = '';
+
+$record = read_user($USER->id);
+
+$parameters = [
+	'record' => $record
+];
+
+$mform = new contact_form(null, $parameters);
+
+if ($mform->is_cancelled()) {
+    redirect($url);
+} 
+else if ($mform_data = $mform->get_data()) {
+	if ($mform_data->submitbutton == get_string('save', 'local_obu_application')) {
+		write_user($USER->id, $mform_data);
+		redirect($url);
+    }
+}	
 
 echo $OUTPUT->header();
-echo '<h2>Faculty of Health and Life Sciences</h2>';
-echo 'We offer a range of short courses for health and social care professionals:
-<ul>
-<li>Postgraduate short courses</li>
-<li>Post-qualification / post-registration short courses</li>
-<li>Institute of Public Care courses</li>
-</ul>';
+
+if ($message) {
+    notice($message, $url);    
+}
+else {
+    $mform->display();
+}
+
 echo $OUTPUT->footer();

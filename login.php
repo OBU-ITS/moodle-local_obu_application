@@ -91,7 +91,6 @@ if ($frm and isset($frm->username)) { // Login WITH cookies
     if (!$user and $frm and is_restored_user($frm->username)) {
 		$PAGE->set_title($CFG->pageheading . ': ' . get_string('restoredaccount'));
         echo $OUTPUT->header();
-		inject_css();
         echo $OUTPUT->heading(get_string('restoredaccount'));
         echo $OUTPUT->box(get_string('restoredaccountinfo'), 'generalbox boxaligncenter');
         require_once('restored_password_form.php');
@@ -110,7 +109,6 @@ if ($frm and isset($frm->username)) { // Login WITH cookies
         if (empty($user->confirmed)) { // This account was never confirmed
 			$PAGE->set_title($CFG->pageheading . ': ' . get_string('mustconfirm'));
             echo $OUTPUT->header();
-			inject_css();
             echo $OUTPUT->heading(get_string('mustconfirm'));
             echo $OUTPUT->box(get_string('emailconfirmsent', '', $user->email), 'generalbox boxaligncenter');
             echo $OUTPUT->footer();
@@ -208,7 +206,6 @@ if (!empty($SESSION->loginerrormsg)) { // We had some errors before redirect, sh
 $PAGE->set_title($CFG->pageheading . ': ' . get_string('login'));
 
 echo $OUTPUT->header();
-inject_css();
 
 if (isloggedin()) { // Prevent login when already logged in, we do not want them to relogin by accident because sesskey would be changed
     echo $OUTPUT->box_start();
