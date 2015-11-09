@@ -16,7 +16,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * OBU Application - Profile page
+ * OBU Application - Apply page
  *
  * @package    obu_application
  * @category   local
@@ -28,36 +28,42 @@
  
 require('../../config.php');
 require_once('./locallib.php');
-require_once('./profile_form.php');
+require_once('./apply_form.php');
 
 require_obu_login();
 
 $url = new moodle_url('/local/obu_application/');
 
-$PAGE->set_title($CFG->pageheading . ': ' . get_string('profile', 'local_obu_application'));
+$PAGE->set_title($CFG->pageheading . ': ' . get_string('apply', 'local_obu_application'));
 
 // HTTPS is required in this page when $CFG->loginhttps enabled
 $PAGE->https_required();
 
-$PAGE->set_url('/local/obu_application/profile.php');
+$PAGE->set_url('/local/obu_application/apply.php');
 $PAGE->set_context(context_system::instance());
 
-$message = '';
-
-$record = read_applicant($USER->id, false); // May not exist yet
+$record = read_applicant($USER->id, false);
+if ($record === false) { // Must have completed the profile
+	$message = get_string('complete_profile', 'local_obu_application');
+}
+else if ($record->module_1_no === '') { // Must have completed the course
+	$message = get_string('complete_course', 'local_obu_application');
+} else {
+	$message = '';
+}
 
 $parameters = [
 	'record' => $record
 ];
 
-$mform = new profile_form(null, $parameters);
+$mform = new apply_form(null, $parameters);
 
 if ($mform->is_cancelled()) {
     redirect($url);
 } 
 else if ($mform_data = $mform->get_data()) {
-	if ($mform_data->submitbutton == get_string('save', 'local_obu_application')) {
-		write_profile($USER->id, $mform_data);
+	if ($mform_data->submitbutton == get_string('apply', 'local_obu_application')) {
+//		write_course($USER->id, $mform_data);
 		redirect($url);
     }
 }	

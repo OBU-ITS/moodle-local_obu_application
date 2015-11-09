@@ -26,8 +26,11 @@
  *
  */
 
-$string['pluginname'] = 'obu_application';
+$string['pluginname'] = 'OBU application';
 $string['plugintitle'] = 'HLS Application';
+
+$string['supportcontact'] = 'Support contact';
+$string['supportdesc'] = 'Name and or email of the support contact within Brookes';
 
 $string['rememberemail'] = 'Remember email';
 $string['forgotten'] = 'Forgotten your password? ';
@@ -72,6 +75,28 @@ $string['prof_reg_head'] = 'Professional Registration';
 $string['prof_reg_no'] = 'Professional body registration number (NMC PIN; HCPC registration)';
 $string['criminal_record_head'] = 'Criminal Record';
 $string['criminal_record'] = 'Please indicate';
+$string['course'] = 'Course';
+$string['complete_profile'] = 'Please complete your profile first';
+$string['award_head'] = 'Short course award (if not an Associate Student)';
+$string['award_name'] = 'Award name';
+$string['module_head'] = 'Modules (level 6 or 7 if an Associate Student)';
+$string['start_date'] = 'Start date';
+$string['module_no'] = 'Module no';
+$string['module_name'] = 'Module name';
+$string['statement_head'] = 'Supporting statement';
+$string['statement'] = 'How will your studies enhance your professional practice?';
+$string['apply'] = 'Apply';
+$string['complete_course'] = 'Please complete your course first';
+$string['authoriser'] = 'Authorising manager';
+$string['finalise'] = 'Finalise application';
+$string['self_funded'] = 'Self-funded';
+$string['self_funded_text'] = 'Are you a self-funding applicant?';
+$string['declaration'] = 'Declaration';
+$string['declaration_text'] = 'I confirm that the information given in this application is complete and accurateand no information
+requested or other material information has been omitted. I give my consent to the processing of my data by Oxford Brookes University.
+I have read the Conditions of Acceptance in the Prospectus and undertake to be bound by those conditions.';
+$string['myapplications'] = 'My applications';
+$string['logout'] = 'Log out';
 
 $string[''] = '';
 

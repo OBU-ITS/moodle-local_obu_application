@@ -54,8 +54,14 @@ function read_user($user_id) {
 function write_profile($user_id, $form_data) {
 	global $DB;
 	
-    $record = new stdClass();
-    $record->userid = $user_id;
+	$record = read_applicant($user_id, false); // May not exist yet
+	if ($record === false) {
+		$record = new stdClass();
+		$record->id = 0;
+		$record->userid = $user_id;
+	}
+	
+	// Update the applicant's profile fields
     $record->birthdate = $form_data->birthdate;
     $record->birthcountry = $form_data->birthcountry;
     $record->firstentrydate = $form_data->firstentrydate;
@@ -77,24 +83,48 @@ function write_profile($user_id, $form_data) {
     $record->emp_prof = $form_data->emp_prof;
     $record->prof_reg_no = $form_data->prof_reg_no;
     $record->criminal_record = $form_data->criminal_record;
-    $record->update_date = time();
+    $record->profile_update = time();
 
-	$profile = read_profile($record->userid);
-	if ($profile !== false) {
-		$id = $profile->id;
-		$record->id = $id;
-		$DB->update_record('local_obu_profile', $record);
+	if ($record->id == 0) { // New record
+		$id = $DB->insert_record('local_obu_applicant', $record);
 	} else {		
-		$id = $DB->insert_record('local_obu_profile', $record);
+		$id = $record->id;
+		$DB->update_record('local_obu_applicant', $record);
 	}
 	
 	return $id;
 }
 
-function read_profile($user_id) {
+function write_course($user_id, $form_data) {
+	global $DB;
+	
+	$record = read_applicant($user_id, true); // Must already exist
+
+	// Update the applicant's course fields
+    $record->award_name = $form_data->award_name;
+    $record->start_date = $form_data->start_date;
+    $record->module_1_no = $form_data->module_1_no;
+    $record->module_1_name = $form_data->module_1_name;
+    $record->module_2_no = $form_data->module_2_no;
+    $record->module_2_name = $form_data->module_2_name;
+    $record->module_3_no = $form_data->module_3_no;
+    $record->module_3_name = $form_data->module_3_name;
+    $record->statement = $form_data->statement;
+    $record->course_update = time();
+
+	return $DB->update_record('local_obu_applicant', $record);
+}
+
+function read_applicant($user_id, $must_exist) {
     global $DB;
     
-	$profile = $DB->get_record('local_obu_profile', array('userid' => $user_id), '*');
+	if ($must_exist) {
+		$strictness = MUST_EXIST;
+	} else {
+		$strictness = IGNORE_MISSING;
+	}
 	
-	return $profile;	
+	$applicant = $DB->get_record('local_obu_applicant', array('userid' => $user_id), '*', $strictness);
+	
+	return $applicant;	
 }

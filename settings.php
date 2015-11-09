@@ -28,7 +28,8 @@
 defined('MOODLE_INTERNAL') || die;
 
 if ($hassiteconfig) {
-/*    $settings = new admin_settingpage(get_string('pluginname', 'local_obu_application'), get_string('title', 'local_obu_application'));
+    $settings = new admin_settingpage(get_string('pluginname', 'local_obu_application'), get_string('plugintitle', 'local_obu_application'));
     $ADMIN->add('localplugins', $settings);
-	$settings->add(new admin_setting_configcheckbox('local_obu_application/showbrisc', get_string('showbrisc', 'local_obu_application'), get_string('showbriscdesc', 'local_obu_application'), '0'));
-*/}
+    $settings->add(new admin_setting_configtext('obu_application/support', get_string('supportcontact', 'local_obu_application'),
+		get_string('supportdesc', 'local_obu_application'), 'moodle@brookes.ac.uk', PARAM_TEXT));
+}

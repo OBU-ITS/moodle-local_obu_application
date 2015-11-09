@@ -4,7 +4,7 @@
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
   <TABLES>
-    <TABLE NAME="local_obu_profile" COMMENT="OBU applicant profiles">
+    <TABLE NAME="local_obu_applicant" COMMENT="OBU applicants">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Moodle user ID"/>
@@ -29,7 +29,17 @@
         <FIELD NAME="emp_prof" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Profession"/>
         <FIELD NAME="prof_reg_no" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Professional body registration number"/>
         <FIELD NAME="criminal_record" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Criminal record?"/>
-        <FIELD NAME="update_date" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Date of last update"/>
+        <FIELD NAME="profile_update" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Date of last profile update"/>
+        <FIELD NAME="award_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Short course award name"/>
+        <FIELD NAME="start_date" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Course start date"/>
+        <FIELD NAME="module_1_no" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 1 number"/>
+        <FIELD NAME="module_1_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 1 name"/>
+        <FIELD NAME="module_1_no" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 2 number"/>
+        <FIELD NAME="module_1_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 2 name"/>
+        <FIELD NAME="module_1_no" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 3 number"/>
+        <FIELD NAME="module_1_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 3 name"/>
+        <FIELD NAME="statement" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Supporting statement"/>
+        <FIELD NAME="course_update" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Date of last course update"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

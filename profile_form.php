@@ -67,7 +67,7 @@ class profile_form extends moodleform {
 			$this->set_data($fields);
 		}
 		
-		$mform->addElement('html', '<h2>' . fullname($USER, true) . ' - ' .get_string('profile', 'local_obu_application') . '</h2>');
+		$mform->addElement('html', '<h2>' . fullname($USER, true) . ' - ' . get_string('profile', 'local_obu_application') . '</h2>');
 
 		// This 'dummy' element has two purposes:
 		// - To force open the Moodle Forms invisible fieldset outside of any table on the form (corrupts display otherwise)
@@ -127,8 +127,7 @@ class profile_form extends moodleform {
         $mform->addElement('header', 'criminal_record_head', get_string('criminal_record_head', 'local_obu_application'), '');
 		$mform->setExpanded('criminal_record_head');
 		$mform->addElement('selectyesno', 'criminal_record', get_string('criminal_record', 'local_obu_application'));
-		$mform->addElement('html', '</td></tr></tbody></table>');
-        $this->add_action_buttons(true, get_string('save', 'local_obu_application'));
+       $this->add_action_buttons(true, get_string('save', 'local_obu_application'));
     }
 
     function validation($data, $files) {

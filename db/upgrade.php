@@ -32,10 +32,10 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 
     $result = true;
 
-    if ($oldversion < 2015102800) {
+    if ($oldversion < 2015110500) {
 
-		// Define table local_obu_users
-		$table = new xmldb_table('local_obu_profile');
+		// Define table local_obu_applicant
+		$table = new xmldb_table('local_obu_applicant');
 
 		// Add fields
 		$table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
@@ -61,7 +61,17 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		$table->add_field('emp_prof', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('prof_reg_no', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('criminal_record', XMLDB_TYPE_INTEGER, '1', null, null, null, '0');
-		$table->add_field('update_date', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+		$table->add_field('profile_update', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+		$table->add_field('award_name', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('start_date', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('module_1_no', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('module_1_name', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('module_2_no', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('module_2_name', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('module_3_no', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('module_3_name', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('statement', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
+		$table->add_field('course_update', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
 
 		// Add keys
 		$table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
@@ -73,9 +83,78 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		if (!$dbman->table_exists($table)) {
 			$dbman->create_table($table);
 		}
+    }
+	
+    if ($oldversion < 2015110900) {
+
+		// Define table local_obu_application
+		$table = new xmldb_table('local_obu_application');
+
+		// Add fields
+		$table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+		$table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+		$table->add_field('title', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('firstname', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('lastname', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('address', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
+		$table->add_field('postcode', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('phone', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('email', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('birthdate', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
+		$table->add_field('birthcountry', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('firstentrydate', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
+		$table->add_field('lastentrydate', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
+		$table->add_field('residencedate', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
+		$table->add_field('support', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('p16school', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('p16schoolperiod', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('p16fe', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('p16feperiod', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('training', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('trainingperiod', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('prof_level', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('prof_award', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('prof_date', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
+		$table->add_field('emp_place', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('emp_area', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('emp_title', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('emp_prof', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('prof_reg_no', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('criminal_record', XMLDB_TYPE_INTEGER, '1', null, null, null, '0');
+		$table->add_field('award_name', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('start_date', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('module_1_no', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('module_1_name', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('module_2_no', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('module_2_name', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('module_3_no', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('module_3_name', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('statement', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
+		$table->add_field('self_funding', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
+		$table->add_field('manager_email', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('disclaimer', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
+		$table->add_field('application_date', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+		$table->add_field('approval_1_status', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
+		$table->add_field('approval_1_comments', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
+		$table->add_field('approval_1_date', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+		$table->add_field('tel_email', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('approval_2_status', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
+		$table->add_field('approval_2_comments', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
+		$table->add_field('approval_2_date', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+
+		// Add keys
+		$table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+
+		// Add indexes
+		$table->add_index('application', XMLDB_INDEX_UNIQUE, array('userid', 'id'));
+
+		// Conditionally create table
+		if (!$dbman->table_exists($table)) {
+			$dbman->create_table($table);
+		}
 
         // obu_application savepoint reached
-        upgrade_plugin_savepoint(true, 2015102800, 'local', 'obu_application');
+        upgrade_plugin_savepoint(true, 2015110900, 'local', 'obu_application');
     }
     
     return $result;

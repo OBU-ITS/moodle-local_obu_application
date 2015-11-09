@@ -32,19 +32,19 @@ $CFG->additionalhtmlhead .= '<style>.langmenu, .usermenu, .logininfo, .homelink,
 
 // Add our own menu items for logged-in users
 if (isloggedin()) {
-	$CFG->custommenuitems = fullname($USER, true) . "
+	$CFG->custommenuitems = fullname($USER, true) . '
 	#####
-	Home|/local/obu_application/index.php
+	' . get_string('contactdetails', 'local_obu_application') . '|/local/obu_application/contact.php
 	#####
-	Contact details|/local/obu_application/contact.php
+	' . get_string('profile', 'local_obu_application') . '|/local/obu_application/profile.php
 	#####
-	Profile|/local/obu_application/profile.php
+	' . get_string('course', 'local_obu_application') . '|/local/obu_application/course.php
 	#####
-	Apply|/local/obu_application/index.php
+	' . get_string('apply', 'local_obu_application') . '|/local/obu_application/apply.php
 	#####
-	My applications|/local/obu_application/index.php
+	' . get_string('myapplications', 'local_obu_application') . '|/local/obu_application/index.php
 	#####
-	Log out|/local/obu_application/logout.php";
+	' . get_string('logout', 'local_obu_application') . '|/local/obu_application/logout.php';
 }
 
 // Set our own page heading (non-standard $CFG variable)
