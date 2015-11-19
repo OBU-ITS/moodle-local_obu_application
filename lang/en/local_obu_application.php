@@ -28,6 +28,14 @@
 
 $string['pluginname'] = 'OBU application';
 $string['plugintitle'] = 'HLS Application';
+$string['obu_application:manage'] = 'Manage, view and approve applications in obu_application';
+
+$string['application_approvals'] = 'Application approvals';
+$string['hls_approvals'] = 'HLS approvals';
+$string['list_applications'] = 'List a user\'s applications';
+$string['redirect_application'] = 'Redirect application';
+
+$string['invalid_data'] = 'Invalid Data';
 
 $string['supportcontact'] = 'Support contact';
 $string['supportdesc'] = 'Name and or email of the support contact within Brookes';
@@ -37,12 +45,30 @@ $string['forgotten'] = 'Forgotten your password? ';
 $string['passwordforgotteninstructions'] = '<p>Only external users not using a Brookes login may use the form below. Please enter the email address you used to register. We will search for your account and send you further instructions on how to regain access to the site.</p>';
 $string['registration'] = 'Registration';
 $string['registrationsteps'] = 'Hi! For access to this Brookes site you\'ll need to take a minute to register yourself. Here are the steps: <ol> <li>Fill out the <a href="{$a}">Registration</a> form with your details.</li> <li>An email will be immediately sent to your email address.</li> <li>Read your email, and click on the web link it contains.</li> <li>Your account will be confirmed and you will be logged in.</li> <li>You can now access the site. From now on you will only need to enter your personal email and password (in the form on this page) to log in to your account.</li> </ol>';
+
+$string['application'] = 'Application (Ref No {$a})';
+$string['applications'] = 'Applications';
+$string['approvals'] = 'Approvals';
 $string['register'] = 'Register';
 $string['save'] = 'Save';
+$string['process'] = 'Process';
+$string['continue'] = 'Continue';
+$string['approve'] = 'Approve';
+$string['reject'] = 'Reject';
+$string['comment'] = 'Comment or Reason for Rejection';
+
+$string['application_unavailable'] = 'Sorry, this application is unavailable to you.';
 $string['form_errors'] = 'Your form has errors (please see below).';
+$string['user_not_found'] = 'User not found.';
+$string['status'] = 'Status';
+$string['status_not_submitted'] = 'Has not been submitted.';
+$string['status_rejected'] = 'Cannot be processed.';
+$string['status_processed'] = 'Has been processed.';
+
 $string['emailandpassword'] = 'Please enter your NHS (or preferred) email address and choose a password';
 $string['newemail'] = 'Email (Note - you would need to use any new address to log in)';
 $string['contactdetails'] = 'Contact details';
+$string['name'] = 'Name';
 $string['title'] = 'Title';
 $string['postcode'] = 'Postcode';
 $string['phone'] = 'Phone No';
@@ -89,13 +115,28 @@ $string['apply'] = 'Apply';
 $string['complete_course'] = 'Please complete your course first';
 $string['authoriser'] = 'Authorising manager';
 $string['finalise'] = 'Finalise application';
-$string['self_funded'] = 'Self-funded';
-$string['self_funded_text'] = 'Are you a self-funding applicant?';
+$string['self_funding'] = 'Self-funding';
+$string['self_funding_text'] = 'Are you a self-funding applicant?';
 $string['declaration'] = 'Declaration';
 $string['declaration_text'] = 'I confirm that the information given in this application is complete and accurateand no information
 requested or other material information has been omitted. I give my consent to the processing of my data by Oxford Brookes University.
 I have read the Conditions of Acceptance in the Prospectus and undertake to be bound by those conditions.';
+
+$string['actioned_by'] = '{$a->action} by {$a->by}.';
+$string['submitted'] = 'Submitted';
+$string['approved'] = 'Approved';
+$string['rejected'] = 'Rejected';
+$string['processed'] = 'Processed';
+
+$string['awaiting_action'] = 'Awaiting {$a->action} by {$a->by}.';
+$string['amendment'] = 'amendment/resubmission';
+$string['submission'] = 'submission';
+$string['approval'] = 'approval';
+
+$string['request_approval'] = 'Could you please approve this {$a} for me or let me know why you couldn\'t do so.  Thank you.';
+
 $string['myapplications'] = 'My applications';
+
 $string['logout'] = 'Log out';
 
 $string[''] = '';

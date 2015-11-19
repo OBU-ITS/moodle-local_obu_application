@@ -4,7 +4,8 @@
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
   <TABLES>
-    <TABLE NAME="local_obu_applicant" COMMENT="OBU applicants">
+
+  <TABLE NAME="local_obu_applicant" COMMENT="OBU applicants">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Moodle user ID"/>
@@ -48,5 +49,85 @@
         <INDEX NAME="userid" UNIQUE="true" FIELDS="userid" COMMENT="Moodle user ID"/>
       </INDEXES>
     </TABLE>
-  </TABLES>
+	
+    <TABLE NAME="local_obu_application" COMMENT="OBU applications">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Moodle user ID"/>
+        <FIELD NAME="title" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Title"/>
+        <FIELD NAME="firstname" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="First name"/>
+        <FIELD NAME="lastname" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Last name (surname)"/>
+        <FIELD NAME="address" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Address"/>
+        <FIELD NAME="postcode" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Postcode"/>
+        <FIELD NAME="phone" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Phone"/>
+        <FIELD NAME="email" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Email"/>
+        <FIELD NAME="birthdate" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Date of birth"/>
+        <FIELD NAME="birthcountry" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Country of birth"/>
+        <FIELD NAME="firstentrydate" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Date of first entry to UK"/>
+        <FIELD NAME="lastentrydate" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Date of most recent entry to UK"/>
+        <FIELD NAME="residencedate" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Date granted permanent residence in the EU"/>
+        <FIELD NAME="support" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Preference for specific disability support"/>
+        <FIELD NAME="p16school" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Post 16 School name"/>
+        <FIELD NAME="p16schoolperiod" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Post 16 School period"/>
+        <FIELD NAME="p16fe" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Post 16 Further Education"/>
+        <FIELD NAME="p16feperiod" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Post 16 Further Education period"/>
+        <FIELD NAME="training" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="University/professional training body"/>
+        <FIELD NAME="trainingperiod" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Training period"/>
+        <FIELD NAME="prof_level" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Level of qualification"/>
+        <FIELD NAME="prof_award" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Award name"/>
+        <FIELD NAME="prof_date" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Date qualified"/>
+        <FIELD NAME="emp_place" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Place of employment"/>
+        <FIELD NAME="emp_area" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Clinical area"/>
+        <FIELD NAME="emp_title" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Job title"/>
+        <FIELD NAME="emp_prof" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Profession"/>
+        <FIELD NAME="prof_reg_no" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Professional body registration number"/>
+        <FIELD NAME="criminal_record" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Criminal record?"/>
+        <FIELD NAME="award_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Short course award name"/>
+        <FIELD NAME="start_date" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Course start date"/>
+        <FIELD NAME="module_1_no" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 1 number"/>
+        <FIELD NAME="module_1_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 1 name"/>
+        <FIELD NAME="module_1_no" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 2 number"/>
+        <FIELD NAME="module_1_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 2 name"/>
+        <FIELD NAME="module_1_no" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 3 number"/>
+        <FIELD NAME="module_1_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 3 name"/>
+        <FIELD NAME="statement" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Supporting statement"/>
+        <FIELD NAME="self_funding" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Self-funding?"/>
+        <FIELD NAME="manager_email" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Email of authorising manager"/>
+        <FIELD NAME="declaration" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Mandatory declaration"/>
+        <FIELD NAME="application_date" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Date of application"/>
+        <FIELD NAME="approval_level" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Current level of approval"/>
+        <FIELD NAME="approval_state" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Current state of approval"/>
+        <FIELD NAME="approval_1_comments" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Approval 1 comments"/>
+        <FIELD NAME="approval_1_date" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Approval 1 date"/>
+        <FIELD NAME="tel_email" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Email of Trust Education Lead"/>
+        <FIELD NAME="approval_2_comments" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Approval 2 comments"/>
+        <FIELD NAME="approval_2_date" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Approval 2 date"/>
+        <FIELD NAME="approval_3_comments" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Approval 3 comments"/>
+        <FIELD NAME="approval_3_date" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Approval 3 date"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="application" UNIQUE="true" FIELDS="userid, id" COMMENT="Application ID"/>
+      </INDEXES>
+    </TABLE>
+
+    <TABLE NAME="local_obu_approval" COMMENT="OBU approvals requested">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="application_id" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The ID of the application that requires approval"/>
+        <FIELD NAME="approver" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Approver's email address"/>
+        <FIELD NAME="request_date" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Date of approval request"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="application" UNIQUE="true" FIELDS="application_id" COMMENT="The application that requires approval"/>
+        <INDEX NAME="approver" UNIQUE="false" FIELDS="approver" COMMENT="The required approver's email address"/>
+      </INDEXES>
+    </TABLE>
+
+	</TABLES>
 </XMLDB>

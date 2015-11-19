@@ -27,6 +27,7 @@
  */
  
 require('../../config.php');
+require_once('./hide_moodle.php');
 require_once('./locallib.php');
 
 // Try to prevent searching for sites that allow sign-up.
@@ -40,8 +41,9 @@ require_obu_login();
 $PAGE->set_title($CFG->pageheading . ': ' . 'Menu');
 
 echo $OUTPUT->header();
-echo '<h2>Faculty of Health and Life Sciences</h2>';
-echo 'We offer a range of short courses for health and social care professionals:
+echo '<audio autoplay><source src="https://brookes-apps.appspot.com/say.php?' . $USER->firstname . ', please select an option." type="audio/wav"></audio>';
+echo '<h2>Faculty of Health and Life Sciences</h2>
+We offer a range of short courses for health and social care professionals:
 <ul>
 <li>Postgraduate short courses</li>
 <li>Post-qualification / post-registration short courses</li>

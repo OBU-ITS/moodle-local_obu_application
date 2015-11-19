@@ -33,11 +33,8 @@ require_once($CFG->libdir . '/formslib.php');
 class apply_form extends moodleform {
 
     function definition() {
-        global $USER;
 		
         $mform =& $this->_form;
-
-		$mform->addElement('html', '<h2>' . fullname($USER, true) . ' - ' . get_string('apply', 'local_obu_application') . '</h2>');
 
 		// This 'dummy' element has two purposes:
 		// - To force open the Moodle Forms invisible fieldset outside of any table on the form (corrupts display otherwise)
@@ -47,9 +44,9 @@ class apply_form extends moodleform {
         $mform->addElement('header', 'authoriser', get_string('authoriser', 'local_obu_application'), '');
 		include('./email_fields.php');
 		
-        $mform->addElement('header', 'finalise', get_string('finalise', 'local_obu_application'), '');
-		$mform->addElement('advcheckbox', 'self_funded', get_string('self_funded', 'local_obu_application'),
-			get_string('self_funded_text', 'local_obu_application'), null, array(0, 1));
+        $mform->addElement('header', 'declaration_head', get_string('declaration', 'local_obu_application'), '');
+		$mform->addElement('advcheckbox', 'self_funding', get_string('self_funding', 'local_obu_application'),
+			get_string('self_funding_text', 'local_obu_application'), null, array(0, 1));
 		$mform->addElement('checkbox', 'declaration', get_string('declaration', 'local_obu_application'),
 			get_string('declaration_text', 'local_obu_application'));
 		$mform->addRule('declaration', null, 'required', null, 'server');

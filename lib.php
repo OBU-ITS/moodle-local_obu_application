@@ -27,39 +27,25 @@
 
 function local_obu_application_extends_navigation($navigation) {
     global $CFG;
-/*
-	// The required grandparent node must already exist
-	$nodeProfile = $navigation->find('myprofile', navigation_node::TYPE_UNKNOWN);
-	if (!$nodeProfile) {
+	
+	if (!isloggedin() || !has_capability('local/obu_application:manage', context_system::instance())) {
 		return;
 	}
 	
-	// BRISC
-	if ((get_config('local_obu_apps', 'showbrisc') == '1') && has_capability('moodle/blog:create', context_system::instance())) { // Only show if allowed
-		$nodeEmpskills = $nodeProfile->get('empskills', navigation_node::TYPE_UNKNOWN); // Parent ('get' faster than 'find')
-		if (!$nodeEmpskills) { // Add the parent if necessary
-			$nodeEmpskills = $nodeProfile->add(get_string('empskills', 'local_empskills'),
-				null, TYPE_CUSTOM, null, 'empskills', null); // The 'key' is 'empskills'
-		}
-		if ($nodeEmpskills) {
-			$nodeEmpskills->add('BRISC', '/local/obu_apps/brisc.php'); // BRISC web app
+	// Find the 'applications' node
+	$nodeParent = $navigation->find(get_string('applications', 'local_obu_applications'), navigation_node::TYPE_SYSTEM);
+	
+	// If necessary, add the 'applications' node to 'home'
+	if (!$nodeParent) {
+		$nodeHome = $navigation->children->get('1')->parent;
+		if ($nodeHome) {
+			$nodeParent = $nodeHome->add(get_string('applications', 'local_obu_application'), null, navigation_node::TYPE_SYSTEM);
 		}
 	}
 	
-	// QuAK
-	if ((get_config('local_obu_apps', 'showquak') == '1') && !empty($CFG->navadduserpostslinks)) { // Only show if allowed
-		$nodeForumPosts	= null;
-		$title = get_string('forumposts', 'mod_forum'); // The required node wasn't given a specific key so we must search for the title
-		$children = $nodeProfile->get_children_key_list();
-		foreach ($children as $child) {
-			$node = $nodeProfile->get($child);
-			if ($node->get_content() == $title) {
-				$nodeForumPosts	= $node;
-				break;
-			}				
-		}
-		if ($nodeForumPosts) {
-			$nodeForumPosts->add('QuAK', '/local/obu_apps/quak.php'); // QuAK web app
-		}
+	if ($nodeParent) {
+		$node = $nodeParent->add(get_string('application_approvals', 'local_obu_application'), '/local/obu_application/mdl_approvals.php');
+		$node = $nodeParent->add(get_string('hls_approvals', 'local_obu_application'), '/local/obu_application/mdl_approvals.php?approver=hls');
+		$node = $nodeParent->add(get_string('list_applications', 'local_obu_application'), '/local/obu_application/mdl_list.php');
 	}
-*/}
+}

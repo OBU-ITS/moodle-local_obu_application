@@ -33,7 +33,6 @@ require_once($CFG->libdir . '/formslib.php');
 class profile_form extends moodleform {
 
     function definition() {
-        global $USER;
 		
         $mform =& $this->_form;
 
@@ -67,8 +66,6 @@ class profile_form extends moodleform {
 			$this->set_data($fields);
 		}
 		
-		$mform->addElement('html', '<h2>' . fullname($USER, true) . ' - ' . get_string('profile', 'local_obu_application') . '</h2>');
-
 		// This 'dummy' element has two purposes:
 		// - To force open the Moodle Forms invisible fieldset outside of any table on the form (corrupts display otherwise)
 		// - To let us inform the user that there are validation errors without them having to scroll down further
@@ -127,19 +124,13 @@ class profile_form extends moodleform {
         $mform->addElement('header', 'criminal_record_head', get_string('criminal_record_head', 'local_obu_application'), '');
 		$mform->setExpanded('criminal_record_head');
 		$mform->addElement('selectyesno', 'criminal_record', get_string('criminal_record', 'local_obu_application'));
-       $this->add_action_buttons(true, get_string('save', 'local_obu_application'));
+		$this->add_action_buttons(true, get_string('save', 'local_obu_application'));
     }
 
     function validation($data, $files) {
         global $CFG, $DB;
         $errors = parent::validation($data, $files);
-/*
-        if (empty($data['email'])) {
-            $errors['email'] = get_string('missingemail');
-        } else if ($data['email'] != $data['username']) {
-            $errors['email'] = get_string('invalidemail');
-        }
-*/
+
 		if (!empty($errors)) {
 			$errors['form_errors'] = get_string('form_errors', 'local_obu_application');
 		}

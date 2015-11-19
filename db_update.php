@@ -128,3 +128,137 @@ function read_applicant($user_id, $must_exist) {
 	
 	return $applicant;	
 }
+
+function write_application($user_id, $form_data) {
+	global $DB;
+	
+	$user = read_user($user_id); // Contact details
+	$applicant = read_applicant($user_id, true); // Profile & course must exist
+	
+	// Initialise the new record
+	$record = new stdClass();
+	$record->id = 0;
+	$record->userid = $user_id;
+	
+	// Contact details
+	$record->title = $user->idnumber;
+	$record->firstname = $user->firstname;
+	$record->lastname = $user->lastname;
+	$record->address = $user->address;
+	$record->postcode = $user->city;
+	$record->phone = $user->phone1;
+	$record->email = $user->email;
+
+	// Profile
+    $record->birthdate = $applicant->birthdate;
+    $record->birthcountry = $applicant->birthcountry;
+    $record->firstentrydate = $applicant->firstentrydate;
+    $record->lastentrydate = $applicant->lastentrydate;
+    $record->residencedate = $applicant->residencedate;
+    $record->support = $applicant->support;
+    $record->p16school = $applicant->p16school;
+    $record->p16schoolperiod = $applicant->p16schoolperiod;
+    $record->p16fe = $applicant->p16fe;
+    $record->p16feperiod = $applicant->p16feperiod;
+    $record->training = $applicant->training;
+    $record->trainingperiod = $applicant->trainingperiod;
+    $record->prof_level = $applicant->prof_level;
+    $record->prof_award = $applicant->prof_award;
+    $record->prof_date = $applicant->prof_date;
+    $record->emp_place = $applicant->emp_place;
+    $record->emp_area = $applicant->emp_area;
+    $record->emp_title = $applicant->emp_title;
+    $record->emp_prof = $applicant->emp_prof;
+    $record->prof_reg_no = $applicant->prof_reg_no;
+    $record->criminal_record = $applicant->criminal_record;
+	
+	// Course
+    $record->award_name = $applicant->award_name;
+    $record->start_date = $applicant->start_date;
+    $record->module_1_no = $applicant->module_1_no;
+    $record->module_1_name = $applicant->module_1_name;
+    $record->module_2_no = $applicant->module_2_no;
+    $record->module_2_name = $applicant->module_2_name;
+    $record->module_3_no = $applicant->module_3_no;
+    $record->module_3_name = $applicant->module_3_name;
+    $record->statement = $applicant->statement;
+	
+	// Final details
+    $record->self_funding = $form_data->self_funding;
+    $record->manager_email = $form_data->email;
+    if (isset($form_data->declaration)) { // Only set if checked
+		$record->declaration = 1;
+	} else {
+		$record->declaration = 0;
+	}
+	
+    $record->application_date = time();
+
+	return $DB->insert_record('local_obu_application', $record); // The remaining fields will have default values
+}
+
+function update_application($application) {
+    global $DB;
+    
+	return $DB->update_record('local_obu_application', $application);
+}
+
+function read_application($application_id) {
+    global $DB;
+    
+	$application = $DB->get_record('local_obu_application', array('id' => $application_id), '*', MUST_EXIST);
+	
+	return $application;	
+}
+
+function get_applications($user_id) {
+    global $DB;
+    
+	return $DB->get_records('local_obu_application', array('userid' => $user_id), 'application_date DESC');
+}
+
+function write_approval($approval) {
+    global $DB;
+    
+	if ($approval->id == 0) {
+		$id = $DB->insert_record('local_obu_approval', $approval);
+	} else {
+		$id = $approval->id;
+		$DB->update_record('local_obu_approval', $approval);
+	}
+	
+	return $id;
+}
+
+function read_approval($application_id, &$approval) {
+    global $DB;
+    
+	$approval = $DB->get_record('local_obu_approval', array('application_id' => $application_id), '*', IGNORE_MISSING);
+	if ($approval === false) {
+		$approval = new stdClass();
+		$approval->id = 0;
+		$approval->application_id = $application_id;
+		$approval->approver = '';
+		$approval->date = 0;
+	}
+}
+
+function get_approvals($approver_email) {
+    global $DB;
+
+	$conditions = array();
+	
+	if ($approver_email != '') {
+		$conditions['approver'] = $approver_email;
+	}
+
+	return $DB->get_records('local_obu_approval', $conditions, 'request_date ASC');
+}
+
+function delete_approval($approval) {
+    global $DB;
+    
+	if ($approval->id != 0) {
+		$DB->delete_records('local_obu_approval', array('id' => $approval->id));
+	}
+}

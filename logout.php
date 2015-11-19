@@ -27,6 +27,7 @@
  */
 
 require_once('../../config.php');
+require_once('./hide_moodle.php');
 require_once('./locallib.php');
 
 $PAGE->set_url('/local/obu_application/logout.php');

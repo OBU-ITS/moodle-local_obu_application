@@ -16,7 +16,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * OBU Application - Apply page
+ * OBU Application - Finalise application and apply
  *
  * @package    obu_application
  * @category   local
@@ -27,12 +27,14 @@
  */
  
 require('../../config.php');
+require_once('./hide_moodle.php');
 require_once('./locallib.php');
 require_once('./apply_form.php');
 
 require_obu_login();
 
 $url = new moodle_url('/local/obu_application/');
+$process_url = new moodle_url('/local/obu_application/process.php');
 
 $PAGE->set_title($CFG->pageheading . ': ' . get_string('apply', 'local_obu_application'));
 
@@ -46,7 +48,7 @@ $record = read_applicant($USER->id, false);
 if ($record === false) { // Must have completed the profile
 	$message = get_string('complete_profile', 'local_obu_application');
 }
-else if ($record->module_1_no === '') { // Must have completed the course
+else if (!isset($record->module_1_no) || ($record->module_1_no === '')) { // Must have completed the course
 	$message = get_string('complete_course', 'local_obu_application');
 } else {
 	$message = '';
@@ -63,12 +65,13 @@ if ($mform->is_cancelled()) {
 } 
 else if ($mform_data = $mform->get_data()) {
 	if ($mform_data->submitbutton == get_string('apply', 'local_obu_application')) {
-//		write_course($USER->id, $mform_data);
-		redirect($url);
+		$application_id = write_application($USER->id, $mform_data);
+		redirect($process_url . '?id=' . $application_id); // Kick-off the workflow process
     }
 }	
 
 echo $OUTPUT->header();
+echo $OUTPUT->heading(get_string('apply', 'local_obu_application'));
 
 if ($message) {
     notice($message, $url);    

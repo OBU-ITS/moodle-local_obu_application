@@ -27,6 +27,7 @@
  */
  
 require('../../config.php');
+require_once('./hide_moodle.php');
 require_once('./locallib.php');
 
 $data = optional_param('data', '', PARAM_RAW);  // Formatted as secret/username

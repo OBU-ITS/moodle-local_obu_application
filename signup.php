@@ -27,6 +27,7 @@
  */
  
 require('../../config.php');
+require_once('./hide_moodle.php');
 require_once('./locallib.php');
 require_once($CFG->dirroot . '/user/editlib.php');
 

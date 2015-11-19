@@ -32,7 +32,7 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 
     $result = true;
 
-    if ($oldversion < 2015110500) {
+    if ($oldversion < 2015111600) {
 
 		// Define table local_obu_applicant
 		$table = new xmldb_table('local_obu_applicant');
@@ -83,9 +83,6 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		if (!$dbman->table_exists($table)) {
 			$dbman->create_table($table);
 		}
-    }
-	
-    if ($oldversion < 2015110900) {
 
 		// Define table local_obu_application
 		$table = new xmldb_table('local_obu_application');
@@ -132,15 +129,17 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		$table->add_field('statement', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
 		$table->add_field('self_funding', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
 		$table->add_field('manager_email', XMLDB_TYPE_CHAR, '100', null, null, null, null);
-		$table->add_field('disclaimer', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
+		$table->add_field('declaration', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
 		$table->add_field('application_date', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
-		$table->add_field('approval_1_status', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
+		$table->add_field('approval_level', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
+		$table->add_field('approval_state', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
 		$table->add_field('approval_1_comments', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
 		$table->add_field('approval_1_date', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
 		$table->add_field('tel_email', XMLDB_TYPE_CHAR, '100', null, null, null, null);
-		$table->add_field('approval_2_status', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
 		$table->add_field('approval_2_comments', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
 		$table->add_field('approval_2_date', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+		$table->add_field('approval_3_comments', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
+		$table->add_field('approval_3_date', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
 
 		// Add keys
 		$table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
@@ -152,9 +151,29 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		if (!$dbman->table_exists($table)) {
 			$dbman->create_table($table);
 		}
+		// Define table local_obu_approval
+		$table = new xmldb_table('local_obu_approval');
+
+		// Add fields
+		$table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+		$table->add_field('application_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+		$table->add_field('approver', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('request_date', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+
+		// Add keys
+		$table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+
+		// Add indexes
+		$table->add_index('application', XMLDB_INDEX_NOTUNIQUE, array('application_id'));
+		$table->add_index('approver', XMLDB_INDEX_NOTUNIQUE, array('approver'));
+
+		// Conditionally create table
+		if (!$dbman->table_exists($table)) {
+			$dbman->create_table($table);
+		}
 
         // obu_application savepoint reached
-        upgrade_plugin_savepoint(true, 2015110900, 'local', 'obu_application');
+        upgrade_plugin_savepoint(true, 2015111600, 'local', 'obu_application');
     }
     
     return $result;

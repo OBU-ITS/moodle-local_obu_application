@@ -27,6 +27,7 @@
  */
  
 require('../../config.php');
+require_once('./hide_moodle.php');
 require_once('./locallib.php');
 
 $testsession = optional_param('testsession', 0, PARAM_INT); // test session works properly
@@ -123,7 +124,7 @@ if ($frm and isset($frm->username)) { // Login WITH cookies
 			if (empty($CFG->rememberusername) or ($CFG->rememberusername == 2 and empty($frm->rememberusername))) { // No permanent cookies, delete old one if exists
 				set_moodle_cookie('');
 			} else {
-				set_moodle_cookie($USER->username);
+				set_moodle_cookie($USER->email);
 			}
         }
 

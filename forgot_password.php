@@ -26,6 +26,7 @@
  */
 
 require('../../config.php');
+require_once('./hide_moodle.php');
 require_once('./locallib.php');
 require_once('./password_lib.php');
 require_once('./forgot_password_form.php');

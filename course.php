@@ -27,6 +27,7 @@
  */
  
 require('../../config.php');
+require_once('./hide_moodle.php');
 require_once('./locallib.php');
 require_once('./course_form.php');
 
@@ -66,6 +67,7 @@ else if ($mform_data = $mform->get_data()) {
 }	
 
 echo $OUTPUT->header();
+echo $OUTPUT->heading(get_string('course', 'local_obu_application'));
 
 if ($message) {
     notice($message, $url);    
