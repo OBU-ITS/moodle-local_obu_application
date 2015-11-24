@@ -94,12 +94,25 @@
         <FIELD NAME="self_funding" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Self-funding?"/>
         <FIELD NAME="manager_email" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Email of manager"/>
         <FIELD NAME="declaration" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Mandatory declaration"/>
+        <FIELD NAME="tel_email" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Email of Trust Education Lead"/>
+        <FIELD NAME="contract_trust" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Contract Trust"/>
+        <FIELD NAME="contract_tel" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Contract Trust Education Lead"/>
+        <FIELD NAME="contract_percentage" TYPE="int" LENGTH="3" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Contract percentage"/>
+        <FIELD NAME="invoice_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Invoice Trust/Other"/>
+        <FIELD NAME="invoice_ref" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Invoice reference (PO number)"/>
+        <FIELD NAME="invoice_address" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Invoice address"/>
+        <FIELD NAME="invoice_email" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Invoice email"/>
+        <FIELD NAME="invoice_phone" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Invoice phone"/>
+        <FIELD NAME="invoice_contact" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Invoice staff member contact"/>
+        <FIELD NAME="invoice_percentage" TYPE="int" LENGTH="3" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Invoice percentage"/>
+        <FIELD NAME="prepaid_trust" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Pre-paid Trust"/>
+        <FIELD NAME="prepaid_tel" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Pre-paid Trust Education Lead"/>
+        <FIELD NAME="prepaid_percentage" TYPE="int" LENGTH="3" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Pre-paid percentage"/>
         <FIELD NAME="application_date" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Date of application"/>
         <FIELD NAME="approval_level" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Current level of approval"/>
         <FIELD NAME="approval_state" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Current state of approval"/>
         <FIELD NAME="approval_1_comments" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Approval 1 comments"/>
         <FIELD NAME="approval_1_date" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Approval 1 date"/>
-        <FIELD NAME="tel_email" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Email of Trust Education Lead"/>
         <FIELD NAME="approval_2_comments" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Approval 2 comments"/>
         <FIELD NAME="approval_2_date" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Approval 2 date"/>
         <FIELD NAME="approval_3_comments" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Approval 3 comments"/>

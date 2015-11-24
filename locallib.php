@@ -547,7 +547,7 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 	}
 }
 
-function update_workflow(&$application, $approved = true, $comment = null, $tel_email = null) {
+function update_workflow(&$application, $approved = true, $data = null) {
 
 	$approver_email = '';
 	
@@ -556,13 +556,13 @@ function update_workflow(&$application, $approved = true, $comment = null, $tel_
 		$application->approval_level = 1;
 		$approver_email = $application->manager_email;
 	} else if ($application->approval_level == 1) {
-		$application->approval_1_notes = $comment;
+		$application->approval_1_notes = $data->comment;
 		$application->approval_1_date = time();
 		if (!$approved) {
 			$application->approval_state = 1; // Rejected
 		} else if ($application->self_funding == 0) {
 			$application->approval_level = 2;
-			$application->tel_email = $tel_email;
+			$application->tel_email = $data->tel_email;
 			$approver_email = $application->tel_email;
 		} else {
 			$application->approval_level = 3; // Brookes
@@ -570,17 +570,30 @@ function update_workflow(&$application, $approved = true, $comment = null, $tel_
 			$approver_email = $hls->email;
 		}
 	} else if ($application->approval_level == 2) {
-		$application->approval_2_notes = $comment;
+		$application->approval_2_notes = $data->comment;
 		$application->approval_2_date = time();
 		if (!$approved) {
 			$application->approval_state = 1; // Rejected
 		} else {
 			$application->approval_level = 3; // Brookes
+			$application->contract_trust = $data->contract_trust;
+			$application->contract_tel = $data->contract_tel;
+			$application->contract_percentage = $data->contract_percentage;
+			$application->invoice_name = $data->invoice_name;
+			$application->invoice_ref = $data->invoice_ref;
+			$application->invoice_address = $data->invoice_address;
+			$application->invoice_email = $data->invoice_email;
+			$application->invoice_phone = $data->invoice_phone;
+			$application->invoice_contact = $data->invoice_contact;
+			$application->invoice_percentage = $data->invoice_percentage;
+			$application->prepaid_trust = $data->prepaid_trust;
+			$application->prepaid_tel = $data->prepaid_tel;
+			$application->prepaid_percentage = $data->prepaid_percentage;
 			$hls = get_complete_user_data('username', 'hls');
 			$approver_email = $hls->email;
 		}
 	} else {
-		$application->approval_3_notes = $comment;
+		$application->approval_3_notes = $data->comment;
 		$application->approval_3_date = time();
 		if (!$approved) {
 			$application->approval_state = 1; // Rejected

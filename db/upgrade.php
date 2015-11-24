@@ -32,7 +32,7 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 
     $result = true;
 
-    if ($oldversion < 2015111600) {
+    if ($oldversion < 2015112200) {
 
 		// Define table local_obu_applicant
 		$table = new xmldb_table('local_obu_applicant');
@@ -130,12 +130,25 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		$table->add_field('self_funding', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
 		$table->add_field('manager_email', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('declaration', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
+		$table->add_field('tel_email', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('contract_trust', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('contract_tel', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('contract_percentage', XMLDB_TYPE_INTEGER, '3', null, XMLDB_NOTNULL, null, '0');
+		$table->add_field('invoice_name', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('invoice_ref', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('invoice_address', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
+		$table->add_field('invoice_email', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('invoice_phone', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('invoice_contact', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('invoice_percentage', XMLDB_TYPE_INTEGER, '3', null, XMLDB_NOTNULL, null, '0');
+		$table->add_field('prepaid_trust', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('prepaid_tel', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('prepaid_percentage', XMLDB_TYPE_INTEGER, '3', null, XMLDB_NOTNULL, null, '0');
 		$table->add_field('application_date', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
 		$table->add_field('approval_level', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
 		$table->add_field('approval_state', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
 		$table->add_field('approval_1_comments', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
 		$table->add_field('approval_1_date', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
-		$table->add_field('tel_email', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('approval_2_comments', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
 		$table->add_field('approval_2_date', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
 		$table->add_field('approval_3_comments', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
@@ -173,7 +186,7 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		}
 
         // obu_application savepoint reached
-        upgrade_plugin_savepoint(true, 2015111600, 'local', 'obu_application');
+        upgrade_plugin_savepoint(true, 2015112200, 'local', 'obu_application');
     }
     
     return $result;

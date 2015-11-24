@@ -98,9 +98,9 @@ if ($mform->is_cancelled()) {
 else if ($mform_data = $mform->get_data()) {
 	if ($mform_data->submitbutton != get_string('continue', 'local_obu_application')) {
 		if ($mform_data->rejectbutton != get_string('reject', 'local_obu_application')) {
-			update_workflow($application, true, $mform_data->comment, $mform_data->tel_email);
+			update_workflow($application, true, $mform_data);
 		} else {
-			update_workflow($application, false, $mform_data->comment);
+			update_workflow($application, false, $mform_data);
 		}
 	}
 	redirect($home);

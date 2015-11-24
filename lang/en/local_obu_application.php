@@ -119,9 +119,19 @@ $string['tel_to_approve'] = 'Trust Education Lead to approve';
 $string['self_funding'] = 'Self-funding';
 $string['self_funding_text'] = 'Are you a self-funding applicant?';
 $string['declaration'] = 'Declaration';
-$string['declaration_text'] = 'I confirm that the information given in this application is complete and accurateand no information
+$string['declaration_text'] = 'I confirm that the information given in this application is complete and accurate and that no information
 requested or other material information has been omitted. I give my consent to the processing of my data by Oxford Brookes University.
 I have read the Conditions of Acceptance in the Prospectus and undertake to be bound by those conditions.';
+
+$string['funding'] = 'Funding';
+$string['contract'] = 'CPD Contract (HETV)';
+$string['trust'] = 'Trust';
+$string['tel'] = 'Trust Education Lead';
+$string['percentage'] = 'Percentage(%)';
+$string['invoice'] = 'Invoice';
+$string['invoice_name'] = 'Trust (or other source)';
+$string['invoice_ref'] = 'PO number';
+$string['invoice_contact'] = 'Staff member to receive invoice';
 
 $string['actioned_by'] = '{$a->action} by {$a->by}.';
 $string['submitted'] = 'Submitted';

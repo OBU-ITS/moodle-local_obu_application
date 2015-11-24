@@ -116,7 +116,20 @@ class process_view extends moodleform {
 				'statement' => $data->record->statement,
 				'self_funding_formatted' => $self_funding_formatted,
 				'manager_email' => $data->record->manager_email,
-				'declaration_formatted' => $declaration_formatted
+				'declaration_formatted' => $declaration_formatted,
+				'contract_trust' => $data->record->contract_trust,
+				'contract_tel' => $data->record->contract_tel,
+				'contract_percentage' => $data->record->contract_percentage,
+				'invoice_name' => $data->record->invoice_name,
+				'invoice_ref' => $data->record->invoice_ref,
+				'invoice_address' => $data->record->invoice_address,
+				'invoice_email' => $data->record->invoice_email,
+				'invoice_phone' => $data->record->invoice_phone,
+				'invoice_contact' => $data->record->invoice_contact,
+				'invoice_percentage' => $data->record->invoice_percentage,
+				'prepaid_trust' => $data->record->prepaid_trust,
+				'prepaid_tel' => $data->record->prepaid_tel,
+				'prepaid_percentage' => $data->record->prepaid_percentage
 			];
 			$this->set_data($fields);
 		}
@@ -266,18 +279,61 @@ class process_view extends moodleform {
 			}
 			$mform->addElement('static', 'self_funding_formatted', get_string('self_funding', 'local_obu_application'));
 			$mform->addElement('static', 'declaration_formatted', get_string('declaration', 'local_obu_application'));
-		} else if ($data->record->self_funding == '1') {
-			$mform->addElement('html', '<h2>' . get_string('self_funding', 'local_obu_application') . ' ' . get_string('applicant', 'local_obu_application') . '</h2>');
 		}
-		
-		if (($approval_sought == 1) && ($data->record->self_funding == '0')) { // Approving manager needs to enter email of TEL to approve
-			// TEL to approve
+
+		if (($approval_sought > 0) && ($data->record->self_funding == '1')) {
+			$mform->addElement('html', '<h2>' . get_string('self_funding', 'local_obu_application') . ' ' . get_string('applicant', 'local_obu_application') . '</h2>');
+		} else if (($approval_sought == 1) && ($data->record->self_funding == '0')) { // Approving manager must enter the email of TEL to approve
 			$mform->addElement('header', 'tel_head', get_string('tel_to_approve', 'local_obu_application'), '');
 			$mform->setExpanded('tel_head');
 			$mform->addElement('text', 'tel_email', get_string('email'), 'size="40" maxlength="100"');
 			$mform->setType('tel_email', PARAM_RAW_TRIMMED);
 			$mform->addElement('text', 'tel_email2', get_string('emailagain'), 'size="40" maxlength="100"');
 			$mform->setType('tel_email2', PARAM_RAW_TRIMMED);
+		} else if (($approval_sought > 1) && ($data->record->self_funding == '0')) { // Approving TEL must enter the complete funding details and HLS approver must see them
+			$mform->addElement('html', '<h1>' . get_string('funding', 'local_obu_application') . '</h1>');
+			$mform->addElement('header', 'contract_head', get_string('contract', 'local_obu_application'), '');
+			$mform->setExpanded('contract_head');
+			if ($approval_sought == 2) { // TEL
+				$mform->addElement('text', 'contract_trust', get_string('trust', 'local_obu_application'), 'size="40" maxlength="100"');
+				$mform->addElement('text', 'contract_tel', get_string('tel', 'local_obu_application'), 'size="40" maxlength="100"');
+				$mform->addElement('text', 'contract_percentage', get_string('percentage', 'local_obu_application'), 'size="3" maxlength="3"');
+				$mform->setType('contract_percentage', PARAM_INT);
+			} else { // HLS
+				$mform->addElement('static', 'contract_trust', get_string('trust', 'local_obu_application'));
+				$mform->addElement('static', 'contract_tel', get_string('tel', 'local_obu_application'));
+				$mform->addElement('static', 'contract_percentage', get_string('percentage', 'local_obu_application'));
+			}
+			$mform->addElement('header', 'invoice_head', get_string('invoice', 'local_obu_application'), '');
+			$mform->setExpanded('invoice_head');
+			if ($approval_sought == 2) { // TEL
+				$mform->addElement('text', 'invoice_name', get_string('invoice_name', 'local_obu_application'), 'size="40" maxlength="100"');
+				$mform->addElement('text', 'invoice_ref', get_string('invoice_ref', 'local_obu_application'), 'size="40" maxlength="100"');
+				$mform->addElement('textarea', 'invoice_address', get_string('address'), 'cols="40" rows="5"');
+				$mform->addElement('text', 'invoice_email', get_string('email'), 'size="40" maxlength="100"');
+				$mform->addElement('text', 'invoice_phone', get_string('phone', 'local_obu_application'), 'size="40" maxlength="100"');
+				$mform->addElement('text', 'invoice_contact', get_string('invoice_contact', 'local_obu_application'), 'size="40" maxlength="100"');
+				$mform->addElement('text', 'invoice_percentage', get_string('percentage', 'local_obu_application'), 'size="3" maxlength="3"');
+				$mform->setType('invoice_percentage', PARAM_INT);
+			} else { // HLS
+				$mform->addElement('static', 'invoice_name', get_string('invoice_name', 'local_obu_application'));
+				$mform->addElement('static', 'invoice_ref', get_string('invoice_ref', 'local_obu_application'));
+				$mform->addElement('static', 'invoice_address', get_string('address'));
+				$mform->addElement('static', 'invoice_email', get_string('email'));
+				$mform->addElement('static', 'invoice_phone', get_string('phone', 'local_obu_application'));
+				$mform->addElement('static', 'invoice_contact', get_string('invoice_contact', 'local_obu_application'));
+				$mform->addElement('static', 'invoice_percentage', get_string('percentage', 'local_obu_application'));
+			}
+			if ($approval_sought == 2) { // TEL
+				$mform->addElement('text', 'prepaid_trust', get_string('trust', 'local_obu_application'), 'size="40" maxlength="100"');
+				$mform->addElement('text', 'prepaid_tel', get_string('tel', 'local_obu_application'), 'size="40" maxlength="100"');
+				$mform->addElement('text', 'prepaid_percentage', get_string('percentage', 'local_obu_application'), 'size="3" maxlength="3"');
+				$mform->setType('prepaid_percentage', PARAM_INT);
+			} else { // HLS
+				$mform->addElement('static', 'prepaid_trust', get_string('trust', 'local_obu_application'));
+				$mform->addElement('static', 'prepaid_tel', get_string('tel', 'local_obu_application'));
+				$mform->addElement('static', 'prepaid_percentage', get_string('percentage', 'local_obu_application'));
+			}
 		}
 
 		// Options
@@ -299,18 +355,21 @@ class process_view extends moodleform {
     function validation($data, $files) {
         $errors = parent::validation($data, $files);
 		
-		// Check that we have been given a TEL email address if we need one
-		if (($data['submitbutton'] == get_string('approve', 'local_obu_application')) && ($data['approval_level'] == '1') && ($data['self_funding'] == '0')) {
-			if (empty($data['tel_email'])) {
-				$errors['tel_email'] = get_string('missingemail');
-			} else if (!validate_email($data['tel_email'])) {
-				$errors['tel_email'] = get_string('invalidemail');
-			}
+		// Check that we have been given sufficient information for an approval
+		if ($data['submitbutton'] == get_string('approve', 'local_obu_application')) {
+			if (($data['approval_level'] == '1') && ($data['self_funding'] == '0')) { // Manager must give us the email of the TEL to approve
+				if (empty($data['tel_email'])) {
+					$errors['tel_email'] = get_string('missingemail');
+				} else if (!validate_email($data['tel_email'])) {
+					$errors['tel_email'] = get_string('invalidemail');
+				}
 		
-			if (empty($data['tel_email2'])) {
-				$errors['tel_email2'] = get_string('missingemail');
-			} else if ($data['tel_email2'] != $data['tel_email']) {
-				$errors['tel_email2'] = get_string('invalidemail');
+				if (empty($data['tel_email2'])) {
+					$errors['tel_email2'] = get_string('missingemail');
+				} else if ($data['tel_email2'] != $data['tel_email']) {
+					$errors['tel_email2'] = get_string('invalidemail');
+				}
+			} else if ($data['approval_level'] == '2') { // TEL must give us the complete funding details
 			}
 		}
 
