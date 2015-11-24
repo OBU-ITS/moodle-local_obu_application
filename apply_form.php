@@ -41,7 +41,7 @@ class apply_form extends moodleform {
 		// - To let us inform the user that there are validation errors without them having to scroll down further
 		$mform->addElement('static', 'form_errors');
 
-        $mform->addElement('header', 'authoriser', get_string('authoriser', 'local_obu_application'), '');
+        $mform->addElement('header', 'manager_to_approve', get_string('manager_to_approve', 'local_obu_application'), '');
 		include('./email_fields.php');
 		
         $mform->addElement('header', 'declaration_head', get_string('declaration', 'local_obu_application'), '');

@@ -78,7 +78,7 @@ if ($status_text) {
 get_application_status($USER->id, $application, $text, $button_text); // get the approval trail and the next action (from user's perspective)
 $status_text .= $text;
 
-if ($button_text != 'approve') { // If not the next approver, check that this user can view the application
+if ($button_text != 'approve') { // If not the next approver, check that this user can at least view the application
 	if (!$manager && ($USER->id != $application->userid)) {
 		$message = get_string('application_unavailable', 'local_obu_application');
 	}
@@ -98,7 +98,7 @@ if ($mform->is_cancelled()) {
 else if ($mform_data = $mform->get_data()) {
 	if ($mform_data->submitbutton != get_string('continue', 'local_obu_application')) {
 		if ($mform_data->rejectbutton != get_string('reject', 'local_obu_application')) {
-			update_workflow($application, true, $mform_data->comment);
+			update_workflow($application, true, $mform_data->comment, $mform_data->tel_email);
 		} else {
 			update_workflow($application, false, $mform_data->comment);
 		}

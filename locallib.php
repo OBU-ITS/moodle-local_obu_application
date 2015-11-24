@@ -467,18 +467,20 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 				}
 				$text .= ' ' . $application->approval_2_notes . '<br />';
 			} else if ($application->approval_level > 2) {
-				date_timestamp_set($date, $application->approval_2_date);
-				$text .= date_format($date, $format) . ' ';
-				$approver = get_complete_user_data('email', $application->tel_email);
-				if ($approver === false) {
-					$name = $application->tel_email;
-				} else if ($approver->id == $user_id) {
-					$name = 'you';
-				} else {
-					$name = $approver->firstname . ' ' . $approver->lastname . ' (' . $approver->email . ')';
+				if ($application->self_funding == '0') { // This step would have been skipped
+					date_timestamp_set($date, $application->approval_2_date);
+					$text .= date_format($date, $format) . ' ';
+					$approver = get_complete_user_data('email', $application->tel_email);
+					if ($approver === false) {
+						$name = $application->tel_email;
+					} else if ($approver->id == $user_id) {
+						$name = 'you';
+					} else {
+						$name = $approver->firstname . ' ' . $approver->lastname . ' (' . $approver->email . ')';
+					}
+					$text .= get_string('actioned_by', 'local_obu_application', array('action' => get_string('approved', 'local_obu_application'), 'by' => $name));
+					$text .= ' ' . $application->approval_2_notes . '<br />';
 				}
-				$text .= get_string('actioned_by', 'local_obu_application', array('action' => get_string('approved', 'local_obu_application'), 'by' => $name));
-				$text .= ' ' . $application->approval_2_notes . '<br />';
 				if ($application->approval_state > 0) { // The workflow ended here
 					date_timestamp_set($date, $application->approval_3_date);
 					$text .= date_format($date, $format) . ' ';
@@ -491,7 +493,7 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 					if ($application->approval_state == 1) {
 						$text .= get_string('actioned_by', 'local_obu_application', array('action' => get_string('rejected', 'local_obu_application'), 'by' => $name));
 					} else {
-						$text .= get_string('actioned_by', 'local_obu_application', array('action' => get_string('approved', 'local_obu_forms'), 'by' => $name));
+						$text .= get_string('actioned_by', 'local_obu_application', array('action' => get_string('approved', 'local_obu_application'), 'by' => $name));
 					}
 					$text .= ' ' . $application->approval_3_notes . '<br />';
 				}
@@ -545,7 +547,7 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 	}
 }
 
-function update_workflow(&$application, $approved = true, $comment = null) {
+function update_workflow(&$application, $approved = true, $comment = null, $tel_email = null) {
 
 	$approver_email = '';
 	
@@ -553,13 +555,14 @@ function update_workflow(&$application, $approved = true, $comment = null) {
 	if ($application->approval_level == 0) { // Being submitted
 		$application->approval_level = 1;
 		$approver_email = $application->manager_email;
-	} else if ($record->approval_level == 1) {
+	} else if ($application->approval_level == 1) {
 		$application->approval_1_notes = $comment;
 		$application->approval_1_date = time();
 		if (!$approved) {
 			$application->approval_state = 1; // Rejected
 		} else if ($application->self_funding == 0) {
 			$application->approval_level = 2;
+			$application->tel_email = $tel_email;
 			$approver_email = $application->tel_email;
 		} else {
 			$application->approval_level = 3; // Brookes
@@ -621,17 +624,34 @@ function update_approver($application, $approver_email) {
 	
 	// Notify the next approver (if there is one)
 	if ($approver_email != '') {
-		if (strpos($process, 'moodle.brookes') === false) {
-			$approver_email = $hls->email; // Send all approval emails to the HLS Team if we aren't 'live'
+		if (strpos($process, 'moodle.brookes') === false) { // We aren't 'live' so suppress spurious email messages
+			if (strpos($approver_email, 'brookes.rocks') === false) { // Not a 'contained' email address so redirect to the HLS Team
+				$approver_email = $hls->email;
+			}
 		}
 		$approver = get_complete_user_data('email', $approver_email);
+		if ($approver === false) { // Approver hasn't yet registered
+			// Moodle requires a user to send emails to, not just an email address
+			$approver = new Object();
+			$approver->email = $approver_email;
+			$approver->firstname = '';
+			$approver->lastname = '';
+			$approver->maildisplay = true;
+			$approver->mailformat = 1; // 0 (zero) text-only emails, 1 (one) for HTML/Text emails.
+			$approver->id = -99; // Moodle User ID. If it is for someone who is not a Moodle user, use an invalid ID like -99.
+			$approver->firstnamephonetic = '';
+			$approver->lastnamephonetic = '';
+			$approver->middlename = '';
+			$approver->alternatename = '';
+		}			
 		if ($approver->email == $hls->email) { // HLS will use 'mainstream' Moodle for their approvals
 			$link = '<a href="' . $mdl_process . '">HLS Application (Ref No ' . $application->id . ')</a>';
 		} else {
 			$link = '<a href="' . $process . '">HLS Application (Ref No ' . $application->id . ')</a>';
 		}
 		$html = get_string('request_approval', 'local_obu_application', $link);
-		email_to_user($approver, $applicant, 'Request for HLS Application Approval (' . $applicant->firstname . ' ' . $applicant->lastname . ')', html_to_text($html), $html);
+		email_to_user($approver, $applicant, 'Request for HLS Application Approval ('
+			. $applicant->firstname . ' ' . $applicant->lastname . ')', html_to_text($html), $html);
 	}
 }
 

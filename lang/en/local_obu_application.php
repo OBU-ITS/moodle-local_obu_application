@@ -46,6 +46,7 @@ $string['passwordforgotteninstructions'] = '<p>Only external users not using a B
 $string['registration'] = 'Registration';
 $string['registrationsteps'] = 'Hi! For access to this Brookes site you\'ll need to take a minute to register yourself. Here are the steps: <ol> <li>Fill out the <a href="{$a}">Registration</a> form with your details.</li> <li>An email will be immediately sent to your email address.</li> <li>Read your email, and click on the web link it contains.</li> <li>Your account will be confirmed and you will be logged in.</li> <li>You can now access the site. From now on you will only need to enter your personal email and password (in the form on this page) to log in to your account.</li> </ol>';
 
+$string['applicant'] = 'Applicant';
 $string['application'] = 'Application (Ref No {$a})';
 $string['applications'] = 'Applications';
 $string['approvals'] = 'Approvals';
@@ -113,8 +114,8 @@ $string['statement_head'] = 'Supporting statement';
 $string['statement'] = 'How will your studies enhance your professional practice?';
 $string['apply'] = 'Apply';
 $string['complete_course'] = 'Please complete your course first';
-$string['authoriser'] = 'Authorising manager';
-$string['finalise'] = 'Finalise application';
+$string['manager_to_approve'] = 'Manager to approve';
+$string['tel_to_approve'] = 'Trust Education Lead to approve';
 $string['self_funding'] = 'Self-funding';
 $string['self_funding_text'] = 'Are you a self-funding applicant?';
 $string['declaration'] = 'Declaration';

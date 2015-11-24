@@ -41,7 +41,7 @@ require_obu_login();
 $PAGE->set_title($CFG->pageheading . ': ' . 'Menu');
 
 echo $OUTPUT->header();
-echo '<audio autoplay><source src="https://brookes-apps.appspot.com/say.php?' . $USER->firstname . ', please select an option." type="audio/wav"></audio>';
+//echo '<audio autoplay><source src="https://brookes-apps.appspot.com/say.php?' . $USER->firstname . ', please select an option." type="audio/wav"></audio>';
 echo '<h2>Faculty of Health and Life Sciences</h2>
 We offer a range of short courses for health and social care professionals:
 <ul>

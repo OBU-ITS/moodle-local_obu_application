@@ -92,7 +92,7 @@
         <FIELD NAME="module_1_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 3 name"/>
         <FIELD NAME="statement" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Supporting statement"/>
         <FIELD NAME="self_funding" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Self-funding?"/>
-        <FIELD NAME="manager_email" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Email of authorising manager"/>
+        <FIELD NAME="manager_email" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Email of manager"/>
         <FIELD NAME="declaration" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Mandatory declaration"/>
         <FIELD NAME="application_date" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Date of application"/>
         <FIELD NAME="approval_level" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Current level of approval"/>
