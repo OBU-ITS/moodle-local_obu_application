@@ -32,7 +32,9 @@ $CFG->additionalhtmlhead .= '<style>.langmenu, .usermenu, .logininfo, .homelink,
 
 // Add our own menu items for logged-in users
 if (isloggedin()) {
-	$CFG->custommenuitems = fullname($USER, true) . '|/local/obu_application/
+	$CFG->custommenuitems = fullname($USER, true) . '
+	#####
+	' . get_string('index_page', 'local_obu_application') . '|/local/obu_application/index.php
 	#####
 	' . get_string('contactdetails', 'local_obu_application') . '|/local/obu_application/contact.php
 	#####
@@ -41,8 +43,6 @@ if (isloggedin()) {
 	' . get_string('course', 'local_obu_application') . '|/local/obu_application/course.php
 	#####
 	' . get_string('apply', 'local_obu_application') . '|/local/obu_application/apply.php
-	#####
-	' . get_string('myapplications', 'local_obu_application') . '|/local/obu_application/applications.php
 	#####
 	' . get_string('logout', 'local_obu_application') . '|/local/obu_application/logout.php';
 }

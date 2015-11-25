@@ -61,6 +61,8 @@ $string['comment'] = 'Comment or Reason for Rejection';
 $string['application_unavailable'] = 'Sorry, this application is unavailable to you.';
 $string['form_errors'] = 'Your form has errors (please see below).';
 $string['user_not_found'] = 'User not found.';
+$string['invalid_funding'] = 'Funding percentages must total 100.';
+$string['value_required'] = 'You must supply a value here.';
 $string['status'] = 'Status';
 $string['status_not_submitted'] = 'Has not been submitted.';
 $string['status_rejected'] = 'Cannot be processed.';
@@ -132,6 +134,7 @@ $string['invoice'] = 'Invoice';
 $string['invoice_name'] = 'Trust (or other source)';
 $string['invoice_ref'] = 'PO number';
 $string['invoice_contact'] = 'Staff member to receive invoice';
+$string['prepaid'] = 'Pre-paid';
 
 $string['actioned_by'] = '{$a->action} by {$a->by}.';
 $string['submitted'] = 'Submitted';
@@ -146,6 +149,8 @@ $string['approval'] = 'approval';
 
 $string['request_approval'] = 'Could you please approve this {$a} for me or let me know why you couldn\'t do so.  Thank you.';
 
+$string['index_page'] = 'Home';
+$string['myapprovals'] = 'My approvals';
 $string['myapplications'] = 'My applications';
 
 $string['logout'] = 'Log out';

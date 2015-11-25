@@ -38,10 +38,40 @@ $CFG->additionalhtmlhead .= '<meta name="robots" content="noindex" />';
 
 require_obu_login();
 
-$PAGE->set_title($CFG->pageheading . ': ' . 'Menu');
+$process = new moodle_url('/local/obu_application/process.php');
+
+$PAGE->set_title($CFG->pageheading . ': ' . get_string('index_page', 'local_obu_application'));
 
 echo $OUTPUT->header();
 //echo '<audio autoplay><source src="https://brookes-apps.appspot.com/say.php?' . $USER->firstname . ', please select an option." type="audio/wav"></audio>';
+
+// Display any outstanding approvals
+$approvals = get_approvals($USER->email); // get outstanding approval requests
+if ($approvals) {
+	echo '<h2>' . get_string('myapprovals', 'local_obu_application') . '</h2>';
+	foreach ($approvals as $approval) {
+		$application = read_application($approval->application_id);
+		get_application_status($USER->id, $application, $text, $button); // get the approval trail and the next action (from the user's perspective)
+		echo '<h4><a href="' . $process . '?id=' . $application->id . '">Ref No ' . $application->id . '</a></h4>';
+		echo $text;
+	}
+}
+
+// Display applications submitted
+$applications = get_applications($USER->id); // get all applications for the user
+if ($applications) {
+	echo '<h2>' . get_string('myapplications', 'local_obu_application') . '</h2>';
+	foreach ($applications as $application) {
+		get_application_status($USER->id, $application, $text, $button); // get the approval trail and the next action (from this user's perspective)
+		if (($button != 'submit') || $currentuser || $manager) {
+			echo '<h4><a href="' . $process . '?id=' . $application->id . '">Ref No ' . $application->id . '</a></h4>';
+		} else {
+			echo '<h4>Ref No ' . $application->id . '</h4>';
+		}
+		echo $text;
+	}
+}
+
 echo '<h2>Faculty of Health and Life Sciences</h2>
 We offer a range of short courses for health and social care professionals:
 <ul>
@@ -49,4 +79,14 @@ We offer a range of short courses for health and social care professionals:
 <li>Post-qualification / post-registration short courses</li>
 <li>Institute of Public Care courses</li>
 </ul>';
+
+echo '<h2>To Apply</h2>
+Please:
+<ul>
+<li>Check that your contact details are correct and up-to-date</li>
+<li>Enter your profile (including education history and professional qualifications)</li>
+<li>Give details of the course and modules that you wish to apply for</li>
+<li>Submit your application and the email of the manager who will approve it</li>
+</ul>';
+
 echo $OUTPUT->footer();
