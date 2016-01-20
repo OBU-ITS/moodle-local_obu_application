@@ -60,10 +60,10 @@ class login_forgot_password_form extends moodleform {
 
 		if (empty($data['email']) || !validate_email($data['email'])) {
 			$errors['email'] = get_string('invalidemail');
-		} else if ($DB->count_records('user', array('email' => $data['email'])) > 1) {
+		} else if ($DB->count_records('user', array('email' => strtolower($data['email']))) > 1) {
 			$errors['email'] = get_string('forgottenduplicate');
 		} else {
-			if ($user = get_complete_user_data('email', $data['email'])) {
+			if ($user = get_complete_user_data('email', strtolower($data['email']))) {
 				if (empty($user->confirmed)) {
 					$errors['email'] = get_string('confirmednot');
 				}

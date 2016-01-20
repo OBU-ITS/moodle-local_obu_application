@@ -30,6 +30,18 @@ $string['pluginname'] = 'OBU application';
 $string['plugintitle'] = 'HLS Application';
 $string['obu_application:manage'] = 'Manage, view and approve applications in obu_application';
 
+$string['introduction'] = '<h2>Faculty of Health and Life Sciences</h2>
+We offer a range of short courses, or individual modules as an associate student for health and social care professionals.';
+
+$string['page_content'] = '<h2>To Apply</h2>
+Please:
+<ul>
+<li>Check that your contact details are correct and up-to-date</li>
+<li>Enter your profile (including education history and professional qualifications)</li>
+<li>Give details of the course and modules that you wish to apply for</li>
+<li>Submit your application and the email of the manager who will approve it</li>
+</ul>';
+
 $string['application_approvals'] = 'Application approvals';
 $string['hls_approvals'] = 'HLS approvals';
 $string['list_applications'] = 'List a user\'s applications';
@@ -44,7 +56,11 @@ $string['rememberemail'] = 'Remember email';
 $string['forgotten'] = 'Forgotten your password? ';
 $string['passwordforgotteninstructions'] = '<p>Only external users not using a Brookes login may use the form below. Please enter the email address you used to register. We will search for your account and send you further instructions on how to regain access to the site.</p>';
 $string['registration'] = 'Registration';
-$string['registrationsteps'] = 'Hi! For access to this Brookes site you\'ll need to take a minute to register yourself. Here are the steps: <ol> <li>Fill out the <a href="{$a}">Registration</a> form with your details.</li> <li>An email will be immediately sent to your email address.</li> <li>Read your email, and click on the web link it contains.</li> <li>Your account will be confirmed and you will be logged in.</li> <li>You can now access the site. From now on you will only need to enter your personal email and password (in the form on this page) to log in to your account.</li> </ol>';
+$string['registrationsteps'] = 'Welcome. For access to this Brookes site you will need to take a minute to register yourself. Here are the steps: <ol> <li>Fill out the <a href="{$a}">Registration</a> form with your details.</li> <li>An email will be immediately sent to your email address.</li> <li>Read your email, and click on the web link it contains.</li> <li>Your account will be confirmed and you will be logged in.</li> <li>You can now access the site. From now on you will only need to enter your personal email and password (in the form on this page) to log in to your account.</li> </ol>';
+
+$string['finance_codes'] = 'Finance codes';
+$string['trust'] = 'NHS Trust';
+$string['code'] = 'Finance Code';
 
 $string['applicant'] = 'Applicant';
 $string['application'] = 'Application (Ref No {$a})';
@@ -68,7 +84,7 @@ $string['status_not_submitted'] = 'Has not been submitted.';
 $string['status_rejected'] = 'Cannot be processed.';
 $string['status_processed'] = 'Has been processed.';
 
-$string['emailandpassword'] = 'Please enter your NHS (or preferred) email address and choose a password';
+$string['emailandpassword'] = 'Please enter your NHS (or preferred) email address (lowercase only) and choose a password';
 $string['newemail'] = 'Email (Note - you would need to use any new address to log in)';
 $string['contactdetails'] = 'Contact details';
 $string['name'] = 'Name';
@@ -93,6 +109,8 @@ $string['training'] = 'University/professional training body';
 $string['period'] = 'Date from and to';
 $string['prof_qual_head'] = 'Professional Qualification';
 $string['prof_level'] = 'Level of qualification (Diploma/Degree/REPs)';
+$string['associate_text'] = 'An Associate Student is one who is booking to study an individual module or a short course
+which may well have academic credit but is not part of a longer award like a Certificate, Diploma or Degree.';
 $string['prof_award'] = 'Award name (eg Adult Nursing/Social Work)';
 $string['prof_date'] = 'Date qualified';
 $string['employment_head'] = 'Current Employment';
@@ -108,7 +126,7 @@ $string['course'] = 'Course';
 $string['complete_profile'] = 'Please complete your profile first';
 $string['award_head'] = 'Short course award (if not an Associate Student)';
 $string['award_name'] = 'Award name';
-$string['module_head'] = 'Modules (level 6 or 7 if an Associate Student)';
+$string['module_head'] = 'Modules (level 5-7 if an Associate Student)';
 $string['start_date'] = 'Start date';
 $string['module_no'] = 'Module no';
 $string['module_name'] = 'Module name';
@@ -121,11 +139,13 @@ $string['tel_to_approve'] = 'Trust Education Lead to approve';
 $string['self_funding'] = 'Self-funding';
 $string['self_funding_text'] = 'Are you a self-funding applicant?';
 $string['declaration'] = 'Declaration';
+$string['conditions'] = 'Conditions of Acceptance';
 $string['declaration_text'] = 'I confirm that the information given in this application is complete and accurate and that no information
 requested or other material information has been omitted. I give my consent to the processing of my data by Oxford Brookes University.
-I have read the Conditions of Acceptance in the Prospectus and undertake to be bound by those conditions.';
+I have read the {$a} and undertake to be bound by those conditions.';
+$string['approval_head'] = 'Approval';
 
-$string['funding'] = 'Funding';
+$string['funding'] = 'Funding Method (please choose one only)';
 $string['contract'] = 'CPD Contract (HETV)';
 $string['trust'] = 'Trust';
 $string['tel'] = 'Trust Education Lead';

@@ -32,7 +32,26 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 
     $result = true;
 
-    if ($oldversion < 2015112200) {
+    if ($oldversion < 2016010600) {
+
+		// Define table local_obu_finance
+		$table = new xmldb_table('local_obu_finance');
+
+		// Add fields
+		$table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+		$table->add_field('trust', XMLDB_TYPE_CHAR, '100', null, XMLDB_NOTNULL, null, null);
+		$table->add_field('code', XMLDB_TYPE_CHAR, '100', null, XMLDB_NOTNULL, null, null);
+
+		// Add keys
+		$table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+
+		// Add indexes
+		$table->add_index('trust', XMLDB_INDEX_UNIQUE, array('trust'));
+
+		// Conditionally create table
+		if (!$dbman->table_exists($table)) {
+			$dbman->create_table($table);
+		}
 
 		// Define table local_obu_applicant
 		$table = new xmldb_table('local_obu_applicant');
@@ -164,6 +183,7 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		if (!$dbman->table_exists($table)) {
 			$dbman->create_table($table);
 		}
+		
 		// Define table local_obu_approval
 		$table = new xmldb_table('local_obu_approval');
 
@@ -186,7 +206,7 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		}
 
         // obu_application savepoint reached
-        upgrade_plugin_savepoint(true, 2015112200, 'local', 'obu_application');
+        upgrade_plugin_savepoint(true, 2016010600, 'local', 'obu_application');
     }
     
     return $result;

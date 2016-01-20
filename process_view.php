@@ -38,6 +38,7 @@ class process_view extends moodleform {
         $mform =& $this->_form;
 
         $data = new stdClass();
+		$data->trusts = $this->_customdata['trusts'];
 		$data->record = $this->_customdata['record'];
 		$data->status_text = $this->_customdata['status_text'];
 		$data->button_text = $this->_customdata['button_text'];
@@ -73,7 +74,7 @@ class process_view extends moodleform {
 			} else {
 				$declaration_formatted = '&#10008;'; // Cross
 			}
-			$declaration_formatted .= ' ' . get_string('declaration_text', 'local_obu_application');
+			$declaration_formatted .= ' ' . get_string('declaration_text', 'local_obu_application', get_string('conditions', 'local_obu_application'));
 			
 			$fields = [
 				'name' => $data->record->title . ' ' . $data->record->firstname . ' ' . $data->record->lastname,
@@ -134,11 +135,12 @@ class process_view extends moodleform {
 			$this->set_data($fields);
 		}
 		
-		// Start with the required hidden field
+		// Start with the required hidden fields
 		$mform->addElement('hidden', 'id', $data->record->id);
-
-		// Our own hidden fields (for use in form validation)
+		$mform->addElement('hidden', 'approval_state', $data->record->approval_state);
 		$mform->addElement('hidden', 'approval_level', $data->record->approval_level);
+
+		// Our own hidden field (for use in form validation)
 		$mform->addElement('hidden', 'self_funding', $data->record->self_funding);
 
 		// This 'dummy' element has two purposes:
@@ -294,56 +296,54 @@ class process_view extends moodleform {
 			$mform->addElement('html', '<h1>' . get_string('funding', 'local_obu_application') . '</h1>');
 			$mform->addElement('header', 'contract_head', get_string('contract', 'local_obu_application'), '');
 			if ($approval_sought == 2) { // TEL
-				$mform->setExpanded('contract_head');
-				$mform->addElement('text', 'contract_trust', get_string('trust', 'local_obu_application'), 'size="40" maxlength="100"');
+//				$mform->addElement('text', 'contract_trust', get_string('trust', 'local_obu_application'), 'size="40" maxlength="100"');
+				$mform->addElement('select', 'contract_trust', get_string('trust', 'local_obu_application'), $data->trusts, null);
 				$mform->addElement('text', 'contract_tel', get_string('tel', 'local_obu_application'), 'size="40" maxlength="100"');
-				$mform->addElement('text', 'contract_percentage', get_string('percentage', 'local_obu_application'), 'size="3" maxlength="3"');
-				$mform->setType('contract_percentage', PARAM_INT);
+//				$mform->addElement('text', 'contract_percentage', get_string('percentage', 'local_obu_application'), 'size="3" maxlength="3"');
+//				$mform->setType('contract_percentage', PARAM_INT);
 			} else { // HLS
-				if ($data->record->contract_percentage != 0) {
+//				if ($data->record->contract_percentage != 0) {
 					$mform->setExpanded('contract_head');
-				}
-				$mform->addElement('static', 'contract_trust', get_string('trust', 'local_obu_application'));
+//				}
+				$mform->addElement('static', $data->trusts['contract_trust'], get_string('trust', 'local_obu_application'));
 				$mform->addElement('static', 'contract_tel', get_string('tel', 'local_obu_application'));
-				$mform->addElement('static', 'contract_percentage', get_string('percentage', 'local_obu_application'));
+//				$mform->addElement('static', 'contract_percentage', get_string('percentage', 'local_obu_application'));
 			}
 			$mform->addElement('header', 'invoice_head', get_string('invoice', 'local_obu_application'), '');
 			if ($approval_sought == 2) { // TEL
-				$mform->setExpanded('invoice_head');
 				$mform->addElement('text', 'invoice_name', get_string('invoice_name', 'local_obu_application'), 'size="40" maxlength="100"');
 				$mform->addElement('text', 'invoice_ref', get_string('invoice_ref', 'local_obu_application'), 'size="40" maxlength="100"');
 				$mform->addElement('textarea', 'invoice_address', get_string('address'), 'cols="40" rows="5"');
 				$mform->addElement('text', 'invoice_email', get_string('email'), 'size="40" maxlength="100"');
 				$mform->addElement('text', 'invoice_phone', get_string('phone', 'local_obu_application'), 'size="40" maxlength="100"');
 				$mform->addElement('text', 'invoice_contact', get_string('invoice_contact', 'local_obu_application'), 'size="40" maxlength="100"');
-				$mform->addElement('text', 'invoice_percentage', get_string('percentage', 'local_obu_application'), 'size="3" maxlength="3"');
-				$mform->setType('invoice_percentage', PARAM_INT);
+//				$mform->addElement('text', 'invoice_percentage', get_string('percentage', 'local_obu_application'), 'size="3" maxlength="3"');
+//				$mform->setType('invoice_percentage', PARAM_INT);
 			} else { // HLS
-				if ($data->record->invoice_percentage != 0) {
+//				if ($data->record->invoice_percentage != 0) {
 					$mform->setExpanded('invoice_head');
-				}
+//				}
 				$mform->addElement('static', 'invoice_name', get_string('invoice_name', 'local_obu_application'));
 				$mform->addElement('static', 'invoice_ref', get_string('invoice_ref', 'local_obu_application'));
 				$mform->addElement('static', 'invoice_address', get_string('address'));
 				$mform->addElement('static', 'invoice_email', get_string('email'));
 				$mform->addElement('static', 'invoice_phone', get_string('phone', 'local_obu_application'));
 				$mform->addElement('static', 'invoice_contact', get_string('invoice_contact', 'local_obu_application'));
-				$mform->addElement('static', 'invoice_percentage', get_string('percentage', 'local_obu_application'));
+//				$mform->addElement('static', 'invoice_percentage', get_string('percentage', 'local_obu_application'));
 			}
 			$mform->addElement('header', 'prepaid_head', get_string('prepaid', 'local_obu_application'), '');
 			if ($approval_sought == 2) { // TEL
-				$mform->setExpanded('prepaid_head');
 				$mform->addElement('text', 'prepaid_trust', get_string('trust', 'local_obu_application'), 'size="40" maxlength="100"');
 				$mform->addElement('text', 'prepaid_tel', get_string('tel', 'local_obu_application'), 'size="40" maxlength="100"');
-				$mform->addElement('text', 'prepaid_percentage', get_string('percentage', 'local_obu_application'), 'size="3" maxlength="3"');
-				$mform->setType('prepaid_percentage', PARAM_INT);
+//				$mform->addElement('text', 'prepaid_percentage', get_string('percentage', 'local_obu_application'), 'size="3" maxlength="3"');
+//				$mform->setType('prepaid_percentage', PARAM_INT);
 			} else { // HLS
-				if ($data->record->prepaid_percentage != 0) {
+//				if ($data->record->prepaid_percentage != 0) {
 					$mform->setExpanded('prepaid_head');
-				}
+//				}
 				$mform->addElement('static', 'prepaid_trust', get_string('trust', 'local_obu_application'));
 				$mform->addElement('static', 'prepaid_tel', get_string('tel', 'local_obu_application'));
-				$mform->addElement('static', 'prepaid_percentage', get_string('percentage', 'local_obu_application'));
+//				$mform->addElement('static', 'prepaid_percentage', get_string('percentage', 'local_obu_application'));
 			}
 		}
 
@@ -354,6 +354,9 @@ class process_view extends moodleform {
 		}
 		if ($data->button_text != 'continue') {
 			if ($data->button_text == 'approve') {
+				$mform->addElement('static', 'dummy_element', '');
+				$mform->closeHeaderBefore('dummy_element');
+				$mform->addElement('html', '<h1>' . get_string('approval_head', 'local_obu_application') . '</h1>');
 				$mform->addElement('text', 'comment', get_string('comment', 'local_obu_application'), 'size="40" maxlength="100"');
 				$buttonarray[] = &$mform->createElement('submit', 'rejectbutton', get_string('reject', 'local_obu_application'));
 			}
@@ -381,12 +384,13 @@ class process_view extends moodleform {
 					$errors['tel_email2'] = get_string('invalidemail');
 				}
 			} else if ($data['approval_level'] == '2') { // TEL must give us the complete funding details
-				if (($data['contract_percentage'] + $data['invoice_percentage'] + $data['prepaid_percentage']) != 100) {
+/*				if (($data['contract_percentage'] + $data['invoice_percentage'] + $data['prepaid_percentage']) != 100) {
 					$errors['contract_percentage'] = get_string('invalid_funding', 'local_obu_application');
 					$errors['invoice_percentage'] = get_string('invalid_funding', 'local_obu_application');
 					$errors['prepaid_percentage'] = get_string('invalid_funding', 'local_obu_application');
 				}
 				if ($data['contract_percentage'] != 0) {
+*/				if (($data['contract_trust'] != '') || ($data['contract_tel'] != '')) {
 					if ($data['contract_trust'] == '') {
 						$errors['contract_trust'] = get_string('value_required', 'local_obu_application');
 					}
@@ -394,7 +398,9 @@ class process_view extends moodleform {
 						$errors['contract_tel'] = get_string('value_required', 'local_obu_application');
 					}
 				}
-				if ($data['invoice_percentage'] != 0) {
+//				if ($data['invoice_percentage'] != 0) {
+				if (($data['invoice_name'] != '') || ($data['invoice_ref'] != '') || ($data['invoice_address'] != '')
+					|| ($data['invoice_email'] != '') || ($data['invoice_phone'] != '') || ($data['invoice_contact'] != '')) {
 					if ($data['invoice_name'] == '') {
 						$errors['invoice_name'] = get_string('value_required', 'local_obu_application');
 					}
@@ -414,7 +420,8 @@ class process_view extends moodleform {
 						$errors['invoice_contact'] = get_string('value_required', 'local_obu_application');
 					}
 				}
-				if ($data['prepaid_percentage'] != 0) {
+//				if ($data['prepaid_percentage'] != 0) {
+				if (($data['prepaid_trust'] != '') || ($data['prepaid_tel'] != '')) {
 					if ($data['prepaid_trust'] == '') {
 						$errors['prepaid_trust'] = get_string('value_required', 'local_obu_application');
 					}

@@ -47,5 +47,6 @@ function local_obu_application_extends_navigation($navigation) {
 		$node = $nodeParent->add(get_string('application_approvals', 'local_obu_application'), '/local/obu_application/mdl_approvals.php');
 		$node = $nodeParent->add(get_string('hls_approvals', 'local_obu_application'), '/local/obu_application/mdl_approvals.php?approver=hls');
 		$node = $nodeParent->add(get_string('list_applications', 'local_obu_application'), '/local/obu_application/mdl_list.php');
+		$node = $nodeParent->add(get_string('finance_codes', 'local_obu_application'), '/local/obu_application/mdl_finance.php');
 	}
 }

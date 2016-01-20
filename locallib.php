@@ -118,14 +118,12 @@ function authenticate_application_user($username, $password, $ignorelockout = fa
     global $CFG, $DB;
     require_once($CFG->libdir . '/authlib.php');
 
-    if ($user = get_complete_user_data('username', $username, $CFG->mnet_localhost_id)) {
-        // we have found the user
+    if ($user = get_complete_user_data('username', $username, $CFG->mnet_localhost_id)) { // We have found the user
     } else if ($email = clean_param($username, PARAM_EMAIL)) {
 		$select = "mnethostid = :mnethostid AND LOWER(email) = LOWER(:email) AND deleted = 0";
-		$params = array('mnethostid' => $CFG->mnet_localhost_id, 'email' => $email);
+		$params = array('mnethostid' => $CFG->mnet_localhost_id, 'email' => strtolower($email));
 		$users = $DB->get_records_select('user', $select, $params, 'id', 'id', 0, 2);
-		if (count($users) === 1) {
-			// Use email for login only if unique.
+		if (count($users) === 1) { // Use email for login only if unique
 			$user = reset($users);
 			$user = get_complete_user_data('id', $user->id);
 			$username = $user->username;
@@ -142,21 +140,19 @@ function authenticate_application_user($username, $password, $ignorelockout = fa
             $failurereason = AUTH_LOGIN_SUSPENDED;
 
             // Trigger login failed event.
-            $event = \core\event\user_login_failed::create(array('userid' => $user->id,
-                    'other' => array('username' => $username, 'reason' => $failurereason)));
+            $event = \core\event\user_login_failed::create(array('userid' => $user->id,  'other' => array('username' => $username, 'reason' => $failurereason)));
             $event->trigger();
-            error_log('[client '.getremoteaddr()."]  $CFG->wwwroot  Suspended Login:  $username  ".$_SERVER['HTTP_USER_AGENT']);
+            error_log('[client ' . getremoteaddr() . "]  $CFG->wwwroot  Suspended Login:  $username  " . $_SERVER['HTTP_USER_AGENT']);
             return false;
         }
-        if ($auth=='nologin' or !is_enabled_auth($auth)) {
+        if ($auth == 'nologin' or !is_enabled_auth($auth)) {
             // Legacy way to suspend user.
             $failurereason = AUTH_LOGIN_SUSPENDED;
 
             // Trigger login failed event.
-            $event = \core\event\user_login_failed::create(array('userid' => $user->id,
-                    'other' => array('username' => $username, 'reason' => $failurereason)));
+            $event = \core\event\user_login_failed::create(array('userid' => $user->id, 'other' => array('username' => $username, 'reason' => $failurereason)));
             $event->trigger();
-            error_log('[client '.getremoteaddr()."]  $CFG->wwwroot  Disabled Login:  $username  ".$_SERVER['HTTP_USER_AGENT']);
+            error_log('[client ' . getremoteaddr() . "]  $CFG->wwwroot  Disabled Login:  $username  " . $_SERVER['HTTP_USER_AGENT']);
             return false;
         }
         $auths = array($auth);
@@ -167,10 +163,9 @@ function authenticate_application_user($username, $password, $ignorelockout = fa
             $failurereason = AUTH_LOGIN_NOUSER;
 
             // Trigger login failed event.
-            $event = \core\event\user_login_failed::create(array('other' => array('username' => $username,
-                    'reason' => $failurereason)));
+            $event = \core\event\user_login_failed::create(array('other' => array('username' => $username, 'reason' => $failurereason)));
             $event->trigger();
-            error_log('[client '.getremoteaddr()."]  $CFG->wwwroot  Deleted Login:  $username  ".$_SERVER['HTTP_USER_AGENT']);
+            error_log('[client ' . getremoteaddr() . "]  $CFG->wwwroot  Deleted Login:  $username  " . $_SERVER['HTTP_USER_AGENT']);
             return false;
         }
 
@@ -231,12 +226,10 @@ function authenticate_application_user($username, $password, $ignorelockout = fa
                 $failurereason = AUTH_LOGIN_UNAUTHORISED;
 
                 // Trigger login failed event.
-                $event = \core\event\user_login_failed::create(array('other' => array('username' => $username,
-                        'reason' => $failurereason)));
+                $event = \core\event\user_login_failed::create(array('other' => array('username' => $username, 'reason' => $failurereason)));
                 $event->trigger();
 
-                error_log('[client '.getremoteaddr()."]  $CFG->wwwroot  Unknown user, can not create new accounts:  $username  ".
-                        $_SERVER['HTTP_USER_AGENT']);
+                error_log('[client ' . getremoteaddr() . "]  $CFG->wwwroot  Unknown user, can not create new accounts:  $username  " . $_SERVER['HTTP_USER_AGENT']);
                 return false;
             } else {
                 $user = create_user_record($username, $password, $auth);
@@ -398,6 +391,17 @@ function require_obu_login($courseorid = null, $autologinguest = true, $cm = nul
     user_accesstime_log($course->id);
 }
 
+function get_trusts() {
+	
+	$trusts = array();
+	$recs = get_finance_codes();
+	foreach ($recs as $rec) {
+		$trusts[$rec->id] = $rec->trust;
+	}
+	
+	return $trusts;	
+}
+
 function get_application_status($user_id, $application, &$text, &$button) { // Get the status from the given user's perspective
 
 	$text = '';
@@ -422,7 +426,7 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 		if (($application->approval_level == 1) && ($application->approval_state > 0)) { // The workflow ended here
 			date_timestamp_set($date, $application->approval_1_date);
 			$text .= date_format($date, $format) . ' ';
-			$approver = get_complete_user_data('email', $application->manager_email);
+			$approver = get_complete_user_data('email', strtolower($application->manager_email));
 			if ($approver === false) {
 				$name = $application->manager_email;
 			} else if ($approver->id == $user_id) {
@@ -439,7 +443,7 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 		} else if ($application->approval_level > 1) {
 			date_timestamp_set($date, $application->approval_1_date);
 			$text .= date_format($date, $format) . ' ';
-			$approver = get_complete_user_data('email', $application->manager_email);
+			$approver = get_complete_user_data('email', strtolower($application->manager_email));
 			if ($approver === false) {
 				$name = $application->manager_email;
 			} else if ($approver->id == $user_id) {
@@ -452,7 +456,7 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 			if (($application->approval_level == 2) && ($application->approval_state > 0)) { // The workflow ended here
 				date_timestamp_set($date, $application->approval_2_date);
 				$text .= date_format($date, $format) . ' ';
-				$approver = get_complete_user_data('email', $application->tel_email);
+				$approver = get_complete_user_data('email', strtolower($application->tel_email));
 				if ($approver === false) {
 					$name = $application->tel_email;
 				} else if ($approver->id == $user_id) {
@@ -470,7 +474,7 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 				if ($application->self_funding == '0') { // This step would have been skipped
 					date_timestamp_set($date, $application->approval_2_date);
 					$text .= date_format($date, $format) . ' ';
-					$approver = get_complete_user_data('email', $application->tel_email);
+					$approver = get_complete_user_data('email', strtolower($application->tel_email));
 					if ($approver === false) {
 						$name = $application->tel_email;
 					} else if ($approver->id == $user_id) {
@@ -515,14 +519,14 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 			$text .= '<p />' . get_string('awaiting_action', 'local_obu_application', array('action' => get_string('submission', 'local_obu_application'), 'by' => $name));
 		} else {
 			if ($application->approval_level == 1) {
-				$approver = get_complete_user_data('email', $application->manager_email);
+				$approver = get_complete_user_data('email', strtolower($application->manager_email));
 				if ($approver === false) {
 					$name = $application->manager_email;
 				} else {
 					$name = $approver->firstname . ' ' . $approver->lastname . ' (' . $approver->email . ')';
 				}
 			} else if ($application->approval_level == 2) {
-				$approver = get_complete_user_data('email', $application->tel_email);
+				$approver = get_complete_user_data('email', strtolower($application->tel_email));
 				if ($approver === false) {
 					$name = $application->tel_email;
 				} else {
@@ -614,7 +618,7 @@ function update_approver($application, $approver_email) {
 	if ($approver_email == '') {
 		delete_approval($approval);
 	} else {
-		$approval->approver = $approver_email;
+		$approval->approver = strtolower($approver_email);
 		$approval->request_date = time();
 		write_approval($approval);
 	}
@@ -642,7 +646,7 @@ function update_approver($application, $approver_email) {
 				$approver_email = $hls->email;
 			}
 		}
-		$approver = get_complete_user_data('email', $approver_email);
+		$approver = get_complete_user_data('email', strtolower($approver_email));
 		if ($approver === false) { // Approver hasn't yet registered
 			// Moodle requires a user to send emails to, not just an email address
 			$approver = new Object();

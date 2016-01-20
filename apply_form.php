@@ -47,8 +47,9 @@ class apply_form extends moodleform {
         $mform->addElement('header', 'declaration_head', get_string('declaration', 'local_obu_application'), '');
 		$mform->addElement('advcheckbox', 'self_funding', get_string('self_funding', 'local_obu_application'),
 			get_string('self_funding_text', 'local_obu_application'), null, array(0, 1));
+		$conditions = '<a href="http://www.brookes.ac.uk/studying-at-brookes/how-to-apply/conditions-of-acceptance/" target="_blank">' . get_string('conditions', 'local_obu_application') . '</a>';
 		$mform->addElement('checkbox', 'declaration', get_string('declaration', 'local_obu_application'),
-			get_string('declaration_text', 'local_obu_application'));
+			get_string('declaration_text', 'local_obu_application', $conditions));
 		$mform->addRule('declaration', null, 'required', null, 'server');
         $this->add_action_buttons(true, get_string('apply', 'local_obu_application'));
     }

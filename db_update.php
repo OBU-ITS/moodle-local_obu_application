@@ -25,6 +25,12 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
+
+function get_finance_codes() {
+	global $DB;
+	   
+	return $DB->get_records('local_obu_finance', null, 'trust');
+}
  
 function write_user($user_id, $form_data) {
 	global $DB;
@@ -38,7 +44,7 @@ function write_user($user_id, $form_data) {
 	$user->address = $form_data->address;
 	$user->city = $form_data->city;
 	$user->phone1 = $form_data->phone1;
-	$user->email = $form_data->email;
+	$user->email = strtolower($form_data->email);
 		
 	user_update_user($user, false, true);
 }
@@ -249,7 +255,7 @@ function get_approvals($approver_email) {
 	$conditions = array();
 	
 	if ($approver_email != '') {
-		$conditions['approver'] = $approver_email;
+		$conditions['approver'] = strtolower($approver_email);
 	}
 
 	return $DB->get_records('local_obu_approval', $conditions, 'request_date ASC');

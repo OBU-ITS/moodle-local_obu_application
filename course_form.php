@@ -54,6 +54,9 @@ class course_form extends moodleform {
 			$this->set_data($fields);
 		}
 		
+		// Firstly, explain what as 'associate student' is
+		$mform->addElement('html', '<h2>' . get_string('associate_text', 'local_obu_application') . '</h2>');
+		
 		// This 'dummy' element has two purposes:
 		// - To force open the Moodle Forms invisible fieldset outside of any table on the form (corrupts display otherwise)
 		// - To let us inform the user that there are validation errors without them having to scroll down further

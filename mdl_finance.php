@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * OBU Application - version
+ * OBU Application - Maintain finance codes [Moodle]
  *
  * @package    obu_application
  * @category   local
@@ -24,13 +24,32 @@
  *
  */
 
-$plugin->version  = 2016011100;   // The (date) version of this module + 2 extra digital for daily versions
-                                  // This version number is displayed into /admin/forms.php
-                                  // TODO: if ever this plugin get branched, the old branch number
-                                  // will not be updated to the current date but just incremented. We will
-                                  // need then a $plugin->release human friendly date. For the moment, we use
-                                  // display this version number with userdate (dev friendly)
-$plugin->requires = 2012120300;   // Requires this Moodle version - at least 2.0
-$plugin->cron     = 0;
-$plugin->release = 'v1.0.0';
-$plugin->maturity = MATURITY_STABLE;
+require_once('../../config.php');
+require_once('./locallib.php');
+require_once('./db_update.php');
+
+require_login();
+
+$context = context_system::instance();
+require_capability('local/obu_application:manage', $context);
+
+$home = new moodle_url('/');
+$dir = $home . 'local/obu_application/';
+$program = $dir . 'mdl_finance.php';
+$heading = get_string('finance_codes', 'local_obu_application');
+
+$PAGE->set_url($program);
+$PAGE->set_pagelayout('standard');
+$PAGE->set_context($context);
+$PAGE->set_heading($SITE->fullname);
+$PAGE->set_title($heading);
+
+echo $OUTPUT->header();
+echo $OUTPUT->heading($heading);
+
+$recs = get_finance_codes();
+foreach ($recs as $rec) {
+	echo $rec->trust . '<br \>';
+}
+
+echo $OUTPUT->footer();

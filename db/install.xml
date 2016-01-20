@@ -5,7 +5,21 @@
 >
   <TABLES>
 
-  <TABLE NAME="local_obu_applicant" COMMENT="OBU applicants">
+    <TABLE NAME="local_obu_finance" COMMENT="OBU finance codes">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="trust" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="The name of the NHS Trust"/>
+        <FIELD NAME="code" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="The finance code"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="trust" UNIQUE="true" FIELDS="trust" COMMENT="The name of the NHS Trust"/>
+      </INDEXES>
+    </TABLE>
+
+	<TABLE NAME="local_obu_applicant" COMMENT="OBU applicants">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Moodle user ID"/>
@@ -35,10 +49,10 @@
         <FIELD NAME="start_date" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Course start date"/>
         <FIELD NAME="module_1_no" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 1 number"/>
         <FIELD NAME="module_1_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 1 name"/>
-        <FIELD NAME="module_1_no" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 2 number"/>
-        <FIELD NAME="module_1_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 2 name"/>
-        <FIELD NAME="module_1_no" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 3 number"/>
-        <FIELD NAME="module_1_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 3 name"/>
+        <FIELD NAME="module_2_no" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 2 number"/>
+        <FIELD NAME="module_2_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 2 name"/>
+        <FIELD NAME="module_3_no" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 3 number"/>
+        <FIELD NAME="module_3_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 3 name"/>
         <FIELD NAME="statement" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Supporting statement"/>
         <FIELD NAME="course_update" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Date of last course update"/>
       </FIELDS>
@@ -86,10 +100,10 @@
         <FIELD NAME="start_date" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Course start date"/>
         <FIELD NAME="module_1_no" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 1 number"/>
         <FIELD NAME="module_1_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 1 name"/>
-        <FIELD NAME="module_1_no" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 2 number"/>
-        <FIELD NAME="module_1_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 2 name"/>
-        <FIELD NAME="module_1_no" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 3 number"/>
-        <FIELD NAME="module_1_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 3 name"/>
+        <FIELD NAME="module_2_no" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 2 number"/>
+        <FIELD NAME="module_2_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 2 name"/>
+        <FIELD NAME="module_3_no" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 3 number"/>
+        <FIELD NAME="module_3_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 3 name"/>
         <FIELD NAME="statement" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Supporting statement"/>
         <FIELD NAME="self_funding" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Self-funding?"/>
         <FIELD NAME="manager_email" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Email of manager"/>

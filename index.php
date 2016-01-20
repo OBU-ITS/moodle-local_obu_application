@@ -72,21 +72,10 @@ if ($applications) {
 	}
 }
 
-echo '<h2>Faculty of Health and Life Sciences</h2>
-We offer a range of short courses for health and social care professionals:
-<ul>
-<li>Postgraduate short courses</li>
-<li>Post-qualification / post-registration short courses</li>
-<li>Institute of Public Care courses</li>
-</ul>';
+if (!$approvals && !$applications) {
+	echo get_string('introduction', 'local_obu_application');
+}
 
-echo '<h2>To Apply</h2>
-Please:
-<ul>
-<li>Check that your contact details are correct and up-to-date</li>
-<li>Enter your profile (including education history and professional qualifications)</li>
-<li>Give details of the course and modules that you wish to apply for</li>
-<li>Submit your application and the email of the manager who will approve it</li>
-</ul>';
+echo get_string('page_content', 'local_obu_application');
 
 echo $OUTPUT->footer();

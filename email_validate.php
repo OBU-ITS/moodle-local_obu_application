@@ -1,6 +1,6 @@
 <?php
 
-if (!validate_email($data['username'])) {
+if (!validate_email($data['username']) || ($data['username'] != strtolower($data['username']))) {
     $errors['username'] = get_string('invalidemail');
 }
 		

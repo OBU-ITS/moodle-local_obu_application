@@ -64,9 +64,9 @@ if (($application->approval_state == 0) && ($application->approval_level == 0)) 
 	update_workflow($application);
 	$status_text = '';
 	
-} else if ($application->authorisation_state == 1) { // Application rejected
+} else if ($application->approval_state == 1) { // Application rejected
 	$status_text = get_string('status_rejected', 'local_obu_application');
-} else if ($application->authorisation_state == 2) { // Application processed
+} else if ($application->approval_state == 2) { // Application processed
 	$status_text = get_string('status_processed', 'local_obu_application');
 } else {
 	$status_text = '';
@@ -85,18 +85,20 @@ if ($button_text != 'approve') { // If not the next approver, check that this us
 }
 
 $parameters = [
+	'trusts' => get_trusts(),
 	'record' => $application,
 	'status_text' => $status_text,
 	'button_text' => $button_text
 ];
-	
+
 $mform = new process_view(null, $parameters);
 
 if ($mform->is_cancelled()) {
     redirect($home);
 } 
 else if ($mform_data = $mform->get_data()) {
-	if ($mform_data->submitbutton != get_string('continue', 'local_obu_application')) {
+	if (($button_text == 'approve') && ($mform_data->submitbutton != get_string('continue', 'local_obu_application')) // They can do something (and they want to)
+		&& ($mform_data->approval_state == $application->approval_state) && ($mform_data->approval_level == $application->approval_level)) { // Check nothing happened while we were away (or they clicked twice)
 		if ($mform_data->rejectbutton != get_string('reject', 'local_obu_application')) {
 			update_workflow($application, true, $mform_data);
 		} else {
