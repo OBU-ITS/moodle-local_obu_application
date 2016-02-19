@@ -26,10 +26,22 @@
  *
  */
 
-function get_finance_codes() {
+function read_course_record($course_code) {
+    global $DB;
+    
+	return $DB->get_record('local_obu_course', array('code' => $course_code), '*', MUST_EXIST);
+}
+
+function get_course_records() {
 	global $DB;
-	   
-	return $DB->get_records('local_obu_finance', null, 'trust');
+	
+	return $DB->get_records('local_obu_course', null, 'code');
+}
+
+function get_organisation_records() {
+	global $DB;
+	
+	return $DB->get_records('local_obu_organisation', null, 'name');
 }
  
 function write_user($user_id, $form_data) {
@@ -66,13 +78,40 @@ function write_profile($user_id, $form_data) {
 		$record->id = 0;
 		$record->userid = $user_id;
 	}
+		// Zero dates that weren't actually input
+		$today = floor(time() / 86400) * 86400;
+		if ($data['firstentrydate'] == $today) {
+			$data['firstentrydate'] = 0;
+		}
+		if ($data['lastentrydate'] == $today) {
+			$data['lastentrydate'] = 0;
+		}
+		if ($data['residencedate'] == $today) {
+			$data['residencedate'] = 0;
+		}
+		
+		$data['lastentrydate'] = time();
+		$data['residencedate'] = 0;
 	
 	// Update the applicant's profile fields
     $record->birthdate = $form_data->birthdate;
     $record->birthcountry = $form_data->birthcountry;
-    $record->firstentrydate = $form_data->firstentrydate;
-    $record->lastentrydate = $form_data->lastentrydate;
-    $record->residencedate = $form_data->residencedate;
+	$today = floor(time() / 86400) * 86400; // Time stamp at 00:00 today
+    if ($form_data->firstentrydate == $today) { // Not actually entered
+		$record->firstentrydate = 0;
+	} else {
+		$record->firstentrydate = $form_data->firstentrydate;
+	}
+    if ($form_data->lastentrydate == $today) { // Not actually entered
+		$record->lastentrydate = 0;
+	} else {
+		$record->lastentrydate = $form_data->lastentrydate;
+	}
+    if ($form_data->residencedate == $today) { // Not actually entered
+		$record->residencedate = 0;
+	} else {
+		$record->residencedate = $form_data->residencedate;
+	}
     $record->support = $form_data->support;
     $record->p16school = $form_data->p16school;
     $record->p16schoolperiod = $form_data->p16schoolperiod;
@@ -107,14 +146,9 @@ function write_course($user_id, $form_data) {
 	$record = read_applicant($user_id, true); // Must already exist
 
 	// Update the applicant's course fields
-    $record->award_name = $form_data->award_name;
-    $record->start_date = $form_data->start_date;
-    $record->module_1_no = $form_data->module_1_no;
-    $record->module_1_name = $form_data->module_1_name;
-    $record->module_2_no = $form_data->module_2_no;
-    $record->module_2_name = $form_data->module_2_name;
-    $record->module_3_no = $form_data->module_3_no;
-    $record->module_3_name = $form_data->module_3_name;
+    $record->course_code = $form_data->course_code;
+    $record->course_name = $form_data->course_name;
+    $record->course_date = $form_data->course_date;
     $record->statement = $form_data->statement;
     $record->course_update = time();
 
@@ -179,14 +213,9 @@ function write_application($user_id, $form_data) {
     $record->criminal_record = $applicant->criminal_record;
 	
 	// Course
-    $record->award_name = $applicant->award_name;
-    $record->start_date = $applicant->start_date;
-    $record->module_1_no = $applicant->module_1_no;
-    $record->module_1_name = $applicant->module_1_name;
-    $record->module_2_no = $applicant->module_2_no;
-    $record->module_2_name = $applicant->module_2_name;
-    $record->module_3_no = $applicant->module_3_no;
-    $record->module_3_name = $applicant->module_3_name;
+    $record->course_code = $applicant->course_code;
+    $record->course_name = $applicant->course_name;
+    $record->course_date = $applicant->course_date;
     $record->statement = $applicant->statement;
 	
 	// Final details

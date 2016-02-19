@@ -37,33 +37,54 @@ class course_form extends moodleform {
         $mform =& $this->_form;
 
         $data = new stdClass();
-		$data->courses = $this->_customdata['courses'];
 		$data->record = $this->_customdata['record'];
 		
 		if ($data->record !== false) {
 			$fields = [
-				'course_code' => $data->record->course_code,
-				'course_date' => $data->record->course_date,
+				'award_name' => $data->record->award_name,
+				'start_date' => $data->record->start_date,
+				'module_1_no' => $data->record->module_1_no,
+				'module_1_name' => $data->record->module_1_name,
+				'module_2_no' => $data->record->module_2_no,
+				'module_2_name' => $data->record->module_2_name,
+				'module_3_no' => $data->record->module_3_no,
+				'module_3_name' => $data->record->module_3_name,
 				'statement' => $data->record->statement
 			];
 			$this->set_data($fields);
 		}
+		
+		// Firstly, explain what as 'associate student' is
+		$mform->addElement('html', '<h2>' . get_string('associate_text', 'local_obu_application') . '</h2>');
 		
 		// This 'dummy' element has two purposes:
 		// - To force open the Moodle Forms invisible fieldset outside of any table on the form (corrupts display otherwise)
 		// - To let us inform the user that there are validation errors without them having to scroll down further
 		$mform->addElement('static', 'form_errors');
 
-        $mform->addElement('header', 'course_head', get_string('course_head', 'local_obu_application'), '');
-		$mform->setExpanded('course_head');
-		$mform->addElement('select', 'course_code', get_string('course', 'local_obu_application'), $data->courses, null);
-		$mform->addElement('text', 'course_date', get_string('course_date', 'local_obu_application'), 'size="40" maxlength="100"');
-		$mform->addRule('course_date', null, 'required', null, 'server');
+        $mform->addElement('header', 'award_head', get_string('award_head', 'local_obu_application'), '');
+		$mform->setExpanded('award_head');
+		$mform->addElement('text', 'award_name', get_string('award_name', 'local_obu_application'), 'size="40" maxlength="100"');
+        $mform->addElement('header', 'module_head', get_string('module_head', 'local_obu_application'), '');
+		$mform->setExpanded('module_head');
+		$mform->addElement('text', 'start_date', get_string('start_date', 'local_obu_application'), 'size="40" maxlength="100"');
+		$mform->addRule('start_date', null, 'required', null, 'server');
+		$mform->addElement('text', 'module_1_no', get_string('module_no', 'local_obu_application'), 'size="40" maxlength="100"');
+		$mform->addRule('module_1_no', null, 'required', null, 'server');
+		$mform->addElement('text', 'module_1_name', get_string('module_name', 'local_obu_application'), 'size="40" maxlength="100"');
+		$mform->addRule('module_1_name', null, 'required', null, 'server');
+		$mform->addElement('text', 'module_2_no', get_string('module_no', 'local_obu_application'), 'size="40" maxlength="100"');
+		$mform->addElement('text', 'module_2_name', get_string('module_name', 'local_obu_application'), 'size="40" maxlength="100"');
+		$mform->addElement('text', 'module_3_no', get_string('module_no', 'local_obu_application'), 'size="40" maxlength="100"');
+		$mform->addElement('text', 'module_3_name', get_string('module_name', 'local_obu_application'), 'size="40" maxlength="100"');
         $mform->addElement('header', 'statement_head', get_string('statement_head', 'local_obu_application'), '');
 		$mform->setExpanded('statement_head');
 		$mform->addElement('textarea', 'statement', get_string('statement', 'local_obu_application'), 'cols="60" rows="10"');
 		$mform->setType('statement', PARAM_TEXT);
 		$mform->addRule('statement', null, 'required', null, 'server');
+        $mform->addElement('header', 'attachments_head', get_string('attachments_head', 'local_obu_application'), '');
+		$mform->setExpanded('attachments_head');
+		$mform->addElement('filemanager', 'attachments', get_string('attachments', 'local_obu_application'));
 		$this->add_action_buttons(true, get_string('save', 'local_obu_application'));
     }
 

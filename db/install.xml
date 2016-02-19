@@ -5,21 +5,56 @@
 >
   <TABLES>
 
-    <TABLE NAME="local_obu_finance" COMMENT="OBU finance codes">
+    <TABLE NAME="local_obu_course" COMMENT="OBU HLS courses">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-        <FIELD NAME="trust" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="The name of the NHS Trust"/>
-        <FIELD NAME="code" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="The finance code"/>
+        <FIELD NAME="code" TYPE="char" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The course code"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="The name of the course"/>
+        <FIELD NAME="applicant_form" TYPE="char" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Any supplementary form for the applicant"/>
+        <FIELD NAME="manager_form" TYPE="char" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Any supplementary form for the manager"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
       <INDEXES>
-        <INDEX NAME="trust" UNIQUE="true" FIELDS="trust" COMMENT="The name of the NHS Trust"/>
+        <INDEX NAME="code" UNIQUE="true" FIELDS="code" COMMENT="The course code"/>
+      </INDEXES>
+    </TABLE>
+	
+    <TABLE NAME="local_obu_form" COMMENT="OBU HLS forms">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="form_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The form's ID"/>
+        <FIELD NAME="version" TYPE="char" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The form's version"/>
+        <FIELD NAME="author" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The authors's Moodle user ID"/>
+        <FIELD NAME="date" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Date of form update"/>
+        <FIELD NAME="notes" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Completion notes"/>
+        <FIELD NAME="published" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Draft or Published"/>
+        <FIELD NAME="data" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="The form's template"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="form" UNIQUE="true" FIELDS="form_id, version" COMMENT="The form's ID/version"/>
       </INDEXES>
     </TABLE>
 
-	<TABLE NAME="local_obu_applicant" COMMENT="OBU applicants">
+    <TABLE NAME="local_obu_organisation" COMMENT="OBU HLS organisations">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="The name of the organisation"/>
+        <FIELD NAME="code" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="The organisation's finance code"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="name" UNIQUE="true" FIELDS="name" COMMENT="The name of the organisation"/>
+      </INDEXES>
+    </TABLE>
+
+	<TABLE NAME="local_obu_applicant" COMMENT="OBU HLS applicants">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Moodle user ID"/>
@@ -45,15 +80,11 @@
         <FIELD NAME="prof_reg_no" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Professional body registration number"/>
         <FIELD NAME="criminal_record" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Criminal record?"/>
         <FIELD NAME="profile_update" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Date of last profile update"/>
-        <FIELD NAME="award_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Short course award name"/>
-        <FIELD NAME="start_date" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Course start date"/>
-        <FIELD NAME="module_1_no" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 1 number"/>
-        <FIELD NAME="module_1_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 1 name"/>
-        <FIELD NAME="module_2_no" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 2 number"/>
-        <FIELD NAME="module_2_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 2 name"/>
-        <FIELD NAME="module_3_no" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 3 number"/>
-        <FIELD NAME="module_3_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 3 name"/>
+        <FIELD NAME="course_code" TYPE="char" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Course code"/>
+        <FIELD NAME="course_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Course name"/>
+        <FIELD NAME="course_date" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Course start date"/>
         <FIELD NAME="statement" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Supporting statement"/>
+        <FIELD NAME="applicant_form" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Applicant supplementary form data"/>
         <FIELD NAME="course_update" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Date of last course update"/>
       </FIELDS>
       <KEYS>
@@ -64,7 +95,7 @@
       </INDEXES>
     </TABLE>
 	
-    <TABLE NAME="local_obu_application" COMMENT="OBU applications">
+    <TABLE NAME="local_obu_application" COMMENT="OBU HLS applications">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Moodle user ID"/>
@@ -96,41 +127,34 @@
         <FIELD NAME="emp_prof" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Profession"/>
         <FIELD NAME="prof_reg_no" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Professional body registration number"/>
         <FIELD NAME="criminal_record" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Criminal record?"/>
-        <FIELD NAME="award_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Short course award name"/>
-        <FIELD NAME="start_date" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Course start date"/>
-        <FIELD NAME="module_1_no" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 1 number"/>
-        <FIELD NAME="module_1_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 1 name"/>
-        <FIELD NAME="module_2_no" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 2 number"/>
-        <FIELD NAME="module_2_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 2 name"/>
-        <FIELD NAME="module_3_no" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 3 number"/>
-        <FIELD NAME="module_3_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Module 3 name"/>
+        <FIELD NAME="course_code" TYPE="char" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Course code"/>
+        <FIELD NAME="course_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Course name"/>
+        <FIELD NAME="course_date" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Course start date"/>
         <FIELD NAME="statement" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Supporting statement"/>
+        <FIELD NAME="applicant_form" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Applicant supplementary form data"/>
         <FIELD NAME="self_funding" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Self-funding?"/>
         <FIELD NAME="manager_email" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Email of manager"/>
         <FIELD NAME="declaration" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Mandatory declaration"/>
-        <FIELD NAME="tel_email" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Email of Trust Education Lead"/>
-        <FIELD NAME="contract_trust" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Contract Trust"/>
-        <FIELD NAME="contract_tel" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Contract Trust Education Lead"/>
-        <FIELD NAME="contract_percentage" TYPE="int" LENGTH="3" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Contract percentage"/>
-        <FIELD NAME="invoice_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Invoice Trust/Other"/>
+        <FIELD NAME="manager_form" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Manager supplementary form data"/>
+        <FIELD NAME="funder_email" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Email of funder"/>
+        <FIELD NAME="funding_method" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Funding method"/>
+        <FIELD NAME="funding_organisation" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Funding organisation"/>
+        <FIELD NAME="funder_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Name of funder"/>
         <FIELD NAME="invoice_ref" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Invoice reference (PO number)"/>
         <FIELD NAME="invoice_address" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Invoice address"/>
         <FIELD NAME="invoice_email" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Invoice email"/>
         <FIELD NAME="invoice_phone" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Invoice phone"/>
         <FIELD NAME="invoice_contact" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Invoice staff member contact"/>
-        <FIELD NAME="invoice_percentage" TYPE="int" LENGTH="3" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Invoice percentage"/>
-        <FIELD NAME="prepaid_trust" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Pre-paid Trust"/>
-        <FIELD NAME="prepaid_tel" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Pre-paid Trust Education Lead"/>
-        <FIELD NAME="prepaid_percentage" TYPE="int" LENGTH="3" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Pre-paid percentage"/>
         <FIELD NAME="application_date" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Date of application"/>
         <FIELD NAME="approval_level" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Current level of approval"/>
         <FIELD NAME="approval_state" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Current state of approval"/>
-        <FIELD NAME="approval_1_comments" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Approval 1 comments"/>
+        <FIELD NAME="approval_1_comment" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Approval 1 comment"/>
         <FIELD NAME="approval_1_date" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Approval 1 date"/>
-        <FIELD NAME="approval_2_comments" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Approval 2 comments"/>
+        <FIELD NAME="approval_2_comment" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Approval 2 comment"/>
         <FIELD NAME="approval_2_date" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Approval 2 date"/>
-        <FIELD NAME="approval_3_comments" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Approval 3 comments"/>
+        <FIELD NAME="approval_3_comment" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Approval 3 comment"/>
         <FIELD NAME="approval_3_date" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Approval 3 date"/>
+        <FIELD NAME="admissions_date" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Date posted to admissions"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
@@ -140,7 +164,7 @@
       </INDEXES>
     </TABLE>
 
-    <TABLE NAME="local_obu_approval" COMMENT="OBU approvals requested">
+    <TABLE NAME="local_obu_approval" COMMENT="OBU HLS approvals requested">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="application_id" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The ID of the application that requires approval"/>

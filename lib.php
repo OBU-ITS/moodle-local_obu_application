@@ -28,7 +28,7 @@
 function local_obu_application_extends_navigation($navigation) {
     global $CFG;
 	
-	if (!isloggedin() || !has_capability('local/obu_application:manage', context_system::instance())) {
+	if (!isloggedin() || isguestuser() || !has_capability('local/obu_application:manage', context_system::instance())) {
 		return;
 	}
 	
@@ -47,6 +47,8 @@ function local_obu_application_extends_navigation($navigation) {
 		$node = $nodeParent->add(get_string('application_approvals', 'local_obu_application'), '/local/obu_application/mdl_approvals.php');
 		$node = $nodeParent->add(get_string('hls_approvals', 'local_obu_application'), '/local/obu_application/mdl_approvals.php?approver=hls');
 		$node = $nodeParent->add(get_string('list_applications', 'local_obu_application'), '/local/obu_application/mdl_list.php');
-		$node = $nodeParent->add(get_string('finance_codes', 'local_obu_application'), '/local/obu_application/mdl_finance.php');
+		$node = $nodeParent->add(get_string('courses', 'local_obu_application'), '/local/obu_application/mdl_course.php');
+		$node = $nodeParent->add(get_string('forms', 'local_obu_application'), '/local/obu_application/mdl_form.php');
+		$node = $nodeParent->add(get_string('organisations', 'local_obu_application'), '/local/obu_application/mdl_organisation.php');
 	}
 }

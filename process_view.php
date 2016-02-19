@@ -1,7 +1,5 @@
 <?php
 
-// This file is part of Moodle - http://moodle.org/
-//
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
@@ -38,7 +36,7 @@ class process_view extends moodleform {
         $mform =& $this->_form;
 
         $data = new stdClass();
-		$data->trusts = $this->_customdata['trusts'];
+		$data->organisations = $this->_customdata['organisations'];
 		$data->record = $this->_customdata['record'];
 		$data->status_text = $this->_customdata['status_text'];
 		$data->button_text = $this->_customdata['button_text'];
@@ -56,6 +54,24 @@ class process_view extends moodleform {
 			$date_format = 'd-m-y';
 			date_timestamp_set($date, $data->record->birthdate);
 			$birthdate_formatted = date_format($date, $date_format);
+			if ($data->record->firstentrydate == 0) {
+				$firstentrydate_formatted = '';
+			} else {
+				date_timestamp_set($date, $data->record->firstentrydate);
+				$firstentrydate_formatted = date_format($date, $date_format);
+			}
+			if ($data->record->lastentrydate == 0) {
+				$lastentrydate_formatted = '';
+			} else {
+				date_timestamp_set($date, $data->record->lastentrydate);
+				$lastentrydate_formatted = date_format($date, $date_format);
+			}
+			if ($data->record->residencedate == 0) {
+				$residencedate_formatted = '';
+			} else {
+				date_timestamp_set($date, $data->record->residencedate);
+				$residencedate_formatted = date_format($date, $date_format);
+			}
 			date_timestamp_set($date, $data->record->prof_date);
 			$prof_date_formatted = date_format($date, $date_format);
 			if ($data->record->criminal_record == '1') {
@@ -75,6 +91,23 @@ class process_view extends moodleform {
 				$declaration_formatted = '&#10008;'; // Cross
 			}
 			$declaration_formatted .= ' ' . get_string('declaration_text', 'local_obu_application', get_string('conditions', 'local_obu_application'));
+			if ($data->record->funding_method == 0) { // non-NHS
+				$funding_method_formatted = get_string('other', 'local_obu_application') . ' (' . get_string('invoice', 'local_obu_application') . ')';
+			} else { // NHS trust
+				$funding_method_formatted = get_string('trust', 'local_obu_application') . ' (';
+				if ($data->record->funding_method == 1) {
+					$funding_method_formatted .= get_string('invoice', 'local_obu_application');
+				} else if ($data->record->funding_method == 2) {
+					$funding_method_formatted .= get_string('prepaid', 'local_obu_application');
+				} else {
+					$funding_method_formatted .= get_string('contract', 'local_obu_application');
+				}
+				$funding_method_formatted .= ')';
+			}
+			$funder_name_formatted = $data->record->funder_name;
+			if ($approval_sought == 2) { // Funder
+				$funder_name_formatted = $USER->firstname . ' ' . $USER->lastname;
+			}
 			
 			$fields = [
 				'name' => $data->record->title . ' ' . $data->record->firstname . ' ' . $data->record->lastname,
@@ -85,11 +118,11 @@ class process_view extends moodleform {
 				'postcode' => $data->record->postcode,
 				'phone' => $data->record->phone,
 				'email' => $data->record->email,
-				'birthdate_formatted' => $birthdate_formatted,
+				'birthdate' => $birthdate_formatted,
 				'birthcountry' => $data->record->birthcountry,
-				'firstentrydate' => $data->record->firstentrydate,
-				'lastentrydate' => $data->record->lastentrydate,
-				'residencedate' => $data->record->residencedate,
+				'firstentrydate' => $firstentrydate_formatted,
+				'lastentrydate' => $lastentrydate_formatted,
+				'residencedate' => $residencedate_formatted,
 				'support' => $data->record->support,
 				'p16school' => $data->record->p16school,
 				'p16schoolperiod' => $data->record->p16schoolperiod,
@@ -106,31 +139,20 @@ class process_view extends moodleform {
 				'emp_prof' => $data->record->emp_prof,
 				'prof_reg_no' => $data->record->prof_reg_no,
 				'criminal_record_formatted' => $criminal_record_formatted,
-				'award_name' => $data->record->award_name,
-				'start_date' => $data->record->start_date,
-				'module_1_no' => $data->record->module_1_no,
-				'module_1_name' => $data->record->module_1_name,
-				'module_2_no' => $data->record->module_2_no,
-				'module_2_name' => $data->record->module_2_name,
-				'module_3_no' => $data->record->module_3_no,
-				'module_3_name' => $data->record->module_3_name,
+				'course_name' => $data->record->course_code . ' ' . $data->record->course_name,
+				'course_date' => $data->record->course_date,
 				'statement' => $data->record->statement,
 				'self_funding_formatted' => $self_funding_formatted,
 				'manager_email' => $data->record->manager_email,
 				'declaration_formatted' => $declaration_formatted,
-				'contract_trust' => $data->record->contract_trust,
-				'contract_tel' => $data->record->contract_tel,
-				'contract_percentage' => $data->record->contract_percentage,
-				'invoice_name' => $data->record->invoice_name,
+				'funding_method' => $funding_method_formatted,
+				'funding_organisation' => $data->record->funding_organisation,
+				'funder_name' => $funder_name_formatted,
 				'invoice_ref' => $data->record->invoice_ref,
 				'invoice_address' => $data->record->invoice_address,
 				'invoice_email' => $data->record->invoice_email,
 				'invoice_phone' => $data->record->invoice_phone,
-				'invoice_contact' => $data->record->invoice_contact,
-				'invoice_percentage' => $data->record->invoice_percentage,
-				'prepaid_trust' => $data->record->prepaid_trust,
-				'prepaid_tel' => $data->record->prepaid_tel,
-				'prepaid_percentage' => $data->record->prepaid_percentage
+				'invoice_contact' => $data->record->invoice_contact
 			];
 			$this->set_data($fields);
 		}
@@ -156,9 +178,11 @@ class process_view extends moodleform {
 		}
 
         // Contact details
-		$mform->addElement('header', 'contactdetails', get_string('contactdetails', 'local_obu_application'), '');
 		if ($data->button_text == 'approve') {
+			$mform->addElement('header', 'contactdetails', get_string('applicantdetails', 'local_obu_application'), '');
 			$mform->setExpanded('contactdetails');
+		} else {
+			$mform->addElement('header', 'contactdetails', get_string('contactdetails', 'local_obu_application'), '');
 		}
 		$mform->addElement('static', 'name', get_string('name', 'local_obu_application'));
 		if (($approval_sought == 0) || ($approval_sought == 3)) {
@@ -175,7 +199,7 @@ class process_view extends moodleform {
 			if ($data->button_text == 'approve') {
 				$mform->setExpanded('birth_head');
 			}
-			$mform->addElement('static', 'birthdate_formatted', get_string('birthdate', 'local_obu_application'));
+			$mform->addElement('static', 'birthdate', get_string('birthdate', 'local_obu_application'));
 			$mform->addElement('static', 'birthcountry', get_string('birthcountry', 'local_obu_application'));
 
 			// Non-EU details
@@ -240,25 +264,13 @@ class process_view extends moodleform {
 			$mform->addElement('static', 'criminal_record_formatted', get_string('criminal_record', 'local_obu_application'));
 		}
 
-        // Award name
-		$mform->addElement('header', 'award_head', get_string('award_head', 'local_obu_application'), '');
+        // Course name
+		$mform->addElement('header', 'course_head', get_string('course', 'local_obu_application'), '');
 		if ($data->button_text == 'approve') {
-			$mform->setExpanded('award_head');
+			$mform->setExpanded('course_head');
 		}
-		$mform->addElement('static', 'award_name', get_string('award_name', 'local_obu_application'));
-		
-        // Modules
-		$mform->addElement('header', 'module_head', get_string('module_head', 'local_obu_application'), '');
-		if ($data->button_text == 'approve') {
-			$mform->setExpanded('module_head');
-		}
-		$mform->addElement('static', 'start_date', get_string('start_date', 'local_obu_application'));
-		$mform->addElement('static', 'module_1_no', get_string('module_no', 'local_obu_application'));
-		$mform->addElement('static', 'module_1_name', get_string('module_name', 'local_obu_application'));
-		$mform->addElement('static', 'module_2_no', get_string('module_no', 'local_obu_application'));
-		$mform->addElement('static', 'module_2_name', get_string('module_name', 'local_obu_application'));
-		$mform->addElement('static', 'module_3_no', get_string('module_no', 'local_obu_application'));
-		$mform->addElement('static', 'module_3_name', get_string('module_name', 'local_obu_application'));
+		$mform->addElement('static', 'course_name', get_string('name', 'local_obu_application'));
+		$mform->addElement('static', 'course_date', get_string('course_date', 'local_obu_application'));
 		
         // Supporting statement
 		$mform->addElement('header', 'statement_head', get_string('statement_head', 'local_obu_application'), '');
@@ -285,65 +297,52 @@ class process_view extends moodleform {
 
 		if (($approval_sought > 0) && ($data->record->self_funding == '1')) {
 			$mform->addElement('html', '<h2>' . get_string('self_funding', 'local_obu_application') . ' ' . get_string('applicant', 'local_obu_application') . '</h2>');
-		} else if (($approval_sought == 1) && ($data->record->self_funding == '0')) { // Approving manager must enter the email of TEL to approve
-			$mform->addElement('header', 'tel_head', get_string('tel_to_approve', 'local_obu_application'), '');
-			$mform->setExpanded('tel_head');
-			$mform->addElement('text', 'tel_email', get_string('email'), 'size="40" maxlength="100"');
-			$mform->setType('tel_email', PARAM_RAW_TRIMMED);
-			$mform->addElement('text', 'tel_email2', get_string('emailagain'), 'size="40" maxlength="100"');
-			$mform->setType('tel_email2', PARAM_RAW_TRIMMED);
-		} else if (($approval_sought > 1) && ($data->record->self_funding == '0')) { // Approving TEL must enter the complete funding details and HLS approver must see them
-			$mform->addElement('html', '<h1>' . get_string('funding', 'local_obu_application') . '</h1>');
-			$mform->addElement('header', 'contract_head', get_string('contract', 'local_obu_application'), '');
-			if ($approval_sought == 2) { // TEL
-//				$mform->addElement('text', 'contract_trust', get_string('trust', 'local_obu_application'), 'size="40" maxlength="100"');
-				$mform->addElement('select', 'contract_trust', get_string('trust', 'local_obu_application'), $data->trusts, null);
-				$mform->addElement('text', 'contract_tel', get_string('tel', 'local_obu_application'), 'size="40" maxlength="100"');
-//				$mform->addElement('text', 'contract_percentage', get_string('percentage', 'local_obu_application'), 'size="3" maxlength="3"');
-//				$mform->setType('contract_percentage', PARAM_INT);
-			} else { // HLS
-//				if ($data->record->contract_percentage != 0) {
-					$mform->setExpanded('contract_head');
-//				}
-				$mform->addElement('static', $data->trusts['contract_trust'], get_string('trust', 'local_obu_application'));
-				$mform->addElement('static', 'contract_tel', get_string('tel', 'local_obu_application'));
-//				$mform->addElement('static', 'contract_percentage', get_string('percentage', 'local_obu_application'));
-			}
-			$mform->addElement('header', 'invoice_head', get_string('invoice', 'local_obu_application'), '');
-			if ($approval_sought == 2) { // TEL
-				$mform->addElement('text', 'invoice_name', get_string('invoice_name', 'local_obu_application'), 'size="40" maxlength="100"');
+		} else if (($approval_sought == 1) && ($data->record->self_funding == '0')) { // Approving manager must enter the email of funder to approve
+			$mform->addElement('header', 'funder_head', get_string('funder_to_approve', 'local_obu_application'), '');
+			$mform->setExpanded('funder_head');
+			$mform->addElement('text', 'funder_email', get_string('email'), 'size="40" maxlength="100"');
+			$mform->setType('funder_email', PARAM_RAW_TRIMMED);
+			$mform->addElement('text', 'funder_email2', get_string('emailagain'), 'size="40" maxlength="100"');
+			$mform->setType('funder_email2', PARAM_RAW_TRIMMED);
+		} else if (($approval_sought > 1) && ($data->record->self_funding == '0')) { // Approving funder must enter the funding details and HLS approver must see them
+			if ($approval_sought == 2) { // Funder
+				$mform->addElement('html', '<h1>' . get_string('funding_organisation', 'local_obu_application') . '</h1>');
+				$mform->addElement('header', 'trust_head', get_string('trust', 'local_obu_application'), '');
+				$mform->addElement('select', 'funding_organisation', get_string('organisation', 'local_obu_application'), $data->organisations, null);
+				$mform->addElement('text', 'funder_name', get_string('funder_name', 'local_obu_application'), 'size="40" maxlength="100"');
+				$radioarray = array();
+				$radioarray[] = $mform->createElement('radio', 'funding_method', '', get_string('contract', 'local_obu_application') . ' | ', 3);
+				$radioarray[] = $mform->createElement('radio', 'funding_method', '', get_string('prepaid', 'local_obu_application') . ' | ', 2);
+				$radioarray[] = $mform->createElement('radio', 'funding_method', '', get_string('invoice', 'local_obu_application'), 1);
+				$mform->setDefault('funding_method', 3); // Contract
+				$mform->addGroup($radioarray, 'funding_methods', get_string('funding_method', 'local_obu_application'), array(' '), false);
+				$mform->addElement('static', 'invoice_text', get_string('invoice_text', 'local_obu_application'));
 				$mform->addElement('text', 'invoice_ref', get_string('invoice_ref', 'local_obu_application'), 'size="40" maxlength="100"');
 				$mform->addElement('textarea', 'invoice_address', get_string('address'), 'cols="40" rows="5"');
 				$mform->addElement('text', 'invoice_email', get_string('email'), 'size="40" maxlength="100"');
 				$mform->addElement('text', 'invoice_phone', get_string('phone', 'local_obu_application'), 'size="40" maxlength="100"');
 				$mform->addElement('text', 'invoice_contact', get_string('invoice_contact', 'local_obu_application'), 'size="40" maxlength="100"');
-//				$mform->addElement('text', 'invoice_percentage', get_string('percentage', 'local_obu_application'), 'size="3" maxlength="3"');
-//				$mform->setType('invoice_percentage', PARAM_INT);
+ 				$mform->addElement('header', 'other_head', get_string('other', 'local_obu_application'), '');
+				$mform->addElement('text', 'other_organisation', get_string('organisation', 'local_obu_application'), 'size="40" maxlength="100"');
+				$mform->addElement('text', 'other_ref', get_string('invoice_ref', 'local_obu_application'), 'size="40" maxlength="100"');
+				$mform->addElement('textarea', 'other_address', get_string('address'), 'cols="40" rows="5"');
+				$mform->addElement('text', 'other_email', get_string('email'), 'size="40" maxlength="100"');
+				$mform->addElement('text', 'other_phone', get_string('phone', 'local_obu_application'), 'size="40" maxlength="100"');
+				$mform->addElement('text', 'other_contact', get_string('invoice_contact', 'local_obu_application'), 'size="40" maxlength="100"');
 			} else { // HLS
-//				if ($data->record->invoice_percentage != 0) {
-					$mform->setExpanded('invoice_head');
-//				}
-				$mform->addElement('static', 'invoice_name', get_string('invoice_name', 'local_obu_application'));
-				$mform->addElement('static', 'invoice_ref', get_string('invoice_ref', 'local_obu_application'));
-				$mform->addElement('static', 'invoice_address', get_string('address'));
-				$mform->addElement('static', 'invoice_email', get_string('email'));
-				$mform->addElement('static', 'invoice_phone', get_string('phone', 'local_obu_application'));
-				$mform->addElement('static', 'invoice_contact', get_string('invoice_contact', 'local_obu_application'));
-//				$mform->addElement('static', 'invoice_percentage', get_string('percentage', 'local_obu_application'));
-			}
-			$mform->addElement('header', 'prepaid_head', get_string('prepaid', 'local_obu_application'), '');
-			if ($approval_sought == 2) { // TEL
-				$mform->addElement('text', 'prepaid_trust', get_string('trust', 'local_obu_application'), 'size="40" maxlength="100"');
-				$mform->addElement('text', 'prepaid_tel', get_string('tel', 'local_obu_application'), 'size="40" maxlength="100"');
-//				$mform->addElement('text', 'prepaid_percentage', get_string('percentage', 'local_obu_application'), 'size="3" maxlength="3"');
-//				$mform->setType('prepaid_percentage', PARAM_INT);
-			} else { // HLS
-//				if ($data->record->prepaid_percentage != 0) {
-					$mform->setExpanded('prepaid_head');
-//				}
-				$mform->addElement('static', 'prepaid_trust', get_string('trust', 'local_obu_application'));
-				$mform->addElement('static', 'prepaid_tel', get_string('tel', 'local_obu_application'));
-//				$mform->addElement('static', 'prepaid_percentage', get_string('percentage', 'local_obu_application'));
+				$mform->addElement('html', '<h1>' . get_string('funding', 'local_obu_application') . '</h1>');
+				$mform->addElement('static', 'funding_method', get_string('funding_method', 'local_obu_application'));
+				$mform->addElement('static', 'funding_organisation', get_string('organisation', 'local_obu_application'));
+				if ($data->record->funding_method > 0) { // NHS trust
+					$mform->addElement('static', 'funder_name', get_string('funder_name', 'local_obu_application'));
+				}
+				if ($data->record->funding_method < 2) { // By invoice
+					$mform->addElement('static', 'invoice_ref', get_string('invoice_ref', 'local_obu_application'));
+					$mform->addElement('static', 'invoice_address', get_string('address'));
+					$mform->addElement('static', 'invoice_email', get_string('email'));
+					$mform->addElement('static', 'invoice_phone', get_string('phone', 'local_obu_application'));
+					$mform->addElement('static', 'invoice_contact', get_string('invoice_contact', 'local_obu_application'));
+				}
 			}
 		}
 
@@ -371,62 +370,75 @@ class process_view extends moodleform {
 		
 		// Check that we have been given sufficient information for an approval
 		if ($data['submitbutton'] == get_string('approve', 'local_obu_application')) {
-			if (($data['approval_level'] == '1') && ($data['self_funding'] == '0')) { // Manager must give us the email of the TEL to approve
-				if (empty($data['tel_email'])) {
-					$errors['tel_email'] = get_string('missingemail');
-				} else if (!validate_email($data['tel_email'])) {
-					$errors['tel_email'] = get_string('invalidemail');
+			if (($data['approval_level'] == '1') && ($data['self_funding'] == '0')) { // Manager must give us the email of the funder to approve
+				if (empty($data['funder_email'])) {
+					$errors['funder_email'] = get_string('missingemail');
+				} else if (!validate_email($data['funder_email'])) {
+					$errors['funder_email'] = get_string('invalidemail');
 				}
 		
-				if (empty($data['tel_email2'])) {
-					$errors['tel_email2'] = get_string('missingemail');
-				} else if ($data['tel_email2'] != $data['tel_email']) {
-					$errors['tel_email2'] = get_string('invalidemail');
+				if (empty($data['funder_email2'])) {
+					$errors['funder_email2'] = get_string('missingemail');
+				} else if ($data['funder_email2'] != $data['funder_email']) {
+					$errors['funder_email2'] = get_string('invalidemail');
 				}
-			} else if ($data['approval_level'] == '2') { // TEL must give us the complete funding details
-/*				if (($data['contract_percentage'] + $data['invoice_percentage'] + $data['prepaid_percentage']) != 100) {
-					$errors['contract_percentage'] = get_string('invalid_funding', 'local_obu_application');
-					$errors['invoice_percentage'] = get_string('invalid_funding', 'local_obu_application');
-					$errors['prepaid_percentage'] = get_string('invalid_funding', 'local_obu_application');
-				}
-				if ($data['contract_percentage'] != 0) {
-*/				if (($data['contract_trust'] != '') || ($data['contract_tel'] != '')) {
-					if ($data['contract_trust'] == '') {
-						$errors['contract_trust'] = get_string('value_required', 'local_obu_application');
+			} else if ($data['approval_level'] == '2') { // Funder must give us the funding details
+				if (($data['other_organisation'] != '') || ($data['other_ref'] != '') || ($data['other_address'] != '')
+					|| ($data['other_email'] != '') || ($data['other_phone'] != '') || ($data['other_contact'] != '')) { // Invoice to a non-NHS organisation
+					if ($data['other_organisation'] == '') {
+						$errors['other_organisation'] = get_string('value_required', 'local_obu_application');
 					}
-					if ($data['contract_tel'] == '') {
-						$errors['contract_tel'] = get_string('value_required', 'local_obu_application');
+					if ($data['other_ref'] == '') {
+						$errors['other_ref'] = get_string('value_required', 'local_obu_application');
 					}
-				}
-//				if ($data['invoice_percentage'] != 0) {
-				if (($data['invoice_name'] != '') || ($data['invoice_ref'] != '') || ($data['invoice_address'] != '')
-					|| ($data['invoice_email'] != '') || ($data['invoice_phone'] != '') || ($data['invoice_contact'] != '')) {
-					if ($data['invoice_name'] == '') {
-						$errors['invoice_name'] = get_string('value_required', 'local_obu_application');
+					if ($data['other_address'] == '') {
+						$errors['other_address'] = get_string('value_required', 'local_obu_application');
 					}
-					if ($data['invoice_ref'] == '') {
-						$errors['invoice_ref'] = get_string('value_required', 'local_obu_application');
+					if ($data['other_email'] == '') {
+						$errors['other_email'] = get_string('value_required', 'local_obu_application');
 					}
-					if ($data['invoice_address'] == '') {
-						$errors['invoice_address'] = get_string('value_required', 'local_obu_application');
+					if ($data['other_phone'] == '') {
+						$errors['other_phone'] = get_string('value_required', 'local_obu_application');
 					}
-					if ($data['invoice_email'] == '') {
-						$errors['invoice_email'] = get_string('value_required', 'local_obu_application');
+					if ($data['other_contact'] == '') {
+						$errors['other_contact'] = get_string('value_required', 'local_obu_application');
 					}
-					if ($data['invoice_phone'] == '') {
-						$errors['invoice_phone'] = get_string('value_required', 'local_obu_application');
+				} else { // NHS trust
+					if ($data['funder_name'] == '') {
+						$errors['funder_name'] = get_string('value_required', 'local_obu_application');
 					}
-					if ($data['invoice_contact'] == '') {
-						$errors['invoice_contact'] = get_string('value_required', 'local_obu_application');
-					}
-				}
-//				if ($data['prepaid_percentage'] != 0) {
-				if (($data['prepaid_trust'] != '') || ($data['prepaid_tel'] != '')) {
-					if ($data['prepaid_trust'] == '') {
-						$errors['prepaid_trust'] = get_string('value_required', 'local_obu_application');
-					}
-					if ($data['prepaid_tel'] == '') {
-						$errors['prepaid_tel'] = get_string('value_required', 'local_obu_application');
+					if ($data['funding_method'] == 1) { // Invoice
+						if ($data['invoice_ref'] == '') {
+							$errors['invoice_ref'] = get_string('value_required', 'local_obu_application');
+						}
+						if ($data['invoice_address'] == '') {
+							$errors['invoice_address'] = get_string('value_required', 'local_obu_application');
+						}
+						if ($data['invoice_email'] == '') {
+							$errors['invoice_email'] = get_string('value_required', 'local_obu_application');
+						}
+						if ($data['invoice_phone'] == '') {
+							$errors['invoice_phone'] = get_string('value_required', 'local_obu_application');
+						}
+						if ($data['invoice_contact'] == '') {
+							$errors['invoice_contact'] = get_string('value_required', 'local_obu_application');
+						}
+					} else { // Contract or Pre-paid
+						if ($data['invoice_ref'] != '') {
+							$errors['invoice_ref'] = get_string('value_verboten', 'local_obu_application');
+						}
+						if ($data['invoice_address'] != '') {
+							$errors['invoice_address'] = get_string('value_verboten', 'local_obu_application');
+						}
+						if ($data['invoice_email'] != '') {
+							$errors['invoice_email'] = get_string('value_verboten', 'local_obu_application');
+						}
+						if ($data['invoice_phone'] != '') {
+							$errors['invoice_phone'] = get_string('value_verboten', 'local_obu_application');
+						}
+						if ($data['invoice_contact'] != '') {
+							$errors['invoice_contact'] = get_string('value_verboten', 'local_obu_application');
+						}
 					}
 				}
 			}

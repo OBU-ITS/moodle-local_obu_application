@@ -48,7 +48,7 @@ $record = read_applicant($USER->id, false);
 if ($record === false) { // Must have completed the profile
 	$message = get_string('complete_profile', 'local_obu_application');
 }
-else if (!isset($record->module_1_no) || ($record->module_1_no === '')) { // Must have completed the course
+else if (!isset($record->course_code) || ($record->course_code === '')) { // Must have completed the course
 	$message = get_string('complete_course', 'local_obu_application');
 } else {
 	$message = '';

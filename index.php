@@ -48,34 +48,32 @@ echo $OUTPUT->header();
 // Display any outstanding approvals
 $approvals = get_approvals($USER->email); // get outstanding approval requests
 if ($approvals) {
-	echo '<h2>' . get_string('myapprovals', 'local_obu_application') . '</h2>';
+	echo '<h2>' . get_string('your_approvals', 'local_obu_application') . '</h2>';
 	foreach ($approvals as $approval) {
 		$application = read_application($approval->application_id);
+		$application_title = $application->firstname . ' ' . $application->lastname . ' (Application Ref HLS/' . $application->id . ')';
+		echo '<h4><a href="' . $process . '?id=' . $application->id . '">' . $application_title . '</a></h4>';
 		get_application_status($USER->id, $application, $text, $button); // get the approval trail and the next action (from the user's perspective)
-		echo '<h4><a href="' . $process . '?id=' . $application->id . '">Ref No ' . $application->id . '</a></h4>';
 		echo $text;
 	}
+} else {
+	echo get_string('page_content', 'local_obu_application');
 }
 
 // Display applications submitted
 $applications = get_applications($USER->id); // get all applications for the user
 if ($applications) {
-	echo '<h2>' . get_string('myapplications', 'local_obu_application') . '</h2>';
+	echo '<h2>' . get_string('your_applications', 'local_obu_application') . '</h2>';
 	foreach ($applications as $application) {
-		get_application_status($USER->id, $application, $text, $button); // get the approval trail and the next action (from this user's perspective)
+		$application_title = $application->course_code . ' ' . $application->course_name . ' (Application Ref HLS/' . $application->id . ')';
 		if (($button != 'submit') || $currentuser || $manager) {
-			echo '<h4><a href="' . $process . '?id=' . $application->id . '">Ref No ' . $application->id . '</a></h4>';
+			echo '<h4><a href="' . $process . '?id=' . $application->id . '">' . $application_title . '</a></h4>';
 		} else {
-			echo '<h4>Ref No ' . $application->id . '</h4>';
+			echo '<h4>' . $application_title . '</h4>';
 		}
+		get_application_status($USER->id, $application, $text, $button); // get the approval trail and the next action (from this user's perspective)
 		echo $text;
 	}
 }
-
-if (!$approvals && !$applications) {
-	echo get_string('introduction', 'local_obu_application');
-}
-
-echo get_string('page_content', 'local_obu_application');
 
 echo $OUTPUT->footer();

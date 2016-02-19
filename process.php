@@ -35,6 +35,7 @@ require_obu_login();
 $context = context_system::instance();
 $manager = has_capability('local/obu_application:manage', $context);
 $home = new moodle_url('/local/obu_application/');
+$logout = $home . 'logout.php';
 
 // We only handle an existing application (id given)
 if (!isset($_REQUEST['id'])) {
@@ -84,8 +85,11 @@ if ($button_text != 'approve') { // If not the next approver, check that this us
 	}
 }
 
+$organisations = get_organisation_names();
+$organisations[] = get_string('other', 'local_obu_application');
+
 $parameters = [
-	'trusts' => get_trusts(),
+	'organisations' => get_organisation_names(),
 	'record' => $application,
 	'status_text' => $status_text,
 	'button_text' => $button_text
@@ -103,6 +107,10 @@ else if ($mform_data = $mform->get_data()) {
 			update_workflow($application, true, $mform_data);
 		} else {
 			update_workflow($application, false, $mform_data);
+		}
+		$approvals = get_approvals($USER->email); // Any more approval requests?
+		if (empty($approvals)) { // No there aren't
+			redirect($logout);
 		}
 	}
 	redirect($home);

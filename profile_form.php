@@ -66,6 +66,8 @@ class profile_form extends moodleform {
 			$this->set_data($fields);
 		}
 		
+		$date_options = array('startyear' => 1950, 'stopyear'  => 2030, 'timezone'  => 99, 'optional' => false);
+		
 		// This 'dummy' element has two purposes:
 		// - To force open the Moodle Forms invisible fieldset outside of any table on the form (corrupts display otherwise)
 		// - To let us inform the user that there are validation errors without them having to scroll down further
@@ -73,7 +75,7 @@ class profile_form extends moodleform {
 
         $mform->addElement('header', 'birth_head', get_string('birth_head', 'local_obu_application'), '');
 		$mform->setExpanded('birth_head');
-		$mform->addElement('date_selector', 'birthdate', get_string('birthdate', 'local_obu_application'));
+		$mform->addElement('date_selector', 'birthdate', get_string('birthdate', 'local_obu_application'), $date_options);
 		$mform->addRule('birthdate', null, 'required', null, 'server');
         $country = get_string_manager()->get_list_of_countries();
         $default_country[''] = get_string('selectacountry');
@@ -87,9 +89,9 @@ class profile_form extends moodleform {
 		$mform->addRule('birthcountry', null, 'required', null, 'server');
         $mform->addElement('header', 'non_eu_head', get_string('non_eu_head', 'local_obu_application'), '');
 		$mform->setExpanded('non_eu_head');
-		$mform->addElement('text', 'firstentrydate', get_string('firstentrydate', 'local_obu_application'), 'size="40" maxlength="100"');
-		$mform->addElement('text', 'lastentrydate', get_string('lastentrydate', 'local_obu_application'), 'size="40" maxlength="100"');
-		$mform->addElement('text', 'residencedate', get_string('residencedate', 'local_obu_application'), 'size="40" maxlength="100"');
+		$mform->addElement('date_selector', 'firstentrydate', get_string('firstentrydate', 'local_obu_application'));
+		$mform->addElement('date_selector', 'lastentrydate', get_string('lastentrydate', 'local_obu_application'));
+		$mform->addElement('date_selector', 'residencedate', get_string('residencedate', 'local_obu_application'));
         $mform->addElement('header', 'needs_head', get_string('needs_head', 'local_obu_application'), '');
 		$mform->setExpanded('needs_head');
 		$mform->addElement('text', 'support', get_string('support', 'local_obu_application'), 'size="40" maxlength="100"');
@@ -120,7 +122,6 @@ class profile_form extends moodleform {
         $mform->addElement('header', 'prof_reg_head', get_string('prof_reg_head', 'local_obu_application'), '');
 		$mform->setExpanded('prof_reg_head');
 		$mform->addElement('text', 'prof_reg_no', get_string('prof_reg_no', 'local_obu_application'), 'size="40" maxlength="100"');
-		$mform->addRule('prof_reg_no', null, 'required', null, 'server');
         $mform->addElement('header', 'criminal_record_head', get_string('criminal_record_head', 'local_obu_application'), '');
 		$mform->setExpanded('criminal_record_head');
 		$mform->addElement('selectyesno', 'criminal_record', get_string('criminal_record', 'local_obu_application'));
@@ -130,7 +131,7 @@ class profile_form extends moodleform {
     function validation($data, $files) {
         global $CFG, $DB;
         $errors = parent::validation($data, $files);
-
+		
 		if (!empty($errors)) {
 			$errors['form_errors'] = get_string('form_errors', 'local_obu_application');
 		}

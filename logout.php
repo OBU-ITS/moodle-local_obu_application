@@ -33,34 +33,24 @@ require_once('./locallib.php');
 $PAGE->set_url('/local/obu_application/logout.php');
 $PAGE->set_context(context_system::instance());
 
-$sesskey = optional_param('sesskey', '__notpresent__', PARAM_RAW); // we want not null default to prevent required sesskey warning
 $login = optional_param('loginpage', 0, PARAM_BOOL);
 
-if ($login) {
-    $redirect = $CFG->wwwroot . '/local/obu_application/login.php';
-} else {
-    $redirect = $CFG->wwwroot . '/local/obu_application/';
-}
-
-if (!isloggedin()) {
-    // no confirmation, user has already logged out
-    require_logout();
-    redirect($redirect);
-
-} else if (!confirm_sesskey($sesskey)) {
-    $PAGE->set_title($CFG->pageheading . ': Logout');
-    echo $OUTPUT->header();
-    echo $OUTPUT->confirm(get_string('logoutconfirm'), new moodle_url($PAGE->url, array('sesskey' => sesskey())), $redirect);
-    echo $OUTPUT->footer();
-    die;
-}
-
-$authsequence = get_enabled_auth_plugins(); // auths, in sequence
-foreach($authsequence as $authname) {
-    $authplugin = get_auth_plugin($authname);
-    $authplugin->logoutpage_hook();
+if (isloggedin()) {
+	$authsequence = get_enabled_auth_plugins(); // auths, in sequence
+	foreach($authsequence as $authname) {
+		$authplugin = get_auth_plugin($authname);
+		$authplugin->logoutpage_hook();
+	}
 }
 
 require_logout();
 
-redirect($redirect);
+if ($login) {
+    redirect($CFG->wwwroot . '/local/obu_application/login.php');
+}	
+
+$PAGE->set_title($CFG->pageheading . ': Logout');
+$CFG->custommenuitems = ''; // Clear the menu
+echo $OUTPUT->header();
+echo get_string('logout_message', 'local_obu_application');
+echo $OUTPUT->footer();

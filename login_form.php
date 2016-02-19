@@ -34,6 +34,19 @@ if (!empty($CFG->loginpasswordautocomplete)) {
 ?>
 
 <div class="loginbox clearfix twocolumns">
+	
+    <div class="signuppanel">
+		<?php print_string('introduction', 'local_obu_application') ?>
+		<h2><?php print_string('registration', 'local_obu_application') ?></h2>
+		<div class="subcontent">
+			<?php print_string('registrationsteps', 'local_obu_application', 'signup.php'); ?>
+			<div class="signupform">
+				<form action="signup.php" method="get" id="register">
+					<div><input type="submit" value="<?php print_string('register', 'local_obu_application') ?>" /></div>
+				</form>
+			</div>
+		</div>
+    </div>
 
 	<div class="loginpanel">
 		<h2><?php print_string("login") ?></h2>
@@ -49,7 +62,7 @@ if (!empty($CFG->loginpasswordautocomplete)) {
 			<form action="<?php echo $CFG->httpswwwroot; ?>/local/obu_application/login.php" method="post" id="login" <?php echo $autocomplete; ?> >
 				<div class="loginform">
 					<div class="form-label"><label for="username"><?php print_string("email") ?></label></div>
-					<div class="form-input"><input type="text" name="username" id="username" size="25" maxlength="100" value="<?php p($frm->username) ?>" /></div>
+					<div class="form-input"><input type="text" name="username" id="username" size="50" maxlength="100" value="<?php p($frm->username) ?>" /></div>
 					<div class="clearer"><!-- --></div>
 					<div class="form-label"><label for="password"><?php print_string("password") ?></label></div>
 					<div class="form-input">
@@ -76,15 +89,4 @@ if (!empty($CFG->loginpasswordautocomplete)) {
 		</div>
 	</div>
 	
-    <div class="signuppanel">
-		<h2><?php print_string('registration', 'local_obu_application') ?></h2>
-		<div class="subcontent">
-			<?php print_string('registrationsteps', 'local_obu_application', 'signup.php'); ?>
-			<div class="signupform">
-				<form action="signup.php" method="get" id="register">
-					<div><input type="submit" value="<?php print_string('register', 'local_obu_application') ?>" /></div>
-				</form>
-			</div>
-		</div>
-    </div>
 </div>

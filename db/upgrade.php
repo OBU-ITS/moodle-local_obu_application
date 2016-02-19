@@ -32,21 +32,66 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 
     $result = true;
 
-    if ($oldversion < 2016010600) {
+    if ($oldversion < 2016011700) {
 
-		// Define table local_obu_finance
-		$table = new xmldb_table('local_obu_finance');
+		// Define table local_obu_course
+		$table = new xmldb_table('local_obu_course');
 
 		// Add fields
 		$table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
-		$table->add_field('trust', XMLDB_TYPE_CHAR, '100', null, XMLDB_NOTNULL, null, null);
+		$table->add_field('code', XMLDB_TYPE_CHAR, '10', null, XMLDB_NOTNULL, null, null);
+		$table->add_field('name', XMLDB_TYPE_CHAR, '100', null, XMLDB_NOTNULL, null, null);
+		$table->add_field('applicant_form', XMLDB_TYPE_CHAR, '10', null, null, null, null);
+		$table->add_field('manager_form', XMLDB_TYPE_CHAR, '10', null, null, null, null);
+
+		// Add keys
+		$table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+
+		// Add indexes
+		$table->add_index('code', XMLDB_INDEX_UNIQUE, array('code'));
+
+		// Conditionally create table
+		if (!$dbman->table_exists($table)) {
+			$dbman->create_table($table);
+		}
+		
+		// Define table local_obu_form
+		$table = new xmldb_table('local_obu_form');
+
+		// Add fields
+		$table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+		$table->add_field('form_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+		$table->add_field('version', XMLDB_TYPE_CHAR, '10', null, XMLDB_NOTNULL, null, null);
+		$table->add_field('author', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+		$table->add_field('date', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+		$table->add_field('notes', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
+		$table->add_field('published', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
+		$table->add_field('data', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
+
+		// Add keys
+		$table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+
+		// Add indexes
+		$table->add_index('form', XMLDB_INDEX_UNIQUE, array('form_id', 'version'));
+
+		// Conditionally create table
+		if (!$dbman->table_exists($table)) {
+			$dbman->create_table($table);
+		}
+		
+		// Define table local_obu_organisation
+		$table = new xmldb_table('local_obu_organisation');
+
+		// Add fields
+		$table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+		$table->add_field('name', XMLDB_TYPE_CHAR, '100', null, XMLDB_NOTNULL, null, null);
 		$table->add_field('code', XMLDB_TYPE_CHAR, '100', null, XMLDB_NOTNULL, null, null);
 
 		// Add keys
 		$table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
 
 		// Add indexes
-		$table->add_index('trust', XMLDB_INDEX_UNIQUE, array('trust'));
+		$table->add_index('name', XMLDB_INDEX_UNIQUE, array('name'));
 
 		// Conditionally create table
 		if (!$dbman->table_exists($table)) {
@@ -81,15 +126,11 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		$table->add_field('prof_reg_no', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('criminal_record', XMLDB_TYPE_INTEGER, '1', null, null, null, '0');
 		$table->add_field('profile_update', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
-		$table->add_field('award_name', XMLDB_TYPE_CHAR, '100', null, null, null, null);
-		$table->add_field('start_date', XMLDB_TYPE_CHAR, '100', null, null, null, null);
-		$table->add_field('module_1_no', XMLDB_TYPE_CHAR, '100', null, null, null, null);
-		$table->add_field('module_1_name', XMLDB_TYPE_CHAR, '100', null, null, null, null);
-		$table->add_field('module_2_no', XMLDB_TYPE_CHAR, '100', null, null, null, null);
-		$table->add_field('module_2_name', XMLDB_TYPE_CHAR, '100', null, null, null, null);
-		$table->add_field('module_3_no', XMLDB_TYPE_CHAR, '100', null, null, null, null);
-		$table->add_field('module_3_name', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('course_code', XMLDB_TYPE_CHAR, '10', null, null, null, null);
+		$table->add_field('course_name', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('course_date', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('statement', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
+		$table->add_field('applicant_form', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
 		$table->add_field('course_update', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
 
 		// Add keys
@@ -137,40 +178,32 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		$table->add_field('emp_prof', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('prof_reg_no', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('criminal_record', XMLDB_TYPE_INTEGER, '1', null, null, null, '0');
-		$table->add_field('award_name', XMLDB_TYPE_CHAR, '100', null, null, null, null);
-		$table->add_field('start_date', XMLDB_TYPE_CHAR, '100', null, null, null, null);
-		$table->add_field('module_1_no', XMLDB_TYPE_CHAR, '100', null, null, null, null);
-		$table->add_field('module_1_name', XMLDB_TYPE_CHAR, '100', null, null, null, null);
-		$table->add_field('module_2_no', XMLDB_TYPE_CHAR, '100', null, null, null, null);
-		$table->add_field('module_2_name', XMLDB_TYPE_CHAR, '100', null, null, null, null);
-		$table->add_field('module_3_no', XMLDB_TYPE_CHAR, '100', null, null, null, null);
-		$table->add_field('module_3_name', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('course_code', XMLDB_TYPE_CHAR, '10', null, null, null, null);
+		$table->add_field('course_name', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('course_date', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('statement', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
+		$table->add_field('applicant_form', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
 		$table->add_field('self_funding', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
 		$table->add_field('manager_email', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('declaration', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
-		$table->add_field('tel_email', XMLDB_TYPE_CHAR, '100', null, null, null, null);
-		$table->add_field('contract_trust', XMLDB_TYPE_CHAR, '100', null, null, null, null);
-		$table->add_field('contract_tel', XMLDB_TYPE_CHAR, '100', null, null, null, null);
-		$table->add_field('contract_percentage', XMLDB_TYPE_INTEGER, '3', null, XMLDB_NOTNULL, null, '0');
-		$table->add_field('invoice_name', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('manager_form', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
+		$table->add_field('funder_email', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('funding_method', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
+		$table->add_field('funding_organisation', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('funder_name', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('invoice_ref', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('invoice_address', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
 		$table->add_field('invoice_email', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('invoice_phone', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('invoice_contact', XMLDB_TYPE_CHAR, '100', null, null, null, null);
-		$table->add_field('invoice_percentage', XMLDB_TYPE_INTEGER, '3', null, XMLDB_NOTNULL, null, '0');
-		$table->add_field('prepaid_trust', XMLDB_TYPE_CHAR, '100', null, null, null, null);
-		$table->add_field('prepaid_tel', XMLDB_TYPE_CHAR, '100', null, null, null, null);
-		$table->add_field('prepaid_percentage', XMLDB_TYPE_INTEGER, '3', null, XMLDB_NOTNULL, null, '0');
 		$table->add_field('application_date', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
 		$table->add_field('approval_level', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
 		$table->add_field('approval_state', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
-		$table->add_field('approval_1_comments', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
+		$table->add_field('approval_1_comment', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
 		$table->add_field('approval_1_date', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
-		$table->add_field('approval_2_comments', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
+		$table->add_field('approval_2_comment', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
 		$table->add_field('approval_2_date', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
-		$table->add_field('approval_3_comments', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
+		$table->add_field('approval_3_comment', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
 		$table->add_field('approval_3_date', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
 
 		// Add keys
@@ -206,7 +239,7 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		}
 
         // obu_application savepoint reached
-        upgrade_plugin_savepoint(true, 2016010600, 'local', 'obu_application');
+        upgrade_plugin_savepoint(true, 2016011700, 'local', 'obu_application');
     }
     
     return $result;
