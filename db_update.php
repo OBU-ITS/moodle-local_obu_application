@@ -21,10 +21,76 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2015, Oxford Brookes University
+ * @copyright  2016, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
+
+function write_supplement_form($author, $supplement) {
+	global $DB;
+	
+    $record = new stdClass();
+	$record->ref = $supplement->ref;
+    $record->version = $supplement->version;
+    $record->author = $author;
+	$record->date = time();
+	$record->published = $supplement->published;
+	$record->template = $supplement->template['text'];
+
+	$supplement_form = read_supplement_form($record->ref, $record->version);
+	if ($supplement_form !== false) {
+		$id = $supplement_form->id;
+		$record->id = $id;
+		$DB->update_record('local_obu_supplement', $record);
+	} else {		
+		$id = $DB->insert_record('local_obu_supplement', $record);
+	}
+	
+	return $id;
+}
+
+function read_supplement_forms($ref) {
+	global $DB;
+	
+	$supplements = $DB->get_records('local_obu_supplement', array('ref' => $ref), 'version', '*');
+	
+	return $supplements;
+}
+	
+function read_supplement_form($ref, $version) {
+    global $DB;
+    
+	$supplement = $DB->get_record('local_obu_supplement', array('ref' => $ref, 'version' => $version), '*', IGNORE_MISSING);
+	
+	return $supplement;	
+}
+
+function read_supplement_form_by_id($supplement_id) {
+    global $DB;
+    
+	$supplement = $DB->get_record('local_obu_supplement', array('id' => $supplement_id), '*', MUST_EXIST);
+	
+	return $supplement;	
+}
+
+function get_supplement_form($ref, $include_unpublished = false) { // Return the latest version of the supplement form
+    global $DB;
+    
+    // Return the latest version
+	$supplement = null;
+	$supplements = read_supplement_forms($ref);
+	foreach ($supplements as $s) {
+		if ($s->published || $include_unpublished) {
+			$supplement = $s;
+		}
+	}
+	
+	if ($supplement) {
+		return $supplement;
+	}
+	
+	return false;
+}
 
 function read_course_record($course_code) {
     global $DB;
@@ -155,6 +221,18 @@ function write_course($user_id, $form_data) {
 	return $DB->update_record('local_obu_applicant', $record);
 }
 
+function write_supplement_data($user_id, $supplement_data) {
+	global $DB;
+	
+	$record = read_applicant($user_id, true); // Must already exist
+
+	// Update the supplement data for the applicant's course
+    $record->supplement_data = $supplement_data;
+    $record->course_update = time();
+
+	return $DB->update_record('local_obu_applicant', $record);
+}
+
 function read_applicant($user_id, $must_exist) {
     global $DB;
     
@@ -217,6 +295,10 @@ function write_application($user_id, $form_data) {
     $record->course_name = $applicant->course_name;
     $record->course_date = $applicant->course_date;
     $record->statement = $applicant->statement;
+	$course = read_course_record($applicant->course_code);
+	if ($course->supplement != '') { // There should be supplementary data
+		$record->supplement_data = $applicant->supplement_data;
+	}
 	
 	// Final details
     $record->self_funding = $form_data->self_funding;

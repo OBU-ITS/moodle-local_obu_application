@@ -19,7 +19,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2015, Oxford Brookes University
+ * @copyright  2016, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -695,6 +695,159 @@ function update_approver($application, $approver_email) {
 				. $applicant->firstname . ' ' . $applicant->lastname . ')', html_to_text($html), $html);
 		}
 	}
+}
+
+function encode_xml($string) {
+	return(htmlentities($string, ENT_NOQUOTES | ENT_XML1, 'UTF-8'));
+}
+
+function decode_xml($string) {
+	return(html_entity_decode($string, ENT_NOQUOTES | ENT_XML1, 'UTF-8'));
+}
+
+function get_select_elements($supplement) {
+	$selects = array();
+	
+	$fld_start = '<input ';
+	$fld_start_len = strlen($fld_start);
+	$fld_end = '>';
+	$fld_end_len = strlen($fld_end);
+	$offset = 0;
+	
+	do {
+		$pos = strpos($supplement, $fld_start, $offset);
+		if ($pos === false) {
+			break;
+		}
+		$offset = $pos + $fld_start_len;
+		$pos = strpos($supplement, $fld_end, $offset);
+		if ($pos === false) {
+			break;
+		}
+		$element = split_input_field(substr($supplement, $offset, ($pos - $offset)));
+		$offset = $pos + $fld_end_len;
+		if ($element['type'] == 'select') {
+			$selects[$element['id']] = $element['name'];
+		}
+	} while(true);
+	
+	return $selects;
+}
+
+function get_file_elements($supplement) {
+	$files = array();
+	
+	$fld_start = '<input ';
+	$fld_start_len = strlen($fld_start);
+	$fld_end = '>';
+	$fld_end_len = strlen($fld_end);
+	$offset = 0;
+	
+	do {
+		$pos = strpos($supplement, $fld_start, $offset);
+		if ($pos === false) {
+			break;
+		}
+		$offset = $pos + $fld_start_len;
+		$pos = strpos($supplement, $fld_end, $offset);
+		if ($pos === false) {
+			break;
+		}
+		$element = split_input_field(substr($supplement, $offset, ($pos - $offset)));
+		$offset = $pos + $fld_end_len;
+		if ($element['type'] == 'file') {
+			$files[] = $element['id'];
+		}
+	} while(true);
+	
+	return $files;
+}
+
+function split_input_field($input_field) {
+	$parts = str_replace('" ', '"|^|', $input_field);
+	$parts = explode('|^|', $parts);
+	$params = array();
+	$options = '';
+	foreach ($parts as $part) {
+		$pos = strpos($part, '="');
+		$key = substr($part, 0, $pos);
+		
+		// We were forced to use 'maxlength' so map it
+		if (($params['type'] == 'select') && ($key == 'maxlength')) {
+			$key = 'selected';
+		}
+		
+		if (($key == 'size') || ($key == 'maxlength')) {
+			if ($options != '') {
+				$options .= ' ';
+			}
+			$options .= $part;
+		} else {
+			$pos += 2;
+			$value = substr($part, $pos, (strlen($part) - 1 - $pos));
+			$value = str_replace('"', '', $value);
+			
+			// If the 'value' parameter is suffixed then the field (or one of the required group) must be completed
+			if ($key == 'value') {
+				$suffix = substr($value, (strlen($value) - 1));
+				if (($suffix == '#') || ($suffix == '*')) {
+					$value = substr($value, 0, (strlen($value) - 1)); // Strip-off the indicator
+					if ($suffix == '#') {
+						$params['rule'] = 'group';
+					} else {
+						$params['rule'] = 'required';
+					}
+				}
+			}
+			
+			$params[$key] = $value;
+		}
+	}
+	if ($options != '') {
+		// We were forced to use 'size' and 'maxlength' in 'area' (textarea) so map them
+		if ($params['type'] == 'area') {
+			$options = str_replace('size', 'cols', $options);
+			$options = str_replace('maxlength', 'rows', $options);
+		}
+		$params['options'] = $options;
+	}
+	
+	return $params;
+}
+
+function pack_supplement_data($fields) {
+	$xml = new SimpleXMLElement('<supplement_data/>');
+	foreach ($fields as $key => $value) {
+		$xml->addChild($key, encode_xml($value));
+	}
+	
+    return $xml->asXML();
+}
+
+function unpack_supplement_data($data, &$fields) {
+
+	$fields = array();
+	if ($data) {
+		$xml = new SimpleXMLElement($data);
+		foreach ($xml as $key => $value) {
+			$fields[$key] = (string)$value;
+		}
+	}
+	
+	return true;
+}
+
+function get_file_link($file_id) {
+    global $CFG, $USER;
+
+	$fs = get_file_storage();
+	$file = $fs->get_file_by_id($file_id);
+	print_r($file);
+	return $file_id;
+//	return $file->get_filename();
+	$url = $CFG->wwwroot . '/local/obu_application/draftfile.php/' . $file->contextid . '/user/' . $file->filearea . '/' . $file->id . '/' . $file->filename;
+		
+	return '<a href="' . $url . '" target="_blank">' . $file->filename . '</a>';
 }
 
 ?>

@@ -19,14 +19,14 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2015, Oxford Brookes University
+ * @copyright  2016, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
 
 require_once('../../config.php');
 require_once('./locallib.php');
-require_once('./redirect_input.php');
+require_once('./mdl_redirect_form.php');
 
 require_login();
 
@@ -65,8 +65,9 @@ $PAGE->set_heading($SITE->fullname);
 $PAGE->set_title($heading);
 
 $application = read_application($application_id);
+$application_title = $application->course_code . ' ' . $application->course_name . ' (Application Ref HLS/' . $application->id . ')';
 get_application_status($USER->id, $application, $text, $button); // get the approval trail and the next action (from the user's perspective)
-$application_status = '<h4>Ref No ' . $application->id . '</h4>' . $text;
+$application_status = '<h4>' . $application_title . '</h4>' . $text;
 
 $parameters = [
 	'application_id' => $application_id,
@@ -77,7 +78,7 @@ $parameters = [
 
 $message = '';
 
-$mform = new redirect_input(null, $parameters);
+$mform = new mdl_redirect_form(null, $parameters);
 
 if ($mform->is_cancelled()) {
     redirect($home);

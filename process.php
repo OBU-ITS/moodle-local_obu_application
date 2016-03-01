@@ -19,7 +19,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2015, Oxford Brookes University
+ * @copyright  2016, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -27,7 +27,7 @@
 require_once('../../config.php');
 require_once('./hide_moodle.php');
 require_once('./locallib.php');
-require_once('./process_view.php');
+require_once('./process_form.php');
 require_once($CFG->libdir . '/moodlelib.php');
 
 require_obu_login();

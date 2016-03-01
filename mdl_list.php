@@ -19,7 +19,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2015, Oxford Brookes University
+ * @copyright  2016, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -27,7 +27,7 @@
 require_once('../../config.php');
 require_once('./locallib.php');
 require_once('./db_update.php');
-require_once('./user_input.php');
+require_once('./mdl_list_form.php');
 
 require_login();
 
@@ -47,7 +47,7 @@ $PAGE->set_title($heading);
 
 $message = '';
 
-$mform = new user_input(null, array());
+$mform = new mdl_list_form(null, array());
 
 if ($mform->is_cancelled()) {
     redirect($home);

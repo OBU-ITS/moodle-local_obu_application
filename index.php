@@ -21,7 +21,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2015, Oxford Brookes University
+ * @copyright  2016, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -65,13 +65,13 @@ $applications = get_applications($USER->id); // get all applications for the use
 if ($applications) {
 	echo '<h2>' . get_string('your_applications', 'local_obu_application') . '</h2>';
 	foreach ($applications as $application) {
+		get_application_status($USER->id, $application, $text, $button); // get the approval trail and the next action (from this user's perspective)
 		$application_title = $application->course_code . ' ' . $application->course_name . ' (Application Ref HLS/' . $application->id . ')';
 		if (($button != 'submit') || $currentuser || $manager) {
 			echo '<h4><a href="' . $process . '?id=' . $application->id . '">' . $application_title . '</a></h4>';
 		} else {
 			echo '<h4>' . $application_title . '</h4>';
 		}
-		get_application_status($USER->id, $application, $text, $button); // get the approval trail and the next action (from this user's perspective)
 		echo $text;
 	}
 }

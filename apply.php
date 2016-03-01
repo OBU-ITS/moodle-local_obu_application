@@ -21,7 +21,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2015, Oxford Brookes University
+ * @copyright  2016, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -44,6 +44,7 @@ $PAGE->https_required();
 $PAGE->set_url('/local/obu_application/apply.php');
 $PAGE->set_context(context_system::instance());
 
+$message = '';
 $record = read_applicant($USER->id, false);
 if ($record === false) { // Must have completed the profile
 	$message = get_string('complete_profile', 'local_obu_application');
@@ -51,7 +52,18 @@ if ($record === false) { // Must have completed the profile
 else if (!isset($record->course_code) || ($record->course_code === '')) { // Must have completed the course
 	$message = get_string('complete_course', 'local_obu_application');
 } else {
-	$message = '';
+	$course = read_course_record($record->course_code);
+	if ($course->applicant_form != '') {
+		$form = get_form($course->applicant_form, is_siteadmin());
+		if (!$form) {
+			$message = get_string('invalid_data', 'local_obu_application'); // Shouldn't be here
+		} else {
+			unpack_form_data($record->applicant_form, $fields);
+			if (($fields['form'] != $form->ref) || ($fields['version'] != $form->version)) {
+				$message = get_string('complete_course', 'local_obu_application'); // Shouldn't be here
+			}
+		}
+	}
 }
 
 $parameters = [

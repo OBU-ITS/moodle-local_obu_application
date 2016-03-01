@@ -28,7 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/formslib.php');
 
-class process_view extends moodleform {
+class process_form extends moodleform {
 
     function definition() {
         global $USER;
@@ -279,6 +279,21 @@ class process_view extends moodleform {
 		}
 		$mform->addElement('static', 'statement', get_string('statement', 'local_obu_application'));
 		
+        if (($approval_sought == 0) || ($approval_sought == 3)) {
+			// Supplementary course information (if any)
+			unpack_supplement_data($data->record->supplement_data, $fields);
+			if (!empty($fields)) {
+				$supplement = read_supplement($fields['supplement'], $fields['version']);
+				if ($supplement !== false) {
+					$mform->addElement('header', 'supplement_head', get_string('course_supplement', 'local_obu_application'), '');
+					if ($data->button_text == 'approve') {
+						$mform->setExpanded('supplement_head');
+					}
+					$this->supplement_display($form, $fields);
+				}
+			}
+		}
+		
         if (($approval_sought == 0) && ($data->record->approval_level == 1)) {
 			// Manager to approve
 			$mform->addElement('header', 'manager_head', get_string('manager_to_approve', 'local_obu_application'), '');
@@ -294,7 +309,7 @@ class process_view extends moodleform {
 			$mform->addElement('static', 'self_funding_formatted', get_string('self_funding', 'local_obu_application'));
 			$mform->addElement('static', 'declaration_formatted', get_string('declaration', 'local_obu_application'));
 		}
-
+		
 		if (($approval_sought > 0) && ($data->record->self_funding == '1')) {
 			$mform->addElement('html', '<h2>' . get_string('self_funding', 'local_obu_application') . ' ' . get_string('applicant', 'local_obu_application') . '</h2>');
 		} else if (($approval_sought == 1) && ($data->record->self_funding == '0')) { // Approving manager must enter the email of funder to approve
@@ -450,4 +465,52 @@ class process_view extends moodleform {
 
         return $errors;
     }
+
+	function supplement_display($form, $fields) {
+
+		$fld_start = '<input ';
+		$fld_start_len = strlen($fld_start);
+		$fld_end = '>';
+		$fld_end_len = strlen($fld_end);
+		$offset = 0;
+		$date_format = 'd-m-y';
+		
+		do {
+			$pos = strpos($form->data, $fld_start, $offset);
+			if ($pos === false) {
+				break;
+			}
+			if ($pos > $offset) {
+				$this->_form->addElement('html', substr($form->data, $offset, ($pos - $offset))); // output any HTML
+			}
+			$offset = $pos + $fld_start_len;
+			$pos = strpos($form->data, $fld_end, $offset);
+			if ($pos === false) {
+				break;
+			}
+			$element = split_input_field(substr($form->data, $offset, ($pos - $offset)));
+			$offset = $pos + $fld_end_len;
+			$text = $fields[$element['id']];
+			if ($element['type'] == 'checkbox') { // map a checkbox value to a nice character
+				if ($text == '1') {
+					$text = '&#10004;';
+				} else {
+					$text = '';
+				}
+			}
+			if (($element['type'] == 'date') && ($text)) { // map a UNIX date to a nice text string
+				$date = date_create();
+				date_timestamp_set($date, $text);
+				$text = date_format($date, $date_format);
+			}
+			if (($element['type'] == 'file') && ($text)) { // map a file id to a URL for the file
+				$text = get_file_link($text);
+			}
+			$this->_form->addElement('static', $element['id'], $element['value'], $text);
+		} while(true);
+
+		$this->_form->addElement('html', substr($form->data, $offset)); // output any remaining HTML
+	
+		return;
+	}
 }

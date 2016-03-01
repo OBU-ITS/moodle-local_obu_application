@@ -19,14 +19,14 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2015, Oxford Brookes University
+ * @copyright  2016, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
 
 require_once("{$CFG->libdir}/formslib.php");
 
-class user_input extends moodleform {
+class mdl_list_form extends moodleform {
 
     function definition() {
         $mform =& $this->_form;

@@ -21,7 +21,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2015, Oxford Brookes University
+ * @copyright  2016, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -40,7 +40,7 @@ $PAGE->set_title($CFG->pageheading . ': ' . get_string('course', 'local_obu_appl
 // HTTPS is required in this page when $CFG->loginhttps enabled
 $PAGE->https_required();
 
-$PAGE->set_url('/local/obu_application/course.php');
+$PAGE->set_url($url . 'course.php');
 $PAGE->set_context(context_system::instance());
 
 $record = read_applicant($USER->id, false);
@@ -67,7 +67,8 @@ else if ($mform_data = $mform->get_data()) {
 		$course = read_course_record($mform_data->course_code);
 		$mform_data->course_name = $course->name;
 		write_course($USER->id, $mform_data);
-		if ($course->applicant_form != '') {
+		if ($course->supplement != '') {
+			$url .= 'supplement.php'; 
 		}
 		redirect($url);
     }

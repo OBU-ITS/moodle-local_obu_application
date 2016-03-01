@@ -20,7 +20,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham (derived from '/login/forgot_password.php')
- * @copyright  2015, Oxford Brookes University
+ * @copyright  2016, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */

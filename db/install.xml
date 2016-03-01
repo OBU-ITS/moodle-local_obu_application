@@ -10,8 +10,7 @@
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="code" TYPE="char" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The course code"/>
         <FIELD NAME="name" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="The name of the course"/>
-        <FIELD NAME="applicant_form" TYPE="char" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Any supplementary form for the applicant"/>
-        <FIELD NAME="manager_form" TYPE="char" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Any supplementary form for the manager"/>
+        <FIELD NAME="supplement" TYPE="char" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Any supplementary form for the course"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
@@ -21,22 +20,21 @@
       </INDEXES>
     </TABLE>
 	
-    <TABLE NAME="local_obu_form" COMMENT="OBU HLS forms">
+    <TABLE NAME="local_obu_supplement" COMMENT="OBU HLS supplementary forms">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-        <FIELD NAME="form_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The form's ID"/>
-        <FIELD NAME="version" TYPE="char" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The form's version"/>
+        <FIELD NAME="ref" TYPE="char" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The supplement's reference"/>
+        <FIELD NAME="version" TYPE="char" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The supplement's version"/>
         <FIELD NAME="author" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The authors's Moodle user ID"/>
-        <FIELD NAME="date" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Date of form update"/>
-        <FIELD NAME="notes" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Completion notes"/>
+        <FIELD NAME="date" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Date of supplement update"/>
         <FIELD NAME="published" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Draft or Published"/>
-        <FIELD NAME="data" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="The form's template"/>
+        <FIELD NAME="template" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="The supplement's template"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
       <INDEXES>
-        <INDEX NAME="form" UNIQUE="true" FIELDS="form_id, version" COMMENT="The form's ID/version"/>
+        <INDEX NAME="supplement" UNIQUE="true" FIELDS="ref, version" COMMENT="The supplement's reference/version"/>
       </INDEXES>
     </TABLE>
 
@@ -84,7 +82,7 @@
         <FIELD NAME="course_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Course name"/>
         <FIELD NAME="course_date" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Course start date"/>
         <FIELD NAME="statement" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Supporting statement"/>
-        <FIELD NAME="applicant_form" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Applicant supplementary form data"/>
+        <FIELD NAME="supplement_data" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Course supplementary form data"/>
         <FIELD NAME="course_update" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Date of last course update"/>
       </FIELDS>
       <KEYS>
@@ -131,11 +129,10 @@
         <FIELD NAME="course_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Course name"/>
         <FIELD NAME="course_date" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Course start date"/>
         <FIELD NAME="statement" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Supporting statement"/>
-        <FIELD NAME="applicant_form" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Applicant supplementary form data"/>
+        <FIELD NAME="supplement_data" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Course supplementary form data"/>
         <FIELD NAME="self_funding" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Self-funding?"/>
         <FIELD NAME="manager_email" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Email of manager"/>
         <FIELD NAME="declaration" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Mandatory declaration"/>
-        <FIELD NAME="manager_form" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Manager supplementary form data"/>
         <FIELD NAME="funder_email" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Email of funder"/>
         <FIELD NAME="funding_method" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Funding method"/>
         <FIELD NAME="funding_organisation" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Funding organisation"/>

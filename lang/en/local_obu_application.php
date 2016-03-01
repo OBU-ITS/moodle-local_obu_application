@@ -21,7 +21,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2015, Oxford Brookes University
+ * @copyright  2016, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -30,7 +30,7 @@ $string['pluginname'] = 'OBU application';
 $string['plugintitle'] = 'HLS Application';
 $string['obu_application:manage'] = 'Manage, view and approve applications in obu_application';
 
-$string['introduction'] = 'Welcome to the online application form for the Faculty of Health and Life Sciences.  This service is for applicants who wish to apply to study a module with the university or one of 3 graduate certificates; surgical nursing, cancer nursing or palliative care nursing. This category of applicant is known as an *Associate Student.
+$string['introduction'] = 'Welcome to the online application service for the Faculty of Health and Life Sciences.  This service is for applicants who wish to apply to study a module with the university or one of 3 graduate certificates; surgical nursing, cancer nursing or palliative care nursing. This category of applicant is known as an *Associate Student.
 <p>
 *Applicants to certified programmes (by this we mean part time and full time degree, postgraduate certificate/diploma or masters), can apply using UCAS.
 </p>';
@@ -40,7 +40,7 @@ Using the tabs above, please:
 <ul>
 <li>Check that your contact details are correct and up-to-date</li>
 <li>Enter your personal details (including education history and professional qualifications)</li>
-<li>Give details of the course that you wish to attend</li>
+<li>Give details of the course that you wish to undertake</li>
 <li>Click \'Apply\' to submit your application and the email of the manager who will approve it</li>
 </ul>';
 
@@ -49,7 +49,8 @@ $string['hls_approvals'] = 'HLS approvals';
 $string['list_applications'] = 'List a user\'s applications';
 $string['redirect_application'] = 'Redirect application';
 $string['courses'] = 'Courses';
-$string['forms'] = 'Forms';
+$string['supplements'] = 'Supplementary Forms';
+$string['course_supplement'] = 'Course (Supplementary Form)';
 $string['organisations'] = 'Organisations';
 $string['logout_message'] = '<h1>Thank you.</h1>';
 
@@ -66,8 +67,6 @@ $string['registrationsteps'] = 'To access to this site you will firstly need to 
 
 $string['code'] = 'Code';
 $string['name'] = 'Name';
-$string['applicant_form'] = 'Applicant form';
-$string['manager_form'] = 'Manager form';
 
 $string['finance_code'] = 'Finance Code';
 
@@ -88,11 +87,22 @@ $string['approve'] = 'Approve';
 $string['reject'] = 'Reject';
 $string['comment'] = 'Comment or Reason for Rejection';
 
+$string['supplement'] = 'Supplement';
+$string['suppref'] = 'Supplement Ref';
+$string['version'] = 'Version';
+$string['new_version'] = 'New Version';
+$string['amend_supplement'] = 'Add or Amend a Supplement';
+$string['publish'] = 'Publish';
+$string['publish_note'] = ' (Note - a published supplement version can no longer be amended)';
+$string['draft'] = 'Draft';
+$string['published'] = 'Published';
+
 $string['application_unavailable'] = 'Sorry, this application is unavailable to you.';
-$string['form_errors'] = 'Your form has errors (please see below).';
+$string['form_errors'] = 'Sorry, your form has errors (please see below).';
 $string['user_not_found'] = 'User not found.';
 $string['value_required'] = 'You must supply a value here.';
 $string['value_verboten'] = 'You must not supply a value here.';
+$string['group_required'] = 'You must supply at least one value.';
 $string['status'] = 'Status';
 $string['status_not_submitted'] = 'Has not been submitted.';
 $string['status_rejected'] = 'Cannot be processed.';

@@ -21,7 +21,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2015, Oxford Brookes University
+ * @copyright  2016, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -41,8 +41,7 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		$table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
 		$table->add_field('code', XMLDB_TYPE_CHAR, '10', null, XMLDB_NOTNULL, null, null);
 		$table->add_field('name', XMLDB_TYPE_CHAR, '100', null, XMLDB_NOTNULL, null, null);
-		$table->add_field('applicant_form', XMLDB_TYPE_CHAR, '10', null, null, null, null);
-		$table->add_field('manager_form', XMLDB_TYPE_CHAR, '10', null, null, null, null);
+		$table->add_field('supplement', XMLDB_TYPE_CHAR, '10', null, null, null, null);
 
 		// Add keys
 		$table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
@@ -55,24 +54,23 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 			$dbman->create_table($table);
 		}
 		
-		// Define table local_obu_form
-		$table = new xmldb_table('local_obu_form');
+		// Define table local_obu_supplement
+		$table = new xmldb_table('local_obu_supplement');
 
 		// Add fields
 		$table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
-		$table->add_field('form_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+		$table->add_field('ref', XMLDB_TYPE_CHAR, '10', null, XMLDB_NOTNULL, null, null);
 		$table->add_field('version', XMLDB_TYPE_CHAR, '10', null, XMLDB_NOTNULL, null, null);
 		$table->add_field('author', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
 		$table->add_field('date', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
-		$table->add_field('notes', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
 		$table->add_field('published', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
-		$table->add_field('data', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
+		$table->add_field('template', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
 
 		// Add keys
 		$table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
 
 		// Add indexes
-		$table->add_index('form', XMLDB_INDEX_UNIQUE, array('form_id', 'version'));
+		$table->add_index('supplement', XMLDB_INDEX_UNIQUE, array('ref', 'version'));
 
 		// Conditionally create table
 		if (!$dbman->table_exists($table)) {
@@ -130,7 +128,7 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		$table->add_field('course_name', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('course_date', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('statement', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
-		$table->add_field('applicant_form', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
+		$table->add_field('supplement_data', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
 		$table->add_field('course_update', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
 
 		// Add keys
@@ -182,11 +180,10 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		$table->add_field('course_name', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('course_date', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('statement', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
-		$table->add_field('applicant_form', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
+		$table->add_field('supplement_data', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
 		$table->add_field('self_funding', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
 		$table->add_field('manager_email', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('declaration', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
-		$table->add_field('manager_form', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
 		$table->add_field('funder_email', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('funding_method', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
 		$table->add_field('funding_organisation', XMLDB_TYPE_CHAR, '100', null, null, null, null);
