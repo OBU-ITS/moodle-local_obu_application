@@ -32,8 +32,7 @@ require_once($CFG->libdir . '/moodlelib.php');
 
 require_obu_login();
 
-$context = context_system::instance();
-$manager = has_capability('local/obu_application:manage', $context);
+$manager = has_capability('local/obu_application:manage', context_system::instance());
 $home = new moodle_url('/local/obu_application/');
 $logout = $home . 'logout.php';
 
@@ -50,7 +49,6 @@ $process = $home . 'process.php?id=' . $application->id;
 
 $PAGE->set_title($CFG->pageheading . ': ' . get_string('process', 'local_obu_application'));
 $PAGE->set_url($process);
-$PAGE->set_context($context);
 
 $message = '';
 
@@ -95,7 +93,7 @@ $parameters = [
 	'button_text' => $button_text
 ];
 
-$mform = new process_view(null, $parameters);
+$mform = new process_form(null, $parameters);
 
 if ($mform->is_cancelled()) {
     redirect($home);
@@ -103,10 +101,10 @@ if ($mform->is_cancelled()) {
 else if ($mform_data = $mform->get_data()) {
 	if (($button_text == 'approve') && ($mform_data->submitbutton != get_string('continue', 'local_obu_application')) // They can do something (and they want to)
 		&& ($mform_data->approval_state == $application->approval_state) && ($mform_data->approval_level == $application->approval_level)) { // Check nothing happened while we were away (or they clicked twice)
-		if ($mform_data->rejectbutton != get_string('reject', 'local_obu_application')) {
-			update_workflow($application, true, $mform_data);
-		} else {
+		if (isset($mform_data->rejectbutton) && ($mform_data->rejectbutton == get_string('reject', 'local_obu_application'))) { // Application rejected
 			update_workflow($application, false, $mform_data);
+		} else {
+			update_workflow($application, true, $mform_data);
 		}
 		$approvals = get_approvals($USER->email); // Any more approval requests?
 		if (empty($approvals)) { // No there aren't

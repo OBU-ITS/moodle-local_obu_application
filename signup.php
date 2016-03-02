@@ -41,7 +41,6 @@ $CFG->additionalhtmlhead .= '<meta name="robots" content="noindex" />';
 $PAGE->https_required();
 
 $PAGE->set_url('/local/obu_application/signup.php');
-$PAGE->set_context(context_system::instance());
 
 // Override wanted URL, we do not want to end up here again if user clicks "Login"
 $SESSION->wantsurl = $CFG->wwwroot . '/local/obu_application/';

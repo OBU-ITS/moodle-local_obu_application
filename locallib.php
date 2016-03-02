@@ -773,7 +773,7 @@ function split_input_field($input_field) {
 		$key = substr($part, 0, $pos);
 		
 		// We were forced to use 'maxlength' so map it
-		if (($params['type'] == 'select') && ($key == 'maxlength')) {
+		if (isset($params['type']) && ($params['type'] == 'select') && ($key == 'maxlength')) {
 			$key = 'selected';
 		}
 		
@@ -837,17 +837,15 @@ function unpack_supplement_data($data, &$fields) {
 	return true;
 }
 
-function get_file_link($file_id) {
+function get_file_link($file_pathnamehash) {
     global $CFG, $USER;
 
 	$fs = get_file_storage();
-	$file = $fs->get_file_by_id($file_id);
-	print_r($file);
-	return $file_id;
-//	return $file->get_filename();
-	$url = $CFG->wwwroot . '/local/obu_application/draftfile.php/' . $file->contextid . '/user/' . $file->filearea . '/' . $file->id . '/' . $file->filename;
+	$file = $fs->get_file_by_hash($file_pathnamehash);
+	
+	$url = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(), $file->get_itemid(), $file->get_filepath(), $file->get_filename());
 		
-	return '<a href="' . $url . '" target="_blank">' . $file->filename . '</a>';
+	return '<a href="' . $url . '">' . $file->get_filename() . '</a>';
 }
 
 ?>

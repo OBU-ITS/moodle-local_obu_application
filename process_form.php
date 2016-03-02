@@ -159,11 +159,15 @@ class process_form extends moodleform {
 		
 		// Start with the required hidden fields
 		$mform->addElement('hidden', 'id', $data->record->id);
+		$mform->setType('id', PARAM_RAW);
 		$mform->addElement('hidden', 'approval_state', $data->record->approval_state);
+		$mform->setType('approval_state', PARAM_RAW);
 		$mform->addElement('hidden', 'approval_level', $data->record->approval_level);
+		$mform->setType('approval_level', PARAM_RAW);
 
 		// Our own hidden field (for use in form validation)
 		$mform->addElement('hidden', 'self_funding', $data->record->self_funding);
+		$mform->setType('self_funding', PARAM_RAW);
 
 		// This 'dummy' element has two purposes:
 		// - To force open the Moodle Forms invisible fieldset outside of any table on the form (corrupts display otherwise)
@@ -283,13 +287,13 @@ class process_form extends moodleform {
 			// Supplementary course information (if any)
 			unpack_supplement_data($data->record->supplement_data, $fields);
 			if (!empty($fields)) {
-				$supplement = read_supplement($fields['supplement'], $fields['version']);
+				$supplement = read_supplement_form($fields['supplement'], $fields['version']);
 				if ($supplement !== false) {
 					$mform->addElement('header', 'supplement_head', get_string('course_supplement', 'local_obu_application'), '');
 					if ($data->button_text == 'approve') {
 						$mform->setExpanded('supplement_head');
 					}
-					$this->supplement_display($form, $fields);
+					$this->supplement_display($supplement, $fields);
 				}
 			}
 		}
@@ -317,14 +321,17 @@ class process_form extends moodleform {
 			$mform->setExpanded('funder_head');
 			$mform->addElement('text', 'funder_email', get_string('email'), 'size="40" maxlength="100"');
 			$mform->setType('funder_email', PARAM_RAW_TRIMMED);
+			$mform->addRule('funder_email', null, 'required', null, 'server');
 			$mform->addElement('text', 'funder_email2', get_string('emailagain'), 'size="40" maxlength="100"');
 			$mform->setType('funder_email2', PARAM_RAW_TRIMMED);
+			$mform->addRule('funder_email2', null, 'required', null, 'server');
 		} else if (($approval_sought > 1) && ($data->record->self_funding == '0')) { // Approving funder must enter the funding details and HLS approver must see them
 			if ($approval_sought == 2) { // Funder
 				$mform->addElement('html', '<h1>' . get_string('funding_organisation', 'local_obu_application') . '</h1>');
 				$mform->addElement('header', 'trust_head', get_string('trust', 'local_obu_application'), '');
 				$mform->addElement('select', 'funding_organisation', get_string('organisation', 'local_obu_application'), $data->organisations, null);
 				$mform->addElement('text', 'funder_name', get_string('funder_name', 'local_obu_application'), 'size="40" maxlength="100"');
+				$mform->setType('funder_name', PARAM_TEXT);
 				$radioarray = array();
 				$radioarray[] = $mform->createElement('radio', 'funding_method', '', get_string('contract', 'local_obu_application') . ' | ', 3);
 				$radioarray[] = $mform->createElement('radio', 'funding_method', '', get_string('prepaid', 'local_obu_application') . ' | ', 2);
@@ -333,17 +340,28 @@ class process_form extends moodleform {
 				$mform->addGroup($radioarray, 'funding_methods', get_string('funding_method', 'local_obu_application'), array(' '), false);
 				$mform->addElement('static', 'invoice_text', get_string('invoice_text', 'local_obu_application'));
 				$mform->addElement('text', 'invoice_ref', get_string('invoice_ref', 'local_obu_application'), 'size="40" maxlength="100"');
+				$mform->setType('invoice_ref', PARAM_TEXT);
 				$mform->addElement('textarea', 'invoice_address', get_string('address'), 'cols="40" rows="5"');
+				$mform->setType('invoice_address', PARAM_TEXT);
 				$mform->addElement('text', 'invoice_email', get_string('email'), 'size="40" maxlength="100"');
+				$mform->setType('invoice_email', PARAM_RAW_TRIMMED);
 				$mform->addElement('text', 'invoice_phone', get_string('phone', 'local_obu_application'), 'size="40" maxlength="100"');
+				$mform->setType('invoice_phone', PARAM_TEXT);
 				$mform->addElement('text', 'invoice_contact', get_string('invoice_contact', 'local_obu_application'), 'size="40" maxlength="100"');
+				$mform->setType('invoice_contact', PARAM_TEXT);
  				$mform->addElement('header', 'other_head', get_string('other', 'local_obu_application'), '');
 				$mform->addElement('text', 'other_organisation', get_string('organisation', 'local_obu_application'), 'size="40" maxlength="100"');
+				$mform->setType('other_organisation', PARAM_TEXT);
 				$mform->addElement('text', 'other_ref', get_string('invoice_ref', 'local_obu_application'), 'size="40" maxlength="100"');
+				$mform->setType('other_ref', PARAM_TEXT);
 				$mform->addElement('textarea', 'other_address', get_string('address'), 'cols="40" rows="5"');
+				$mform->setType('other_address', PARAM_TEXT);
 				$mform->addElement('text', 'other_email', get_string('email'), 'size="40" maxlength="100"');
+				$mform->setType('other_email', PARAM_RAW_TRIMMED);
 				$mform->addElement('text', 'other_phone', get_string('phone', 'local_obu_application'), 'size="40" maxlength="100"');
+				$mform->setType('other_phone', PARAM_TEXT);
 				$mform->addElement('text', 'other_contact', get_string('invoice_contact', 'local_obu_application'), 'size="40" maxlength="100"');
+				$mform->setType('other_contact', PARAM_TEXT);
 			} else { // HLS
 				$mform->addElement('html', '<h1>' . get_string('funding', 'local_obu_application') . '</h1>');
 				$mform->addElement('static', 'funding_method', get_string('funding_method', 'local_obu_application'));
@@ -372,6 +390,7 @@ class process_form extends moodleform {
 				$mform->closeHeaderBefore('dummy_element');
 				$mform->addElement('html', '<h1>' . get_string('approval_head', 'local_obu_application') . '</h1>');
 				$mform->addElement('text', 'comment', get_string('comment', 'local_obu_application'), 'size="40" maxlength="100"');
+				$mform->setType('comment', PARAM_TEXT);
 				$buttonarray[] = &$mform->createElement('submit', 'rejectbutton', get_string('reject', 'local_obu_application'));
 			}
 			$buttonarray[] = &$mform->createElement('cancel');
@@ -476,19 +495,19 @@ class process_form extends moodleform {
 		$date_format = 'd-m-y';
 		
 		do {
-			$pos = strpos($form->data, $fld_start, $offset);
+			$pos = strpos($form->template, $fld_start, $offset);
 			if ($pos === false) {
 				break;
 			}
 			if ($pos > $offset) {
-				$this->_form->addElement('html', substr($form->data, $offset, ($pos - $offset))); // output any HTML
+				$this->_form->addElement('html', substr($form->template, $offset, ($pos - $offset))); // output any HTML
 			}
 			$offset = $pos + $fld_start_len;
-			$pos = strpos($form->data, $fld_end, $offset);
+			$pos = strpos($form->template, $fld_end, $offset);
 			if ($pos === false) {
 				break;
 			}
-			$element = split_input_field(substr($form->data, $offset, ($pos - $offset)));
+			$element = split_input_field(substr($form->template, $offset, ($pos - $offset)));
 			$offset = $pos + $fld_end_len;
 			$text = $fields[$element['id']];
 			if ($element['type'] == 'checkbox') { // map a checkbox value to a nice character
@@ -503,13 +522,13 @@ class process_form extends moodleform {
 				date_timestamp_set($date, $text);
 				$text = date_format($date, $date_format);
 			}
-			if (($element['type'] == 'file') && ($text)) { // map a file id to a URL for the file
+			if (($element['type'] == 'file') && ($text)) { // map a file pathname hash to a URL for the file
 				$text = get_file_link($text);
 			}
 			$this->_form->addElement('static', $element['id'], $element['value'], $text);
 		} while(true);
 
-		$this->_form->addElement('html', substr($form->data, $offset)); // output any remaining HTML
+		$this->_form->addElement('html', substr($form->template, $offset)); // output any remaining HTML
 	
 		return;
 	}

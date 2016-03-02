@@ -42,24 +42,23 @@ $PAGE->set_title($CFG->pageheading . ': ' . get_string('apply', 'local_obu_appli
 $PAGE->https_required();
 
 $PAGE->set_url('/local/obu_application/apply.php');
-$PAGE->set_context(context_system::instance());
 
 $message = '';
 $record = read_applicant($USER->id, false);
 if ($record === false) { // Must have completed the profile
 	$message = get_string('complete_profile', 'local_obu_application');
 }
-else if (!isset($record->course_code) || ($record->course_code === '')) { // Must have completed the course
+else if (!isset($record->course_code) || ($record->course_code === '')) { // They must complete the course
 	$message = get_string('complete_course', 'local_obu_application');
 } else {
 	$course = read_course_record($record->course_code);
-	if ($course->applicant_form != '') {
-		$form = get_form($course->applicant_form, is_siteadmin());
-		if (!$form) {
+	if ($course->supplement != '') {
+		$supplement = get_supplement_form($course->supplement, is_siteadmin());
+		if (!$supplement) {
 			$message = get_string('invalid_data', 'local_obu_application'); // Shouldn't be here
 		} else {
-			unpack_form_data($record->applicant_form, $fields);
-			if (($fields['form'] != $form->ref) || ($fields['version'] != $form->version)) {
+			unpack_supplement_data($record->supplement_data, $fields);
+			if (($fields['supplement'] != $supplement->ref) || ($fields['version'] != $supplement->version)) {
 				$message = get_string('complete_course', 'local_obu_application'); // Shouldn't be here
 			}
 		}

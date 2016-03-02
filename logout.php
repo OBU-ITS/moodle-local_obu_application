@@ -31,7 +31,6 @@ require_once('./hide_moodle.php');
 require_once('./locallib.php');
 
 $PAGE->set_url('/local/obu_application/logout.php');
-$PAGE->set_context(context_system::instance());
 
 $login = optional_param('loginpage', 0, PARAM_BOOL);
 

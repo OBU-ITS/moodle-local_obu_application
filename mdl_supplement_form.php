@@ -52,15 +52,18 @@ class mdl_supplement_form extends moodleform {
 
 		if ($data->ref == '') {
 			$mform->addElement('text', 'ref', get_string('suppref', 'local_obu_application'), 'size="10" maxlength="10"');
+			$mform->setType('ref', PARAM_TEXT);
 			$this->add_action_buttons(false, get_string('continue', 'local_obu_application'));
 			return;
 		}
 		$mform->addElement('hidden', 'ref', $data->ref);
+		$mform->setType('ref', PARAM_RAW);
 		$mform->addElement('static', null, get_string('suppref', 'local_obu_application'), $data->ref);
 		
 		if ($data->version == '') {
 			if (!$data->versions) {
 				$mform->addElement('text', 'version', get_string('version', 'local_obu_application'), 'size="10" maxlength="10"');
+				$mform->setType('version', PARAM_TEXT);
 			} else {
 				$select = $mform->addElement('select', 'versions', get_string('version', 'local_obu_application'), $data->versions, null);
 				$select->setSelected(0);
@@ -69,6 +72,7 @@ class mdl_supplement_form extends moodleform {
 			return;
 		}
 		$mform->addElement('hidden', 'version', $data->version);
+		$mform->setType('version', PARAM_RAW);
 		$mform->addElement('static', null, get_string('version', 'local_obu_application'), $data->version);
 		
 		$mform->addElement('editor', 'template', get_string('supplement', 'local_obu_application'));
@@ -77,10 +81,13 @@ class mdl_supplement_form extends moodleform {
 
 		if ($already_published) {
 			$mform->addElement('hidden', 'already_published', 1);
+			$mform->setType('already_published', PARAM_RAW);
 			$mform->addElement('hidden', 'published', 1);
+			$mform->setType('published', PARAM_RAW);
 			$mform->addElement('html', '<strong>' . get_string('published', 'local_obu_application') . '</strong>' . get_string('publish_note', 'local_obu_application'));
 		} else {
 			$mform->addElement('hidden', 'already_published', 0);
+			$mform->setType('already_published', PARAM_RAW);
 			$mform->addElement('advcheckbox', 'published', get_string('publish', 'local_obu_application'), get_string('publish_note', 'local_obu_application'), null, array(0, 1));
 			$mform->disabledIf('published', 'published', 'checked');
 		}

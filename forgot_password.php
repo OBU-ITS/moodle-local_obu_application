@@ -38,8 +38,6 @@ $token = optional_param('token', false, PARAM_ALPHANUM);
 $PAGE->https_required();
 
 $PAGE->set_url('/local/obu_application/forgot_password.php');
-$systemcontext = context_system::instance();
-$PAGE->set_context($systemcontext);
 $PAGE->set_title($CFG->pageheading . ': ' . get_string('passwordforgotten'));
 
 // If you're logged in then you shouldn't be here!

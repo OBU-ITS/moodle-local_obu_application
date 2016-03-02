@@ -41,7 +41,6 @@ $PAGE->set_title($CFG->pageheading . ': ' . get_string('course', 'local_obu_appl
 $PAGE->https_required();
 
 $PAGE->set_url($url . 'course.php');
-$PAGE->set_context(context_system::instance());
 
 $record = read_applicant($USER->id, false);
 if ($record === false) { // Must complete the profile first

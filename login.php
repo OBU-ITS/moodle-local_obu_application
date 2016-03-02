@@ -40,9 +40,7 @@ if ($cancel) {
 // HTTPS is required in this page when $CFG->loginhttps enabled
 $PAGE->https_required();
 
-$context = context_system::instance();
 $PAGE->set_url($CFG->httpswwwroot . '/local/obu_application/login.php');
-$PAGE->set_context($context);
 $PAGE->set_pagelayout('login');
 
 // Initialize variables

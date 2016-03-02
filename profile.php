@@ -41,7 +41,6 @@ $PAGE->set_title($CFG->pageheading . ': ' . get_string('profile', 'local_obu_app
 $PAGE->https_required();
 
 $PAGE->set_url('/local/obu_application/profile.php');
-$PAGE->set_context(context_system::instance());
 
 $message = '';
 

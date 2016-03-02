@@ -58,6 +58,7 @@ class course_form extends moodleform {
 		$mform->setExpanded('course_head');
 		$mform->addElement('select', 'course_code', get_string('course', 'local_obu_application'), $data->courses, null);
 		$mform->addElement('text', 'course_date', get_string('course_date', 'local_obu_application'), 'size="40" maxlength="100"');
+		$mform->setType('course_date', PARAM_TEXT);
 		$mform->addRule('course_date', null, 'required', null, 'server');
         $mform->addElement('header', 'statement_head', get_string('statement_head', 'local_obu_application'), '');
 		$mform->setExpanded('statement_head');

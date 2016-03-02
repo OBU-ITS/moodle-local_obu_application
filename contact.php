@@ -41,7 +41,6 @@ $PAGE->set_title($CFG->pageheading . ': ' . get_string('contactdetails', 'local_
 $PAGE->https_required();
 
 $PAGE->set_url('/local/obu_application/contact.php');
-$PAGE->set_context(context_system::instance());
 
 $message = '';
 

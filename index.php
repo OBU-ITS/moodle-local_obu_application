@@ -40,6 +40,7 @@ require_obu_login();
 
 $process = new moodle_url('/local/obu_application/process.php');
 
+$PAGE->set_url($CFG->httpswwwroot . '/local/obu_application/index.php');
 $PAGE->set_title($CFG->pageheading . ': ' . get_string('index_page', 'local_obu_application'));
 
 echo $OUTPUT->header();

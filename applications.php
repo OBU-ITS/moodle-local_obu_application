@@ -30,8 +30,7 @@ require_once('./locallib.php');
 
 require_obu_login();
 
-$context = context_system::instance();
-$manager = has_capability('local/obu_application:manage', $context);
+$manager = has_capability('local/obu_application:manage', context_system::instance());
 
 $user_id = optional_param('userid', 0, PARAM_INT);
 
@@ -51,7 +50,6 @@ if (($user_id == 0) || ($user_id == $USER->id)) {
 	$heading = get_string('applications', 'local_obu_application') . ': ' . $user->firstname . ' ' . $user->lastname;
 }
 
-$PAGE->set_context($context);
 $PAGE->set_title($CFG->pageheading . ': ' . get_string('applications', 'local_obu_application'));
 
 // The page contents

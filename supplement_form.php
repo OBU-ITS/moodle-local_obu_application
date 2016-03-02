@@ -43,7 +43,9 @@ class supplement_form extends moodleform {
 		$this->set_data($data->fields);
 		
 		$mform->addElement('hidden', 'supplement', $data->supplement->ref);
+		$mform->setType('supplement', PARAM_RAW);
 		$mform->addElement('hidden', 'version', $data->supplement->version);
+		$mform->setType('version', PARAM_RAW);
 		
         // Process the form
 		$fld_start = '<input ';
@@ -52,7 +54,8 @@ class supplement_form extends moodleform {
 		$fld_end_len = strlen($fld_end);
 		$offset = 0;
 		$date_format = 'd-m-y';
-		$files = array();
+		$fs = get_file_storage();
+		$context = context_user::instance($USER->id);
 		
 		// This 'dummy' element has two purposes:
 		// - To force open the Moodle Forms invisible fieldset outside of any table on the form (corrupts display otherwise)
@@ -89,12 +92,21 @@ class supplement_form extends moodleform {
 					$mform->addElement('date_selector', $element['id'], $element['value'], $element['options']);
 					break;
 				case 'file':
-					$draftitemid = file_get_submitted_draft_itemid($element['id']);
-					if ($draftitemid == 0) {
-						$context = context_user::instance($USER->id);
-						file_prepare_draft_area($draftitemid, $context->id, 'local_obu_application', 'file', $data->fields[$element['id']], array('subdirs' => false, 'maxbytes' => 2097152, 'maxfiles' => 1));
-						$this->set_data(array($element['id'] => $draftitemid));
+					if (isset($data->fields[$element['id']])) {
+						$pathnamehash = $data->fields[$element['id']];
+					} else {
+						$pathnamehash = '';
 					}
+					if ($pathnamehash == '') {
+						$draftitemid = 0;
+						$itemid = 0;
+					} else {
+						$file = $fs->get_file_by_hash($pathnamehash);
+						$itemid = $file->get_itemid();
+						$draftitemid = 0;
+					}
+					file_prepare_draft_area($draftitemid, $context->id, 'local_obu_application', 'file', $itemid, array('subdirs' => false, 'maxbytes' => 2097152, 'maxfiles' => 1));
+					$this->set_data(array($element['id'] => $draftitemid));
  					$mform->addElement('filepicker', $element['id'] , $element['value'], null, array('maxbytes' => 2097152, 'accepted_types' => array('.pdf')));
 					break;
 				case 'select':
@@ -119,13 +131,16 @@ class supplement_form extends moodleform {
 					break;
 				case 'text':
 					$mform->addElement('text', $element['id'], $element['value'], $element['options']);
+					$mform->setType($element['id'], PARAM_TEXT);
 					break;
 				case 'alphabetic':
 					$mform->addElement('text', $element['id'], $element['value'], $element['options']);
+					$mform->setType($element['id'], PARAM_RAW);
 					$mform->addRule($element['id'], null, 'lettersonly', null, 'server'); // Let Moodle handle the rule
 					break;
 				case 'numeric':
 					$mform->addElement('text', $element['id'], $element['value'], $element['options']);
+					$mform->setType($element['id'], PARAM_RAW);
 					$mform->addRule($element['id'], null, 'numeric', null, 'server'); // Let Moodle handle the rule
 					break;
 				default:

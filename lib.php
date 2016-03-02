@@ -33,7 +33,7 @@ function local_obu_application_extends_navigation($navigation) {
 	}
 	
 	// Find the 'applications' node
-	$nodeParent = $navigation->find(get_string('applications', 'local_obu_applications'), navigation_node::TYPE_SYSTEM);
+	$nodeParent = $navigation->find(get_string('applications', 'local_obu_application'), navigation_node::TYPE_SYSTEM);
 	
 	// If necessary, add the 'applications' node to 'home'
 	if (!$nodeParent) {
@@ -51,4 +51,41 @@ function local_obu_application_extends_navigation($navigation) {
 		$node = $nodeParent->add(get_string('supplements', 'local_obu_application'), '/local/obu_application/mdl_supplement.php');
 		$node = $nodeParent->add(get_string('organisations', 'local_obu_application'), '/local/obu_application/mdl_organisation.php');
 	}
+}
+
+function local_obu_application_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, $options) {
+	global $USER;
+	
+    // Check that the context is a 'user' one and that the filearea is valid
+    if (($context->contextlevel != CONTEXT_USER) || ($filearea !== 'file')) {
+        return false; 
+    }
+ 
+    // Make sure the user is logged in
+    require_login();
+ 
+    $itemid = array_shift($args); // The first item in the $args array
+
+    // Extract the filename / filepath from the $args array
+    $filename = array_pop($args); // The last item in the $args array
+    if (!$args) {
+        $filepath = '/'; // $args is empty => the path is '/'
+    } else {
+        $filepath = '/'.implode('/', $args).'/'; // $args contains elements of the filepath
+    }
+ 
+    // Retrieve the file from the pool
+    $fs = get_file_storage();
+    $file = $fs->get_file($context->id, 'local_obu_application', $filearea, $itemid, $filepath, $filename);
+    if (!$file) {
+        return false; // The file does not exist!
+    }
+	
+    // Check the capability
+    if (($USER->id != $file->get_userid()) && !has_capability('local/obu_application:manage', $context)) {
+        return false;
+    }
+ 
+    // We can now send the file back to the browser 
+	send_stored_file($file, 86400, 0, $forcedownload, $options);
 }

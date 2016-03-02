@@ -26,7 +26,7 @@
 
 require_once('../../config.php');
 require_once('./locallib.php');
-require_once('./process_view.php');
+require_once('./process_form.php');
 require_once($CFG->libdir . '/moodlelib.php');
 
 require_login();
@@ -46,10 +46,10 @@ if ($application === false) {
 }
 $process = $home . 'local/obu_application/mdl_process.php?id=' . $application->id;
 
+$PAGE->set_context($context);
 $PAGE->set_pagelayout('standard');
 $PAGE->set_title(get_string('plugintitle', 'local_obu_application') . ': ' . get_string('process', 'local_obu_application'));
 $PAGE->set_url($process);
-$PAGE->set_context($context);
 $PAGE->navbar->add(get_string('application', 'local_obu_application', $application->id));
 
 $message = '';
@@ -65,9 +65,9 @@ if (($application->approval_state == 0) && ($application->approval_level == 0)) 
 	update_workflow($application);
 	$status_text = '';
 	
-} else if ($application->authorisation_state == 1) { // Application rejected
+} else if ($application->approval_state == 1) { // Application rejected
 	$status_text = get_string('status_rejected', 'local_obu_application');
-} else if ($application->authorisation_state == 2) { // Application processed
+} else if ($application->approval_state == 2) { // Application processed
 	$status_text = get_string('status_processed', 'local_obu_application');
 } else {
 	$status_text = '';
@@ -86,12 +86,13 @@ if ($button_text != 'approve') { // If not the next approver, check that this us
 }
 
 $parameters = [
+	'organisations' => get_organisation_names(),
 	'record' => $application,
 	'status_text' => $status_text,
 	'button_text' => $button_text
 ];
 	
-$mform = new process_view(null, $parameters);
+$mform = new process_form(null, $parameters);
 
 if ($mform->is_cancelled()) {
     redirect($home);

@@ -28,10 +28,13 @@
 $CFG->sessioncookie = 'email';
 
 // Add our own CSS - mainly to hide the standard Moodle page elements
-$CFG->additionalhtmlhead .= '<style>.langmenu, .usermenu, .logininfo, .homelink, .helplink { display: none; } .nav { color: white; } a.brand { pointer-events: none; }</style>';
+$CFG->additionalhtmlhead .= '<style>.langmenu, .usermenu, .logininfo, .homelink, .breadcrumb, .helplink { display: none; } .nav { color: white; } a.brand { pointer-events: none; }</style>';
 
 // Add our own menu items for logged-in users
-if (isloggedin()) {
+if (!isloggedin()) {
+	$PAGE->set_context(context_system::instance());
+} else {
+	$PAGE->set_context(context_user::instance($USER->id));
 	$CFG->custommenuitems = fullname($USER, true) . '
 	#####
 	' . get_string('index_page', 'local_obu_application') . '|/local/obu_application/index.php

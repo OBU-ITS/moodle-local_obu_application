@@ -40,7 +40,6 @@ $PAGE->set_title($CFG->pageheading . ': ' . get_string('course', 'local_obu_appl
 $PAGE->https_required();
 
 $PAGE->set_url($url . 'supplement.php');
-$PAGE->set_context(context_system::instance());
 
 $message = '';
 $record = read_applicant($USER->id, false);
@@ -77,18 +76,18 @@ if ($mform->is_cancelled()) {
 } 
 else if ($mform_data = (array)$mform->get_data()) {
 	$files = get_file_elements($supplement->template); // Get the list of the 'file' elements from the supplementary form's template
-	$fields = array();
+	$data_fields = array();
 	foreach ($mform_data as $key => $value) {
 		if ($key != 'submitbutton') { // Ignore the standard field
 			if (in_array($key, $files)) { // Is this element a 'file' one?
 				$file = $mform->save_stored_file($key, $context->id, 'local_obu_application', 'file', $value, '/', null, true, null); // Save it to the Moodle pool
-				$fields[$key] = $file->get_itemid(); // Store the file ID
+				$data_fields[$key] = $file->get_pathnamehash(); // Store the file's pathname hash (it's unique identifier)
 			} else {
-				$fields[$key] = $value;
+				$data_fields[$key] = $value;
 			}
 		}
 	}
-	write_supplement_data($USER->id, pack_supplement_data($fields));
+	write_supplement_data($USER->id, pack_supplement_data($data_fields));
 	redirect($url); // Perform initial form processing
 }
 
