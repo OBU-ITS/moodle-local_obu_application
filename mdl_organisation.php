@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * OBU Application - Maintain organisations [Moodle]
+ * OBU Application - Organisation maintenance [Moodle]
  *
  * @package    obu_application
  * @category   local
@@ -23,33 +23,85 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
-
+ 
 require_once('../../config.php');
 require_once('./locallib.php');
 require_once('./db_update.php');
+require_once('./mdl_organisation_form.php');
 
 require_login();
-
 $context = context_system::instance();
 require_capability('local/obu_application:manage', $context);
 
-$home = new moodle_url('/');
-$dir = $home . 'local/obu_application/';
-$program = $dir . 'mdl_organisation.php';
-$heading = get_string('organisations', 'local_obu_application');
+$program = '/local/obu_application/mdl_organisation.php';
+$url = new moodle_url($program);
 
-$PAGE->set_url($program);
 $PAGE->set_pagelayout('standard');
+$PAGE->set_url($program);
 $PAGE->set_context($context);
 $PAGE->set_heading($SITE->fullname);
-$PAGE->set_title($heading);
+$PAGE->set_title(get_string('organisations', 'local_obu_application'));
+
+$message = '';
+
+$id = '';
+$delete = false;
+$organisations = array();
+$record = null;
+
+if (isset($_REQUEST['id'])) {
+	$id = $_REQUEST['id'];
+	if ($id != '0') {
+		$record = read_organisation($id);
+		if (isset($_REQUEST['delete'])) {
+			$delete = true;
+		}		
+	}
+} else {
+	$recs = get_organisation_records();
+	if ($recs) { // Do they have a choice?
+		$organisations[0] = get_string('new_organisation', 'local_obu_application'); // The 'New Organisation' option
+		foreach ($recs as $rec) {
+			$organisations[$rec->id] = $rec->name . ' [' . $rec->code . ']';
+		}
+	} else { // No, they don't...
+		$id = '0'; // ...so it's gottabee a new one
+	}
+}
+
+$parameters = [
+	'id' => $id,
+	'delete' => $delete,
+	'organisations' => $organisations,
+	'record' => $record
+];
+
+$mform = new mdl_organisation_form(null, $parameters);
+
+if ($mform->is_cancelled()) {
+    redirect($url);
+} 
+else if ($mform_data = $mform->get_data()) {
+	if (isset($mform_data->submitbutton)) { // 'Save' or 'Confirm Deletion'
+		if ($mform_data->submitbutton == get_string('save', 'local_obu_application')) {
+			write_organisation($mform_data);
+			redirect($url);
+		} else if ($mform_data->submitbutton == get_string('confirm_delete', 'local_obu_application')) {
+			delete_organisation($mform_data->id);
+			redirect($url);
+		}
+    } else if (isset($mform_data->deletebutton) && ($mform_data->deletebutton == get_string('delete', 'local_obu_application'))) { // Delete
+		redirect($url . '?id=' . $id . '&delete=1'); // Come back and ask for confirmation
+	}
+}	
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading($heading);
 
-$names = get_organisation_names();
-foreach ($names as $name) {
-	echo $name . '<br \>';
+if ($message) {
+    notice($message, $url);    
+}
+else {
+    $mform->display();
 }
 
 echo $OUTPUT->footer();

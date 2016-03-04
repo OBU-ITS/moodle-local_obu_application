@@ -30,41 +30,76 @@ require_once('./db_update.php');
 require_once('./mdl_course_form.php');
 
 require_login();
-
 $context = context_system::instance();
 require_capability('local/obu_application:manage', $context);
 
-$home = new moodle_url('/');
-$dir = $home . 'local/obu_application/';
-$program = $dir . 'mdl_course_code.php';
-$heading = get_string('list_applications', 'local_obu_application');
+$program = '/local/obu_application/mdl_course.php';
+$url = new moodle_url($program);
 
-$PAGE->set_url($program);
 $PAGE->set_pagelayout('standard');
+$PAGE->set_url($program);
 $PAGE->set_context($context);
 $PAGE->set_heading($SITE->fullname);
-$PAGE->set_title($heading);
+$PAGE->set_title(get_string('courses', 'local_obu_application'));
 
 $message = '';
 
+$id = '';
+$delete = false;
+$courses = array();
+$record = null;
+
+if (isset($_REQUEST['id'])) {
+	$id = $_REQUEST['id'];
+	if ($id != '0') {
+		$record = read_course_record_by_id($id);
+		if (isset($_REQUEST['delete'])) {
+			$delete = true;
+		}		
+	}
+} else {
+	$recs = get_course_records();
+	if ($recs) { // Do they have a choice?
+		$courses[0] = get_string('new_course', 'local_obu_application'); // The 'New Course' option
+		foreach ($recs as $rec) {
+			$name = $rec->code . ' ' . $rec->name;
+			if ($rec->supplement) {
+				$name .= ' [' . $rec->supplement . ']';
+			}
+			$courses[$rec->id] = $name;
+		}
+	} else { // No, they don't...
+		$id = '0'; // ...so it's gottabee a new one
+	}
+}
+
 $parameters = [
+	'id' => $id,
+	'delete' => $delete,
+	'courses' => $courses,
 	'record' => $record
 ];
 
-$mform = new user_input(null, $parameters);
+$mform = new mdl_course_form(null, $parameters);
 
 if ($mform->is_cancelled()) {
-    redirect($home);
+    redirect($url);
 } 
 else if ($mform_data = $mform->get_data()) {
-	if ($mform_data->submitbutton == get_string('save', 'local_obu_application')) {
-		write_course($USER->id, $mform_data);
-		redirect($url);
+	if (isset($mform_data->submitbutton)) { // 'Save' or 'Confirm Deletion'
+		if ($mform_data->submitbutton == get_string('save', 'local_obu_application')) {
+			write_course_record($mform_data);
+			redirect($url);
+		} else if ($mform_data->submitbutton == get_string('confirm_delete', 'local_obu_application')) {
+			delete_course_record($mform_data->id);
+			redirect($url);
+		}
+    } else if (isset($mform_data->deletebutton) && ($mform_data->deletebutton == get_string('delete', 'local_obu_application'))) { // Delete
+		redirect($url . '?id=' . $id . '&delete=1'); // Come back and ask for confirmation
 	}
 }	
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading($heading);
 
 if ($message) {
     notice($message, $url);    

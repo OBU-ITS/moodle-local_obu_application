@@ -16,7 +16,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * OBU Application - Course maintenance form
+ * OBU Application - Organisation maintenance form
  *
  * @package    obu_application
  * @category   local
@@ -30,7 +30,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/formslib.php');
 
-class mdl_course_form extends moodleform {
+class mdl_organisation_form extends moodleform {
 
     function definition() {
         $mform =& $this->_form;
@@ -38,22 +38,21 @@ class mdl_course_form extends moodleform {
         $data = new stdClass();
 		$data->id = $this->_customdata['id'];
 		$data->delete = $this->_customdata['delete'];
-		$data->courses = $this->_customdata['courses'];
+		$data->organisations = $this->_customdata['organisations'];
 		$data->record = $this->_customdata['record'];
 		
 		if ($data->record != null) {
 			$fields = [
-				'code' => $data->record->code,
 				'name' => $data->record->name,
-				'supplement' => $data->record->supplement
+				'code' => $data->record->code
 			];
 			$this->set_data($fields);
 		}
 		
-		$mform->addElement('html', '<h2>' . get_string('update_course', 'local_obu_application') . '</h2>');
+		$mform->addElement('html', '<h2>' . get_string('update_organisation', 'local_obu_application') . '</h2>');
 
 		if ($data->id == '') {
-			$select = $mform->addElement('select', 'id', get_string('course', 'local_obu_application'), $data->courses, null);
+			$select = $mform->addElement('select', 'id', get_string('organisation', 'local_obu_application'), $data->organisations, null);
 			$select->setSelected(0);
 			$this->add_action_buttons(false, get_string('continue', 'local_obu_application'));
 			return;
@@ -68,16 +67,13 @@ class mdl_course_form extends moodleform {
 		$mform->addElement('static', 'form_errors');
 		
 		if ($data->delete) {
-			$mform->addElement('static', 'code', get_string('code', 'local_obu_application'));
 			$mform->addElement('static', 'name', get_string('name', 'local_obu_application'));
-			$mform->addElement('static', 'supplement', get_string('supplement', 'local_obu_application'));
+			$mform->addElement('static', 'code', get_string('finance_code', 'local_obu_application'));
 		} else {
-			$mform->addElement('text', 'code', get_string('code', 'local_obu_application'), 'size="10" maxlength="10"');
-			$mform->setType('code', PARAM_TEXT);
 			$mform->addElement('text', 'name', get_string('name', 'local_obu_application'), 'size="50" maxlength="100"');
 			$mform->setType('name', PARAM_TEXT);
-			$mform->addElement('text', 'supplement', get_string('supplement', 'local_obu_application'), 'size="2" maxlength="2"');
-			$mform->setType('supplement', PARAM_TEXT);
+			$mform->addElement('text', 'code', get_string('finance_code', 'local_obu_application'), 'size="10" maxlength="10"');
+			$mform->setType('code', PARAM_TEXT);
 		}
 
 		// Options
@@ -101,11 +97,11 @@ class mdl_course_form extends moodleform {
 
 		// Check that we have been given sufficient information
 		if (isset($data['submitbutton']) && ($data['submitbutton'] == get_string('save', 'local_obu_application'))) {
-			if ($data['code'] == '') {
-				$errors['code'] = get_string('value_required', 'local_obu_application');
-			}
 			if ($data['name'] == '') {
 				$errors['name'] = get_string('value_required', 'local_obu_application');
+			}
+			if ($data['code'] == '') {
+				$errors['code'] = get_string('value_required', 'local_obu_application');
 			}
 		}
 		
