@@ -41,16 +41,18 @@ if (isset($_REQUEST['id'])) {
 	die;
 }
 
-// We may have the email of the approver
-if (isset($_REQUEST['approver'])) {
-	$approver_email = $_REQUEST['approver'];
+// We may have been given the email of the new approver
+if (isset($_REQUEST['approver_email'])) {
+	$approver_email = $_REQUEST['approver_email'];
 	$approver = get_complete_user_data('email', $approver_email);
-	$approver_id = $approver->id;
-	$approver_name = $approver->firstname . ' ' . $approver->lastname;
+	if ($approver) {
+		$approver_name = $approver->firstname . ' ' . $approver->lastname;
+	} else {
+		$approver_name = 'Not Registered';
+	}
 } else {
-	$approver = null;
-	$approver_id = 0;
-	$approver_name = null;
+	$approver_email = '';
+	$approver_name = '';
 }
 
 $home = new moodle_url('/');
@@ -58,9 +60,9 @@ $dir = $home . 'local/obu_application/';
 $program = $dir . 'mdl_redirect.php?id=' . $application_id;
 $heading = get_string('redirect_application', 'local_obu_application');
 
+$PAGE->set_context($context);
 $PAGE->set_pagelayout('standard');
 $PAGE->set_url($program);
-$PAGE->set_context($context);
 $PAGE->set_heading($SITE->fullname);
 $PAGE->set_title($heading);
 
@@ -89,7 +91,7 @@ if ($mform_data = $mform->get_data()) {
 		if ($application->approval_level == 1) {
 			$application->manager_email = $approver_email;
 		} else {
-			$application->tel_email = $approver_email;
+			$application->funder_email = $approver_email;
 		} 
 		update_application($application);
 		update_approver($application, $approver_email); // Update the approvals and send notification emails

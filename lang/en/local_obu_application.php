@@ -42,7 +42,10 @@ Using the tabs above, please:
 <li>Enter your personal details (including education history and professional qualifications)</li>
 <li>Give details of the course that you wish to undertake</li>
 <li>Click \'Apply\' to submit your application and the email of the manager who will approve it</li>
-</ul>';
+</ul>
+<p>
+Once you have submitted your application your manager will receive a request to support your plans.  This request will be delivered to your manager\'s email address as provided by you.  If your request is supported by your manager, and you are also seeking funding support, your manager will then submit your application to your organisation\'s staff development and funding team/department.  If your funding is approved your full application will be submitted to the Faculty of Health and Life Sciences for consideration.
+</p>';
 
 $string['application_approvals'] = 'Application approvals';
 $string['hls_approvals'] = 'HLS approvals';
@@ -169,6 +172,8 @@ $string['declaration_text'] = 'I confirm that the information given in this appl
 requested or other material information has been omitted. I give my consent to the processing of my data by Oxford Brookes University.
 I have read the {$a} and undertake to be bound by those conditions.';
 $string['approval_head'] = 'Approval';
+$string['amend_course'] = 'Amend Course';
+$string['amend_funding'] = 'Amend Funding';
 
 $string['funding'] = 'Funding';
 $string['funding_organisation'] = 'Funding Organisation (please choose one only)';

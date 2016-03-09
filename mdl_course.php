@@ -36,11 +36,11 @@ require_capability('local/obu_application:manage', $context);
 $program = '/local/obu_application/mdl_course.php';
 $url = new moodle_url($program);
 
-$PAGE->set_pagelayout('standard');
-$PAGE->set_url($program);
 $PAGE->set_context($context);
+$PAGE->set_pagelayout('standard');
+$PAGE->set_title(get_string('plugintitle', 'local_obu_application') . ': ' . get_string('courses', 'local_obu_application'));
+$PAGE->set_url($program);
 $PAGE->set_heading($SITE->fullname);
-$PAGE->set_title(get_string('courses', 'local_obu_application'));
 
 $message = '';
 

@@ -49,10 +49,8 @@ if ($record === false) { // Must complete the profile first
 	$message = '';
 }
 
-$courses = get_course_names();
-
 $parameters = [
-	'courses' => $courses,
+	'courses' => get_course_names(),
 	'record' => $record
 ];
 

@@ -41,7 +41,7 @@ class process_form extends moodleform {
 		$data->status_text = $this->_customdata['status_text'];
 		$data->button_text = $this->_customdata['button_text'];
 		
-		$approval_sought = 0; // Level at which we are is seeking approval from this user (if at all)
+		$approval_sought = 0; // Level at which we are seeking approval from this user (if at all)
 		if ($data->record !== false) {
 			
 			// Level (if any) at which we are seeking approval from this user
@@ -392,6 +392,10 @@ class process_form extends moodleform {
 				$mform->addElement('text', 'comment', get_string('comment', 'local_obu_application'), 'size="40" maxlength="100"');
 				$mform->setType('comment', PARAM_TEXT);
 				$buttonarray[] = &$mform->createElement('submit', 'rejectbutton', get_string('reject', 'local_obu_application'));
+				if ($approval_sought == 3) { // HLS
+					$buttonarray[] = &$mform->createElement('submit', 'amendcoursebutton', get_string('amend_course', 'local_obu_application'));
+					$buttonarray[] = &$mform->createElement('submit', 'amendfundingbutton', get_string('amend_funding', 'local_obu_application'));
+				}
 			}
 			$buttonarray[] = &$mform->createElement('cancel');
 		}

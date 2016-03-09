@@ -530,28 +530,28 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 			$action = span(get_string('awaiting_action', 'local_obu_application', array('action' => get_string('submission', 'local_obu_application'), 'by' => $name)), '', array('style' => 'color:red'));
 			$text .= '<p />' . $action;
 		} else {
-			if ($application->approval_level == 1) {
+			if ($application->approval_level == 1) { // Manager
 				$approver = get_complete_user_data('email', strtolower($application->manager_email));
 				if ($approver === false) {
 					$name = $application->manager_email;
 				} else {
 					$name = $approver->firstname . ' ' . $approver->lastname . ' (' . $approver->email . ')';
 				}
-			} else if ($application->approval_level == 2) {
+			} else if ($application->approval_level == 2) { // Funder
 				$approver = get_complete_user_data('email', strtolower($application->funder_email));
 				if ($approver === false) {
 					$name = $application->funder_email;
 				} else {
 					$name = $approver->firstname . ' ' . $approver->lastname;
 				}
-			} else {
+			} else { // HLS
 				$approver = get_complete_user_data('username', 'hls');
-				$name = $approver->firstname . ' ' . $approver->lastname . ' (' . $approver->email . ')';
+				$name = $approver->firstname . ' ' . $approver->lastname;
 			}
 			if (($approver !== false) && ($approver->id == $user_id)) {
 				$name = 'you';
 				$button = 'approve';
-			} else if (($name == 'HLS Team') && $manager) {
+			} else if (($approver !== false) && ($approver->username == 'hls') && $manager) {
 				$button = 'approve';
 			} else {
 				$button = 'continue';
@@ -664,7 +664,7 @@ function update_approver($application, $approver_email) {
 	// Notify the next approver (if there is one)
 	if ($approver_email != '') {
 		if (strpos($process, 'moodle.brookes') === false) { // We aren't 'live' so suppress spurious email messages
-			if (strpos($approver_email, 'brookes.rocks') === false) { // Not a 'contained' email address so redirect to the HLS Team
+			if ((strpos($approver_email, 'hls_tester') === false) && (strpos($approver_email, 'brookes.rocks') === false)) { // Not a 'contained' email address so redirect to the HLS Team
 				$approver_email = $hls->email;
 			}
 		}

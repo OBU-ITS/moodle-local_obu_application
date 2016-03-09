@@ -42,13 +42,13 @@ class mdl_redirect_form extends moodleform {
 
 		$mform->addElement('html', $data->application_status);
 		
-		if (!$data->approver_email) {
-			$mform->addElement('text', 'approver', get_string('email'), 'size="40" maxlength="100"');
+		if ($data->approver_email == '') {
+			$mform->addElement('text', 'approver_email', get_string('email'), 'size="40" maxlength="100"');
 			$this->add_action_buttons(true, get_string('continue', 'local_obu_application'));
 		} else {
-			$mform->addElement('hidden', 'approver', $data->approver_email);
-			$mform->addElement('static', 'approver_email', get_string('email'), $data->approver_email);
-			$mform->addElement('static', 'approver_name', null, $data->approver_name);
+			$mform->addElement('hidden', 'approver_email', $data->approver_email);
+			$mform->addElement('static', null, get_string('email'), $data->approver_email);
+			$mform->addElement('static', null, get_string('name', 'local_obu_application'), $data->approver_name);
 			$this->add_action_buttons(true, get_string('save', 'local_obu_application'));
 		}
     }
@@ -58,10 +58,9 @@ class mdl_redirect_form extends moodleform {
 		
 		// Do our own validation and add errors to array
 		foreach ($data as $key => $value) {
-			if ($key == 'approver') {
-				$approver = get_complete_user_data('email', $value);
-				if ($approver === false) {
-					$errors[$key] = get_string('user_not_found', 'local_obu_application');
+			if ($key == 'approver_email') {
+				if ($value == '') {
+					$errors[$key] = get_string('value_required', 'local_obu_application');
 				}
 			}
 		}
