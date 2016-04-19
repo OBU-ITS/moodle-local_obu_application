@@ -407,7 +407,7 @@ function get_organisation_names() {
 	$organisations = array();
 	$recs = get_organisation_records();
 	foreach ($recs as $rec) {
-		$organisations[$rec->name] = $rec->name;
+		$organisations[$rec->id] = $rec->name;
 	}
 	
 	return $organisations;	
@@ -572,21 +572,28 @@ function update_workflow(&$application, $approved = true, $data = null) {
 	if ($application->approval_level == 0) { // Being submitted
 		$application->approval_level = 1;
 		$approver_email = $application->manager_email;
-	} else if ($application->approval_level == 1) {
+	} else if ($application->approval_level == 1) { // Manager
 		$application->approval_1_comment = $data->comment;
 		$application->approval_1_date = time();
 		if (!$approved) {
 			$application->approval_state = 1; // Rejected
 		} else if ($application->self_funding == 0) {
-			$application->approval_level = 2;
-			$application->funder_email = $data->funder_email;
+			$application->approval_level = 2; // Funder
+			if ($data->funding_organisation == 0) { // 'Other Organisation'
+				$application->funding_organisation = '';
+				$application->funder_email = $data->funder_email; // Must have been given
+			} else { // A known organisation with a fixed email address
+				$organisation = read_organisation($data->funding_organisation);
+				$application->funding_organisation = $organisation->name;
+				$application->funder_email = $organisation->email;
+			}
 			$approver_email = $application->funder_email;
 		} else {
 			$application->approval_level = 3; // Brookes
 			$hls = get_complete_user_data('username', 'hls');
 			$approver_email = $hls->email;
 		}
-	} else if ($application->approval_level == 2) {
+	} else if ($application->approval_level == 2) { // Funder
 		$application->approval_2_comment = $data->comment;
 		$application->approval_2_date = time();
 		if (!$approved) {
@@ -595,17 +602,8 @@ function update_workflow(&$application, $approved = true, $data = null) {
 			$application->approval_level = 3; // Brookes
 			
 			// Store the funding details
-			if ($data->other_organisation != '') { // Must be an invoice to a non-NHS organisation
-				$application->funding_method = 0;
-				$application->funding_organisation = $data->other_organisation;
-				$application->invoice_ref = $data->other_ref;
-				$application->invoice_address = $data->other_address;
-				$application->invoice_email = $data->other_email;
-				$application->invoice_phone = $data->other_phone;
-				$application->invoice_contact = $data->other_contact;
-			} else { // NHS trust
+			if ($application->funding_organisation != '') { // NHS trust (previously selected by the manager)
 				$application->funding_method = $data->funding_method;
-				$application->funding_organisation = $data->funding_organisation;
 				$application->funder_name = $data->funder_name;
 				if ($application->funding_method == 1) { // Invoice
 					$application->invoice_ref = $data->invoice_ref;
@@ -614,11 +612,19 @@ function update_workflow(&$application, $approved = true, $data = null) {
 					$application->invoice_phone = $data->invoice_phone;
 					$application->invoice_contact = $data->invoice_contact;
 				}
+			} else { // Must be an invoice to a non-NHS organisation
+				$application->funding_method = 0;
+				$application->funding_organisation = $data->organisation;
+				$application->invoice_ref = $data->invoice_ref;
+				$application->invoice_address = $data->invoice_address;
+				$application->invoice_email = $data->invoice_email;
+				$application->invoice_phone = $data->invoice_phone;
+				$application->invoice_contact = $data->invoice_contact;
 			}
 			$hls = get_complete_user_data('username', 'hls');
 			$approver_email = $hls->email;
 		}
-	} else {
+	} else { // Brookes
 		$application->approval_3_comment = $data->comment;
 		$application->approval_3_date = time();
 		if (!$approved) {
@@ -663,12 +669,12 @@ function update_approver($application, $approver_email) {
 	
 	// Notify the next approver (if there is one)
 	if ($approver_email != '') {
-		if (strpos($process, 'moodle.brookes') === false) { // We aren't 'live' so suppress spurious email messages
+/*		if (strpos($process, 'moodle.brookes') === false) { // We aren't 'live' so suppress spurious email messages
 			if ((strpos($approver_email, 'hls_tester') === false) && (strpos($approver_email, 'brookes.rocks') === false)) { // Not a 'contained' email address so redirect to the HLS Team
 				$approver_email = $hls->email;
 			}
 		}
-		$approver = get_complete_user_data('email', strtolower($approver_email));
+*/		$approver = get_complete_user_data('email', strtolower($approver_email));
 		if ($approver === false) { // Approver hasn't yet registered
 			// Moodle requires a user to send emails to, not just an email address
 			$approver = new Object();

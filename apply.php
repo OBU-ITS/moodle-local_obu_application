@@ -33,15 +33,16 @@ require_once('./apply_form.php');
 
 require_obu_login();
 
-$url = new moodle_url('/local/obu_application/');
-$process_url = new moodle_url('/local/obu_application/process.php');
+$home = new moodle_url('/local/obu_application/');
+$url = $home . 'apply.php';
+$process_url = $home . 'process.php';
 
 $PAGE->set_title($CFG->pageheading . ': ' . get_string('apply', 'local_obu_application'));
 
 // HTTPS is required in this page when $CFG->loginhttps enabled
 $PAGE->https_required();
 
-$PAGE->set_url('/local/obu_application/apply.php');
+$PAGE->set_url($url);
 
 $message = '';
 $record = read_applicant($USER->id, false);
@@ -72,7 +73,7 @@ $parameters = [
 $mform = new apply_form(null, $parameters);
 
 if ($mform->is_cancelled()) {
-    redirect($url);
+    redirect($home);
 } 
 else if ($mform_data = $mform->get_data()) {
 	if ($mform_data->submitbutton == get_string('apply', 'local_obu_application')) {
@@ -85,7 +86,7 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('apply', 'local_obu_application'));
 
 if ($message) {
-    notice($message, $url);    
+    notice($message, $home);    
 }
 else {
     $mform->display();

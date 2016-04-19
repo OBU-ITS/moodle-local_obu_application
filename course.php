@@ -33,14 +33,17 @@ require_once('./course_form.php');
 
 require_obu_login();
 
-$url = new moodle_url('/local/obu_application/');
+$home = new moodle_url('/local/obu_application/');
+$url = $home . 'course.php';
+$supplement = $home . 'supplement.php';
+$apply = $home . 'apply.php';
 
-$PAGE->set_title($CFG->pageheading . ': ' . get_string('course', 'local_obu_application'));
+$PAGE->set_title($CFG->pageheading . ': ' . get_string('apply', 'local_obu_application'));
 
 // HTTPS is required in this page when $CFG->loginhttps enabled
 $PAGE->https_required();
 
-$PAGE->set_url($url . 'course.php');
+$PAGE->set_url($url);
 
 $record = read_applicant($USER->id, false);
 if ($record === false) { // Must complete the profile first
@@ -57,17 +60,19 @@ $parameters = [
 $mform = new course_form(null, $parameters);
 
 if ($mform->is_cancelled()) {
-    redirect($url);
-} 
-else if ($mform_data = $mform->get_data()) {
-	if ($mform_data->submitbutton == get_string('save', 'local_obu_application')) {
+    redirect($home);
+}
+
+if ($mform_data = $mform->get_data()) {
+	if ($mform_data->submitbutton == get_string('save_continue', 'local_obu_application')) {
 		$course = read_course_record($mform_data->course_code);
 		$mform_data->course_name = $course->name;
 		write_course($USER->id, $mform_data);
 		if ($course->supplement != '') {
-			$url .= 'supplement.php'; 
+			redirect($supplement); 
+		} else {
+			redirect($apply);
 		}
-		redirect($url);
     }
 }	
 
@@ -75,7 +80,7 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('course', 'local_obu_application'));
 
 if ($message) {
-    notice($message, $url);    
+    notice($message, $home);    
 }
 else {
     $mform->display();

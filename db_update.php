@@ -147,6 +147,7 @@ function write_organisation($organisation) {
     $record = new stdClass();
 	$id = $organisation->id;
 	$record->name = $organisation->name;
+	$record->email = $organisation->email;
 	$record->code = $organisation->code;
 
 	if ($id == '0') {

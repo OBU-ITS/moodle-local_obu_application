@@ -44,6 +44,7 @@ class mdl_organisation_form extends moodleform {
 		if ($data->record != null) {
 			$fields = [
 				'name' => $data->record->name,
+				'email' => $data->record->email,
 				'code' => $data->record->code
 			];
 			$this->set_data($fields);
@@ -68,10 +69,13 @@ class mdl_organisation_form extends moodleform {
 		
 		if ($data->delete) {
 			$mform->addElement('static', 'name', get_string('name', 'local_obu_application'));
+			$mform->addElement('static', 'email', get_string('funder_email', 'local_obu_application'));
 			$mform->addElement('static', 'code', get_string('finance_code', 'local_obu_application'));
 		} else {
 			$mform->addElement('text', 'name', get_string('name', 'local_obu_application'), 'size="50" maxlength="100"');
 			$mform->setType('name', PARAM_TEXT);
+			$mform->addElement('text', 'email', get_string('funder_email', 'local_obu_application'), 'size="50" maxlength="10"');
+			$mform->setType('email', PARAM_TEXT);
 			$mform->addElement('text', 'code', get_string('finance_code', 'local_obu_application'), 'size="10" maxlength="10"');
 			$mform->setType('code', PARAM_TEXT);
 		}
@@ -99,6 +103,9 @@ class mdl_organisation_form extends moodleform {
 		if (isset($data['submitbutton']) && ($data['submitbutton'] == get_string('save', 'local_obu_application'))) {
 			if ($data['name'] == '') {
 				$errors['name'] = get_string('value_required', 'local_obu_application');
+			}
+			if ($data['email'] == '') {
+				$errors['email'] = get_string('value_required', 'local_obu_application');
 			}
 			if ($data['code'] == '') {
 				$errors['code'] = get_string('value_required', 'local_obu_application');

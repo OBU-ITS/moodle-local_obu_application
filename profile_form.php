@@ -33,6 +33,7 @@ require_once($CFG->libdir . '/formslib.php');
 class profile_form extends moodleform {
 
     function definition() {
+		global $CFG;
 		
         $mform =& $this->_form;
 
@@ -77,18 +78,17 @@ class profile_form extends moodleform {
 		$mform->setExpanded('birth_head');
 		$mform->addElement('date_selector', 'birthdate', get_string('birthdate', 'local_obu_application'), $date_options);
 		$mform->addRule('birthdate', null, 'required', null, 'server');
-        $country = get_string_manager()->get_list_of_countries();
-        $default_country[''] = get_string('selectacountry');
-        $country = array_merge($default_country, $country);
-        $mform->addElement('select', 'birthcountry', get_string('birthcountry', 'local_obu_application'), $country);
-        if( !empty($CFG->country) ){
-            $mform->setDefault('country', $CFG->country);
-        }else{
-            $mform->setDefault('country', '');
-        }
+        $country_list = get_string_manager()->get_list_of_countries();
+		$countries = array();
+		if ($data->record->birthcountry == '') { // None selected yet
+			$countries[''] = get_string('selectacountry'); // We don't want them to just accept any given default
+		}
+		if (!empty($CFG->country) && array_key_exists($CFG->country, $country_list)) { // Is there a valid country in the configuration?
+			$countries[$CFG->country] = $country_list[$CFG->country]; // If so, make it the first available option on the list
+		}
+        $mform->addElement('select', 'birthcountry', get_string('birthcountry', 'local_obu_application'), array_merge($countries, $country_list));
 		$mform->addRule('birthcountry', null, 'required', null, 'server');
         $mform->addElement('header', 'non_eu_head', get_string('non_eu_head', 'local_obu_application'), '');
-		$mform->setExpanded('non_eu_head');
 		$mform->addElement('date_selector', 'firstentrydate', get_string('firstentrydate', 'local_obu_application'));
 		$mform->addElement('date_selector', 'lastentrydate', get_string('lastentrydate', 'local_obu_application'));
 		$mform->addElement('date_selector', 'residencedate', get_string('residencedate', 'local_obu_application'));
@@ -126,6 +126,7 @@ class profile_form extends moodleform {
 		$mform->setExpanded('employment_head');
 		$mform->addElement('text', 'emp_place', get_string('emp_place', 'local_obu_application'), 'size="40" maxlength="100"');
 		$mform->setType('emp_place', PARAM_TEXT);
+		$mform->addRule('emp_place', null, 'required', null, 'server');
 		$mform->addElement('text', 'emp_area', get_string('emp_area', 'local_obu_application'), 'size="40" maxlength="100"');
 		$mform->setType('emp_area', PARAM_TEXT);
 		$mform->addElement('text', 'emp_title', get_string('emp_title', 'local_obu_application'), 'size="40" maxlength="100"');
@@ -138,7 +139,14 @@ class profile_form extends moodleform {
 		$mform->setType('prof_reg_no', PARAM_TEXT);
         $mform->addElement('header', 'criminal_record_head', get_string('criminal_record_head', 'local_obu_application'), '');
 		$mform->setExpanded('criminal_record_head');
-		$mform->addElement('selectyesno', 'criminal_record', get_string('criminal_record', 'local_obu_application'));
+		$options = [];
+		if ($data->record === false) {
+			$options['-1'] = '';
+		}
+		$options['0'] = get_string('no', 'local_obu_application');
+		$options['1'] = get_string('yes', 'local_obu_application');
+		$mform->addElement('select', 'criminal_record', get_string('criminal_record', 'local_obu_application'), $options);
+		$mform->addRule('criminal_record', null, 'required', null, 'server');
 		$this->add_action_buttons(true, get_string('save', 'local_obu_application'));
     }
 
@@ -146,6 +154,10 @@ class profile_form extends moodleform {
         global $CFG, $DB;
         $errors = parent::validation($data, $files);
 		
+		if ($data['criminal_record'] == '-1') {
+			$errors['criminal_record'] = get_string('value_required', 'local_obu_application');
+		}
+
 		if (!empty($errors)) {
 			$errors['form_errors'] = get_string('form_errors', 'local_obu_application');
 		}

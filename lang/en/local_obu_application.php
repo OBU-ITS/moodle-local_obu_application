@@ -28,20 +28,21 @@
 
 $string['pluginname'] = 'OBU application';
 $string['plugintitle'] = 'HLS Application';
+$string['obu_application:admin'] = 'Administer applications in obu_application';
 $string['obu_application:manage'] = 'Manage, view and approve applications in obu_application';
 
-$string['introduction'] = 'Welcome to the online application service for the Faculty of Health and Life Sciences.  This service is for applicants who wish to apply to study a module with the university or one of 3 graduate certificates; surgical nursing, cancer nursing or palliative care nursing. This category of applicant is known as an *Associate Student.
-<p>
-*Applicants to certified programmes (by this we mean part time and full time degree, postgraduate certificate/diploma or masters), can apply using UCAS.
-</p>';
+$string['introduction'] = '<h2>First-time users please register here before logging-in</h2>Welcome to the online application service for the Faculty of Health and Life Sciences.  This service is for applicants who wish to apply to study a module with the university or one of 3 graduate certificates; surgical nursing, cancer nursing or palliative care nursing. This category of applicant is known as an Associate Student.
+<p>&nbsp;</p>
+Applicants to certified programmes (by this we mean part time and full time degree, postgraduate certificate/diploma or masters), must apply using UCAS.';
 
 $string['page_content'] = '<h2>If You Wish To Apply</h2>
+The information you will need in order to complete your application includes the correct name of the course you are applying for and your manager\'s email address.
+<p>&nbsp;</p>
 Using the tabs above, please:
 <ul>
 <li>Check that your contact details are correct and up-to-date</li>
 <li>Enter your personal details (including education history and professional qualifications)</li>
-<li>Give details of the course that you wish to undertake</li>
-<li>Click \'Apply\' to submit your application and the email of the manager who will approve it</li>
+<li>Click \'Apply\' to enter details of the course that you wish to undertake, supply the email of the manager who will approve it and submit your application</li>
 </ul>
 <p>
 Once you have submitted your application your manager will receive a request to support your plans.  This request will be delivered to your manager\'s email address as provided by you.  If your request is supported by your manager, and you are also seeking funding support, your manager will then submit your application to your organisation\'s staff development and funding team/department.  If your funding is approved your full application will be submitted to the Faculty of Health and Life Sciences for consideration.
@@ -55,7 +56,7 @@ $string['courses'] = 'Courses';
 $string['supplements'] = 'Supplementary Forms';
 $string['course_supplement'] = 'Course (Supplementary Form)';
 $string['organisations'] = 'Organisations';
-$string['logout_message'] = '<h1>Thank you.</h1>';
+$string['logout_message'] = '<h1>Thank you.</h1>This application has been passed on to the next step of the process.';
 
 $string['invalid_data'] = 'Invalid Data';
 
@@ -74,13 +75,18 @@ $string['code'] = 'Code';
 $string['name'] = 'Name';
 $string['update_organisation'] = 'Add, Amend or Delete an Organisation';
 $string['new_organisation'] = 'New Organisation';
+$string['funder_email'] = 'Email of Funder';
 $string['finance_code'] = 'Finance Code';
 
 $string['add'] = 'Add';
 $string['amend'] = 'Amend';
 $string['delete'] = 'Delete';
+$string['select'] = 'Please select';
+$string['yes'] = 'Yes';
+$string['no'] = 'No';
 $string['confirm_delete'] = 'Confirm Deletion';
 $string['save'] = 'Save';
+$string['save_continue'] = 'Save & Continue';
 
 $string['applicant'] = 'Applicant';
 $string['application'] = 'Application (Ref HLS/{$a})';
@@ -138,13 +144,13 @@ $string['p16school'] = 'Post 16 School name (if applicable)';
 $string['p16fe'] = 'Post 16 Further Education (if applicable)';
 $string['training'] = 'University/professional training body';
 $string['period'] = 'Date from and to';
-$string['prof_qual_head'] = 'Professional Qualification';
+$string['prof_qual_head'] = 'Highest Professional Qualification';
 $string['prof_level'] = 'Level of qualification (Diploma/Degree/REPs)';
 $string['prof_award'] = 'Award name (eg Adult Nursing/Social Work)';
 $string['prof_date'] = 'Date qualified';
 $string['employment_head'] = 'Current Employment';
-$string['emp_place'] = 'Place';
-$string['emp_area'] = 'Clinical area';
+$string['emp_place'] = 'Employer / Employment status';
+$string['emp_area'] = 'Department / Clinical area';
 $string['emp_title'] = 'Job title';
 $string['emp_prof'] = 'Profession';
 $string['prof_reg_head'] = 'Professional Registration';
@@ -163,7 +169,6 @@ $string['attachments'] = 'Attachments';
 $string['apply'] = 'Apply';
 $string['complete_course'] = 'Please complete your course first';
 $string['manager_to_approve'] = 'Manager to approve';
-$string['funder_to_approve'] = 'Funder to approve';
 $string['self_funding'] = 'Self-funding';
 $string['self_funding_text'] = 'Are you a self-funding applicant?';
 $string['declaration'] = 'Declaration';
@@ -176,7 +181,8 @@ $string['amend_course'] = 'Amend Course';
 $string['amend_funding'] = 'Amend Funding';
 
 $string['funding'] = 'Funding';
-$string['funding_organisation'] = 'Funding Organisation (please choose one only)';
+$string['funding_organisation'] = 'Funding Organisation';
+$string['funding_text'] = 'ONLY if \'Other Organisation\' is selected above, enter the funder\'s contact email:';
 $string['trust'] = 'NHS Trust';
 $string['other'] = 'Other Organisation';
 $string['organisation'] = 'Organisation';

@@ -23,9 +23,14 @@
 
 
 $capabilities = array(
+    'local/obu_application:admin' => array(
+		'riskbitmask' => RISK_SPAM | RISK_PERSONAL,
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_SYSTEM
+    ),
     'local/obu_application:manage' => array(
 		'riskbitmask' => RISK_SPAM | RISK_PERSONAL,
         'captype' => 'write',
         'contextlevel' => CONTEXT_SYSTEM
     )
- );
+);

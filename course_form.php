@@ -65,7 +65,7 @@ class course_form extends moodleform {
 		$mform->addElement('textarea', 'statement', get_string('statement', 'local_obu_application'), 'cols="60" rows="10"');
 		$mform->setType('statement', PARAM_TEXT);
 		$mform->addRule('statement', null, 'required', null, 'server');
-		$this->add_action_buttons(true, get_string('save', 'local_obu_application'));
+		$this->add_action_buttons(true, get_string('save_continue', 'local_obu_application'));
     }
 
     function validation($data, $files) {

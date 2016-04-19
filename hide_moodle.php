@@ -43,9 +43,7 @@ if (!isloggedin()) {
 	#####
 	' . get_string('profile', 'local_obu_application') . '|/local/obu_application/profile.php
 	#####
-	' . get_string('course', 'local_obu_application') . '|/local/obu_application/course.php
-	#####
-	' . get_string('apply', 'local_obu_application') . '|/local/obu_application/apply.php
+	' . get_string('apply', 'local_obu_application') . '|/local/obu_application/course.php
 	#####
 	' . get_string('logout', 'local_obu_application') . '|/local/obu_application/logout.php?loginpage=1';
 }

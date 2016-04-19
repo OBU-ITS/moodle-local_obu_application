@@ -40,6 +40,7 @@ class process_form extends moodleform {
 		$data->record = $this->_customdata['record'];
 		$data->status_text = $this->_customdata['status_text'];
 		$data->button_text = $this->_customdata['button_text'];
+		$data->administrator = $this->_customdata['administrator'];
 		
 		$approval_sought = 0; // Level at which we are seeking approval from this user (if at all)
 		if ($data->record !== false) {
@@ -164,6 +165,8 @@ class process_form extends moodleform {
 		$mform->setType('approval_state', PARAM_RAW);
 		$mform->addElement('hidden', 'approval_level', $data->record->approval_level);
 		$mform->setType('approval_level', PARAM_RAW);
+		$mform->addElement('hidden', 'nhs_trust', $data->record->funding_organisation);
+		$mform->setType('nhs_trust', PARAM_RAW);
 
 		// Our own hidden field (for use in form validation)
 		$mform->addElement('hidden', 'self_funding', $data->record->self_funding);
@@ -316,29 +319,46 @@ class process_form extends moodleform {
 		
 		if (($approval_sought > 0) && ($data->record->self_funding == '1')) {
 			$mform->addElement('html', '<h2>' . get_string('self_funding', 'local_obu_application') . ' ' . get_string('applicant', 'local_obu_application') . '</h2>');
-		} else if (($approval_sought == 1) && ($data->record->self_funding == '0')) { // Approving manager must enter the email of funder to approve
-			$mform->addElement('header', 'funder_head', get_string('funder_to_approve', 'local_obu_application'), '');
-			$mform->setExpanded('funder_head');
+		} else if (($approval_sought == 1) && ($data->record->self_funding == '0')) { // Approving manager must enter either the organisation or email of funder to approve
+			$mform->addElement('static', 'funding', '');
+			$mform->closeHeaderBefore('funding');
+			$mform->addElement('html', '<h1>' . get_string('funding_organisation', 'local_obu_application') . '</h1>');
+			$options = [];
+			if ($data->record->funding_organisation == '') {
+				$options['-1'] = get_string('select', 'local_obu_application');
+			}
+			foreach ($data->organisations as $organisation_id => $organisation_name) {
+				$options[$organisation_id] = $organisation_name;
+			}
+			$options['0'] = get_string('other', 'local_obu_application');
+			$mform->addElement('select', 'funding_organisation', get_string('organisation', 'local_obu_application'), $options, null);
+			$mform->addElement('static', 'funding_text', get_string('funding_text', 'local_obu_application'));
 			$mform->addElement('text', 'funder_email', get_string('email'), 'size="40" maxlength="100"');
 			$mform->setType('funder_email', PARAM_RAW_TRIMMED);
-			$mform->addRule('funder_email', null, 'required', null, 'server');
 			$mform->addElement('text', 'funder_email2', get_string('emailagain'), 'size="40" maxlength="100"');
 			$mform->setType('funder_email2', PARAM_RAW_TRIMMED);
-			$mform->addRule('funder_email2', null, 'required', null, 'server');
 		} else if (($approval_sought > 1) && ($data->record->self_funding == '0')) { // Approving funder must enter the funding details and HLS approver must see them
 			if ($approval_sought == 2) { // Funder
-				$mform->addElement('html', '<h1>' . get_string('funding_organisation', 'local_obu_application') . '</h1>');
-				$mform->addElement('header', 'trust_head', get_string('trust', 'local_obu_application'), '');
-				$mform->addElement('select', 'funding_organisation', get_string('organisation', 'local_obu_application'), $data->organisations, null);
-				$mform->addElement('text', 'funder_name', get_string('funder_name', 'local_obu_application'), 'size="40" maxlength="100"');
-				$mform->setType('funder_name', PARAM_TEXT);
-				$radioarray = array();
-				$radioarray[] = $mform->createElement('radio', 'funding_method', '', get_string('contract', 'local_obu_application') . ' | ', 3);
-				$radioarray[] = $mform->createElement('radio', 'funding_method', '', get_string('prepaid', 'local_obu_application') . ' | ', 2);
-				$radioarray[] = $mform->createElement('radio', 'funding_method', '', get_string('invoice', 'local_obu_application'), 1);
-				$mform->setDefault('funding_method', 3); // Contract
-				$mform->addGroup($radioarray, 'funding_methods', get_string('funding_method', 'local_obu_application'), array(' '), false);
-				$mform->addElement('static', 'invoice_text', get_string('invoice_text', 'local_obu_application'));
+				$mform->addElement('static', 'funding', '');
+				$mform->closeHeaderBefore('funding');
+				$mform->addElement('html', '<h1>' . get_string('funding', 'local_obu_application') . '</h1>');
+				if ($data->record->funding_organisation != '') { // Must be an organisation previously selected by the manager
+					$mform->addElement('text', 'funder_name', get_string('funder_name', 'local_obu_application'), 'size="40" maxlength="100"');
+					$mform->setType('funder_name', PARAM_TEXT);
+					$options = [];
+					if ($data->record->funding_method == 0) {
+						$options['0'] = get_string('select', 'local_obu_application');
+					}
+					$options['1'] = get_string('invoice', 'local_obu_application');
+					$options['2'] = get_string('prepaid', 'local_obu_application');
+					$options['3'] = get_string('contract', 'local_obu_application');
+					$mform->addElement('select', 'funding_method', get_string('funding_method', 'local_obu_application'), $options);
+					$mform->addElement('static', 'invoice_text', get_string('invoice_text', 'local_obu_application'));
+					$mform->addElement('text', 'invoice_ref', get_string('invoice_ref', 'local_obu_application'), 'size="40" maxlength="100"');
+				} else { // 'Other Organisation' (must be payable by invoice)
+					$mform->addElement('text', 'funding_organisation', get_string('organisation', 'local_obu_application'), 'size="40" maxlength="100"');
+					$mform->setType('funding_organisation', PARAM_TEXT);
+				}
 				$mform->addElement('text', 'invoice_ref', get_string('invoice_ref', 'local_obu_application'), 'size="40" maxlength="100"');
 				$mform->setType('invoice_ref', PARAM_TEXT);
 				$mform->addElement('textarea', 'invoice_address', get_string('address'), 'cols="40" rows="5"');
@@ -349,19 +369,6 @@ class process_form extends moodleform {
 				$mform->setType('invoice_phone', PARAM_TEXT);
 				$mform->addElement('text', 'invoice_contact', get_string('invoice_contact', 'local_obu_application'), 'size="40" maxlength="100"');
 				$mform->setType('invoice_contact', PARAM_TEXT);
- 				$mform->addElement('header', 'other_head', get_string('other', 'local_obu_application'), '');
-				$mform->addElement('text', 'other_organisation', get_string('organisation', 'local_obu_application'), 'size="40" maxlength="100"');
-				$mform->setType('other_organisation', PARAM_TEXT);
-				$mform->addElement('text', 'other_ref', get_string('invoice_ref', 'local_obu_application'), 'size="40" maxlength="100"');
-				$mform->setType('other_ref', PARAM_TEXT);
-				$mform->addElement('textarea', 'other_address', get_string('address'), 'cols="40" rows="5"');
-				$mform->setType('other_address', PARAM_TEXT);
-				$mform->addElement('text', 'other_email', get_string('email'), 'size="40" maxlength="100"');
-				$mform->setType('other_email', PARAM_RAW_TRIMMED);
-				$mform->addElement('text', 'other_phone', get_string('phone', 'local_obu_application'), 'size="40" maxlength="100"');
-				$mform->setType('other_phone', PARAM_TEXT);
-				$mform->addElement('text', 'other_contact', get_string('invoice_contact', 'local_obu_application'), 'size="40" maxlength="100"');
-				$mform->setType('other_contact', PARAM_TEXT);
 			} else { // HLS
 				$mform->addElement('html', '<h1>' . get_string('funding', 'local_obu_application') . '</h1>');
 				$mform->addElement('static', 'funding_method', get_string('funding_method', 'local_obu_application'));
@@ -386,13 +393,13 @@ class process_form extends moodleform {
 		}
 		if ($data->button_text != 'continue') {
 			if ($data->button_text == 'approve') {
-				$mform->addElement('static', 'dummy_element', '');
-				$mform->closeHeaderBefore('dummy_element');
+				$mform->addElement('static', 'approval', '');
+				$mform->closeHeaderBefore('approval');
 				$mform->addElement('html', '<h1>' . get_string('approval_head', 'local_obu_application') . '</h1>');
 				$mform->addElement('text', 'comment', get_string('comment', 'local_obu_application'), 'size="40" maxlength="100"');
 				$mform->setType('comment', PARAM_TEXT);
 				$buttonarray[] = &$mform->createElement('submit', 'rejectbutton', get_string('reject', 'local_obu_application'));
-				if ($approval_sought == 3) { // HLS
+				if (($approval_sought == 3) && has_capability('local/obu_application:admin', context_system::instance())) { // HLS administrator
 					$buttonarray[] = &$mform->createElement('submit', 'amendcoursebutton', get_string('amend_course', 'local_obu_application'));
 					$buttonarray[] = &$mform->createElement('submit', 'amendfundingbutton', get_string('amend_funding', 'local_obu_application'));
 				}
@@ -408,44 +415,55 @@ class process_form extends moodleform {
 		
 		// Check that we have been given sufficient information for an approval
 		if ($data['submitbutton'] == get_string('approve', 'local_obu_application')) {
-			if (($data['approval_level'] == '1') && ($data['self_funding'] == '0')) { // Manager must give us the email of the funder to approve
-				if (empty($data['funder_email'])) {
-					$errors['funder_email'] = get_string('missingemail');
-				} else if (!validate_email($data['funder_email'])) {
-					$errors['funder_email'] = get_string('invalidemail');
-				}
-		
-				if (empty($data['funder_email2'])) {
-					$errors['funder_email2'] = get_string('missingemail');
-				} else if ($data['funder_email2'] != $data['funder_email']) {
-					$errors['funder_email2'] = get_string('invalidemail');
+			if (($data['approval_level'] == '1') && ($data['self_funding'] == '0')) { // Approving manager must enter either the organisation or email of funder to approve
+				if ($data['funding_organisation'] == -1) { // Not entered
+					$errors['funding_organisation'] = get_string('value_required', 'local_obu_application');
+				} else if ($data['funding_organisation'] == 0) { // 'Other Organisation'
+					if (empty($data['funder_email'])) {
+						$errors['funder_email'] = get_string('missingemail');
+					} else if (!validate_email($data['funder_email'])) {
+						$errors['funder_email'] = get_string('invalidemail');
+					}
+					if (empty($data['funder_email2'])) {
+						$errors['funder_email2'] = get_string('missingemail');
+					} else if ($data['funder_email2'] != $data['funder_email']) {
+						$errors['funder_email2'] = get_string('invalidemail');
+					}
+				} else { // Known organisation (likely an NHS trust) so no email please
+					if (!empty($data['funder_email'])) {
+						$errors['funder_email'] = get_string('value_verboten', 'local_obu_application');
+					}
+					if (!empty($data['funder_email2'])) {
+						$errors['funder_email2'] = get_string('value_verboten', 'local_obu_application');
+					}
 				}
 			} else if ($data['approval_level'] == '2') { // Funder must give us the funding details
-				if (($data['other_organisation'] != '') || ($data['other_ref'] != '') || ($data['other_address'] != '')
-					|| ($data['other_email'] != '') || ($data['other_phone'] != '') || ($data['other_contact'] != '')) { // Invoice to a non-NHS organisation
-					if ($data['other_organisation'] == '') {
-						$errors['other_organisation'] = get_string('value_required', 'local_obu_application');
+				if ($data['nhs_trust'] == '') { // Invoice to a non-NHS organisation
+					if ($data['funding_organisation'] == '') {
+						$errors['funding_organisation'] = get_string('value_required', 'local_obu_application');
 					}
-					if ($data['other_ref'] == '') {
-						$errors['other_ref'] = get_string('value_required', 'local_obu_application');
+					if ($data['invoice_ref'] == '') {
+						$errors['invoice_ref'] = get_string('value_required', 'local_obu_application');
 					}
-					if ($data['other_address'] == '') {
-						$errors['other_address'] = get_string('value_required', 'local_obu_application');
+					if ($data['invoice_address'] == '') {
+						$errors['invoice_address'] = get_string('value_required', 'local_obu_application');
 					}
-					if ($data['other_email'] == '') {
-						$errors['other_email'] = get_string('value_required', 'local_obu_application');
+					if ($data['invoice_email'] == '') {
+						$errors['invoice_email'] = get_string('value_required', 'local_obu_application');
 					}
-					if ($data['other_phone'] == '') {
-						$errors['other_phone'] = get_string('value_required', 'local_obu_application');
+					if ($data['invoice_phone'] == '') {
+						$errors['invoice_phone'] = get_string('value_required', 'local_obu_application');
 					}
-					if ($data['other_contact'] == '') {
-						$errors['other_contact'] = get_string('value_required', 'local_obu_application');
+					if ($data['invoice_contact'] == '') {
+						$errors['invoice_contact'] = get_string('value_required', 'local_obu_application');
 					}
 				} else { // NHS trust
 					if ($data['funder_name'] == '') {
 						$errors['funder_name'] = get_string('value_required', 'local_obu_application');
 					}
-					if ($data['funding_method'] == 1) { // Invoice
+					if ($data['funding_method'] == 0) {
+						$errors['funding_method'] = get_string('value_required', 'local_obu_application');
+					} else if ($data['funding_method'] == 1) { // Invoice
 						if ($data['invoice_ref'] == '') {
 							$errors['invoice_ref'] = get_string('value_required', 'local_obu_application');
 						}

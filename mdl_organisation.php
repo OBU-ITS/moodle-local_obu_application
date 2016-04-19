@@ -62,7 +62,7 @@ if (isset($_REQUEST['id'])) {
 	if ($recs) { // Do they have a choice?
 		$organisations[0] = get_string('new_organisation', 'local_obu_application'); // The 'New Organisation' option
 		foreach ($recs as $rec) {
-			$organisations[$rec->id] = $rec->name . ' [' . $rec->code . ']';
+			$organisations[$rec->id] = $rec->name;
 		}
 	} else { // No, they don't...
 		$id = '0'; // ...so it's gottabee a new one

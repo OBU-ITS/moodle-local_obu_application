@@ -31,15 +31,18 @@ require_once('./supplement_form.php');
 
 require_obu_login();
 
-$url = new moodle_url('/local/obu_application/');
+$home = new moodle_url('/local/obu_application/');
+$url = $home . 'supplement.php';
+$apply = $home . 'apply.php';
+
 $context = context_user::instance($USER->id);
 
-$PAGE->set_title($CFG->pageheading . ': ' . get_string('course', 'local_obu_application'));
+$PAGE->set_title($CFG->pageheading . ': ' . get_string('apply', 'local_obu_application'));
 
 // HTTPS is required in this page when $CFG->loginhttps enabled
 $PAGE->https_required();
 
-$PAGE->set_url($url . 'supplement.php');
+$PAGE->set_url($url);
 
 $message = '';
 $record = read_applicant($USER->id, false);
@@ -72,9 +75,10 @@ $parameters = [
 $mform = new supplement_form(null, $parameters);
 
 if ($mform->is_cancelled()) {
-    redirect($url);
-} 
-else if ($mform_data = (array)$mform->get_data()) {
+    redirect($home);
+}
+
+if ($mform_data = (array)$mform->get_data()) {
 	$files = get_file_elements($supplement->template); // Get the list of the 'file' elements from the supplementary form's template
 	$data_fields = array();
 	foreach ($mform_data as $key => $value) {
@@ -88,7 +92,7 @@ else if ($mform_data = (array)$mform->get_data()) {
 		}
 	}
 	write_supplement_data($USER->id, pack_supplement_data($data_fields));
-	redirect($url); // Perform initial form processing
+	redirect($apply);
 }
 
 echo $OUTPUT->header();

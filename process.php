@@ -83,9 +83,6 @@ if ($button_text != 'approve') { // If not the next approver, check that this us
 	}
 }
 
-$organisations = get_organisation_names();
-$organisations[] = get_string('other', 'local_obu_application');
-
 $parameters = [
 	'organisations' => get_organisation_names(),
 	'record' => $application,
@@ -118,7 +115,7 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('application', 'local_obu_application', $application->id));
 
 if ($message) {
-    notice($message, $home);    
+    notice($message, $home);
 }
 else {
     $mform->display();

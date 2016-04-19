@@ -34,8 +34,8 @@ require_login();
 $context = context_system::instance();
 $home = new moodle_url('/');
 
-// We only allow 'manager' level access and only to an existing application (id given)
-if (!has_capability('local/obu_application:manage', $context) || !isset($_REQUEST['id'])) {
+// We only allow 'administrator' level access and only to an existing application (id given)
+if (!has_capability('local/obu_application:admin', $context) || !isset($_REQUEST['id'])) {
 	redirect($home);
 }
 
@@ -69,14 +69,27 @@ if ($mform->is_cancelled()) {
 if ($mform_data = $mform->get_data()) {
 		
 	// Update the applications's funding fields
-	$application->funding_method = $mform_data->funding_method;
-	$application->funding_organisation = $mform_data->funding_organisation;
-	$application->funder_name = $mform_data->funder_name;
-	$application->invoice_ref = $mform_data->invoice_ref;
-	$application->invoice_address = $mform_data->invoice_address;
-	$application->invoice_email = $mform_data->invoice_email;
-	$application->invoice_phone = $mform_data->invoice_phone;
-	$application->invoice_contact = $mform_data->invoice_contact;
+	if ($mform_data->other_organisation != '') { // Must be an invoice to a non-NHS organisation
+		$application->funding_method = 0;
+		$application->funding_organisation = $mform_data->other_organisation;
+		$application->funder_name = '';
+		$application->invoice_ref = $mform_data->other_ref;
+		$application->invoice_address = $mform_data->other_address;
+		$application->invoice_email = $mform_data->other_email;
+		$application->invoice_phone = $mform_data->other_phone;
+		$application->invoice_contact = $mform_data->other_contact;
+	} else { // NHS trust
+		$application->funding_method = $mform_data->funding_method;
+		$application->funding_organisation = $mform_data->funding_organisation;
+		$application->funder_name = $mform_data->funder_name;
+		if ($application->funding_method == 1) { // Invoice
+			$application->invoice_ref = $mform_data->invoice_ref;
+			$application->invoice_address = $mform_data->invoice_address;
+			$application->invoice_email = $mform_data->invoice_email;
+			$application->invoice_phone = $mform_data->invoice_phone;
+			$application->invoice_contact = $mform_data->invoice_contact;
+		}
+	}
 	update_application($application);
 
 	redirect($process);

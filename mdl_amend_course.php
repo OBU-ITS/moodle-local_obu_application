@@ -34,8 +34,8 @@ require_login();
 $context = context_system::instance();
 $home = new moodle_url('/');
 
-// We only allow 'manager' level access and only to an existing application (id given)
-if (!has_capability('local/obu_application:manage', $context) || !isset($_REQUEST['id'])) {
+// We only allow 'administrator' level access and only to an existing application (id given)
+if (!has_capability('local/obu_application:admin', $context) || !isset($_REQUEST['id'])) {
 	redirect($home);
 }
 

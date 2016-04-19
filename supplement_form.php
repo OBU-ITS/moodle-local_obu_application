@@ -160,7 +160,7 @@ class supplement_form extends moodleform {
 
 		$mform->addElement('html', substr($data->supplement->template, $offset)); // output any remaining HTML
 
-        $this->add_action_buttons(true, get_string('save', 'local_obu_application'));
+        $this->add_action_buttons(true, get_string('save_continue', 'local_obu_application'));
     }
 	
 	function validation($data, $files) {

@@ -42,6 +42,7 @@
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="name" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="The name of the organisation"/>
+        <FIELD NAME="email" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="The (generic) email of the funder"/>
         <FIELD NAME="code" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="The organisation's finance code"/>
       </FIELDS>
       <KEYS>
