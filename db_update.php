@@ -176,6 +176,7 @@ function read_user($user_id) {
     global $DB;
     
 	$user = $DB->get_record('user', array('id' => $user_id), '*', MUST_EXIST);
+	profile_load_data($user); // Add custom profile data
 	
 	return $user;	
 }
@@ -185,8 +186,10 @@ function write_user($user_id, $form_data) {
 	
 	$user = read_user($user_id);
 	
-	$user->username = $form_data->username;
-	$user->idnumber = $form_data->idnumber;
+	if (isset($form_data->username)) {
+		$user->username = $form_data->username;
+	}
+	$user->profile_field_title = $form_data->profile_field_title;
 	$user->firstname = $form_data->firstname;
 	$user->lastname = $form_data->lastname;
 	$user->address = $form_data->address;
@@ -195,6 +198,7 @@ function write_user($user_id, $form_data) {
 	$user->email = strtolower($form_data->email);
 		
 	user_update_user($user, false, true);
+	profile_save_data($user); // Save custom profile data
 }
 
 function read_applicant($user_id, $must_exist) {
@@ -329,7 +333,7 @@ function write_application($user_id, $form_data) {
 	$record->userid = $user_id;
 	
 	// Contact details
-	$record->title = $user->idnumber;
+	$record->title = $user->profile_field_title;
 	$record->firstname = $user->firstname;
 	$record->lastname = $user->lastname;
 	$record->address = $user->address;

@@ -30,6 +30,7 @@ $string['pluginname'] = 'OBU application';
 $string['plugintitle'] = 'HLS Application';
 $string['obu_application:admin'] = 'Administer applications in obu_application';
 $string['obu_application:manage'] = 'Manage, view and approve applications in obu_application';
+$string['my_applications'] = 'My HLS applications';
 
 $string['introduction'] = '<h2>First-time users please register here before logging-in</h2>Welcome to the online application service for the Faculty of Health and Life Sciences.  This service is for applicants who wish to apply to study a module with the university or one of 3 graduate certificates; surgical nursing, cancer nursing or palliative care nursing. This category of applicant is known as an Associate Student.
 <p>&nbsp;</p>
@@ -53,9 +54,10 @@ $string['hls_approvals'] = 'HLS approvals';
 $string['list_applications'] = 'List a user\'s applications';
 $string['redirect_application'] = 'Redirect application';
 $string['courses'] = 'Courses';
-$string['supplements'] = 'Supplementary Forms';
+$string['supplements'] = 'Supplementary forms';
 $string['course_supplement'] = 'Course (Supplementary Form)';
 $string['organisations'] = 'Organisations';
+$string['hls_applications'] = 'HLS applications';
 $string['logout_message'] = '<h1>Thank you.</h1>This application has been passed on to the next step of the process.';
 
 $string['invalid_data'] = 'Invalid Data';
@@ -120,6 +122,7 @@ $string['status_not_submitted'] = 'Has not been submitted.';
 $string['status_rejected'] = 'Cannot be processed.';
 $string['status_processed'] = 'Has been processed.';
 
+$string['preregistered'] = '<strong>NOTE:</strong> If you have a \'brookes.ac.uk\' email address you are pre-registered.  Click <a href="/local/obu_application/mdl_login.php">here</a> to login.';
 $string['emailandpassword'] = 'Please enter your NHS (or preferred) email address (lowercase only) and choose a password';
 $string['newemail'] = 'Email (Note - you would need to use any new address to log in)';
 $string['contactdetails'] = 'Contact details';

@@ -24,11 +24,18 @@
  * @copyright  2016, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+ 
+require_once($CFG->dirroot . '/local/obu_application/db_update.php');
 
 function local_obu_application_extends_navigation($navigation) {
-    global $CFG;
+    global $CFG, $USER;
 	
-	if (!isloggedin() || isguestuser() || !has_capability('local/obu_application:manage', context_system::instance())) {
+	if (!isloggedin() || isguestuser()) {
+		return;
+	}
+	
+	$applicant = (read_applicant($USER->id, false) !== false);
+	if (!has_capability('local/obu_application:manage', context_system::instance()) && !$applicant) {
 		return;
 	}
 	
@@ -44,12 +51,17 @@ function local_obu_application_extends_navigation($navigation) {
 	}
 	
 	if ($nodeParent) {
-		$node = $nodeParent->add(get_string('application_approvals', 'local_obu_application'), '/local/obu_application/mdl_approvals.php');
-		$node = $nodeParent->add(get_string('hls_approvals', 'local_obu_application'), '/local/obu_application/mdl_approvals.php?approver=hls');
-		$node = $nodeParent->add(get_string('list_applications', 'local_obu_application'), '/local/obu_application/mdl_list.php');
-		$node = $nodeParent->add(get_string('courses', 'local_obu_application'), '/local/obu_application/mdl_course.php');
-		$node = $nodeParent->add(get_string('supplements', 'local_obu_application'), '/local/obu_application/mdl_supplement.php');
-		$node = $nodeParent->add(get_string('organisations', 'local_obu_application'), '/local/obu_application/mdl_organisation.php');
+		if (has_capability('local/obu_application:manage', context_system::instance())) {
+			$node = $nodeParent->add(get_string('application_approvals', 'local_obu_application'), '/local/obu_application/mdl_approvals.php');
+			$node = $nodeParent->add(get_string('hls_approvals', 'local_obu_application'), '/local/obu_application/mdl_approvals.php?approver=hls');
+			$node = $nodeParent->add(get_string('list_applications', 'local_obu_application'), '/local/obu_application/mdl_list.php');
+			$node = $nodeParent->add(get_string('courses', 'local_obu_application'), '/local/obu_application/mdl_course.php');
+			$node = $nodeParent->add(get_string('supplements', 'local_obu_application'), '/local/obu_application/mdl_supplement.php');
+			$node = $nodeParent->add(get_string('organisations', 'local_obu_application'), '/local/obu_application/mdl_organisation.php');
+		}
+		if ($applicant) {
+			$node = $nodeParent->add(get_string('hls_applications', 'local_obu_application'), '/local/obu_application/');
+		}
 	}
 }
 

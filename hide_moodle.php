@@ -48,6 +48,13 @@ if (!isloggedin()) {
 	' . get_string('logout', 'local_obu_application') . '|/local/obu_application/logout.php?loginpage=1';
 }
 
+if (strpos($USER->email, '@brookes.ac.uk') !== false) {
+	$CFG->custommenuitems .= '
+	#####
+	Moodle|/';
+}
+
+
 // Set our own page heading (non-standard $CFG variable)
 $CFG->pageheading = get_string('plugintitle', 'local_obu_application');
 $PAGE->set_headingmenu('<h1>' . $CFG->pageheading . '</h1>');

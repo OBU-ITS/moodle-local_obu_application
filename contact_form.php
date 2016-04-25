@@ -35,18 +35,18 @@ class contact_form extends moodleform {
         $mform =& $this->_form;
 
         $data = new stdClass();
-		$data->record = $this->_customdata['record'];
+		$data->user = $this->_customdata['user'];
 		
-		if ($data->record !== false) {
+		if ($data->user !== false) {
 			$fields = [
-				'username' => $data->record->username,
-				'idnumber' => $data->record->idnumber,
-				'firstname' => $data->record->firstname,
-				'lastname' => $data->record->lastname,
-				'address' => $data->record->address,
-				'city' => $data->record->city,
-				'phone1' => $data->record->phone1,
-				'email' => $data->record->email
+				'username' => $data->user->username,
+				'profile_field_title' => $data->user->profile_field_title,
+				'firstname' => $data->user->firstname,
+				'lastname' => $data->user->lastname,
+				'address' => $data->user->address,
+				'city' => $data->user->city,
+				'phone1' => $data->user->phone1,
+				'email' => $data->user->email
 			];
 			
 			$this->set_data($fields);
@@ -58,10 +58,56 @@ class contact_form extends moodleform {
 		$mform->addElement('static', 'form_errors');
 
         $mform->addElement('header', 'contactdetails', get_string('contactdetails', 'local_obu_application'), '');
-        include('./contact_fields.php');
+		
+		$mform->addElement('text', 'profile_field_title', get_string('title', 'local_obu_application'), 'size="30" maxlength="100"');
+		if ($data->user->email != $data->user->username) {
+			$mform->disabledIf('profile_field_title', 'email', 'neq', $data->user->username);
+		} else {
+			$mform->setType('profile_field_title', PARAM_TEXT);
+			$mform->addRule('profile_field_title', null, 'required', null, 'server');
+		}
+		
+		$mform->addElement('text', 'firstname', get_string('firstname'), 'size="30" maxlength="100"');
+		if ($data->user->email != $data->user->username) {
+			$mform->disabledIf('firstname', 'email', 'neq', $data->user->username);
+		} else {
+			$mform->setType('firstname', PARAM_TEXT);
+			$mform->addRule('firstname', null, 'required', null, 'server');
+		}
+		
+		$mform->addElement('text', 'lastname', get_string('lastname'), 'size="30" maxlength="100"');
+		if ($data->user->email != $data->user->username) {
+			$mform->disabledIf('lastname', 'email', 'neq', $data->user->username);
+		} else {
+			$mform->setType('lastname', PARAM_TEXT);
+			$mform->addRule('lastname', null, 'required', null, 'server');
+		}
+		
+		$mform->addElement('textarea', 'address', get_string('address'), 'cols="40" rows="5"');
+		$mform->setType('address', PARAM_TEXT);
+		$mform->addRule('address', null, 'required', null, 'server');
 
-        $mform->addElement('header', 'newemail', get_string('newemail', 'local_obu_application'), '');
-        include('./email_fields.php');
+		$mform->addElement('text', 'city', get_string('postcode', 'local_obu_application'), 'size="15" maxlength="100"');
+		$mform->setType('city', PARAM_TEXT);
+		$mform->addRule('city', null, 'required', null, 'server');
+
+		$mform->addElement('text', 'phone1', get_string('phone', 'local_obu_application'), 'size="30" maxlength="100"');
+		$mform->setType('phone1', PARAM_TEXT);
+		$mform->addRule('phone1', null, 'required', null, 'server');
+
+		if ($data->user->email != $data->user->username) {
+			$mform->addElement('text', 'email', get_string('email'), 'size="25" maxlength="100"');
+			$mform->disabledIf('email', 'firstname', 'neq', '?****?');
+		} else {
+			$mform->addElement('header', 'newemail', get_string('newemail', 'local_obu_application'), '');
+			$mform->addElement('text', 'email', get_string('email'), 'size="25" maxlength="100"');
+			$mform->setType('email', PARAM_RAW_TRIMMED);
+			$mform->addRule('email', get_string('missingemail'), 'required', null, 'server');
+
+			$mform->addElement('text', 'username', get_string('emailagain'), 'size="25" maxlength="100"');
+			$mform->setType('username', PARAM_RAW_TRIMMED);
+			$mform->addRule('username', get_string('missingemail'), 'required', null, 'server');
+		}
 
         // buttons
         $this->add_action_buttons(true, get_string('save', 'local_obu_application'));
@@ -70,8 +116,17 @@ class contact_form extends moodleform {
     function validation($data, $files) {
         global $CFG, $DB;
         $errors = parent::validation($data, $files);
-
-		include('./email_validate.php');
+		
+		if ($data['email'] == $data['username']) {
+			if (!validate_email($data['email']) || ($data['email'] != strtolower($data['email']))) {
+				$errors['email'] = get_string('invalidemail');
+			}
+			if (empty($data['username'])) {
+				$errors['username'] = get_string('missingemail');
+			} else if ($data['username'] != $data['email']) {
+				$errors['username'] = get_string('invalidemail');
+			}
+		}
 
 		if (!empty($errors)) {
 			$errors['form_errors'] = get_string('form_errors', 'local_obu_application');

@@ -33,39 +33,37 @@ require_once('./contact_form.php');
 
 require_obu_login();
 
-$url = new moodle_url('/local/obu_application/');
+$home = new moodle_url('/local/obu_application/');
+$url = $home . 'contact.php';
 
 $PAGE->set_title($CFG->pageheading . ': ' . get_string('contactdetails', 'local_obu_application'));
 
 // HTTPS is required in this page when $CFG->loginhttps enabled
 $PAGE->https_required();
+$PAGE->set_url($url);
 
-$PAGE->set_url('/local/obu_application/contact.php');
-
-$message = '';
-
-$record = read_user($USER->id);
+$message ='';
 
 $parameters = [
-	'record' => $record
+	'user' => read_user($USER->id)
 ];
 
 $mform = new contact_form(null, $parameters);
 
 if ($mform->is_cancelled()) {
-    redirect($url);
+    redirect($home);
 } 
 else if ($mform_data = $mform->get_data()) {
 	if ($mform_data->submitbutton == get_string('save', 'local_obu_application')) {
 		write_user($USER->id, $mform_data);
-		redirect($url);
     }
+	redirect($home);
 }	
 
 echo $OUTPUT->header();
 
 if ($message) {
-    notice($message, $url);    
+    notice($message, $home);    
 }
 else {
     $mform->display();

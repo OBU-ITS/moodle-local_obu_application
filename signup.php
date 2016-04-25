@@ -40,10 +40,14 @@ $CFG->additionalhtmlhead .= '<meta name="robots" content="noindex" />';
 // HTTPS is required in this page when $CFG->loginhttps enabled
 $PAGE->https_required();
 
-$PAGE->set_url('/local/obu_application/signup.php');
+$home = new moodle_url('/local/obu_application/');
+$url = $home . 'signup.php';
+$login = $home . 'login.php';
+
+$PAGE->set_url($url);
 
 // Override wanted URL, we do not want to end up here again if user clicks "Login"
-$SESSION->wantsurl = $CFG->wwwroot . '/local/obu_application/';
+$SESSION->wantsurl = $home;
 
 // Prevent registering when already logged in
 if (isloggedin()) {
@@ -51,7 +55,7 @@ if (isloggedin()) {
     echo $OUTPUT->box_start();
     $logout = new single_button(new moodle_url($CFG->httpswwwroot . '/local/obu_application/logout.php',
         array('sesskey' => sesskey(), 'loginpage' => 1)), get_string('logout'), 'post');
-    $continue = new single_button(new moodle_url('/local/obu_application/'), get_string('cancel'), 'get');
+    $continue = new single_button($home, get_string('cancel'), 'get');
     echo $OUTPUT->confirm(get_string('cannotsignup', 'error', fullname($USER)), $logout, $continue);
     echo $OUTPUT->box_end();
     echo $OUTPUT->footer();
@@ -62,24 +66,29 @@ include('./signup_form.php');
 $mform = new registration_form();
 
 if ($mform->is_cancelled()) {
-    redirect('/local/obu_application/login.php');
+    redirect($login);
 } else if ($user = $mform->get_data()) {
-    $user->confirmed = 0;
-    $user->lang = current_language();
-    $user->firstaccess = time();
-    $user->timecreated = time();
-    $user->mnethostid = $CFG->mnet_localhost_id;
-    $user->secret = random_string(15);
-    $user->auth = 'email';
+	if (strpos($user->email, '@brookes.ac.uk') !== false) {
+		$message = get_string('preregistered', 'local_obu_application');
+	} else {
+		$message = '';
+		$user->confirmed = 0;
+		$user->lang = current_language();
+		$user->firstaccess = time();
+		$user->timecreated = time();
+		$user->mnethostid = $CFG->mnet_localhost_id;
+		$user->secret = random_string(15);
+		$user->auth = 'email';
 	
-    // Initialize alternate name fields to empty strings.
-    $namefields = array_diff(get_all_user_name_fields(), useredit_get_required_name_fields());
-    foreach ($namefields as $namefield) {
-        $user->$namefield = '';
-    }
+		// Initialize alternate name fields to empty strings.
+		$namefields = array_diff(get_all_user_name_fields(), useredit_get_required_name_fields());
+		foreach ($namefields as $namefield) {
+			$user->$namefield = '';
+		}
 	
-    application_user_signup($user); // prints notice and link to 'local/obu_application/index.php'
-    exit; //never reached
+		application_user_signup($user); // prints notice and link to 'local/obu_application/index.php'
+		exit; //never reached
+	}
 }
 
 // make sure we really are on the https page when https login required
@@ -88,5 +97,12 @@ $PAGE->verify_https_required();
 $PAGE->set_title($CFG->pageheading . ': ' . get_string('registration', 'local_obu_application'));
 
 echo $OUTPUT->header();
-$mform->display();
+
+if ($message) {
+    notice($message, $login);    
+}
+else {
+    $mform->display();
+}
+
 echo $OUTPUT->footer();

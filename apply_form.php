@@ -42,15 +42,24 @@ class apply_form extends moodleform {
 		$mform->addElement('static', 'form_errors');
 
         $mform->addElement('header', 'manager_to_approve', get_string('manager_to_approve', 'local_obu_application'), '');
-		include('./email_fields.php');
+		
+		$mform->addElement('text', 'email', get_string('email'), 'size="25" maxlength="100"');
+		$mform->setType('email', PARAM_RAW_TRIMMED);
+		$mform->addRule('email', get_string('missingemail'), 'required', null, 'server');
+
+		$mform->addElement('text', 'emailagain', get_string('emailagain'), 'size="25" maxlength="100"');
+		$mform->setType('emailagain', PARAM_RAW_TRIMMED);
+		$mform->addRule('emailagain', get_string('missingemail'), 'required', null, 'server');
 		
         $mform->addElement('header', 'declaration_head', get_string('declaration', 'local_obu_application'), '');
+		
 		$mform->addElement('advcheckbox', 'self_funding', get_string('self_funding', 'local_obu_application'),
 			get_string('self_funding_text', 'local_obu_application'), null, array(0, 1));
 		$conditions = '<a href="http://www.brookes.ac.uk/studying-at-brookes/how-to-apply/conditions-of-acceptance/" target="_blank">' . get_string('conditions', 'local_obu_application') . '</a>';
 		$mform->addElement('checkbox', 'declaration', get_string('declaration', 'local_obu_application'),
 			get_string('declaration_text', 'local_obu_application', $conditions));
 		$mform->addRule('declaration', null, 'required', null, 'server');
+		
         $this->add_action_buttons(true, get_string('apply', 'local_obu_application'));
     }
 
@@ -58,7 +67,15 @@ class apply_form extends moodleform {
         global $CFG, $DB;
         $errors = parent::validation($data, $files);
 
-		include('./email_validate.php');
+		if (!validate_email($data['email']) || ($data['email'] != strtolower($data['email']))) {
+			$errors['email'] = get_string('invalidemail');
+		}
+		
+		if (empty($data['emailagain'])) {
+			$errors['emailagain'] = get_string('missingemail');
+		} else if ($data['emailagain'] != $data['email']) {
+			$errors['emailagain'] = get_string('invalidemail');
+		}
 
 		if (!empty($errors)) {
 			$errors['form_errors'] = get_string('form_errors', 'local_obu_application');

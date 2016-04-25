@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * OBU Application - version
+ * OBU Application - Login [Moodle]
  *
  * @package    obu_application
  * @category   local
@@ -23,14 +23,9 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
+ 
+require_once('../../config.php');
 
-$plugin->version  = 2016042400;   // The (date) version of this module + 2 extra digital for daily versions
-                                  // This version number is displayed into /admin/forms.php
-                                  // TODO: if ever this plugin get branched, the old branch number
-                                  // will not be updated to the current date but just incremented. We will
-                                  // need then a $plugin->release human friendly date. For the moment, we use
-                                  // display this version number with userdate (dev friendly)
-$plugin->requires = 2012120300;   // Requires this Moodle version - at least 2.0
-$plugin->cron     = 0;
-$plugin->release = 'v1.0.0';
-$plugin->maturity = MATURITY_STABLE;
+require_login();
+
+redirect(new moodle_url('/local/obu_application/'));

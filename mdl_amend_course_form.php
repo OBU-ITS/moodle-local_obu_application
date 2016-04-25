@@ -43,6 +43,7 @@ class mdl_amend_course_form extends moodleform {
 		$fields = [
 			'current_course_name' => $data->application->course_code . ' ' . $data->application->course_name,
 			'current_course_date' => $data->application->course_date,
+			'course_code' => $data->application->course_code,
 			'course_date' => $data->application->course_date
 		];
 		$this->set_data($fields);
