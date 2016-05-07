@@ -61,6 +61,7 @@ class registration_form extends moodleform {
         $mform->addRule('password', get_string('missingpassword'), 'required', null, 'server');
 
         $mform->addElement('header', 'contactdetails', get_string('contactdetails', 'local_obu_application'), '');
+		
 		$mform->addElement('text', 'profile_field_title', get_string('title', 'local_obu_application'), 'size="30" maxlength="100"');
 		$mform->setType('profile_field_title', PARAM_TEXT);
 		$mform->addRule('profile_field_title', null, 'required', null, 'server');
@@ -73,13 +74,26 @@ class registration_form extends moodleform {
 		$mform->setType('lastname', PARAM_TEXT);
 		$mform->addRule('lastname', null, 'required', null, 'server');
 		
-		$mform->addElement('textarea', 'address', get_string('address'), 'cols="40" rows="5"');
-		$mform->setType('address', PARAM_TEXT);
-		$mform->addRule('address', null, 'required', null, 'server');
+		$mform->addElement('text', 'address_1', get_string('address_1', 'local_obu_application'), 'size="30" maxlength="50"');
+		$mform->setType('address_1', PARAM_TEXT);
+		$mform->addRule('address_1', null, 'required', null, 'server');
 
-		$mform->addElement('text', 'city', get_string('postcode', 'local_obu_application'), 'size="15" maxlength="100"');
-		$mform->setType('city', PARAM_TEXT);
-		$mform->addRule('city', null, 'required', null, 'server');
+		$mform->addElement('text', 'address_2', get_string('address_2', 'local_obu_application'), 'size="30" maxlength="50"');
+		$mform->setType('address_2', PARAM_TEXT);
+
+		$mform->addElement('text', 'address_3', get_string('address_3', 'local_obu_application'), 'size="30" maxlength="50"');
+		$mform->setType('address_3', PARAM_TEXT);
+
+		$mform->addElement('text', 'town', get_string('town', 'local_obu_application'), 'size="30" maxlength="50"');
+		$mform->setType('town', PARAM_TEXT);
+		$mform->addRule('town', null, 'required', null, 'server');
+
+		$mform->addElement('text', 'county', get_string('county', 'local_obu_application'), 'size="30" maxlength="30"');
+		$mform->setType('county', PARAM_TEXT);
+
+		$mform->addElement('text', 'postcode', get_string('postcode', 'local_obu_application'), 'size="20" maxlength="20"');
+		$mform->setType('postcode', PARAM_TEXT);
+		$mform->addRule('postcode', null, 'required', null, 'server');
 
 		$mform->addElement('text', 'phone1', get_string('phone', 'local_obu_application'), 'size="30" maxlength="100"');
 		$mform->setType('phone1', PARAM_TEXT);

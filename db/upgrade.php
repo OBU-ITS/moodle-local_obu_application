@@ -32,7 +32,7 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 
     $result = true;
 
-    if ($oldversion < 2016011700) {
+    if ($oldversion < 2016050600) {
 
 		// Define table local_obu_course
 		$table = new xmldb_table('local_obu_course');
@@ -103,6 +103,13 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		// Add fields
 		$table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
 		$table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+		$table->add_field('title', XMLDB_TYPE_CHAR, '10', null, null, null, null);
+		$table->add_field('address_1', XMLDB_TYPE_CHAR, '50', null, null, null, null);
+		$table->add_field('address_2', XMLDB_TYPE_CHAR, '50', null, null, null, null);
+		$table->add_field('address_3', XMLDB_TYPE_CHAR, '50', null, null, null, null);
+		$table->add_field('town', XMLDB_TYPE_CHAR, '50', null, null, null, null);
+		$table->add_field('county', XMLDB_TYPE_CHAR, '30', null, null, null, null);
+		$table->add_field('postcode', XMLDB_TYPE_CHAR, '20', null, null, null, null);
 		$table->add_field('birthdate', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
 		$table->add_field('birthcountry', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('firstentrydate', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
@@ -152,8 +159,12 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		$table->add_field('title', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('firstname', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('lastname', XMLDB_TYPE_CHAR, '100', null, null, null, null);
-		$table->add_field('address', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
-		$table->add_field('postcode', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('address_1', XMLDB_TYPE_CHAR, '50', null, null, null, null);
+		$table->add_field('address_2', XMLDB_TYPE_CHAR, '50', null, null, null, null);
+		$table->add_field('address_3', XMLDB_TYPE_CHAR, '50', null, null, null, null);
+		$table->add_field('town', XMLDB_TYPE_CHAR, '50', null, null, null, null);
+		$table->add_field('county', XMLDB_TYPE_CHAR, '30', null, null, null, null);
+		$table->add_field('postcode', XMLDB_TYPE_CHAR, '20', null, null, null, null);
 		$table->add_field('phone', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('email', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('birthdate', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
@@ -203,6 +214,7 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		$table->add_field('approval_2_date', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
 		$table->add_field('approval_3_comment', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
 		$table->add_field('approval_3_date', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+		$table->add_field('admissions_date', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
 
 		// Add keys
 		$table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
@@ -237,7 +249,7 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		}
 
         // obu_application savepoint reached
-        upgrade_plugin_savepoint(true, 2016011700, 'local', 'obu_application');
+        upgrade_plugin_savepoint(true, 2016050600, 'local', 'obu_application');
     }
     
     return $result;

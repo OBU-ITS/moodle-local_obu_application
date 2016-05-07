@@ -45,7 +45,8 @@ $PAGE->set_url($url);
 $message ='';
 
 $parameters = [
-	'user' => read_user($USER->id)
+	'user' => read_user($USER->id),
+	'applicant' => read_applicant($USER->id, false)
 ];
 
 $mform = new contact_form(null, $parameters);
@@ -56,6 +57,7 @@ if ($mform->is_cancelled()) {
 else if ($mform_data = $mform->get_data()) {
 	if ($mform_data->submitbutton == get_string('save', 'local_obu_application')) {
 		write_user($USER->id, $mform_data);
+		write_contact_details($USER->id, $mform_data);
     }
 	redirect($home);
 }	

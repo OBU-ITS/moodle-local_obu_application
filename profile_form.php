@@ -74,6 +74,7 @@ class profile_form extends moodleform {
 		// - To let us inform the user that there are validation errors without them having to scroll down further
 		$mform->addElement('static', 'form_errors');
 
+        // Birth date/country
         $mform->addElement('header', 'birth_head', get_string('birth_head', 'local_obu_application'), '');
 		$mform->setExpanded('birth_head');
 		$mform->addElement('date_selector', 'birthdate', get_string('birthdate', 'local_obu_application'), $date_options);
@@ -86,17 +87,26 @@ class profile_form extends moodleform {
 		if (!empty($CFG->country) && array_key_exists($CFG->country, $country_list)) { // Is there a valid country in the configuration?
 			$countries[$CFG->country] = $country_list[$CFG->country]; // If so, make it the first available option on the list
 		}
-        $mform->addElement('select', 'birthcountry', get_string('birthcountry', 'local_obu_application'), array_merge($countries, $country_list));
+		$mform->addElement('select', 'birthcountry', get_string('birthcountry', 'local_obu_application'), array_merge($countries, $country_list));
 		$mform->addRule('birthcountry', null, 'required', null, 'server');
-        $mform->addElement('header', 'non_eu_head', get_string('non_eu_head', 'local_obu_application'), '');
+
+        // Non-EU applicants
+		$mform->addElement('header', 'non_eu_head', get_string('non_eu_head', 'local_obu_application'), '');
 		$mform->addElement('date_selector', 'firstentrydate', get_string('firstentrydate', 'local_obu_application'));
+		$mform->disabledIf('firstentrydate', 'birthcountry', 'eq', 'GB');
 		$mform->addElement('date_selector', 'lastentrydate', get_string('lastentrydate', 'local_obu_application'));
+		$mform->disabledIf('lastentrydate', 'birthcountry', 'eq', 'GB');
 		$mform->addElement('date_selector', 'residencedate', get_string('residencedate', 'local_obu_application'));
-        $mform->addElement('header', 'needs_head', get_string('needs_head', 'local_obu_application'), '');
+		$mform->disabledIf('residencedate', 'birthcountry', 'eq', 'GB');
+
+        // Disability needs
+		$mform->addElement('header', 'needs_head', get_string('needs_head', 'local_obu_application'), '');
 		$mform->setExpanded('needs_head');
 		$mform->addElement('text', 'support', get_string('support', 'local_obu_application'), 'size="40" maxlength="100"');
 		$mform->setType('support', PARAM_TEXT);
-        $mform->addElement('header', 'education_head', get_string('education_head', 'local_obu_application'), '');
+
+        // Education
+		$mform->addElement('header', 'education_head', get_string('education_head', 'local_obu_application'), '');
 		$mform->setExpanded('education_head');
 		$mform->addElement('text', 'p16school', get_string('p16school', 'local_obu_application'), 'size="40" maxlength="100"');
 		$mform->setType('p16school', PARAM_TEXT);
@@ -112,7 +122,9 @@ class profile_form extends moodleform {
 		$mform->addElement('text', 'trainingperiod', get_string('period', 'local_obu_application'), 'size="40" maxlength="100"');
 		$mform->setType('trainingperiod', PARAM_TEXT);
 		$mform->addRule('trainingperiod', null, 'required', null, 'server');
-        $mform->addElement('header', 'prof_qual_head', get_string('prof_qual_head', 'local_obu_application'), '');
+
+        // Professional qualification
+		$mform->addElement('header', 'prof_qual_head', get_string('prof_qual_head', 'local_obu_application'), '');
 		$mform->setExpanded('prof_qual_head');
 		$mform->addElement('text', 'prof_level', get_string('prof_level', 'local_obu_application'), 'size="40" maxlength="100"');
 		$mform->setType('prof_level', PARAM_TEXT);
@@ -122,7 +134,9 @@ class profile_form extends moodleform {
 		$mform->addRule('prof_award', null, 'required', null, 'server');
 		$mform->addElement('date_selector', 'prof_date', get_string('prof_date', 'local_obu_application'));
 		$mform->addRule('prof_date', null, 'required', null, 'server');
-        $mform->addElement('header', 'employment_head', get_string('employment_head', 'local_obu_application'), '');
+
+        // Employment
+		$mform->addElement('header', 'employment_head', get_string('employment_head', 'local_obu_application'), '');
 		$mform->setExpanded('employment_head');
 		$mform->addElement('text', 'emp_place', get_string('emp_place', 'local_obu_application'), 'size="40" maxlength="100"');
 		$mform->setType('emp_place', PARAM_TEXT);
@@ -133,20 +147,25 @@ class profile_form extends moodleform {
 		$mform->setType('emp_title', PARAM_TEXT);
 		$mform->addElement('text', 'emp_prof', get_string('emp_prof', 'local_obu_application'), 'size="40" maxlength="100"');
 		$mform->setType('emp_prof', PARAM_TEXT);
-        $mform->addElement('header', 'prof_reg_head', get_string('prof_reg_head', 'local_obu_application'), '');
+
+        // Professional registration
+		$mform->addElement('header', 'prof_reg_head', get_string('prof_reg_head', 'local_obu_application'), '');
 		$mform->setExpanded('prof_reg_head');
 		$mform->addElement('text', 'prof_reg_no', get_string('prof_reg_no', 'local_obu_application'), 'size="40" maxlength="100"');
 		$mform->setType('prof_reg_no', PARAM_TEXT);
-        $mform->addElement('header', 'criminal_record_head', get_string('criminal_record_head', 'local_obu_application'), '');
+		
+        // Criminal record
+		$mform->addElement('header', 'criminal_record_head', get_string('criminal_record_head', 'local_obu_application'), '');
 		$mform->setExpanded('criminal_record_head');
 		$options = [];
-		if ($data->record === false) {
-			$options['-1'] = '';
+		if ($data->record->criminal_record == 0) { // A mandatory field so must be the first time thru
+			$options['0'] = ''; // No choice made yet
 		}
-		$options['0'] = get_string('no', 'local_obu_application');
 		$options['1'] = get_string('yes', 'local_obu_application');
+		$options['2'] = get_string('no', 'local_obu_application');
 		$mform->addElement('select', 'criminal_record', get_string('criminal_record', 'local_obu_application'), $options);
 		$mform->addRule('criminal_record', null, 'required', null, 'server');
+
 		$this->add_action_buttons(true, get_string('save', 'local_obu_application'));
     }
 
@@ -154,7 +173,7 @@ class profile_form extends moodleform {
         global $CFG, $DB;
         $errors = parent::validation($data, $files);
 		
-		if ($data['criminal_record'] == '-1') {
+		if ($data['criminal_record'] == '0') {
 			$errors['criminal_record'] = get_string('value_required', 'local_obu_application');
 		}
 

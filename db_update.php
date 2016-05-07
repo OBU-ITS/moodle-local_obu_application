@@ -189,11 +189,8 @@ function write_user($user_id, $form_data) {
 	if (isset($form_data->username)) {
 		$user->username = $form_data->username;
 	}
-	$user->profile_field_title = $form_data->profile_field_title;
 	$user->firstname = $form_data->firstname;
 	$user->lastname = $form_data->lastname;
-	$user->address = $form_data->address;
-	$user->city = $form_data->city;
 	$user->phone1 = $form_data->phone1;
 	$user->email = strtolower($form_data->email);
 		
@@ -215,6 +212,35 @@ function read_applicant($user_id, $must_exist) {
 	return $applicant;	
 }
 
+function write_contact_details($user_id, $form_data) {
+	global $DB;
+	
+	$record = read_applicant($user_id, false); // May not exist yet
+	if ($record === false) {
+		$record = new stdClass();
+		$record->id = 0;
+		$record->userid = $user_id;
+	}
+	
+	// Update the applicant's title and address details
+    $record->title = $form_data->title;
+    $record->address_1 = $form_data->address_1;
+    $record->address_2 = $form_data->address_2;
+    $record->address_3 = $form_data->address_3;
+    $record->town = $form_data->town;
+    $record->county = $form_data->county;
+    $record->postcode = $form_data->postcode;
+
+	if ($record->id == 0) { // New record
+		$id = $DB->insert_record('local_obu_applicant', $record);
+	} else {		
+		$id = $record->id;
+		$DB->update_record('local_obu_applicant', $record);
+	}
+	
+	return $id;
+}
+
 function write_profile($user_id, $form_data) {
 	global $DB;
 	
@@ -224,36 +250,25 @@ function write_profile($user_id, $form_data) {
 		$record->id = 0;
 		$record->userid = $user_id;
 	}
-		// Zero dates that weren't actually input
-		$today = floor(time() / 86400) * 86400;
-		if ($data['firstentrydate'] == $today) {
-			$data['firstentrydate'] = 0;
-		}
-		if ($data['lastentrydate'] == $today) {
-			$data['lastentrydate'] = 0;
-		}
-		if ($data['residencedate'] == $today) {
-			$data['residencedate'] = 0;
-		}
-		
-		$data['lastentrydate'] = time();
-		$data['residencedate'] = 0;
 	
 	// Update the applicant's profile fields
     $record->birthdate = $form_data->birthdate;
     $record->birthcountry = $form_data->birthcountry;
-	$today = floor(time() / 86400) * 86400; // Time stamp at 00:00 today
-    if ($form_data->firstentrydate == $today) { // Not actually entered
+	$today = floor(time() / 86400) * 86400; // Time stamp at 00:00 UTC today
+	$date = floor(($form_data->firstentrydate + 3600) / 86400) * 86400; // Compensate for BST
+    if ($date == $today) { // Not actually entered
 		$record->firstentrydate = 0;
 	} else {
 		$record->firstentrydate = $form_data->firstentrydate;
 	}
-    if ($form_data->lastentrydate == $today) { // Not actually entered
+	$date = floor(($form_data->lastentrydate + 3600) / 86400) * 86400; // Compensate for BST
+    if ($date == $today) { // Not actually entered
 		$record->lastentrydate = 0;
 	} else {
 		$record->lastentrydate = $form_data->lastentrydate;
 	}
-    if ($form_data->residencedate == $today) { // Not actually entered
+	$date = floor(($form_data->residencedate + 3600) / 86400) * 86400; // Compensate for BST
+    if ($date == $today) { // Not actually entered
 		$record->residencedate = 0;
 	} else {
 		$record->residencedate = $form_data->residencedate;
@@ -333,11 +348,15 @@ function write_application($user_id, $form_data) {
 	$record->userid = $user_id;
 	
 	// Contact details
-	$record->title = $user->profile_field_title;
+	$record->title = $applicant->title;
 	$record->firstname = $user->firstname;
 	$record->lastname = $user->lastname;
-	$record->address = $user->address;
-	$record->postcode = $user->city;
+	$record->address_1 = $applicant->address_1;
+	$record->address_2 = $applicant->address_2;
+	$record->address_3 = $applicant->address_3;
+	$record->town = $applicant->town;
+	$record->county = $applicant->county;
+	$record->postcode = $applicant->postcode;
 	$record->phone = $user->phone1;
 	$record->email = $user->email;
 
@@ -362,7 +381,11 @@ function write_application($user_id, $form_data) {
     $record->emp_title = $applicant->emp_title;
     $record->emp_prof = $applicant->emp_prof;
     $record->prof_reg_no = $applicant->prof_reg_no;
-    $record->criminal_record = $applicant->criminal_record;
+    if ($applicant->criminal_record == '1') { // '1' = yes, '2' = no
+		$record->criminal_record = '1'; // Yes
+	} else {
+		$record->criminal_record = '0'; // No
+	}
 	
 	// Course
     $record->course_code = $applicant->course_code;
@@ -394,10 +417,16 @@ function update_application($application) {
 	return $DB->update_record('local_obu_application', $application);
 }
 
-function get_applications($user_id) {
+function get_applications($user_id = null) {
     global $DB;
     
-	return $DB->get_records('local_obu_application', array('userid' => $user_id), 'application_date DESC');
+	if ($user_id != null) { // Required for just this user
+		$applications = $DB->get_records('local_obu_application', array('userid' => $user_id), 'application_date DESC');
+	} else { // All applications
+		$applications = $DB->get_records('local_obu_application');
+	}
+	
+	return $applications;
 }
 
 function read_approval($application_id, &$approval) {

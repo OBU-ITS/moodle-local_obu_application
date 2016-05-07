@@ -59,6 +59,9 @@ function application_user_signup($user) { // Derived from email->user_signup
 	// Save any custom profile field information
 	profile_save_data($user);
 	
+	// Save contact information
+	write_contact_details($user->id, $user);
+	
 	// Trigger event
 	\core\event\user_created::create_from_userid($user->id)->trigger();
 	
@@ -104,7 +107,8 @@ function send_application_confirmation_email($user) {
 	$subject = get_string('emailconfirmationsubject', '', $data->sitename);
 	$username = urlencode($user->username);
 	$username = str_replace('.', '%2E', $username); // Prevent problems with trailing dots.
-	$data->link = $CFG->wwwroot . '/local/obu_application/confirm.php?data=' . $user->secret . '/' . $username;
+	$link = $CFG->wwwroot . '/local/obu_application/confirm.php?data=' . $user->secret . '/' . $username;
+	$data->link = '<a href="' . $link . '">' . $link . '</a>';
 	$message = get_string('emailconfirmation', '', $data);
 	$messagehtml = text_to_html($message, false, false, true);
 

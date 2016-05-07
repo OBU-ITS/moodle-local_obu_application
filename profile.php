@@ -45,6 +45,11 @@ $PAGE->set_url('/local/obu_application/profile.php');
 $message = '';
 
 $record = read_applicant($USER->id, false); // May not exist yet
+if (($record === false) || ($record->address_1 == '')) { // Must complete the contact details first
+	$message = get_string('complete_contact_details', 'local_obu_application');
+} else {
+	$message = '';
+}
 
 $parameters = [
 	'record' => $record

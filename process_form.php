@@ -115,7 +115,11 @@ class process_form extends moodleform {
 				'title' => $data->record->title,
 				'firstname' => $data->record->firstname,
 				'lastname' => $data->record->lastname,
-				'address' => $data->record->address,
+				'address_1' => $data->record->address_1,
+				'address_2' => $data->record->address_2,
+				'address_3' => $data->record->address_3,
+				'town' => $data->record->town,
+				'county' => $data->record->county,
 				'postcode' => $data->record->postcode,
 				'phone' => $data->record->phone,
 				'email' => $data->record->email,
@@ -193,7 +197,11 @@ class process_form extends moodleform {
 		}
 		$mform->addElement('static', 'name', get_string('name', 'local_obu_application'));
 		if (($approval_sought == 0) || ($approval_sought == 3)) {
-			$mform->addElement('static', 'address', get_string('address'));
+			$mform->addElement('static', 'address_1', get_string('address_1', 'local_obu_application'));
+			$mform->addElement('static', 'address_2', get_string('address_2', 'local_obu_application'));
+			$mform->addElement('static', 'address_3', get_string('address_3', 'local_obu_application'));
+			$mform->addElement('static', 'town', get_string('town', 'local_obu_application'));
+			$mform->addElement('static', 'county', get_string('county', 'local_obu_application'));
 			$mform->addElement('static', 'postcode', get_string('postcode', 'local_obu_application'));
 		}
 		$mform->addElement('static', 'phone', get_string('phone', 'local_obu_application'));

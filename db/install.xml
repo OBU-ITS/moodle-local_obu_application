@@ -57,6 +57,13 @@
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Moodle user ID"/>
+        <FIELD NAME="title" TYPE="char" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Title"/>
+        <FIELD NAME="address_1" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false" COMMENT="Address 1"/>
+        <FIELD NAME="address_2" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false" COMMENT="Address 2"/>
+        <FIELD NAME="address_3" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false" COMMENT="Address 3"/>
+        <FIELD NAME="town" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false" COMMENT="Town"/>
+        <FIELD NAME="county" TYPE="char" LENGTH="30" NOTNULL="false" SEQUENCE="false" COMMENT="County"/>
+        <FIELD NAME="postcode" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="Postcode"/>
         <FIELD NAME="birthdate" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Date of birth"/>
         <FIELD NAME="birthcountry" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Country of birth"/>
         <FIELD NAME="firstentrydate" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Date of first entry to UK"/>
@@ -101,8 +108,12 @@
         <FIELD NAME="title" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Title"/>
         <FIELD NAME="firstname" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="First name"/>
         <FIELD NAME="lastname" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Last name (surname)"/>
-        <FIELD NAME="address" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Address"/>
-        <FIELD NAME="postcode" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Postcode"/>
+        <FIELD NAME="address_1" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false" COMMENT="Address 1"/>
+        <FIELD NAME="address_2" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false" COMMENT="Address 2"/>
+        <FIELD NAME="address_3" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false" COMMENT="Address 3"/>
+        <FIELD NAME="town" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false" COMMENT="Town"/>
+        <FIELD NAME="county" TYPE="char" LENGTH="30" NOTNULL="false" SEQUENCE="false" COMMENT="County"/>
+        <FIELD NAME="postcode" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="Postcode"/>
         <FIELD NAME="phone" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Phone"/>
         <FIELD NAME="email" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Email"/>
         <FIELD NAME="birthdate" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Date of birth"/>

@@ -74,7 +74,7 @@ class mdl_organisation_form extends moodleform {
 		} else {
 			$mform->addElement('text', 'name', get_string('name', 'local_obu_application'), 'size="50" maxlength="100"');
 			$mform->setType('name', PARAM_TEXT);
-			$mform->addElement('text', 'email', get_string('funder_email', 'local_obu_application'), 'size="50" maxlength="10"');
+			$mform->addElement('text', 'email', get_string('funder_email', 'local_obu_application'), 'size="50" maxlength="100"');
 			$mform->setType('email', PARAM_TEXT);
 			$mform->addElement('text', 'code', get_string('finance_code', 'local_obu_application'), 'size="10" maxlength="10"');
 			$mform->setType('code', PARAM_TEXT);

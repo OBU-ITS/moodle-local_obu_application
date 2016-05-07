@@ -36,22 +36,33 @@ class contact_form extends moodleform {
 
         $data = new stdClass();
 		$data->user = $this->_customdata['user'];
+		$data->applicant = $this->_customdata['applicant'];
 		
 		if ($data->user !== false) {
 			$fields = [
 				'username' => $data->user->username,
-				'profile_field_title' => $data->user->profile_field_title,
 				'firstname' => $data->user->firstname,
 				'lastname' => $data->user->lastname,
-				'address' => $data->user->address,
-				'city' => $data->user->city,
 				'phone1' => $data->user->phone1,
 				'email' => $data->user->email
 			];
 			
+			if ($data->applicant !== false) {
+				$applicant_fields = [
+					'title' => $data->applicant->title,
+					'address_1' => $data->applicant->address_1,
+					'address_2' => $data->applicant->address_2,
+					'address_3' => $data->applicant->address_3,
+					'town' => $data->applicant->town,
+					'county' => $data->applicant->county,
+					'postcode' => $data->applicant->postcode
+				];
+				$fields = array_merge($fields, $applicant_fields);
+			}
+			
 			$this->set_data($fields);
 		}
-
+		
 		// This 'dummy' element has two purposes:
 		// - To force open the Moodle Forms invisible fieldset outside of any table on the form (corrupts display otherwise)
 		// - To let us inform the user that there are validation errors without them having to scroll down further
@@ -59,13 +70,9 @@ class contact_form extends moodleform {
 
         $mform->addElement('header', 'contactdetails', get_string('contactdetails', 'local_obu_application'), '');
 		
-		$mform->addElement('text', 'profile_field_title', get_string('title', 'local_obu_application'), 'size="30" maxlength="100"');
-		if ($data->user->email != $data->user->username) {
-			$mform->disabledIf('profile_field_title', 'email', 'neq', $data->user->username);
-		} else {
-			$mform->setType('profile_field_title', PARAM_TEXT);
-			$mform->addRule('profile_field_title', null, 'required', null, 'server');
-		}
+		$mform->addElement('text', 'title', get_string('title', 'local_obu_application'), 'size="10" maxlength="10"');
+		$mform->setType('title', PARAM_TEXT);
+		$mform->addRule('title', null, 'required', null, 'server');
 		
 		$mform->addElement('text', 'firstname', get_string('firstname'), 'size="30" maxlength="100"');
 		if ($data->user->email != $data->user->username) {
@@ -83,13 +90,26 @@ class contact_form extends moodleform {
 			$mform->addRule('lastname', null, 'required', null, 'server');
 		}
 		
-		$mform->addElement('textarea', 'address', get_string('address'), 'cols="40" rows="5"');
-		$mform->setType('address', PARAM_TEXT);
-		$mform->addRule('address', null, 'required', null, 'server');
+		$mform->addElement('text', 'address_1', get_string('address_1', 'local_obu_application'), 'size="30" maxlength="50"');
+		$mform->setType('address_1', PARAM_TEXT);
+		$mform->addRule('address_1', null, 'required', null, 'server');
 
-		$mform->addElement('text', 'city', get_string('postcode', 'local_obu_application'), 'size="15" maxlength="100"');
-		$mform->setType('city', PARAM_TEXT);
-		$mform->addRule('city', null, 'required', null, 'server');
+		$mform->addElement('text', 'address_2', get_string('address_2', 'local_obu_application'), 'size="30" maxlength="50"');
+		$mform->setType('address_2', PARAM_TEXT);
+
+		$mform->addElement('text', 'address_3', get_string('address_3', 'local_obu_application'), 'size="30" maxlength="50"');
+		$mform->setType('address_3', PARAM_TEXT);
+
+		$mform->addElement('text', 'town', get_string('town', 'local_obu_application'), 'size="30" maxlength="50"');
+		$mform->setType('town', PARAM_TEXT);
+		$mform->addRule('town', null, 'required', null, 'server');
+
+		$mform->addElement('text', 'county', get_string('county', 'local_obu_application'), 'size="30" maxlength="30"');
+		$mform->setType('county', PARAM_TEXT);
+
+		$mform->addElement('text', 'postcode', get_string('postcode', 'local_obu_application'), 'size="20" maxlength="20"');
+		$mform->setType('postcode', PARAM_TEXT);
+		$mform->addRule('postcode', null, 'required', null, 'server');
 
 		$mform->addElement('text', 'phone1', get_string('phone', 'local_obu_application'), 'size="30" maxlength="100"');
 		$mform->setType('phone1', PARAM_TEXT);
