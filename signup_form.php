@@ -41,8 +41,6 @@ class registration_form extends moodleform {
 		// - To let us inform the user that there are validation errors without them having to scroll down further
 		$mform->addElement('static', 'form_errors');
 		
-//		$mform->addElement('html', '<h2>' . get_string('preregistered', 'local_obu_application') . '</h2>');
-
         $mform->addElement('header', 'emailandpassword', get_string('emailandpassword', 'local_obu_application'), '');
 		$mform->addElement('static', 'preregistered', get_string('preregistered', 'local_obu_application'));
 		$mform->addElement('text', 'email', get_string('email'), 'size="25" maxlength="100"');
@@ -62,9 +60,9 @@ class registration_form extends moodleform {
 
         $mform->addElement('header', 'contactdetails', get_string('contactdetails', 'local_obu_application'), '');
 		
-		$mform->addElement('text', 'profile_field_title', get_string('title', 'local_obu_application'), 'size="30" maxlength="100"');
-		$mform->setType('profile_field_title', PARAM_TEXT);
-		$mform->addRule('profile_field_title', null, 'required', null, 'server');
+		$mform->addElement('text', 'title', get_string('title', 'local_obu_application'), 'size="10" maxlength="10"');
+		$mform->setType('title', PARAM_TEXT);
+		$mform->addRule('title', null, 'required', null, 'server');
 		
 		$mform->addElement('text', 'firstname', get_string('firstname'), 'size="30" maxlength="100"');
 		$mform->setType('firstname', PARAM_TEXT);
@@ -95,7 +93,7 @@ class registration_form extends moodleform {
 		$mform->setType('postcode', PARAM_TEXT);
 		$mform->addRule('postcode', null, 'required', null, 'server');
 
-		$mform->addElement('text', 'phone1', get_string('phone', 'local_obu_application'), 'size="30" maxlength="100"');
+		$mform->addElement('text', 'phone1', get_string('phone', 'local_obu_application'), 'size="20" maxlength="20"');
 		$mform->setType('phone1', PARAM_TEXT);
 		$mform->addRule('phone1', null, 'required', null, 'server');
 

@@ -111,7 +111,7 @@ class contact_form extends moodleform {
 		$mform->setType('postcode', PARAM_TEXT);
 		$mform->addRule('postcode', null, 'required', null, 'server');
 
-		$mform->addElement('text', 'phone1', get_string('phone', 'local_obu_application'), 'size="30" maxlength="100"');
+		$mform->addElement('text', 'phone1', get_string('phone', 'local_obu_application'), 'size="20" maxlength="20"');
 		$mform->setType('phone1', PARAM_TEXT);
 		$mform->addRule('phone1', null, 'required', null, 'server');
 

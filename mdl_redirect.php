@@ -78,7 +78,12 @@ $parameters = [
 	'approver_name' => $approver_name
 ];
 
-$message = '';
+// Check that it is possible to redirect the form
+if ($application->approval_state > 0) { // Already finally approved or rejected?
+	$message = get_string('application_unavailable', 'local_obu_application');
+} else {
+	$message = '';
+}
 
 $mform = new mdl_redirect_form(null, $parameters);
 

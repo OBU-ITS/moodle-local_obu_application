@@ -26,6 +26,48 @@
  *
  */
 
+function is_enroled() {
+	global $DB, $USER;
+	
+	// Establish the initial selection criteria to apply
+	$criteria = 'substr(c.shortname, 7, 1) = " " AND substr(c.shortname, 13, 1) = "-" AND length(c.shortname) >= 18';
+	$criteria = $criteria . ' AND ue.userid = ' . $USER->id; // Restrict modules to ones in which this user is enroled
+	
+	// Read the course (module) records that match our chosen criteria
+	$sql = 'SELECT c.id, c.fullname, c.shortname '
+		. 'FROM {course} c '
+		. 'JOIN {enrol} e ON e.courseid = c.id '
+		. 'JOIN {user_enrolments} ue ON ue.enrolid = e.id '
+		. 'WHERE ' . $criteria;
+	$db_ret = $DB->get_records_sql($sql, array());
+	
+	// Create an array of the current modules with the required type (if given)
+	$modules = array();
+	$now = time();
+	foreach ($db_ret as $row) {
+		$module_type = substr($row->fullname, 0, 1);
+		$module_start = strtotime('01 ' . substr($row->shortname, 7, 3) . ' ' . substr($row->shortname, 10, 2));
+		$module_end = strtotime('31 ' .	substr($row->shortname, 13, 3) . ' ' . substr($row->shortname, 16, 2));
+		if ((!$type || ($module_type == $type)) && ($module_end >= $now)) { // Must be the required type and not already ended
+			if ($user_id == 0) { // Just need the module code for validation purposes
+				$split_pos = strpos($row->fullname, ': ');
+				if ($split_pos !== false) {
+					$modules[$row->id] = substr($row->fullname, 0, $split_pos);
+				}
+			} else { // Need the full name
+				$split_pos = strpos($row->fullname, ' (');
+				if ($split_pos !== false) {
+					$modules[$row->id] = substr($row->fullname, 0, $split_pos);
+				} else {
+					$modules[$row->id] = $row->fullname;
+				}
+			}
+		}
+	}
+
+	return $modules;
+}
+
 function read_supplement_forms($ref) {
 	global $DB;
 	
@@ -191,8 +233,9 @@ function write_user($user_id, $form_data) {
 	}
 	$user->firstname = $form_data->firstname;
 	$user->lastname = $form_data->lastname;
-	$user->phone1 = $form_data->phone1;
 	$user->email = strtolower($form_data->email);
+	$user->phone1 = $form_data->phone1;
+	$user->city = $form_data->town;
 		
 	user_update_user($user, false, true);
 	profile_save_data($user); // Save custom profile data
@@ -228,6 +271,7 @@ function write_contact_details($user_id, $form_data) {
     $record->address_2 = $form_data->address_2;
     $record->address_3 = $form_data->address_3;
     $record->town = $form_data->town;
+    $record->domicile_code = 0;
     $record->county = $form_data->county;
     $record->postcode = $form_data->postcode;
 
@@ -253,7 +297,8 @@ function write_profile($user_id, $form_data) {
 	
 	// Update the applicant's profile fields
     $record->birthdate = $form_data->birthdate;
-    $record->birthcountry = $form_data->birthcountry;
+    $record->nationality_code = 0;
+    $record->nationality = $form_data->nationality;
 	$today = floor(time() / 86400) * 86400; // Time stamp at 00:00 UTC today
 	$date = floor(($form_data->firstentrydate + 3600) / 86400) * 86400; // Compensate for BST
     if ($date == $today) { // Not actually entered
@@ -355,6 +400,7 @@ function write_application($user_id, $form_data) {
 	$record->address_2 = $applicant->address_2;
 	$record->address_3 = $applicant->address_3;
 	$record->town = $applicant->town;
+	$record->domicile_code = $applicant->domicile_code;
 	$record->county = $applicant->county;
 	$record->postcode = $applicant->postcode;
 	$record->phone = $user->phone1;
@@ -362,7 +408,8 @@ function write_application($user_id, $form_data) {
 
 	// Profile
     $record->birthdate = $applicant->birthdate;
-    $record->birthcountry = $applicant->birthcountry;
+	$record->nationality_code = $applicant->nationality_code;
+    $record->nationality = $applicant->nationality;
     $record->firstentrydate = $applicant->firstentrydate;
     $record->lastentrydate = $applicant->lastentrydate;
     $record->residencedate = $applicant->residencedate;

@@ -43,7 +43,7 @@ class profile_form extends moodleform {
 		if ($data->record !== false) {
 			$fields = [
 				'birthdate' => $data->record->birthdate,
-				'birthcountry' => $data->record->birthcountry,
+				'nationality' => $data->record->nationality,
 				'firstentrydate' => $data->record->firstentrydate,
 				'lastentrydate' => $data->record->lastentrydate,
 				'residencedate' => $data->record->residencedate,
@@ -81,23 +81,23 @@ class profile_form extends moodleform {
 		$mform->addRule('birthdate', null, 'required', null, 'server');
         $country_list = get_string_manager()->get_list_of_countries();
 		$countries = array();
-		if ($data->record->birthcountry == '') { // None selected yet
+		if ($data->record->nationality == '') { // None selected yet
 			$countries[''] = get_string('selectacountry'); // We don't want them to just accept any given default
 		}
 		if (!empty($CFG->country) && array_key_exists($CFG->country, $country_list)) { // Is there a valid country in the configuration?
 			$countries[$CFG->country] = $country_list[$CFG->country]; // If so, make it the first available option on the list
 		}
-		$mform->addElement('select', 'birthcountry', get_string('birthcountry', 'local_obu_application'), array_merge($countries, $country_list));
-		$mform->addRule('birthcountry', null, 'required', null, 'server');
+		$mform->addElement('select', 'nationality', get_string('nationality', 'local_obu_application'), array_merge($countries, $country_list));
+		$mform->addRule('nationality', null, 'required', null, 'server');
 
         // Non-EU applicants
 		$mform->addElement('header', 'non_eu_head', get_string('non_eu_head', 'local_obu_application'), '');
 		$mform->addElement('date_selector', 'firstentrydate', get_string('firstentrydate', 'local_obu_application'));
-		$mform->disabledIf('firstentrydate', 'birthcountry', 'eq', 'GB');
+		$mform->disabledIf('firstentrydate', 'nationality', 'eq', 'GB');
 		$mform->addElement('date_selector', 'lastentrydate', get_string('lastentrydate', 'local_obu_application'));
-		$mform->disabledIf('lastentrydate', 'birthcountry', 'eq', 'GB');
+		$mform->disabledIf('lastentrydate', 'nationality', 'eq', 'GB');
 		$mform->addElement('date_selector', 'residencedate', get_string('residencedate', 'local_obu_application'));
-		$mform->disabledIf('residencedate', 'birthcountry', 'eq', 'GB');
+		$mform->disabledIf('residencedate', 'nationality', 'eq', 'GB');
 
         // Disability needs
 		$mform->addElement('header', 'needs_head', get_string('needs_head', 'local_obu_application'), '');

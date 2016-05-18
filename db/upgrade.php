@@ -108,10 +108,12 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		$table->add_field('address_2', XMLDB_TYPE_CHAR, '50', null, null, null, null);
 		$table->add_field('address_3', XMLDB_TYPE_CHAR, '50', null, null, null, null);
 		$table->add_field('town', XMLDB_TYPE_CHAR, '50', null, null, null, null);
+		$table->add_field('domicile_code', XMLDB_TYPE_INTEGER, '4', null, null, null, '0');
 		$table->add_field('county', XMLDB_TYPE_CHAR, '30', null, null, null, null);
 		$table->add_field('postcode', XMLDB_TYPE_CHAR, '20', null, null, null, null);
 		$table->add_field('birthdate', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
-		$table->add_field('birthcountry', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('nationality_code', XMLDB_TYPE_INTEGER, '4', null, null, null, '0');
+		$table->add_field('nationality', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('firstentrydate', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
 		$table->add_field('lastentrydate', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
 		$table->add_field('residencedate', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
@@ -156,19 +158,21 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		// Add fields
 		$table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
 		$table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
-		$table->add_field('title', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('title', XMLDB_TYPE_CHAR, '10', null, null, null, null);
 		$table->add_field('firstname', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('lastname', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('address_1', XMLDB_TYPE_CHAR, '50', null, null, null, null);
 		$table->add_field('address_2', XMLDB_TYPE_CHAR, '50', null, null, null, null);
 		$table->add_field('address_3', XMLDB_TYPE_CHAR, '50', null, null, null, null);
 		$table->add_field('town', XMLDB_TYPE_CHAR, '50', null, null, null, null);
+		$table->add_field('domicile_code', XMLDB_TYPE_INTEGER, '4', null, null, null, '0');
 		$table->add_field('county', XMLDB_TYPE_CHAR, '30', null, null, null, null);
 		$table->add_field('postcode', XMLDB_TYPE_CHAR, '20', null, null, null, null);
-		$table->add_field('phone', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('phone', XMLDB_TYPE_CHAR, '20', null, null, null, null);
 		$table->add_field('email', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('birthdate', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
-		$table->add_field('birthcountry', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+		$table->add_field('nationality_code', XMLDB_TYPE_INTEGER, '4', null, null, null, '0');
+		$table->add_field('nationality', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('firstentrydate', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
 		$table->add_field('lastentrydate', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
 		$table->add_field('residencedate', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');

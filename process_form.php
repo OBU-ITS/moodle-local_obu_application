@@ -124,7 +124,7 @@ class process_form extends moodleform {
 				'phone' => $data->record->phone,
 				'email' => $data->record->email,
 				'birthdate' => $birthdate_formatted,
-				'birthcountry' => $data->record->birthcountry,
+				'nationality' => $data->record->nationality,
 				'firstentrydate' => $firstentrydate_formatted,
 				'lastentrydate' => $lastentrydate_formatted,
 				'residencedate' => $residencedate_formatted,
@@ -215,7 +215,7 @@ class process_form extends moodleform {
 				$mform->setExpanded('birth_head');
 			}
 			$mform->addElement('static', 'birthdate', get_string('birthdate', 'local_obu_application'));
-			$mform->addElement('static', 'birthcountry', get_string('birthcountry', 'local_obu_application'));
+			$mform->addElement('static', 'nationality', get_string('nationality', 'local_obu_application'));
 
 			// Non-EU details
 			$mform->addElement('header', 'non_eu_head', get_string('non_eu_head', 'local_obu_application'), '');
