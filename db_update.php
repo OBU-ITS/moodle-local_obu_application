@@ -68,6 +68,53 @@ function is_enroled() {
 	return $modules;
 }
 
+function read_parameter($name) {
+	global $DB;
+	
+	$parameter = $DB->get_record('local_obu_param', array('name' => $name), '*', MUST_EXIST);
+	
+	return $parameter;
+}
+
+function read_parameter_by_id($param_id) {
+    global $DB;
+    
+	$parameter = $DB->get_record('local_obu_param', array('id' => $param_id), '*', MUST_EXIST);
+	
+	return $parameter;	
+}
+
+function write_parameter($parameter) {
+	global $DB;
+	
+    $record = new stdClass();
+	$id = $parameter->id;
+	$record->name = $parameter->name;
+	$record->number = $parameter->number;
+	$record->text = $parameter->text;
+
+	if ($id == '0') {
+		$id = $DB->insert_record('local_obu_param', $record);
+	} else {
+		$record->id = $id;
+		$DB->update_record('local_obu_param', $record);
+	}
+	
+	return $id;
+}
+
+function delete_parameter($param_id) {
+    global $DB;
+    
+	$DB->delete_records('local_obu_param', array('id' => $param_id));
+}
+
+function get_parameter_records() {
+	global $DB;
+	
+	return $DB->get_records('local_obu_param', null, 'name');
+}
+
 function read_supplement_forms($ref) {
 	global $DB;
 	

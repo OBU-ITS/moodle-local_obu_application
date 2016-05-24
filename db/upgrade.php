@@ -34,6 +34,26 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 
     if ($oldversion < 2016050600) {
 
+		// Define table local_obu_param
+		$table = new xmldb_table('local_obu_param');
+
+		// Add fields
+		$table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+		$table->add_field('name', XMLDB_TYPE_CHAR, '10', null, XMLDB_NOTNULL, null, null);
+		$table->add_field('number', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+		$table->add_field('text', XMLDB_TYPE_CHAR, '100', null, null, null, null);
+
+		// Add keys
+		$table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+
+		// Add indexes
+		$table->add_index('name', XMLDB_INDEX_UNIQUE, array('name'));
+
+		// Conditionally create table
+		if (!$dbman->table_exists($table)) {
+			$dbman->create_table($table);
+		}
+
 		// Define table local_obu_course
 		$table = new xmldb_table('local_obu_course');
 
@@ -202,6 +222,7 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		$table->add_field('declaration', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
 		$table->add_field('funder_email', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('funding_method', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
+		$table->add_field('funding_id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
 		$table->add_field('funding_organisation', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('funder_name', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('invoice_ref', XMLDB_TYPE_CHAR, '100', null, null, null, null);
@@ -218,7 +239,8 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		$table->add_field('approval_2_date', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
 		$table->add_field('approval_3_comment', XMLDB_TYPE_TEXT, 'small', null, null, null, null);
 		$table->add_field('approval_3_date', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
-		$table->add_field('admissions_date', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+		$table->add_field('admissions_xfer', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+		$table->add_field('finance_xfer', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
 
 		// Add keys
 		$table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));

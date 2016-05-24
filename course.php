@@ -46,7 +46,7 @@ $PAGE->https_required();
 $PAGE->set_url($url);
 
 $record = read_applicant($USER->id, false);
-if ($record === false) { // Must complete the profile first
+if (($record === false) || ($record->birthdate == 0)) { // Must complete the profile first
 	$message = get_string('complete_profile', 'local_obu_application');
 } else {
 	$message = '';

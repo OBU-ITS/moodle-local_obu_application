@@ -5,6 +5,21 @@
 >
   <TABLES>
 
+    <TABLE NAME="local_obu_param" COMMENT="OBU HLS parameters">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Parameter name"/>
+        <FIELD NAME="number" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Numeric parameter value"/>
+        <FIELD NAME="text" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Textual parameter value"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="name" UNIQUE="true" FIELDS="name" COMMENT="The parameter name"/>
+      </INDEXES>
+    </TABLE>
+
     <TABLE NAME="local_obu_course" COMMENT="OBU HLS courses">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
@@ -43,7 +58,7 @@
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="name" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="The name of the organisation"/>
         <FIELD NAME="email" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="The (generic) email of the funder"/>
-        <FIELD NAME="code" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="The organisation's finance code"/>
+        <FIELD NAME="code" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="The organisation's contract code"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
@@ -151,6 +166,7 @@
         <FIELD NAME="declaration" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Mandatory declaration"/>
         <FIELD NAME="funder_email" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Email of funder"/>
         <FIELD NAME="funding_method" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Funding method"/>
+        <FIELD NAME="funding_id" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="ID of funding organisation"/>
         <FIELD NAME="funding_organisation" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Funding organisation"/>
         <FIELD NAME="funder_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Name of funder"/>
         <FIELD NAME="invoice_ref" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Invoice reference (PO number)"/>
@@ -167,7 +183,8 @@
         <FIELD NAME="approval_2_date" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Approval 2 date"/>
         <FIELD NAME="approval_3_comment" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Approval 3 comment"/>
         <FIELD NAME="approval_3_date" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Approval 3 date"/>
-        <FIELD NAME="admissions_date" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Date posted to admissions"/>
+        <FIELD NAME="admissions_xfer" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="ID of data transfer to admissions"/>
+        <FIELD NAME="finance_xfer" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="ID of data transfer to finance"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

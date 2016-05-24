@@ -56,7 +56,7 @@ $PAGE->navbar->add(get_string('application', 'local_obu_application', $applicati
 $message = '';
 
 $parameters = [
-	'organisations' => get_organisation_names(),
+	'organisations' => get_organisations(),
 	'application' => $application
 ];
 	

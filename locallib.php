@@ -406,13 +406,16 @@ function get_course_names() {
 	return $courses;	
 }
 
-function get_organisation_names() {
+function get_organisations() {
 	
 	$organisations = array();
 	$recs = get_organisation_records();
 	foreach ($recs as $rec) {
-		$organisations[$rec->id] = $rec->name;
+		if ($rec->code != 0) {
+			$organisations[$rec->id] = $rec->name;
+		}
 	}
+	asort($organisations);
 	
 	return $organisations;	
 }
@@ -531,7 +534,7 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 				$name = $approver->firstname . ' ' . $approver->lastname;
 				$button = 'continue';
 			}
-			$action = span(get_string('awaiting_action', 'local_obu_application', array('action' => get_string('submission', 'local_obu_application'), 'by' => $name)), '', array('style' => 'color:red'));
+			$action = html_writer::span(get_string('awaiting_action', 'local_obu_application', array('action' => get_string('submission', 'local_obu_application'), 'by' => $name)), '', array('style' => 'color:red'));
 			$text .= '<p />' . $action;
 		} else {
 			if ($application->approval_level == 1) { // Manager
@@ -583,11 +586,12 @@ function update_workflow(&$application, $approved = true, $data = null) {
 			$application->approval_state = 1; // Rejected
 		} else if ($application->self_funding == 0) {
 			$application->approval_level = 2; // Funder
-			if ($data->funding_organisation == 0) { // 'Other Organisation'
+			$application->funding_id = $data->funding_organisation;
+			if ($application->funding_id == 0) { // 'Other Organisation'
 				$application->funding_organisation = '';
 				$application->funder_email = $data->funder_email; // Must have been given
 			} else { // A known organisation with a fixed email address
-				$organisation = read_organisation($data->funding_organisation);
+				$organisation = read_organisation($application->funding_id);
 				$application->funding_organisation = $organisation->name;
 				$application->funder_email = $organisation->email;
 			}

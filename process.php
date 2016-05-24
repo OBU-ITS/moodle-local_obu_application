@@ -84,7 +84,7 @@ if ($button_text != 'approve') { // If not the next approver, check that this us
 }
 
 $parameters = [
-	'organisations' => get_organisation_names(),
+	'organisations' => get_organisations(),
 	'record' => $application,
 	'status_text' => $status_text,
 	'button_text' => $button_text
