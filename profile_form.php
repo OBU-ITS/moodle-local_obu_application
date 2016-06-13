@@ -39,33 +39,28 @@ class profile_form extends moodleform {
 
         $data = new stdClass();
 		$data->record = $this->_customdata['record'];
+		$data->nationalities = $this->_customdata['nationalities'];
 		
-		if ($data->record !== false) {
-			$fields = [
-				'birthdate' => $data->record->birthdate,
-				'nationality' => $data->record->nationality,
-				'firstentrydate' => $data->record->firstentrydate,
-				'lastentrydate' => $data->record->lastentrydate,
-				'residencedate' => $data->record->residencedate,
-				'support' => $data->record->support,
-				'p16school' => $data->record->p16school,
-				'p16schoolperiod' => $data->record->p16schoolperiod,
-				'p16fe' => $data->record->p16fe,
-				'p16feperiod' => $data->record->p16feperiod,
-				'training' => $data->record->training,
-				'trainingperiod' => $data->record->trainingperiod,
-				'prof_level' => $data->record->prof_level,
-				'prof_award' => $data->record->prof_award,
-				'prof_date' => $data->record->prof_date,
-				'emp_place' => $data->record->emp_place,
-				'emp_area' => $data->record->emp_area,
-				'emp_title' => $data->record->emp_title,
-				'emp_prof' => $data->record->emp_prof,
-				'prof_reg_no' => $data->record->prof_reg_no,
-				'criminal_record' => $data->record->criminal_record
-			];
-			$this->set_data($fields);
-		}
+		$fields = [
+			'birthdate' => $data->record->birthdate,
+			'nationality_code' => $data->record->nationality_code,
+			'p16school' => $data->record->p16school,
+			'p16schoolperiod' => $data->record->p16schoolperiod,
+			'p16fe' => $data->record->p16fe,
+			'p16feperiod' => $data->record->p16feperiod,
+			'training' => $data->record->training,
+			'trainingperiod' => $data->record->trainingperiod,
+			'prof_level' => $data->record->prof_level,
+			'prof_award' => $data->record->prof_award,
+			'prof_date' => $data->record->prof_date,
+			'emp_place' => $data->record->emp_place,
+			'emp_area' => $data->record->emp_area,
+			'emp_title' => $data->record->emp_title,
+			'emp_prof' => $data->record->emp_prof,
+			'prof_reg_no' => $data->record->prof_reg_no,
+			'criminal_record' => $data->record->criminal_record
+		];
+		$this->set_data($fields);
 		
 		$date_options = array('startyear' => 1950, 'stopyear'  => 2030, 'timezone'  => 99, 'optional' => false);
 		
@@ -74,36 +69,20 @@ class profile_form extends moodleform {
 		// - To let us inform the user that there are validation errors without them having to scroll down further
 		$mform->addElement('static', 'form_errors');
 
-        // Birth date/country
+        // Birth date/nationality
         $mform->addElement('header', 'birth_head', get_string('birth_head', 'local_obu_application'), '');
 		$mform->setExpanded('birth_head');
 		$mform->addElement('date_selector', 'birthdate', get_string('birthdate', 'local_obu_application'), $date_options);
 		$mform->addRule('birthdate', null, 'required', null, 'server');
-        $country_list = get_string_manager()->get_list_of_countries();
-		$countries = array();
-		if ($data->record->nationality == '') { // None selected yet
-			$countries[''] = get_string('selectacountry'); // We don't want them to just accept any given default
+		$options = [];
+		if ($data->record->nationality_code == 0) {
+			$options['0'] = get_string('select', 'local_obu_application');
 		}
-		if (!empty($CFG->country) && array_key_exists($CFG->country, $country_list)) { // Is there a valid country in the configuration?
-			$countries[$CFG->country] = $country_list[$CFG->country]; // If so, make it the first available option on the list
+		foreach ($data->nationalities as $nationality_code => $nationality_name) {
+			$options[$nationality_code] = $nationality_name;
 		}
-		$mform->addElement('select', 'nationality', get_string('nationality', 'local_obu_application'), array_merge($countries, $country_list));
-		$mform->addRule('nationality', null, 'required', null, 'server');
-
-        // Non-EU applicants
-		$mform->addElement('header', 'non_eu_head', get_string('non_eu_head', 'local_obu_application'), '');
-		$mform->addElement('date_selector', 'firstentrydate', get_string('firstentrydate', 'local_obu_application'));
-		$mform->disabledIf('firstentrydate', 'nationality', 'eq', 'GB');
-		$mform->addElement('date_selector', 'lastentrydate', get_string('lastentrydate', 'local_obu_application'));
-		$mform->disabledIf('lastentrydate', 'nationality', 'eq', 'GB');
-		$mform->addElement('date_selector', 'residencedate', get_string('residencedate', 'local_obu_application'));
-		$mform->disabledIf('residencedate', 'nationality', 'eq', 'GB');
-
-        // Disability needs
-		$mform->addElement('header', 'needs_head', get_string('needs_head', 'local_obu_application'), '');
-		$mform->setExpanded('needs_head');
-		$mform->addElement('text', 'support', get_string('support', 'local_obu_application'), 'size="40" maxlength="100"');
-		$mform->setType('support', PARAM_TEXT);
+		$mform->addElement('select', 'nationality_code', get_string('nationality', 'local_obu_application'), $options, null);
+		$mform->addRule('nationality_code', null, 'required', null, 'server');
 
         // Education
 		$mform->addElement('header', 'education_head', get_string('education_head', 'local_obu_application'), '');
@@ -173,6 +152,10 @@ class profile_form extends moodleform {
         global $CFG, $DB;
         $errors = parent::validation($data, $files);
 		
+		if ($data['nationality_code'] == '0') {
+			$errors['nationality_code'] = get_string('value_required', 'local_obu_application');
+		}
+
 		if ($data['criminal_record'] == '0') {
 			$errors['criminal_record'] = get_string('value_required', 'local_obu_application');
 		}

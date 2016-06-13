@@ -83,10 +83,6 @@
         <FIELD NAME="birthdate" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Date of birth"/>
         <FIELD NAME="nationality_code" TYPE="int" LENGTH="4" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Nationality code"/>
         <FIELD NAME="nationality" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Nationality"/>
-        <FIELD NAME="firstentrydate" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Date of first entry to UK"/>
-        <FIELD NAME="lastentrydate" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Date of most recent entry to UK"/>
-        <FIELD NAME="residencedate" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Date granted permanent residence in the EU"/>
-        <FIELD NAME="support" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Preference for specific disability support"/>
         <FIELD NAME="p16school" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Post 16 School name"/>
         <FIELD NAME="p16schoolperiod" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Post 16 School period"/>
         <FIELD NAME="p16fe" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Post 16 Further Education"/>
@@ -137,10 +133,6 @@
         <FIELD NAME="birthdate" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Date of birth"/>
         <FIELD NAME="nationality_code" TYPE="int" LENGTH="4" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Nationality code"/>
         <FIELD NAME="nationality" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Nationality"/>
-        <FIELD NAME="firstentrydate" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Date of first entry to UK"/>
-        <FIELD NAME="lastentrydate" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Date of most recent entry to UK"/>
-        <FIELD NAME="residencedate" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Date granted permanent residence in the EU"/>
-        <FIELD NAME="support" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Preference for specific disability support"/>
         <FIELD NAME="p16school" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Post 16 School name"/>
         <FIELD NAME="p16schoolperiod" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Post 16 School period"/>
         <FIELD NAME="p16fe" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Post 16 Further Education"/>

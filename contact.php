@@ -44,9 +44,11 @@ $PAGE->set_url($url);
 
 $message ='';
 
+$counties = get_counties();
 $parameters = [
 	'user' => read_user($USER->id),
-	'applicant' => read_applicant($USER->id, false)
+	'applicant' => read_applicant($USER->id, false),
+	'counties' => $counties
 ];
 
 $mform = new contact_form(null, $parameters);
@@ -56,6 +58,7 @@ if ($mform->is_cancelled()) {
 } 
 else if ($mform_data = $mform->get_data()) {
 	if ($mform_data->submitbutton == get_string('save', 'local_obu_application')) {
+		$mform_data->county = $counties[$mform_data->domicile_code];
 		write_user($USER->id, $mform_data);
 		write_contact_details($USER->id, $mform_data);
     }

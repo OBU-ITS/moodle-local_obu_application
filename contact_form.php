@@ -37,6 +37,7 @@ class contact_form extends moodleform {
         $data = new stdClass();
 		$data->user = $this->_customdata['user'];
 		$data->applicant = $this->_customdata['applicant'];
+		$data->counties = $this->_customdata['counties'];
 		
 		if ($data->user !== false) {
 			$fields = [
@@ -54,7 +55,7 @@ class contact_form extends moodleform {
 					'address_2' => $data->applicant->address_2,
 					'address_3' => $data->applicant->address_3,
 					'town' => $data->applicant->town,
-					'county' => $data->applicant->county,
+					'domicile_code' => $data->applicant->domicile_code,
 					'postcode' => $data->applicant->postcode
 				];
 				$fields = array_merge($fields, $applicant_fields);
@@ -104,8 +105,15 @@ class contact_form extends moodleform {
 		$mform->setType('town', PARAM_TEXT);
 		$mform->addRule('town', null, 'required', null, 'server');
 
-		$mform->addElement('text', 'county', get_string('county', 'local_obu_application'), 'size="30" maxlength="30"');
-		$mform->setType('county', PARAM_TEXT);
+		$options = [];
+		if ($data->applicant === false) {
+			$options['0'] = get_string('select', 'local_obu_application');
+		}
+		foreach ($data->counties as $domicile_code => $county_name) {
+			$options[$domicile_code] = $county_name;
+		}
+		$mform->addElement('select', 'domicile_code', get_string('county', 'local_obu_application'), $options, null);
+		$mform->addRule('domicile_code', null, 'required', null, 'server');
 
 		$mform->addElement('text', 'postcode', get_string('postcode', 'local_obu_application'), 'size="20" maxlength="20"');
 		$mform->setType('postcode', PARAM_TEXT);
@@ -137,6 +145,10 @@ class contact_form extends moodleform {
         global $CFG, $DB;
         $errors = parent::validation($data, $files);
 		
+		if ($data['domicile_code'] == '0') {
+			$errors['domicile_code'] = get_string('value_required', 'local_obu_application');
+		}
+
 		if ($data['email'] == $data['username']) {
 			if (!validate_email($data['email']) || ($data['email'] != strtolower($data['email']))) {
 				$errors['email'] = get_string('invalidemail');

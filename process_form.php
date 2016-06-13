@@ -55,24 +55,6 @@ class process_form extends moodleform {
 			$date_format = 'd-m-y';
 			date_timestamp_set($date, $data->record->birthdate);
 			$birthdate_formatted = date_format($date, $date_format);
-			if ($data->record->firstentrydate == 0) {
-				$firstentrydate_formatted = '';
-			} else {
-				date_timestamp_set($date, $data->record->firstentrydate);
-				$firstentrydate_formatted = date_format($date, $date_format);
-			}
-			if ($data->record->lastentrydate == 0) {
-				$lastentrydate_formatted = '';
-			} else {
-				date_timestamp_set($date, $data->record->lastentrydate);
-				$lastentrydate_formatted = date_format($date, $date_format);
-			}
-			if ($data->record->residencedate == 0) {
-				$residencedate_formatted = '';
-			} else {
-				date_timestamp_set($date, $data->record->residencedate);
-				$residencedate_formatted = date_format($date, $date_format);
-			}
 			date_timestamp_set($date, $data->record->prof_date);
 			$prof_date_formatted = date_format($date, $date_format);
 			if ($data->record->criminal_record == '1') {
@@ -125,10 +107,6 @@ class process_form extends moodleform {
 				'email' => $data->record->email,
 				'birthdate' => $birthdate_formatted,
 				'nationality' => $data->record->nationality,
-				'firstentrydate' => $firstentrydate_formatted,
-				'lastentrydate' => $lastentrydate_formatted,
-				'residencedate' => $residencedate_formatted,
-				'support' => $data->record->support,
 				'p16school' => $data->record->p16school,
 				'p16schoolperiod' => $data->record->p16schoolperiod,
 				'p16fe' => $data->record->p16fe,
@@ -216,22 +194,6 @@ class process_form extends moodleform {
 			}
 			$mform->addElement('static', 'birthdate', get_string('birthdate', 'local_obu_application'));
 			$mform->addElement('static', 'nationality', get_string('nationality', 'local_obu_application'));
-
-			// Non-EU details
-			$mform->addElement('header', 'non_eu_head', get_string('non_eu_head', 'local_obu_application'), '');
-			if ($data->button_text == 'approve') {
-				$mform->setExpanded('non_eu_head');
-			}
-			$mform->addElement('static', 'firstentrydate', get_string('firstentrydate', 'local_obu_application'));
-			$mform->addElement('static', 'lastentrydate', get_string('lastentrydate', 'local_obu_application'));
-			$mform->addElement('static', 'residencedate', get_string('residencedate', 'local_obu_application'));
-
-			// Support needs
-			$mform->addElement('header', 'needs_head', get_string('needs_head', 'local_obu_application'), '');
-			if ($data->button_text == 'approve') {
-				$mform->setExpanded('needs_head');
-			}
-			$mform->addElement('static', 'support', get_string('support', 'local_obu_application'));
 
 			// Education
 			$mform->addElement('header', 'education_head', get_string('education_head', 'local_obu_application'), '');

@@ -395,6 +395,36 @@ function require_obu_login($courseorid = null, $autologinguest = true, $cm = nul
     user_accesstime_log($course->id);
 }
 
+function get_counties() {
+	
+	$records = file_get_contents('https://tmis.brookes.ac.uk/usms/enrolment_api.domicile1');
+	$records = json_decode($records, true);
+	$counties = array();
+	foreach ($records as $record) {
+		if (($record['AREA'] == 'UK') && ($record['CODE'] != '') && ($record['DESCRIPTION'] != '')) {
+			$counties[$record['CODE']] = $record['DESCRIPTION'];
+		}
+	}
+	asort($counties);	
+	
+	return $counties;	
+}
+
+function get_nationalities() {
+	
+	$records = file_get_contents('https://tmis.brookes.ac.uk/usms/enrolment_api.nationality/get');
+	$records = json_decode($records, true);
+	$nationalities = array();
+	foreach ($records as $record) {
+		if (($record['CODE'] != '') && ($record['DESCRIPTION'] != '')) {
+			$nationalities[$record['CODE']] = $record['DESCRIPTION'];
+		}
+	}
+	asort($nationalities);	
+	
+	return $nationalities;	
+}
+
 function get_course_names() {
 	
 	$courses = array();
@@ -677,12 +707,7 @@ function update_approver($application, $approver_email) {
 	
 	// Notify the next approver (if there is one)
 	if ($approver_email != '') {
-/*		if (strpos($process, 'moodle.brookes') === false) { // We aren't 'live' so suppress spurious email messages
-			if ((strpos($approver_email, 'hls_tester') === false) && (strpos($approver_email, 'brookes.rocks') === false)) { // Not a 'contained' email address so redirect to the HLS Team
-				$approver_email = $hls->email;
-			}
-		}
-*/		$approver = get_complete_user_data('email', strtolower($approver_email));
+		$approver = get_complete_user_data('email', strtolower($approver_email));
 		if ($approver === false) { // Approver hasn't yet registered
 			// Moodle requires a user to send emails to, not just an email address
 			$approver = new Object();
@@ -698,11 +723,11 @@ function update_approver($application, $approver_email) {
 			$approver->alternatename = '';
 		}			
 		if ($approver->email == $hls->email) { // HLS require the course name and will use 'mainstream' Moodle for their approvals
-			$link = '<a href="' . $mdl_process . '">' . $application->course_code . ' ' . $application->course_name . ' (Application Ref HLS/'. $application->id . ')</a>';
+/*			$link = '<a href="' . $mdl_process . '">' . $application->course_code . ' ' . $application->course_name . ' (Application Ref HLS/'. $application->id . ')</a>';
 			$html = get_string('request_approval', 'local_obu_application', $link);
 			email_to_user($approver, $applicant, 'Approval Required: ' . $application->course_code . ' ' . $application->course_name
 				. ' (' . $applicant->firstname . ' ' . $applicant->lastname . ')', html_to_text($html), $html);
-		} else {
+*/		} else {
 			$link = '<a href="' . $process . '">HLS Application (Application Ref HLS/' . $application->id . ')</a>';
 			$html = get_string('request_approval', 'local_obu_application', $link);
 			email_to_user($approver, $applicant, 'Request for HLS Application Approval ('

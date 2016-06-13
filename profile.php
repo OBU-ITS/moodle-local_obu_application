@@ -42,8 +42,6 @@ $PAGE->https_required();
 
 $PAGE->set_url('/local/obu_application/profile.php');
 
-$message = '';
-
 $record = read_applicant($USER->id, false); // May not exist yet
 if (($record === false) || ($record->address_1 == '')) { // Must complete the contact details first
 	$message = get_string('complete_contact_details', 'local_obu_application');
@@ -51,8 +49,10 @@ if (($record === false) || ($record->address_1 == '')) { // Must complete the co
 	$message = '';
 }
 
+$nationalities = get_nationalities();
 $parameters = [
-	'record' => $record
+	'record' => $record,
+	'nationalities' => $nationalities
 ];
 
 $mform = new profile_form(null, $parameters);
@@ -62,6 +62,7 @@ if ($mform->is_cancelled()) {
 } 
 else if ($mform_data = $mform->get_data()) {
 	if ($mform_data->submitbutton == get_string('save', 'local_obu_application')) {
+		$mform_data->nationality = $nationalities[$mform_data->nationality_code];
 		write_profile($USER->id, $mform_data);
 		redirect($url);
     }

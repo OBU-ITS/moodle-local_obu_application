@@ -99,7 +99,7 @@ else if ($mform_data = $mform->get_data()) {
 			$fields['Title'] = $application->title;
 			$fields['Surname'] = $application->lastname;
 			$fields['First_Name'] = $application->firstname;
-			if (($mform_data->xfer_type == 1) || ($mform_data->xfer_type == 3)) {
+			if (($mform_data->xfer_type == 1) || ($mform_data->xfer_type == 3)) { // Admissions
 				if ($mform_data->xfer_type == 3) {
 					$fields['Middle_Name'] = '';
 					$fields['Previous_Family_Name'] = '';
@@ -147,7 +147,39 @@ else if ($mform_data = $mform->get_data()) {
 				$fields['Course_Code'] = $application->course_code;
 				$fields['Course_Name'] = $application->course_name;
 				$fields['Course_Date'] = $application->course_date;
-			} else {
+			} else { // Finance
+				if ($application->self_funding == 1) {
+					$fields['Funding_Method'] = 'Self-funding';
+					$fields['Organisation'] = '';
+					$fields['Funder_Name'] = '';
+				} else {
+					if ($application->funding_method < 2) {
+						$fields['Funding_Method'] = 'Invoice';
+					} else if ($application->funding_method == 2) {
+						$fields['Funding_Method'] = 'Pre-paid';
+					} else {
+						$fields['Funding_Method'] = 'Contract';
+					}
+					$fields['Organisation'] = $application->funding_organisation;
+					if ($application->funding_method == 0) {
+						$fields['Funder_Name'] = '';
+					} else {
+						$fields['Funder_Name'] = $application->funder_name;
+					}
+				}
+				if (($application->self_funding == 1) || ($application->funding_method > 2)){
+					$fields['PO_Number'] = '';
+					$fields['Address'] = '';
+					$fields['Email'] = '';
+					$fields['Phone_No'] = '';
+					$fields['Contact_Name'] = '';
+				} else {
+					$fields['PO_Number'] = 'invoice_ref';
+					$fields['Address'] = 'invoice_address';
+					$fields['Email'] = 'invoice_email';
+					$fields['Phone_No'] = 'invoice_phone';
+					$fields['Contact_Name'] = 'invoice_contact';
+				}
 			}
 
 			if ($index == 0) { // First record

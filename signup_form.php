@@ -35,6 +35,9 @@ class registration_form extends moodleform {
         global $CFG;
 
         $mform = $this->_form;
+		
+        $data = new stdClass();
+		$data->counties = $this->_customdata['counties'];
 
 		// This 'dummy' element has two purposes:
 		// - To force open the Moodle Forms invisible fieldset outside of any table on the form (corrupts display otherwise)
@@ -86,8 +89,13 @@ class registration_form extends moodleform {
 		$mform->setType('town', PARAM_TEXT);
 		$mform->addRule('town', null, 'required', null, 'server');
 
-		$mform->addElement('text', 'county', get_string('county', 'local_obu_application'), 'size="30" maxlength="30"');
-		$mform->setType('county', PARAM_TEXT);
+		$options = [];
+		$options['0'] = get_string('select', 'local_obu_application');
+		foreach ($data->counties as $domicile_code => $county_name) {
+			$options[$domicile_code] = $county_name;
+		}
+		$mform->addElement('select', 'domicile_code', get_string('county', 'local_obu_application'), $options, null);
+		$mform->addRule('domicile_code', null, 'required', null, 'server');
 
 		$mform->addElement('text', 'postcode', get_string('postcode', 'local_obu_application'), 'size="20" maxlength="20"');
 		$mform->setType('postcode', PARAM_TEXT);
@@ -118,6 +126,10 @@ class registration_form extends moodleform {
     function validation($data, $files) {
         global $CFG, $DB;
         $errors = parent::validation($data, $files);
+
+		if ($data['domicile_code'] == '0') {
+			$errors['domicile_code'] = get_string('value_required', 'local_obu_application');
+		}
 
 		if (!validate_email($data['email']) || ($data['email'] != strtolower($data['email']))) {
 			$errors['email'] = get_string('invalidemail');

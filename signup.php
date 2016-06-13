@@ -63,7 +63,12 @@ if (isloggedin()) {
 }
 
 include('./signup_form.php');
-$mform = new registration_form();
+$counties = get_counties();
+$parameters = [
+	'counties' => $counties
+];
+
+$mform = new registration_form(null, $parameters);
 
 if ($mform->is_cancelled()) {
     redirect($login);
@@ -79,6 +84,7 @@ if ($mform->is_cancelled()) {
 		$user->mnethostid = $CFG->mnet_localhost_id;
 		$user->secret = random_string(15);
 		$user->auth = 'email';
+		$user->county = $counties[$user->domicile_code];
 	
 		// Initialize alternate name fields to empty strings.
 		$namefields = array_diff(get_all_user_name_fields(), useredit_get_required_name_fields());

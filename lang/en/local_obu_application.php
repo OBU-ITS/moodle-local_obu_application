@@ -32,7 +32,8 @@ $string['obu_application:admin'] = 'Administer applications in obu_application';
 $string['obu_application:manage'] = 'Manage, view and approve applications in obu_application';
 $string['my_applications'] = 'My HLS applications';
 
-$string['introduction'] = '<h2>First-time users please register here before logging-in</h2>Welcome to the online application service for the Faculty of Health and Life Sciences.  This service is for applicants who wish to apply to study a module with the university or one of 3 graduate certificates; surgical nursing, cancer nursing or palliative care nursing. This category of applicant is known as an Associate Student.
+$string['introduction'] = '<span style=\'color:red\'>Whether you are an applicant, approving manager or funder you will need to register to use this portal.  Once registered you can go directly to log-in for any subsequent visits.</span>
+<h2>First-time users please register here before logging-in</h2>Welcome to the online application service for the Faculty of Health and Life Sciences.  This service is for applicants who wish to apply to study a module with the university or one of 3 graduate certificates; surgical nursing, cancer nursing or palliative care nursing. This category of applicant is known as an Associate Student.
 <p>&nbsp;</p>
 Applicants to certified programmes (by this we mean part time and full time degree, postgraduate certificate/diploma or masters), must apply using UCAS.';
 
@@ -151,13 +152,7 @@ $string['phone'] = 'Phone No';
 $string['profile'] = 'Personal details';
 $string['birth_head'] = 'Date of birth';
 $string['birthdate'] = 'Date of birth';
-$string['nationality'] = 'Country of birth';
-$string['non_eu_head'] = 'Applicants Born Outside the European Union';
-$string['firstentrydate'] = 'Date of first entry to UK';
-$string['lastentrydate'] = 'Date of most recent entry to UK';
-$string['residencedate'] = 'Date granted permanent residence in the EU';
-$string['needs_head'] = 'Disability/Special Needs';
-$string['support'] = 'If your require specific support, please state your preference here';
+$string['nationality'] = 'Nationality';
 $string['education_head'] = 'Educational Establishments Attended';
 $string['period'] = 'Date from and to';
 $string['p16school'] = 'Post 16 School name (if applicable)';
@@ -227,7 +222,10 @@ $string['amendment'] = 'amendment/resubmission';
 $string['submission'] = 'submission';
 $string['approval'] = 'approval';
 
-$string['request_approval'] = 'Could you please approve this {$a} for me or let me know why you couldn\'t do so.  Thank you.';
+$string['request_approval'] = 'A member of staff from your organisation has submitted a request for staff development support in order to attend a course at Oxford Brookes.  
+If you are a manager we are asking you to confirm the appropriateness of your staff member for their chosen course.  
+If you are responsible for staff development and training you will be asked to confirm funding.  
+Please use this link {$a} to register for the Faculty of Health and Life Sciences application portal where you can view this request.  Thank you.';
 
 $string['index_page'] = 'Home';
 $string['your_approvals'] = 'Your pending approvals';

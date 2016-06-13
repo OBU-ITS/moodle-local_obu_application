@@ -318,7 +318,7 @@ function write_contact_details($user_id, $form_data) {
     $record->address_2 = $form_data->address_2;
     $record->address_3 = $form_data->address_3;
     $record->town = $form_data->town;
-    $record->domicile_code = 0;
+    $record->domicile_code = $form_data->domicile_code;
     $record->county = $form_data->county;
     $record->postcode = $form_data->postcode;
 
@@ -344,29 +344,9 @@ function write_profile($user_id, $form_data) {
 	
 	// Update the applicant's profile fields
     $record->birthdate = $form_data->birthdate;
-    $record->nationality_code = 0;
+    $record->nationality_code = $form_data->nationality_code;
     $record->nationality = $form_data->nationality;
-	$today = floor(time() / 86400) * 86400; // Time stamp at 00:00 UTC today
-	$date = floor(($form_data->firstentrydate + 3600) / 86400) * 86400; // Compensate for BST
-    if ($date == $today) { // Not actually entered
-		$record->firstentrydate = 0;
-	} else {
-		$record->firstentrydate = $form_data->firstentrydate;
-	}
-	$date = floor(($form_data->lastentrydate + 3600) / 86400) * 86400; // Compensate for BST
-    if ($date == $today) { // Not actually entered
-		$record->lastentrydate = 0;
-	} else {
-		$record->lastentrydate = $form_data->lastentrydate;
-	}
-	$date = floor(($form_data->residencedate + 3600) / 86400) * 86400; // Compensate for BST
-    if ($date == $today) { // Not actually entered
-		$record->residencedate = 0;
-	} else {
-		$record->residencedate = $form_data->residencedate;
-	}
-    $record->support = $form_data->support;
-    $record->p16school = $form_data->p16school;
+	$record->p16school = $form_data->p16school;
     $record->p16schoolperiod = $form_data->p16schoolperiod;
     $record->p16fe = $form_data->p16fe;
     $record->p16feperiod = $form_data->p16feperiod;
@@ -457,10 +437,6 @@ function write_application($user_id, $form_data) {
     $record->birthdate = $applicant->birthdate;
 	$record->nationality_code = $applicant->nationality_code;
     $record->nationality = $applicant->nationality;
-    $record->firstentrydate = $applicant->firstentrydate;
-    $record->lastentrydate = $applicant->lastentrydate;
-    $record->residencedate = $applicant->residencedate;
-    $record->support = $applicant->support;
     $record->p16school = $applicant->p16school;
     $record->p16schoolperiod = $applicant->p16schoolperiod;
     $record->p16fe = $applicant->p16fe;

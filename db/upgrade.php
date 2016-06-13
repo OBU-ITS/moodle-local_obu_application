@@ -134,10 +134,6 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		$table->add_field('birthdate', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
 		$table->add_field('nationality_code', XMLDB_TYPE_INTEGER, '4', null, null, null, '0');
 		$table->add_field('nationality', XMLDB_TYPE_CHAR, '100', null, null, null, null);
-		$table->add_field('firstentrydate', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
-		$table->add_field('lastentrydate', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
-		$table->add_field('residencedate', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
-		$table->add_field('support', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('p16school', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('p16schoolperiod', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('p16fe', XMLDB_TYPE_CHAR, '100', null, null, null, null);
@@ -193,10 +189,6 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		$table->add_field('birthdate', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
 		$table->add_field('nationality_code', XMLDB_TYPE_INTEGER, '4', null, null, null, '0');
 		$table->add_field('nationality', XMLDB_TYPE_CHAR, '100', null, null, null, null);
-		$table->add_field('firstentrydate', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
-		$table->add_field('lastentrydate', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
-		$table->add_field('residencedate', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
-		$table->add_field('support', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('p16school', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('p16schoolperiod', XMLDB_TYPE_CHAR, '100', null, null, null, null);
 		$table->add_field('p16fe', XMLDB_TYPE_CHAR, '100', null, null, null, null);
