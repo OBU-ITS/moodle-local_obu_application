@@ -63,7 +63,7 @@ foreach ($approvals as $approval) {
 	if (($approver_email != '') || ($approval->approver != $approver->email)) {
 		$application = read_application($approval->application_id);
 		get_application_status($USER->id, $application, $text, $button); // get the approval trail and the next action (from the user's perspective)
-		echo '<h4><a href="' . $process . '?id=' . $application->id . '">' . $application->course_code . ' ' . $application->course_name . ' (Application Ref HLS/' . $application->id . ')</a></h4>';
+		echo '<h4><a href="' . $process . '?id=' . $application->id . '">' . $application->course_code . ' ' . $application->course_name . ' (' . $application->lastname . ' - HLS/' . $application->id . ')</a></h4>';
 		echo $text;
 		if ($application->approval_level < 3) { // Can't redirect away from final HLS approval/processing
 			echo '<p><a href="' . $redirect . '?id=' . $application->id . '">' . get_string('redirect_application', 'local_obu_application') . '</a></p>';

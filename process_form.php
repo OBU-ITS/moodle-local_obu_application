@@ -306,7 +306,7 @@ class process_form extends moodleform {
 			$mform->addElement('text', 'funder_email', get_string('email'), 'size="40" maxlength="100"');
 			$mform->setType('funder_email', PARAM_RAW_TRIMMED);
 			$mform->disabledIf('funder_email', 'funding_organisation', 'neq', '0');
-			$mform->addElement('text', 'funder_email2', get_string('emailagain'), 'size="40" maxlength="100"');
+			$mform->addElement('text', 'funder_email2', get_string('confirm_email', 'local_obu_application'), 'size="40" maxlength="100"');
 			$mform->setType('funder_email2', PARAM_RAW_TRIMMED);
 			$mform->disabledIf('funder_email2', 'funding_organisation', 'neq', '0');
 		} else if (($approval_sought > 1) && ($data->record->self_funding == '0')) { // Approving funder must enter the funding details and HLS approver must see them

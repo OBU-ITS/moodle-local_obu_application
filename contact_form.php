@@ -106,7 +106,7 @@ class contact_form extends moodleform {
 		$mform->addRule('town', null, 'required', null, 'server');
 
 		$options = [];
-		if ($data->applicant === false) {
+		if (($data->applicant === false) || ($data->applicant->domicile_code == 0)) {
 			$options['0'] = get_string('select', 'local_obu_application');
 		}
 		foreach ($data->counties as $domicile_code => $county_name) {
@@ -132,7 +132,7 @@ class contact_form extends moodleform {
 			$mform->setType('email', PARAM_RAW_TRIMMED);
 			$mform->addRule('email', get_string('missingemail'), 'required', null, 'server');
 
-			$mform->addElement('text', 'username', get_string('emailagain'), 'size="25" maxlength="100"');
+			$mform->addElement('text', 'username', get_string('confirm_email', 'local_obu_application'), 'size="25" maxlength="100"');
 			$mform->setType('username', PARAM_RAW_TRIMMED);
 			$mform->addRule('username', get_string('missingemail'), 'required', null, 'server');
 		}

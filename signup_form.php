@@ -36,9 +36,6 @@ class registration_form extends moodleform {
 
         $mform = $this->_form;
 		
-        $data = new stdClass();
-		$data->counties = $this->_customdata['counties'];
-
 		// This 'dummy' element has two purposes:
 		// - To force open the Moodle Forms invisible fieldset outside of any table on the form (corrupts display otherwise)
 		// - To let us inform the user that there are validation errors without them having to scroll down further
@@ -50,7 +47,7 @@ class registration_form extends moodleform {
 		$mform->setType('email', PARAM_RAW_TRIMMED);
 		$mform->addRule('email', get_string('missingemail'), 'required', null, 'server');
 
-		$mform->addElement('text', 'username', get_string('emailagain'), 'size="25" maxlength="100"');
+		$mform->addElement('text', 'username', get_string('confirm_email', 'local_obu_application'), 'size="25" maxlength="100"');
 		$mform->setType('username', PARAM_RAW_TRIMMED);
 		$mform->addRule('username', get_string('missingemail'), 'required', null, 'server');
 
@@ -75,32 +72,6 @@ class registration_form extends moodleform {
 		$mform->setType('lastname', PARAM_TEXT);
 		$mform->addRule('lastname', null, 'required', null, 'server');
 		
-		$mform->addElement('text', 'address_1', get_string('address_1', 'local_obu_application'), 'size="30" maxlength="50"');
-		$mform->setType('address_1', PARAM_TEXT);
-		$mform->addRule('address_1', null, 'required', null, 'server');
-
-		$mform->addElement('text', 'address_2', get_string('address_2', 'local_obu_application'), 'size="30" maxlength="50"');
-		$mform->setType('address_2', PARAM_TEXT);
-
-		$mform->addElement('text', 'address_3', get_string('address_3', 'local_obu_application'), 'size="30" maxlength="50"');
-		$mform->setType('address_3', PARAM_TEXT);
-
-		$mform->addElement('text', 'town', get_string('town', 'local_obu_application'), 'size="30" maxlength="50"');
-		$mform->setType('town', PARAM_TEXT);
-		$mform->addRule('town', null, 'required', null, 'server');
-
-		$options = [];
-		$options['0'] = get_string('select', 'local_obu_application');
-		foreach ($data->counties as $domicile_code => $county_name) {
-			$options[$domicile_code] = $county_name;
-		}
-		$mform->addElement('select', 'domicile_code', get_string('county', 'local_obu_application'), $options, null);
-		$mform->addRule('domicile_code', null, 'required', null, 'server');
-
-		$mform->addElement('text', 'postcode', get_string('postcode', 'local_obu_application'), 'size="20" maxlength="20"');
-		$mform->setType('postcode', PARAM_TEXT);
-		$mform->addRule('postcode', null, 'required', null, 'server');
-
 		$mform->addElement('text', 'phone1', get_string('phone', 'local_obu_application'), 'size="20" maxlength="20"');
 		$mform->setType('phone1', PARAM_TEXT);
 		$mform->addRule('phone1', null, 'required', null, 'server');
@@ -126,10 +97,6 @@ class registration_form extends moodleform {
     function validation($data, $files) {
         global $CFG, $DB;
         $errors = parent::validation($data, $files);
-
-		if ($data['domicile_code'] == '0') {
-			$errors['domicile_code'] = get_string('value_required', 'local_obu_application');
-		}
 
 		if (!validate_email($data['email']) || ($data['email'] != strtolower($data['email']))) {
 			$errors['email'] = get_string('invalidemail');

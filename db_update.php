@@ -314,13 +314,15 @@ function write_contact_details($user_id, $form_data) {
 	
 	// Update the applicant's title and address details
     $record->title = $form_data->title;
-    $record->address_1 = $form_data->address_1;
-    $record->address_2 = $form_data->address_2;
-    $record->address_3 = $form_data->address_3;
-    $record->town = $form_data->town;
-    $record->domicile_code = $form_data->domicile_code;
-    $record->county = $form_data->county;
-    $record->postcode = $form_data->postcode;
+	if ($form_data->address_1 != '') { // Check we are updating full Contact Details and not Signin sub-set
+		$record->address_1 = $form_data->address_1;
+		$record->address_2 = $form_data->address_2;
+		$record->address_3 = $form_data->address_3;
+		$record->town = $form_data->town;
+		$record->domicile_code = $form_data->domicile_code;
+		$record->county = $form_data->county;
+		$record->postcode = $form_data->postcode;
+	}
 
 	if ($record->id == 0) { // New record
 		$id = $DB->insert_record('local_obu_applicant', $record);

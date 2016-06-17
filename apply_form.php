@@ -43,11 +43,14 @@ class apply_form extends moodleform {
 
         $mform->addElement('header', 'manager_to_approve', get_string('manager_to_approve', 'local_obu_application'), '');
 		
+		// Bucks Healthcare want to bypass the manager's approval stage
+		$mform->addElement('static', 'bucks_email', get_string('bucks_email', 'local_obu_application'));
+		
 		$mform->addElement('text', 'email', get_string('email'), 'size="25" maxlength="100"');
 		$mform->setType('email', PARAM_RAW_TRIMMED);
 		$mform->addRule('email', get_string('missingemail'), 'required', null, 'server');
 
-		$mform->addElement('text', 'emailagain', get_string('emailagain'), 'size="25" maxlength="100"');
+		$mform->addElement('text', 'emailagain', get_string('confirm_email', 'local_obu_application'), 'size="25" maxlength="100"');
 		$mform->setType('emailagain', PARAM_RAW_TRIMMED);
 		$mform->addRule('emailagain', get_string('missingemail'), 'required', null, 'server');
 		

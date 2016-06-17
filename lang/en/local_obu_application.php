@@ -112,7 +112,7 @@ $string['process'] = 'Process';
 $string['continue'] = 'Continue';
 $string['approve'] = 'Approve';
 $string['reject'] = 'Reject';
-$string['comment'] = 'Comment or Reason for Rejection';
+$string['comment'] = 'Comment or Reason for Rejection (for Applicant)';
 
 $string['supplement'] = 'Supplement';
 $string['suppref'] = 'Supplement Ref';
@@ -138,18 +138,19 @@ $string['status_processed'] = 'Has been processed.';
 $string['preregistered'] = '<strong>NOTE:</strong> If you have a \'brookes.ac.uk\' email address you are pre-registered.  Click <a href="/local/obu_application/mdl_login.php">here</a> to login.';
 $string['emailandpassword'] = 'Please enter your NHS (or preferred) email address (lowercase only) and choose a password';
 $string['newemail'] = 'Email (Note - you would need to use any new address to log in)';
+$string['confirm_email'] = 'Confirm email';
 $string['contactdetails'] = 'Contact details';
 $string['applicantdetails'] = 'Applicant contact details';
-$string['name'] = 'Name';
 $string['title'] = 'Title';
+$string['name'] = 'Name';
+$string['phone'] = 'Phone No';
+$string['profile'] = 'Personal details';
 $string['address_1'] = 'Address 1';
 $string['address_2'] = 'Address 2';
 $string['address_3'] = 'Address 3';
 $string['town'] = 'Town';
 $string['county'] = 'County';
 $string['postcode'] = 'Postcode';
-$string['phone'] = 'Phone No';
-$string['profile'] = 'Personal details';
 $string['birth_head'] = 'Date of birth';
 $string['birthdate'] = 'Date of birth';
 $string['nationality'] = 'Nationality';
@@ -185,6 +186,7 @@ $string['attachments'] = 'Attachments';
 $string['apply'] = 'Apply';
 $string['complete_course'] = 'Please complete your course first';
 $string['manager_to_approve'] = 'Manager to approve';
+$string['bucks_email'] = 'NOTE - Staff from Bucks Healthcare should use LBR@buckshealthcare.nhs.uk instead of a manager\'s email address.';
 $string['self_funding'] = 'Self-funding';
 $string['self_funding_text'] = 'Are you a self-funding applicant?';
 $string['declaration'] = 'Declaration';
@@ -230,6 +232,7 @@ Please use this link {$a} to register for the Faculty of Health and Life Science
 $string['index_page'] = 'Home';
 $string['your_approvals'] = 'Your pending approvals';
 $string['your_applications'] = 'Your applications (please quote the HLS application reference in any communication)';
+$string['amend_application'] = 'If you need to amend any details of an application once you have submitted it then you will need to contact the Faculty on 01865 482779 or pacreception@brookes.ac.uk and ask to speak with the administrator for your course.';
 
 $string['logout'] = 'Log out';
 
