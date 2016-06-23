@@ -27,7 +27,7 @@
  
 require_once($CFG->dirroot . '/local/obu_application/db_update.php');
 
-function local_obu_application_extends_navigation($navigation) {
+function local_obu_application_extend_navigation($navigation) {
     global $CFG, $USER;
 	
 	if (!isloggedin() || isguestuser()) {

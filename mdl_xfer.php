@@ -151,6 +151,7 @@ else if ($mform_data = $mform->get_data()) {
 				if ($application->self_funding == 1) {
 					$fields['Funding_Method'] = 'Self-funding';
 					$fields['Organisation'] = '';
+					$fields['Contract'] = '';
 					$fields['Funder_Name'] = '';
 				} else {
 					if ($application->funding_method < 2) {
@@ -161,6 +162,16 @@ else if ($mform_data = $mform->get_data()) {
 						$fields['Funding_Method'] = 'Contract';
 					}
 					$fields['Organisation'] = $application->funding_organisation;
+					if ($application->funding_method < 3) {
+						$fields['Contract'] = '';
+					} else {
+						$organisation = read_organisation($application->funding_id);
+						if ($organisation == null) {
+							$fields['Contract'] = 'NONE';
+						} else {
+							$fields['Contract'] = $organisation->code;
+						}
+					}
 					if ($application->funding_method == 0) {
 						$fields['Funder_Name'] = '';
 					} else {
@@ -200,7 +211,8 @@ else if ($mform_data = $mform->get_data()) {
 		
 		// Update the parameter record if necessary
 		if ($xfer_id > $param->number) {
-			write_parameter($param->name, $xfer_id);
+			$param->number = $xfer_id;
+			write_parameter($param);
 		}
 		
 		exit();

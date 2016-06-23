@@ -104,7 +104,7 @@ class mdl_param_form extends moodleform {
 			if ($data['name'] == '') {
 				$errors['name'] = get_string('value_required', 'local_obu_application');
 			}
-			if (($data['number'] == '0') && ($data['text'] == '')) {
+			if (($data['number'] == '') && ($data['text'] == '')) {
 				$errors['number'] = get_string('value_required', 'local_obu_application');
 				$errors['text'] = get_string('value_required', 'local_obu_application');
 			}
