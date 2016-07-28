@@ -67,9 +67,9 @@ else if ($mform_data = $mform->get_data()) {
 	$xfers = array();
 	foreach ($applications as $application) {
 		if ((($application->approval_level == 3) && ($application->approval_state == 2)) // Approved by HLS so is/was OK to go...
-			&& (((($mform_data->xfer_type == 1) ) && (($application->admissions_id == 0) || ($application->admissions_id == $xfer_id)))
-			|| (($mform_data->xfer_type == 2) && (($application->finance_id == 0) || ($application->finance_id == $xfer_id)))
-			|| (($mform_data->xfer_type == 3) && ($application->admissions_id == $xfer_id)))) {
+			&& (((($mform_data->xfer_type == 1) ) && (($application->admissions_xfer == 0) || ($application->admissions_xfer == $xfer_id))) // Admissions
+			|| (($mform_data->xfer_type == 2) && (($application->finance_xfer == 0) || ($application->finance_xfer == $xfer_id))) // Finance
+			|| (($mform_data->xfer_type == 3) && ($application->admissions_xfer == $xfer_id)))) { // 'Process' (admissions data processing)
 				$xfers[] = $application->id;
 		}
 	}
@@ -199,11 +199,11 @@ else if ($mform_data = $mform->get_data()) {
 			fputcsv($fp, $fields, $delimiter);
 			
 			// Flag the application as processed
-			if (($mform_data->xfer_type == 1) && ($application->admissions_id == 0)) {
-				$application->admissions_id = $xfer_id;
+			if (($mform_data->xfer_type == 1) && ($application->admissions_xfer == 0)) {
+				$application->admissions_xfer = $xfer_id;
 				update_application($application);
-			} else if (($mform_data->xfer_type == 2) && ($application->finance_id == 0)) {
-				$application->finance_id = $xfer_id;
+			} else if (($mform_data->xfer_type == 2) && ($application->finance_xfer == 0)) {
+				$application->finance_xfer = $xfer_id;
 				update_application($application);
 			}
 		}
