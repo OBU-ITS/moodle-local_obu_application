@@ -185,11 +185,11 @@ else if ($mform_data = $mform->get_data()) {
 					$fields['Phone_No'] = '';
 					$fields['Contact_Name'] = '';
 				} else {
-					$fields['PO_Number'] = 'invoice_ref';
-					$fields['Address'] = 'invoice_address';
-					$fields['Email'] = 'invoice_email';
-					$fields['Phone_No'] = 'invoice_phone';
-					$fields['Contact_Name'] = 'invoice_contact';
+					$fields['PO_Number'] = $application->invoice_ref;
+					$fields['Address'] = $application->invoice_address;
+					$fields['Email'] = $application->invoice_email;
+					$fields['Phone_No'] = $application->invoice_phone;
+					$fields['Contact_Name'] = $application->invoice_contact;
 				}
 			}
 
