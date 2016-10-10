@@ -28,7 +28,7 @@
 $CFG->sessioncookie = 'email';
 
 // Add our own CSS - mainly to hide the standard Moodle page elements
-$CFG->additionalhtmlhead .= '<style>.langmenu, .usermenu, .logininfo, .homelink, .page-context-header, .breadcrumb, .helplink { display: none; } .nav { color: white; } .navbar-inverse .nav .divider { border-left-color: #e5e5e5; border-right-color: white; } a.brand { pointer-events: none; }</style>';
+$CFG->additionalhtmlhead .= '<style>.langmenu, .usermenu, .logininfo, .homelink, .page-context-header, .breadcrumb, .helplink, .footerlinks, .dropdown { display: none; } .nav { color: white; } .navbar-inverse .nav .divider { border-left-color: #e5e5e5; border-right-color: white; } a.brand { pointer-events: none; } .navbar .nav > li >a, .pull-right { color: #0085a1; } .navbar .nav .divider { border-left-color: #0085a1; }</style>';
 
 // Add our own menu items for logged-in users
 if (!isloggedin()) {
@@ -46,21 +46,19 @@ if (!isloggedin()) {
 	' . get_string('apply', 'local_obu_application') . '|/local/obu_application/course.php
 	#####
 	' . get_string('logout', 'local_obu_application') . '|/local/obu_application/logout.php?loginpage=1';
+	
+	if (strpos($USER->email, '@brookes.ac.uk') !== false) {
+		$CFG->custommenuitems .= '
+		#####
+		Moodle|/';
+	}
 }
 
-if (isset($USER) && (strpos($USER->email, '@brookes.ac.uk') !== false)) {
-	$CFG->custommenuitems .= '
-	#####
-	Moodle|/';
-}
 
 
 // Set our own page heading (non-standard $CFG variable)
 $CFG->pageheading = get_string('plugintitle', 'local_obu_application');
 $PAGE->set_headingmenu('<h1>' . $CFG->pageheading . '</h1>');
 $PAGE->set_heading($CFG->pageheading);
-
-// Add our own footer elements
-$CFG->additionalhtmlfooter .= '<center>©' . date('Y') . ', Oxford Brookes University</center>';
 
 ?>

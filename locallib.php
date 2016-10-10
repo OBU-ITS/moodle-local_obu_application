@@ -97,8 +97,6 @@ function application_user_confirm($username, $confirmsecret) { // Derived from e
 function send_application_confirmation_email($user) {
 	global $CFG;
 
-	$supportuser = core_user::get_support_user();
-
 	$data = new stdClass();
 	$data->firstname = fullname($user);
 	$data->sitename = format_string($CFG->pageheading);
@@ -106,7 +104,7 @@ function send_application_confirmation_email($user) {
 
 	$subject = get_string('emailconfirmationsubject', '', $data->sitename);
 	$username = urlencode($user->username);
-	$username = str_replace('.', '%2E', $username); // Prevent problems with trailing dots.
+	$username = str_replace('.', '%2E', $username); // Prevent problems with trailing dots
 	$link = $CFG->wwwroot . '/local/obu_application/confirm.php?data=' . $user->secret . '/' . $username;
 	$data->link = '<a href="' . $link . '">' . $link . '</a>';
 	$message = get_string('emailconfirmation', '', $data);
@@ -114,8 +112,14 @@ function send_application_confirmation_email($user) {
 
 	$user->mailformat = 1;  // Always send HTML version as well.
 
-	// Directly email rather than using the messaging system to ensure its not routed to a popup or jabber.
-	return email_to_user($user, $supportuser, $subject, $message, $messagehtml);
+	// Send from HLS
+	$hls = get_complete_user_data('username', 'hls');
+    $hls->customheaders = array ( // Headers to help prevent auto-responders
+		'Precedence: Bulk',
+		'X-Auto-Response-Suppress: All',
+		'Auto-Submitted: auto-generated'
+	);
+	return email_to_user($user, $hls, $subject, $message, $messagehtml);
 }
 
 function authenticate_application_user($username, $password, $ignorelockout = false, &$failurereason = null) {
@@ -1122,7 +1126,17 @@ function update_approver($application, $approver_email) {
 
 	// Email the new status to the applicant and to the HLS Team (if not the next approver)
 	$applicant = get_complete_user_data('id', $application->userid);
+    $applicant->customheaders = array ( // Headers to help prevent auto-responders
+		'Precedence: Bulk',
+		'X-Auto-Response-Suppress: All',
+		'Auto-Submitted: auto-generated'
+	);
 	$hls = get_complete_user_data('username', 'hls');
+    $hls->customheaders = array ( // Headers to help prevent auto-responders
+		'Precedence: Bulk',
+		'X-Auto-Response-Suppress: All',
+		'Auto-Submitted: auto-generated'
+	);
 	get_application_status($applicant->id, $application, $text, $button_text); // Get the status from the applicant's perspective
 	$html = '<h4><a href="' . $process . '">HLS Application (Ref HLS/' . $application->id . ')</a></h4>' . $text;
 	email_to_user($applicant, $hls, 'The Status of Your HLS Application (Ref HLS/' . $application->id . ')', html_to_text($html), $html);
