@@ -32,22 +32,22 @@ $string['obu_application:admin'] = 'Administer applications in obu_application';
 $string['obu_application:manage'] = 'Manage, view and approve applications in obu_application';
 $string['my_applications'] = 'My HLS applications';
 
-$string['introduction'] = '<span style=\'color:red\'>Whether you are an applicant, approving manager or funder you will need to register to use this portal.  Once registered you can go directly to log-in for any subsequent visits.</span>
+$string['introduction'] = '<span style=\'color:red\'>Whether you are an applicant, manager or funder you will need to register to use this portal.  Once registered you can go directly to log-in for any subsequent visits.</span>
 <h2>First-time users please register here before logging-in</h2>Welcome to the online application service for the Faculty of Health and Life Sciences.  This service is for applicants who wish to apply to study a module with the university or one of 3 graduate certificates; surgical nursing, cancer nursing or palliative care nursing. This category of applicant is known as an Associate Student.
 <p>&nbsp;</p>
 Applicants to certified programmes (by this we mean part time and full time degree, postgraduate certificate/diploma or masters), must apply using UCAS.';
 
 $string['page_content'] = '<h2>If You Wish To Apply</h2>
-The information you will need in order to complete your application includes the correct name of the course you are applying for and your manager\'s email address.
+The information you will need in order to complete your application includes the correct name of the course you are applying for and, if you aren\'t self-funding, the details of your funder.
 <p>&nbsp;</p>
 Using the tabs above, please:
 <ul>
 <li>Check that your contact details are correct and up-to-date</li>
 <li>Enter your personal details (including education history and professional qualifications)</li>
-<li>Click \'Apply\' to enter details of the course that you wish to undertake, supply the email of the manager who will approve it and submit your application</li>
+<li>Click \'Apply\' to enter details of the course that you wish to undertake, supply the funding details and submit your application</li>
 </ul>
 <p>
-Once you have submitted your application your manager will receive a request to support your plans.  This request will be delivered to your manager\'s email address as provided by you.  If your request is supported by your manager, and you are also seeking funding support, your manager will then submit your application to your organisation\'s staff development and funding team/department.  If your funding is approved your full application will be submitted to the Faculty of Health and Life Sciences for consideration.
+Once you have submitted your application your funder (if any) will receive a request to support your plans. This request will be delivered to their organisation or to their email address as provided by you. If your request is supported then your application will be submitted to the Faculty of Health and Life Sciences for consideration.
 </p>';
 
 $string['application_approvals'] = 'Application approvals';
