@@ -67,6 +67,7 @@ else if (!isset($record->course_code) || ($record->course_code === '')) { // The
 }
 
 $parameters = [
+	'organisations' => get_organisations(),
 	'record' => $record
 ];
 
@@ -78,6 +79,11 @@ if ($mform->is_cancelled()) {
 else if ($mform_data = $mform->get_data()) {
 	if ($mform_data->submitbutton == get_string('apply', 'local_obu_application')) {
 		$application_id = write_application($USER->id, $mform_data);
+		
+		// Code required to skip the 'manager' level authorisation
+		$application = read_application($application_id);
+		update_workflow($application, true, $mform_data);
+
 		redirect($process_url . '?id=' . $application_id); // Kick-off the workflow process
     }
 }	

@@ -920,18 +920,20 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 			}
 			$text .= ' ' . $application->approval_1_comment . '<br />';
 		} else if ($application->approval_level > 1) {
-			date_timestamp_set($date, $application->approval_1_date);
-			$text .= date_format($date, $format) . ' ';
-			$approver = get_complete_user_data('email', strtolower($application->manager_email));
-			if ($approver === false) {
-				$name = $application->manager_email;
-			} else if ($approver->id == $user_id) {
-				$name = 'you';
-			} else {
-				$name = $approver->firstname . ' ' . $approver->lastname . ' (' . $approver->email . ')';
+			if ($application->manager_email != '') {
+				date_timestamp_set($date, $application->approval_1_date);
+				$text .= date_format($date, $format) . ' ';
+				$approver = get_complete_user_data('email', strtolower($application->manager_email));
+				if ($approver === false) {
+					$name = $application->manager_email;
+				} else if ($approver->id == $user_id) {
+					$name = 'you';
+				} else {
+					$name = $approver->firstname . ' ' . $approver->lastname . ' (' . $approver->email . ')';
+				}
+				$text .= get_string('actioned_by', 'local_obu_application', array('action' => get_string('approved', 'local_obu_application'), 'by' => $name));
+				$text .= ' ' . $application->approval_1_comment . '<br />';
 			}
-			$text .= get_string('actioned_by', 'local_obu_application', array('action' => get_string('approved', 'local_obu_application'), 'by' => $name));
-			$text .= ' ' . $application->approval_1_comment . '<br />';
 			if (($application->approval_level == 2) && ($application->approval_state > 0)) { // The workflow ended here
 				date_timestamp_set($date, $application->approval_2_date);
 				$text .= date_format($date, $format) . ' ';
@@ -979,6 +981,14 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 						$text .= get_string('actioned_by', 'local_obu_application', array('action' => get_string('approved', 'local_obu_application'), 'by' => $name));
 					}
 					$text .= ' ' . $application->approval_3_comment . '<br />';
+					if ($manager) {
+						if ($application->admissions_xfer > 0) {
+							$text .= get_string('admissions', 'local_obu_application') . ' ' . get_string('data_xfer', 'local_obu_application') . ': ' .$application->admissions_xfer . '<br />';
+						}
+						if ($application->finance_xfer > 0) {
+							$text .= get_string('finance', 'local_obu_application') . ' ' . get_string('data_xfer', 'local_obu_application') . ': ' . $application->finance_xfer . '<br />';
+						}
+					}
 				}
 			}
 		}
@@ -1038,14 +1048,15 @@ function update_workflow(&$application, $approved = true, $data = null) {
 	
 	// Update the application record
 	if ($application->approval_level == 0) { // Being submitted
-		$application->approval_level = 1;
+/*		$application->approval_level = 1;
 		$approver_email = $application->manager_email;
 	} else if ($application->approval_level == 1) { // Manager
 		$application->approval_1_comment = $data->comment;
 		$application->approval_1_date = time();
 		if (!$approved) {
 			$application->approval_state = 1; // Rejected
-		} else if ($application->self_funding == 0) {
+		} else*/
+		if ($application->self_funding == 0) {
 			$application->approval_level = 2; // Funder
 			$application->funding_id = $data->funding_organisation;
 			if ($application->funding_id == 0) { // 'Other Organisation'
@@ -1126,13 +1137,15 @@ function update_approver($application, $approver_email) {
 
 	// Email the new status to the applicant and to the HLS Team (if not the next approver)
 	$applicant = get_complete_user_data('id', $application->userid);
-    $applicant->customheaders = array ( // Headers to help prevent auto-responders
+	$hls = get_complete_user_data('username', 'hls');
+    $applicant->customheaders = array ( // Headers to help both redirect bounces and suppress auto-responders
+		'Sender: ' . $hls->email,
 		'Precedence: Bulk',
 		'X-Auto-Response-Suppress: All',
 		'Auto-Submitted: auto-generated'
 	);
-	$hls = get_complete_user_data('username', 'hls');
-    $hls->customheaders = array ( // Headers to help prevent auto-responders
+    $hls->customheaders = array ( // Headers to help both redirect bounces and suppress auto-responders
+		'Sender: ' . $hls->email,
 		'Precedence: Bulk',
 		'X-Auto-Response-Suppress: All',
 		'Auto-Submitted: auto-generated'

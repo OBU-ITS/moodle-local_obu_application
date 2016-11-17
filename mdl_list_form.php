@@ -31,7 +31,7 @@ class mdl_list_form extends moodleform {
     function definition() {
         $mform =& $this->_form;
 		
-		$mform->addElement('text', 'email', get_string('email'), 'size="40" maxlength="100"');
+		$mform->addElement('text', 'lastname', get_string('lastname'), 'size="30" maxlength="100"');
 
         $this->add_action_buttons(true, get_string('continue', 'local_obu_forms'));
     }
@@ -39,13 +39,12 @@ class mdl_list_form extends moodleform {
 	function validation($data, $files) {
 		$errors = parent::validation($data, $files); // Ensure we don't miss errors from any higher-level validation
 		
-		// Do our own validation and add errors to array
-		foreach ($data as $key => $value) {
-			if ($key == 'email') {
-				$user = get_complete_user_data('email', $value);
-				if ($user === false) {
-					$errors[$key] = get_string('user_not_found', 'local_obu_application');
-				}
+		if ($data['lastname'] == '') {
+			$errors['lastname'] = get_string('value_required', 'local_obu_application');
+		} else {
+			$applicants = get_applicants_by_name($data['lastname']);
+			if (count($applicants) == 0) {
+				$errors['lastname'] = get_string('user_not_found', 'local_obu_application');
 			}
 		}
 		

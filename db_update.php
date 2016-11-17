@@ -238,6 +238,7 @@ function write_organisation($organisation) {
 	$record->name = $organisation->name;
 	$record->email = $organisation->email;
 	$record->code = $organisation->code;
+	$record->address = $organisation->address;
 
 	if ($id == '0') {
 		$id = $DB->insert_record('local_obu_organisation', $record);
@@ -286,6 +287,17 @@ function write_user($user_id, $form_data) {
 		
 	user_update_user($user, false, true);
 	profile_save_data($user); // Save custom profile data
+}
+
+function get_applicants_by_name($lastname) {
+    global $DB;
+    
+	$sql = 'SELECT DISTINCT a.userid, a.firstname, a.lastname '
+		. 'FROM {local_obu_application} a '
+		. 'WHERE a.lastname LIKE "' . $lastname . '%" '
+		. 'ORDER BY a.userid';
+	
+	return $DB->get_records_sql($sql, array());
 }
 
 function read_applicant($user_id, $must_exist) {
@@ -470,9 +482,9 @@ function write_application($user_id, $form_data) {
 	}
 	
 	// Final details
-    $record->self_funding = $form_data->self_funding;
-    $record->manager_email = $form_data->email;
-    if (isset($form_data->declaration)) { // Only set if checked
+	$record->self_funding = $form_data->self_funding;
+//	$record->manager_email = $form_data->email;
+	if (isset($form_data->declaration)) { // Only set if checked
 		$record->declaration = 1;
 	} else {
 		$record->declaration = 0;

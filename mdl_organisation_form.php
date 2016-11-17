@@ -45,7 +45,8 @@ class mdl_organisation_form extends moodleform {
 			$fields = [
 				'name' => $data->record->name,
 				'email' => $data->record->email,
-				'code' => $data->record->code
+				'code' => $data->record->code,
+				'address' => $data->record->address
 			];
 			$this->set_data($fields);
 		}
@@ -71,6 +72,7 @@ class mdl_organisation_form extends moodleform {
 			$mform->addElement('static', 'name', get_string('name', 'local_obu_application'));
 			$mform->addElement('static', 'email', get_string('funder_email', 'local_obu_application'));
 			$mform->addElement('static', 'code', get_string('contract_code', 'local_obu_application'));
+			$mform->addElement('static', 'address', get_string('address'));
 		} else {
 			$mform->addElement('text', 'name', get_string('name', 'local_obu_application'), 'size="50" maxlength="100"');
 			$mform->setType('name', PARAM_TEXT);
@@ -78,6 +80,8 @@ class mdl_organisation_form extends moodleform {
 			$mform->setType('email', PARAM_TEXT);
 			$mform->addElement('text', 'code', get_string('contract_code', 'local_obu_application'), 'size="10" maxlength="10"');
 			$mform->setType('code', PARAM_TEXT);
+			$mform->addElement('textarea', 'address', get_string('address'), 'cols="40" rows="5"');
+			$mform->setType('address', PARAM_TEXT);
 		}
 
 		// Options
@@ -109,6 +113,9 @@ class mdl_organisation_form extends moodleform {
 			}
 			if ($data['code'] == '') {
 				$errors['code'] = get_string('value_required', 'local_obu_application');
+			}
+			if ($data['address'] == '') {
+				$errors['address'] = get_string('value_required', 'local_obu_application');
 			}
 		}
 		

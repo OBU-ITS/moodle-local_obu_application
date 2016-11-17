@@ -36,11 +36,15 @@ class apply_form extends moodleform {
 		
         $mform =& $this->_form;
 
+        $data = new stdClass();
+		$data->organisations = $this->_customdata['organisations'];
+		$data->record = $this->_customdata['record'];
+
 		// This 'dummy' element has two purposes:
 		// - To force open the Moodle Forms invisible fieldset outside of any table on the form (corrupts display otherwise)
 		// - To let us inform the user that there are validation errors without them having to scroll down further
 		$mform->addElement('static', 'form_errors');
-
+/*
         $mform->addElement('header', 'manager_to_approve', get_string('manager_to_approve', 'local_obu_application'), '');
 		
 		// Bucks Healthcare want to bypass the manager's approval stage
@@ -53,11 +57,35 @@ class apply_form extends moodleform {
 		$mform->addElement('text', 'emailagain', get_string('confirm_email', 'local_obu_application'), 'size="25" maxlength="100"');
 		$mform->setType('emailagain', PARAM_RAW_TRIMMED);
 		$mform->addRule('emailagain', get_string('missingemail'), 'required', null, 'server');
+*/
+		$mform->addElement('advcheckbox', 'self_funding', get_string('self_funding', 'local_obu_application'),
+			get_string('self_funding_text', 'local_obu_application'), null, array(0, 1));
+
+		$mform->addElement('static', 'funding', '');
+		$mform->closeHeaderBefore('funding');
+		$mform->addElement('html', '<h1>' . get_string('funding_organisation', 'local_obu_application') . '</h1>');
+		$options = [];
+		if ($data->record->funding_organisation == '') {
+			$options['-1'] = get_string('select', 'local_obu_application');
+		}
+		foreach ($data->organisations as $organisation_id => $organisation_name) {
+			$options[$organisation_id] = $organisation_name;
+		}
+		$options['0'] = get_string('other', 'local_obu_application');
+		$mform->addElement('select', 'funding_organisation', get_string('organisation', 'local_obu_application'), $options, null);
+		$mform->disabledIf('funding_organisation', 'self_funding', 'neq', '0');
+		$mform->addElement('static', 'funding_text', get_string('funding_text', 'local_obu_application'));
+		$mform->addElement('text', 'funder_email', get_string('email'), 'size="40" maxlength="100"');
+		$mform->setType('funder_email', PARAM_RAW_TRIMMED);
+		$mform->disabledIf('funder_email', 'self_funding', 'neq', '0');
+		$mform->disabledIf('funder_email', 'funding_organisation', 'neq', '0');
+		$mform->addElement('text', 'funder_email2', get_string('confirm_email', 'local_obu_application'), 'size="40" maxlength="100"');
+		$mform->setType('funder_email2', PARAM_RAW_TRIMMED);
+		$mform->disabledIf('funder_email2', 'self_funding', 'neq', '0');
+		$mform->disabledIf('funder_email2', 'funding_organisation', 'neq', '0');
 		
         $mform->addElement('header', 'declaration_head', get_string('declaration', 'local_obu_application'), '');
 		
-		$mform->addElement('advcheckbox', 'self_funding', get_string('self_funding', 'local_obu_application'),
-			get_string('self_funding_text', 'local_obu_application'), null, array(0, 1));
 		$conditions = '<a href="http://www.brookes.ac.uk/studying-at-brookes/how-to-apply/conditions-of-acceptance/" target="_blank">' . get_string('conditions', 'local_obu_application') . '</a>';
 		$mform->addElement('checkbox', 'declaration', get_string('declaration', 'local_obu_application'),
 			get_string('declaration_text', 'local_obu_application', $conditions));
@@ -70,7 +98,7 @@ class apply_form extends moodleform {
         global $CFG, $DB;
         $errors = parent::validation($data, $files);
 
-		if (!validate_email($data['email']) || ($data['email'] != strtolower($data['email']))) {
+/*		if (!validate_email($data['email']) || ($data['email'] != strtolower($data['email']))) {
 			$errors['email'] = get_string('invalidemail');
 		}
 		
@@ -78,6 +106,31 @@ class apply_form extends moodleform {
 			$errors['emailagain'] = get_string('missingemail');
 		} else if ($data['emailagain'] != $data['email']) {
 			$errors['emailagain'] = get_string('invalidemail');
+		}
+*/		
+		// if not self-funding, the applicant must enter either the organisation or email of funder to approve
+		if ($data['self_funding'] == '0') {
+			if ($data['funding_organisation'] == -1) { // Not entered
+				$errors['funding_organisation'] = get_string('value_required', 'local_obu_application');
+			} else if ($data['funding_organisation'] == 0) { // 'Other Organisation'
+				if (empty($data['funder_email'])) {
+						$errors['funder_email'] = get_string('missingemail');
+				} else if (!validate_email($data['funder_email'])) {
+						$errors['funder_email'] = get_string('invalidemail');
+				}
+				if (empty($data['funder_email2'])) {
+					$errors['funder_email2'] = get_string('missingemail');
+				} else if ($data['funder_email2'] != $data['funder_email']) {
+					$errors['funder_email2'] = get_string('invalidemail');
+				}
+			} else { // Known organisation (likely an NHS trust) so no email please
+				if (!empty($data['funder_email'])) {
+					$errors['funder_email'] = get_string('value_verboten', 'local_obu_application');
+				}
+				if (!empty($data['funder_email2'])) {
+					$errors['funder_email2'] = get_string('value_verboten', 'local_obu_application');
+				}
+			}
 		}
 
 		if (!empty($errors)) {

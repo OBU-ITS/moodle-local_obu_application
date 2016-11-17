@@ -88,8 +88,13 @@ class process_form extends moodleform {
 				$funding_method_formatted .= ')';
 			}
 			$funder_name_formatted = $data->record->funder_name;
+			$invoice_address = $data->record->invoice_address;
 			if ($approval_sought == 2) { // Funder
 				$funder_name_formatted = $USER->firstname . ' ' . $USER->lastname;
+				if ($data->record->funding_organisation != '') { // Get the address to use as the default
+					$organisation = read_organisation($data->record->funding_id);
+					$invoice_address = $organisation->address;
+				}
 			}
 			
 			$fields = [
@@ -132,7 +137,7 @@ class process_form extends moodleform {
 				'funding_organisation' => $data->record->funding_organisation,
 				'funder_name' => $funder_name_formatted,
 				'invoice_ref' => $data->record->invoice_ref,
-				'invoice_address' => $data->record->invoice_address,
+				'invoice_address' => $invoice_address,
 				'invoice_email' => $data->record->invoice_email,
 				'invoice_phone' => $data->record->invoice_phone,
 				'invoice_contact' => $data->record->invoice_contact
@@ -468,9 +473,6 @@ class process_form extends moodleform {
 					} else { // Contract or Pre-paid
 						if ($data['invoice_ref'] != '') {
 							$errors['invoice_ref'] = get_string('value_verboten', 'local_obu_application');
-						}
-						if ($data['invoice_address'] != '') {
-							$errors['invoice_address'] = get_string('value_verboten', 'local_obu_application');
 						}
 						if ($data['invoice_email'] != '') {
 							$errors['invoice_email'] = get_string('value_verboten', 'local_obu_application');

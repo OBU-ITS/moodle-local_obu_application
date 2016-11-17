@@ -46,6 +46,7 @@ $PAGE->set_heading($SITE->fullname);
 $PAGE->set_title($heading);
 
 $message = '';
+$applicants = null;
 
 $mform = new mdl_list_form(null, array());
 
@@ -53,9 +54,11 @@ if ($mform->is_cancelled()) {
     redirect($home);
 } 
 else if ($mform_data = $mform->get_data()) {
-	$user = get_complete_user_data('email', $mform_data->email);
-	$url = $dir . 'mdl_applications.php?userid=' . $user->id;
-	redirect($url);
+	$applicants = get_applicants_by_name($mform_data->lastname);
+	if (count($applicants) == 1) {
+		$url = $dir . 'mdl_applications.php?userid=' . array_values($applicants)[0]->userid;
+		redirect($url);
+	}
 }	
 
 echo $OUTPUT->header();
@@ -66,6 +69,13 @@ if ($message) {
 }
 else {
     $mform->display();
+	
+	if ($applicants != null) {
+		foreach ($applicants as $applicant) {
+			$url = $dir . 'mdl_applications.php?userid=' . $applicant->userid;
+			echo '<h4><a href="' . $url . '">' . $applicant->firstname . ' ' . $applicant->lastname . '</a></h4>';
+		}
+	}
 }
 
 echo $OUTPUT->footer();
