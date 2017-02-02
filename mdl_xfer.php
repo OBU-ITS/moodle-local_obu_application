@@ -52,24 +52,29 @@ if ($mform->is_cancelled()) {
     redirect($home);
 } 
 else if ($mform_data = $mform->get_data()) {
-	if (($mform_data->xfer_type == 1) || ($mform_data->xfer_type == 3)) {
-		$param = read_parameter('ADM');
-	} else {
-		$param = read_parameter('FIN');
-	}
 		
-	if ($mform_data->xfer_id == 0) {
-		$xfer_id = $param->number + 1; // Batch ID
+	if ($mform_data->xfer_id != 0) { // A re-run
+		$xfer_id = $mform_data->xfer_id; // Re-run batch ID
 	} else {
-		$xfer_id = $mform_data->xfer_id;
+		if (($mform_data->xfer_type == 1) || ($mform_data->xfer_type == 3)) {
+			$param = read_parameter('ADM'); // Admissions
+		} else {
+			$param = read_parameter('FIN'); // Finance
+		}
+		if ($mform_data->xfer_type != 3) {
+			$xfer_id = $param->number + 1; // New batch ID
+		} else {
+			$xfer_id = $param->number; // Default to last Admissions batch ID
+		}
 	}
-	$applications = get_applications(); // get all applications
+	
+	$applications = get_applications(); // Get all applications
 	$xfers = array();
 	foreach ($applications as $application) {
 		if ((($application->approval_level == 3) && ($application->approval_state == 2)) // Approved by HLS so is/was OK to go...
-			&& (((($mform_data->xfer_type == 1) ) && (($application->admissions_xfer == 0) || ($application->admissions_xfer == $xfer_id))) // Admissions
-			|| (($mform_data->xfer_type == 2) && (($application->finance_xfer == 0) || ($application->finance_xfer == $xfer_id))) // Finance
-			|| (($mform_data->xfer_type == 3) && ($application->admissions_xfer == $xfer_id)))) { // 'Process' (admissions data processing)
+			&& ((($mform_data->xfer_type == 1) && ($application->admissions_xfer == $mform_data->xfer_id)) // Admissions
+			|| (($mform_data->xfer_type == 2) && ($application->finance_xfer == $mform_data->xfer_id)) // Finance
+			|| (($mform_data->xfer_type == 3) && ($application->admissions_xfer == $xfer_id)))) { // 'Process' (Admissions data processing)
 				$xfers[] = $application->id;
 		}
 	}
@@ -198,19 +203,21 @@ else if ($mform_data = $mform->get_data()) {
 			}
 			fputcsv($fp, $fields, $delimiter);
 			
-			// Flag the application as processed
-			if (($mform_data->xfer_type == 1) && ($application->admissions_xfer == 0)) {
-				$application->admissions_xfer = $xfer_id;
-				update_application($application);
-			} else if (($mform_data->xfer_type == 2) && ($application->finance_xfer == 0)) {
-				$application->finance_xfer = $xfer_id;
-				update_application($application);
+			// If not a re-run, flag the application as processed
+			if ($mform_data->xfer_id == 0) {
+				if ($mform_data->xfer_type == 1) {
+					$application->admissions_xfer = $xfer_id;
+					update_application($application);
+				} else if ($mform_data->xfer_type == 2) {
+					$application->finance_xfer = $xfer_id;
+					update_application($application);
+				}
 			}
 		}
 		fclose($fp);
 		
-		// Update the parameter record if necessary
-		if ($xfer_id > $param->number) {
+		// If not a re-run, update the parameter record
+		if (($mform_data->xfer_id == 0) && ($mform_data->xfer_type != 3)) {
 			$param->number = $xfer_id;
 			write_parameter($param);
 		}
