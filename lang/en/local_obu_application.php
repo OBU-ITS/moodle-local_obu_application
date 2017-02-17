@@ -76,6 +76,7 @@ $string['registrationsteps'] = 'To access to this site you will firstly need to 
 
 $string['update_course'] = 'Add, Amend or Delete a Course';
 $string['new_course'] = 'New Course';
+$string['existing_course'] = 'Error - Course already exists';
 $string['code'] = 'Code';
 $string['name'] = 'Name';
 $string['number'] = 'Number';

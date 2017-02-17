@@ -53,18 +53,23 @@ if ($mform->is_cancelled()) {
 } 
 else if ($mform_data = $mform->get_data()) {
 		
-	if ($mform_data->xfer_id != 0) { // A re-run
-		$xfer_id = $mform_data->xfer_id; // Re-run batch ID
+	if (($mform_data->xfer_type == 1) || ($mform_data->xfer_type == 3)) {
+		$param_name = 'ADM'; // Admissions
 	} else {
-		if (($mform_data->xfer_type == 1) || ($mform_data->xfer_type == 3)) {
-			$param = read_parameter('ADM'); // Admissions
-		} else {
-			$param = read_parameter('FIN'); // Finance
-		}
-		if ($mform_data->xfer_type != 3) {
-			$xfer_id = $param->number + 1; // New batch ID
-		} else {
+		$param_name = 'FIN'; // Finance
+	}
+	
+	if ($mform_data->xfer_id != '') { // A re-run
+		$xfer_id = $mform_data->xfer_id; // Re-run batch ID
+		$batch_number = 0; // No new batch number
+	} else {
+		$param = read_parameter($param_name);
+		if ($mform_data->xfer_type == 3) {
 			$xfer_id = $param->number; // Default to last Admissions batch ID
+			$batch_number = 0; // No new batch number
+		} else {
+			$xfer_id = 0; // No existing batch number
+			$batch_number = $param->number + 1;
 		}
 	}
 	
@@ -72,9 +77,8 @@ else if ($mform_data = $mform->get_data()) {
 	$xfers = array();
 	foreach ($applications as $application) {
 		if ((($application->approval_level == 3) && ($application->approval_state == 2)) // Approved by HLS so is/was OK to go...
-			&& ((($mform_data->xfer_type == 1) && ($application->admissions_xfer == $mform_data->xfer_id)) // Admissions
-			|| (($mform_data->xfer_type == 2) && ($application->finance_xfer == $mform_data->xfer_id)) // Finance
-			|| (($mform_data->xfer_type == 3) && ($application->admissions_xfer == $xfer_id)))) { // 'Process' (Admissions data processing)
+			&& (((($mform_data->xfer_type == 1) || ($mform_data->xfer_type == 3)) && ($application->admissions_xfer == $xfer_id)) // Admissions or Process (Admissions data processing)
+			|| (($mform_data->xfer_type == 2) && ($application->finance_xfer == $xfer_id)))) { // Finance
 				$xfers[] = $application->id;
 		}
 	}
@@ -89,7 +93,7 @@ else if ($mform_data = $mform->get_data()) {
 			$extension = 'txt';
 		}
 		header('Content-Type: text/csv');
-		header('Content-Disposition: attachment;filename=HLS_' . $param->name . sprintf('_%05d.', $xfer_id) . $extension);
+		header('Content-Disposition: attachment;filename=HLS_' . $param_name . sprintf('_%05d.', $batch_number) . $extension);
 		$fp = fopen('php://output', 'w');
 		foreach ($xfers as $index => $xfer) {
 			$application = read_application($xfer);
@@ -203,22 +207,21 @@ else if ($mform_data = $mform->get_data()) {
 			}
 			fputcsv($fp, $fields, $delimiter);
 			
-			// If not a re-run, flag the application as processed
-			if ($mform_data->xfer_id == 0) {
+			// If a new batch, flag the application as processed
+			if ($batch_number > 0) {
 				if ($mform_data->xfer_type == 1) {
-					$application->admissions_xfer = $xfer_id;
-					update_application($application);
-				} else if ($mform_data->xfer_type == 2) {
-					$application->finance_xfer = $xfer_id;
-					update_application($application);
+					$application->admissions_xfer = $batch_number;
+				} else {
+					$application->finance_xfer = $batch_number;
 				}
+				update_application($application);
 			}
 		}
 		fclose($fp);
 		
-		// If not a re-run, update the parameter record
-		if (($mform_data->xfer_id == 0) && ($mform_data->xfer_type != 3)) {
-			$param->number = $xfer_id;
+		// If a new batch, update the parameter record
+		if ($batch_number > 0) {
+			$param->number = $batch_number;
 			write_parameter($param);
 		}
 		

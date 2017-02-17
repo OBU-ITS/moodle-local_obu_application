@@ -40,7 +40,6 @@ class process_form extends moodleform {
 		$data->record = $this->_customdata['record'];
 		$data->status_text = $this->_customdata['status_text'];
 		$data->button_text = $this->_customdata['button_text'];
-		$data->administrator = $this->_customdata['administrator'];
 		
 		$approval_sought = 0; // Level at which we are seeking approval from this user (if at all)
 		if ($data->record !== false) {
@@ -314,7 +313,7 @@ class process_form extends moodleform {
 			$mform->addElement('text', 'funder_email2', get_string('confirm_email', 'local_obu_application'), 'size="40" maxlength="100"');
 			$mform->setType('funder_email2', PARAM_RAW_TRIMMED);
 			$mform->disabledIf('funder_email2', 'funding_organisation', 'neq', '0');
-		} else if (($approval_sought > 1) && ($data->record->self_funding == '0')) { // Approving funder must enter the funding details and HLS approver must see them
+		} else if (($data->record->approval_level > 1) && ($data->record->self_funding == '0')) { // Approving funder must enter the funding details and HLS must see them
 			if ($approval_sought == 2) { // Funder
 				$mform->addElement('static', 'funding', '');
 				$mform->closeHeaderBefore('funding');
@@ -360,8 +359,11 @@ class process_form extends moodleform {
 					$mform->addElement('text', 'invoice_contact', get_string('invoice_contact', 'local_obu_application'), 'size="40" maxlength="100"');
 					$mform->setType('invoice_contact', PARAM_TEXT);
 				}
-			} else { // HLS
-				$mform->addElement('html', '<h1>' . get_string('funding', 'local_obu_application') . '</h1>');
+			} else if (($data->record->approval_level > 2) && has_capability('local/obu_application:manage', context_system::instance())) { // Funding available for HLS to view
+				$mform->addElement('header', 'funding', get_string('funding', 'local_obu_application'), '');
+				if ($data->button_text == 'approve') {
+					$mform->setExpanded('funding');
+				}
 				$mform->addElement('static', 'funding_method', get_string('funding_method', 'local_obu_application'));
 				$mform->addElement('static', 'funding_organisation', get_string('organisation', 'local_obu_application'));
 				if ($data->record->funding_method > 0) { // NHS trust

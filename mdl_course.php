@@ -46,6 +46,7 @@ $message = '';
 
 $id = '';
 $delete = false;
+$codes = array();
 $courses = array();
 $record = null;
 
@@ -56,6 +57,11 @@ if (isset($_REQUEST['id'])) {
 		if (isset($_REQUEST['delete'])) {
 			$delete = true;
 		}		
+	} else { // Store existing course codes so we can check if any given code is really new
+		$recs = get_course_records();
+		foreach ($recs as $rec) {
+			$codes[] = $rec->code;
+		}
 	}
 } else {
 	$recs = get_course_records();
@@ -88,8 +94,12 @@ if ($mform->is_cancelled()) {
 else if ($mform_data = $mform->get_data()) {
 	if (isset($mform_data->submitbutton)) { // 'Save' or 'Confirm Deletion'
 		if ($mform_data->submitbutton == get_string('save', 'local_obu_application')) {
-			write_course_record($mform_data);
-			redirect($url);
+			if (($mform_data->id == '0') && in_array(strtoupper($mform_data->code), $codes)) { // 'New' course already exists
+				$message = get_string('existing_course', 'local_obu_application');
+			} else {
+				write_course_record($mform_data);
+				redirect($url);
+			}
 		} else if ($mform_data->submitbutton == get_string('confirm_delete', 'local_obu_application')) {
 			delete_course_record($mform_data->id);
 			redirect($url);
