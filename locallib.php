@@ -54,16 +54,13 @@ function application_user_signup($user) { // Derived from email->user_signup
 	if (empty($user->calendartype)) {
 		$user->calendartype = $CFG->calendartype;
 	}
-	$user->id = user_create_user($user, false, false);
+	$user->id = user_create_user($user, false);
 	
 	// Save any custom profile field information
 	profile_save_data($user);
 	
 	// Save contact information
 	write_contact_details($user->id, $user);
-	
-	// Trigger event
-	\core\event\user_created::create_from_userid($user->id)->trigger();
 	
 	if (!send_application_confirmation_email($user)) {
 		print_error('auth_emailnoemail', 'auth_email');
