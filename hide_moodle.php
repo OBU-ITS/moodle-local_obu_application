@@ -28,7 +28,7 @@
 $CFG->sessioncookie = 'email';
 
 // Add our own CSS - mainly to hide the standard Moodle page elements
-$CFG->additionalhtmlhead .= '<style>.langmenu, .usermenu, .logininfo, .homelink, .page-context-header, .breadcrumb, .helplink, .footerlinks, .dropdown { display: none; } .nav { color: white; } .navbar-inverse .nav .divider { border-left-color: #e5e5e5; border-right-color: white; } a.brand { pointer-events: none; } .navbar .nav > li >a, .pull-right { color: #0085a1; } .navbar .nav .divider { border-left-color: #0085a1; }</style>';
+$CFG->additionalhtmlhead .= '<style>.langmenu, .usermenu, .logininfo, .homelink, .page-context-header, .breadcrumb, .helplink, .footerlinks, .dropdown, .popover-region { display: none; } .nav { color: white; } .navbar-inverse .nav .divider { border-left-color: #e5e5e5; border-right-color: white; } a.brand { pointer-events: none; } .navbar .nav > li >a, .pull-right { color: #0085a1; } .navbar .nav .divider { border-left-color: #0085a1; }</style>';
 
 // Add our own menu items for logged-in users
 if (!isloggedin()) {
