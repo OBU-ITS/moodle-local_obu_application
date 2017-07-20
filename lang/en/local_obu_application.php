@@ -32,10 +32,14 @@ $string['obu_application:admin'] = 'Administer applications in obu_application';
 $string['obu_application:manage'] = 'Manage, view and approve applications in obu_application';
 $string['my_applications'] = 'My HLS applications';
 
-$string['introduction'] = '<span style=\'color:red\'>Whether you are an applicant, manager or funder you will need to register to use this portal.  Once registered you can go directly to log-in for any subsequent visits.</span>
-<h2>First-time users please register here before logging-in</h2>Welcome to the online application service for the Faculty of Health and Life Sciences.  This service is for applicants who wish to apply to study a module with the university or one of 3 graduate certificates; surgical nursing, cancer nursing or palliative care nursing. This category of applicant is known as an Associate Student.
+$string['introduction'] = '<span style=\'color:red\'>Whether you are an applicant or a funding approver you will need to register to use this portal.  Once registered you can go directly to log-in for any subsequent visits.</span>
+<h2>First-time users please register here before logging-in</h2>Welcome to the online application portal for the Faculty of Health and Life Sciences.  This service is for applicants hoping to take a one-off module with the Faculty, students taking one module are known as Associates.
 <p>&nbsp;</p>
-Applicants to certified programmes (by this we mean part time and full time degree, postgraduate certificate/diploma or masters), must apply using UCAS.';
+You can also use this service if you are applying to undertake an undergraduate top-up degree in health sciences.
+<p>&nbsp;</p>
+Applicants to certified programmes (Postgraduate Certificate, Diploma and Masters) will need to apply using the postgraduate UCAS online service.*
+<p>&nbsp;</p>
+<em>* Oxford University Hospital staff please note that for the academic year 2017/18 you are required by your Education Department to apply for modules on an individual basis rather than applying through UCAS for a postgraduate certificate, diploma or masters.</em>';
 
 $string['page_content'] = '<h2>If You Wish To Apply</h2>
 The information you will need in order to complete your application includes the correct name of the course you are applying for and, if you aren\'t self-funding, the details of your funder.
