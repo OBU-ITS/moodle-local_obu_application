@@ -21,7 +21,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2016, Oxford Brookes University
+ * @copyright  2017, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -87,8 +87,7 @@ class apply_form extends moodleform {
         $mform->addElement('header', 'declaration_head', get_string('declaration', 'local_obu_application'), '');
 		
 		$conditions = '<a href="http://www.brookes.ac.uk/studying-at-brookes/how-to-apply/conditions-of-acceptance/" target="_blank">' . get_string('conditions', 'local_obu_application') . '</a>';
-		$mform->addElement('checkbox', 'declaration', get_string('declaration', 'local_obu_application'),
-			get_string('declaration_text', 'local_obu_application', $conditions));
+		$mform->addElement('checkbox', 'declaration', get_string('declaration', 'local_obu_application'), get_string('declaration_text', 'local_obu_application', $conditions));
 		$mform->addRule('declaration', null, 'required', null, 'server');
 		
         $this->add_action_buttons(true, get_string('apply', 'local_obu_application'));

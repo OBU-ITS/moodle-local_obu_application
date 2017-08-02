@@ -19,7 +19,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2016, Oxford Brookes University
+ * @copyright  2017, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -311,89 +311,54 @@ function display_message($header, $message) {
 	exit;
 }
 
-function require_obu_login($courseorid = null, $autologinguest = true, $cm = null, $setwantsurltome = true, $preventredirect = false) {
-    global $CFG, $SESSION, $USER, $PAGE, $SITE, $DB, $OUTPUT;
-	
+function require_obu_login() {
+	global $CFG, $SESSION, $USER, $PAGE, $SITE, $DB, $OUTPUT;
+
 	$login_url = '/local/obu_application/login.php';
 
-    // Must not redirect when byteserving already started.
-    if (!empty($_SERVER['HTTP_RANGE'])) {
-        $preventredirect = true;
-    }
+	// Must not redirect when byteserving already started.
+	if (!empty($_SERVER['HTTP_RANGE'])) {
+		$preventredirect = true;
+	} else {
+		$preventredirect = false;
+	}
 
-	// Do not touch global $COURSE via $PAGE->set_course(),
-	// the reasons is we need to be able to call require_obu_login() at any time!!
-	$course = $SITE;
-
-    // If this is an AJAX request and $setwantsurltome is true then we need to override it and set it to false.
-    // Otherwise the AJAX request URL will be set to $SESSION->wantsurl and events such as self enrolment in the future
-    // risk leading the user back to the AJAX request URL.
-    if ($setwantsurltome && defined('AJAX_SCRIPT') && AJAX_SCRIPT) {
-        $setwantsurltome = false;
-    }
-
-    // Redirect to the login page if session has expired, only with dbsessions enabled (MDL-35029) to maintain current behaviour.
-    if ((!isloggedin() or isguestuser()) && !empty($SESSION->has_timed_out) && !$preventredirect && !empty($CFG->dbsessions)) {
-        if ($setwantsurltome) {
-            $SESSION->wantsurl = qualified_me();
-        }
-        redirect($login_url);
-    }
+	// Redirect to the login page if session has expired, only with dbsessions enabled (MDL-35029) to maintain current behaviour.
+	if ((!isloggedin() or isguestuser()) && !empty($SESSION->has_timed_out) && !$preventredirect && !empty($CFG->dbsessions)) {
+		$SESSION->wantsurl = qualified_me();
+		redirect($login_url);
+	}
 
     // If the user is not even logged in yet then make sure they are.
-    if (!isloggedin()) {
-        if ($autologinguest and !empty($CFG->guestloginbutton) and !empty($CFG->autologinguests)) {
-            if (!$guest = get_complete_user_data('id', $CFG->siteguest)) {
-                // Misconfigured site guest, just redirect to login page.
-                redirect($login_url);
-                exit; // Never reached.
-            }
-            $lang = isset($SESSION->lang) ? $SESSION->lang : $CFG->lang;
-            complete_user_login($guest);
-            $USER->autologinguest = true;
-            $SESSION->lang = $lang;
-        } else {
-            // NOTE: $USER->site check was obsoleted by session test cookie, $USER->confirmed test is in login/index.php.
-            if ($preventredirect) {
-                throw new require_login_exception('You are not logged in');
-            }
+	if (!isloggedin()) {
+		if ($preventredirect) {
+			throw new require_login_exception('You are not logged in');
+		}
 
-            if ($setwantsurltome) {
-                $SESSION->wantsurl = qualified_me();
-            }
-            if (!empty($_SERVER['HTTP_REFERER'])) {
-                $SESSION->fromurl  = $_SERVER['HTTP_REFERER'];
-            }
-            redirect($login_url);
-            exit; // Never reached.
-        }
-    }
+		$SESSION->wantsurl = qualified_me();
+		if (!empty($_SERVER['HTTP_REFERER'])) {
+			$SESSION->fromurl = $_SERVER['HTTP_REFERER'];
+		}
+		redirect($login_url);
+	}
 
-    // Make sure the USER has a sesskey set up. Used for CSRF protection.
-    sesskey();
+	// Make sure the USER has a sesskey set up. Used for CSRF protection.
+	sesskey();
 
-    // Do not bother admins with any formalities.
-    if (is_siteadmin()) {
-        // Set accesstime or the user will appear offline which messes up messaging.
-        user_accesstime_log($course->id);
-        return;
-    }
+	// Fetch the system context.
+	$context = context_system::instance();
 
-    // Fetch the system context, the course context, and prefetch its child contexts.
-    $sysctx = context_system::instance();
-    $coursecontext = context_course::instance($course->id, MUST_EXIST);
-	$cmcontext = null;
+	// If the site is currently under maintenance, then print a message.
+	if ((!is_siteadmin() && !empty($CFG->maintenance_enabled) && !has_capability('moodle/site:config', $context))
+		|| !has_capability('local/obu_application:update', $context) || !has_capability('local/obu_application:apply', $context)) {
+		if ($preventredirect) {
+			throw new require_login_exception('Maintenance in progress');
+		}
+		print_maintenance_message();
+	}
 
-    // If the site is currently under maintenance, then print a message.
-    if (!empty($CFG->maintenance_enabled) and !has_capability('moodle/site:config', $sysctx)) {
-        if ($preventredirect) {
-            throw new require_login_exception('Maintenance in progress');
-        }
-        print_maintenance_message();
-    }
-
-    // Finally access granted, update lastaccess times.
-    user_accesstime_log($course->id);
+	// Finally access granted, update lastaccess times.
+	user_accesstime_log();
 }
 
 function get_counties() {

@@ -93,6 +93,9 @@
         <FIELD NAME="prof_level" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Level of qualification"/>
         <FIELD NAME="prof_award" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Award name"/>
         <FIELD NAME="prof_date" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Date qualified"/>
+        <FIELD NAME="credit" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Academic credit?"/>
+        <FIELD NAME="credit_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Credit name"/>
+        <FIELD NAME="credit_organisation" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Awarding organisation"/>
         <FIELD NAME="emp_place" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Place of employment"/>
         <FIELD NAME="emp_area" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Clinical area"/>
         <FIELD NAME="emp_title" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Job title"/>
@@ -143,6 +146,9 @@
         <FIELD NAME="prof_level" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Level of qualification"/>
         <FIELD NAME="prof_award" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Award name"/>
         <FIELD NAME="prof_date" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Date qualified"/>
+        <FIELD NAME="credit" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Academic credit?"/>
+        <FIELD NAME="credit_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Credit name"/>
+        <FIELD NAME="credit_organisation" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Awarding organisation"/>
         <FIELD NAME="emp_place" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Place of employment"/>
         <FIELD NAME="emp_area" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Clinical area"/>
         <FIELD NAME="emp_title" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Job title"/>

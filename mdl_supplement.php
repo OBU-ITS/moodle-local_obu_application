@@ -19,7 +19,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2016, Oxford Brookes University
+ * @copyright  2017, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -31,6 +31,7 @@ require_once('./mdl_supplement_form.php');
 
 require_login();
 $context = context_system::instance();
+require_capability('local/obu_application:update', $context);
 require_capability('local/obu_application:manage', $context);
 
 $program = '/local/obu_application/mdl_supplement.php';

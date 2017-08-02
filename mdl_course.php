@@ -31,6 +31,7 @@ require_once('./mdl_course_form.php');
 
 require_login();
 $context = context_system::instance();
+require_capability('local/obu_application:update', $context);
 require_capability('local/obu_application:manage', $context);
 
 $program = '/local/obu_application/mdl_course.php';

@@ -19,7 +19,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2016, Oxford Brookes University
+ * @copyright  2017, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -35,7 +35,7 @@ $context = context_system::instance();
 $home = new moodle_url('/');
 
 // We only allow 'administrator' level access and only to an existing application (id given)
-if (!has_capability('local/obu_application:admin', $context) || !isset($_REQUEST['id'])) {
+if (!has_capability('local/obu_application:update', $context) || !has_capability('local/obu_application:admin', $context) || !isset($_REQUEST['id'])) {
 	redirect($home);
 }
 

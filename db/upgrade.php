@@ -282,6 +282,42 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		// obu_application savepoint reached
 		upgrade_plugin_savepoint(true, 2016110100, 'local', 'obu_application');
     }
+	
+	if ($oldversion < 2017072800) {
+
+		// Define and add new fields to local_obu_applicant
+		$table = new xmldb_table('local_obu_applicant');
+		$field = new xmldb_field('credit', XMLDB_TYPE_INTEGER, '1', null, null, null, '0', 'prof_date');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+		$field = new xmldb_field('credit_name', XMLDB_TYPE_CHAR, '100', null, null, null, null, 'credit');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+		$field = new xmldb_field('credit_organisation', XMLDB_TYPE_CHAR, '100', null, null, null, null, 'credit_name');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+
+		// Define and add the new fields to local_obu_application
+		$table = new xmldb_table('local_obu_application');
+		$field = new xmldb_field('credit', XMLDB_TYPE_INTEGER, '1', null, null, null, '0', 'prof_date');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+		$field = new xmldb_field('credit_name', XMLDB_TYPE_CHAR, '100', null, null, null, null, 'credit');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+		$field = new xmldb_field('credit_organisation', XMLDB_TYPE_CHAR, '100', null, null, null, null, 'credit_name');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+
+		// obu_application savepoint reached
+		upgrade_plugin_savepoint(true, 2017072800, 'local', 'obu_application');
+    }
     
     return $result;
 }

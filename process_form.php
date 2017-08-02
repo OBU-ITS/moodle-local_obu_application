@@ -56,6 +56,11 @@ class process_form extends moodleform {
 			$birthdate_formatted = date_format($date, $date_format);
 			date_timestamp_set($date, $data->record->prof_date);
 			$prof_date_formatted = date_format($date, $date_format);
+			if ($data->record->credit == '1') {
+				$credit_formatted = '&#10004;'; // Tick
+			} else {
+				$credit_formatted = '&#10008;'; // Cross
+			}
 			if ($data->record->criminal_record == '1') {
 				$criminal_record_formatted = 'Yes';
 			} else {
@@ -120,6 +125,9 @@ class process_form extends moodleform {
 				'prof_level' => $data->record->prof_level,
 				'prof_award' => $data->record->prof_award,
 				'prof_date_formatted' => $prof_date_formatted,
+				'credit_formatted' => $credit_formatted,
+				'credit_name' => $data->record->credit_name,
+				'credit_organisation' => $data->record->credit_organisation,
 				'emp_place' => $data->record->emp_place,
 				'emp_area' => $data->record->emp_area,
 				'emp_title' => $data->record->emp_title,
@@ -219,6 +227,9 @@ class process_form extends moodleform {
 			$mform->addElement('static', 'prof_level', get_string('prof_level', 'local_obu_application'));
 			$mform->addElement('static', 'prof_award', get_string('prof_award', 'local_obu_application'));
 			$mform->addElement('static', 'prof_date_formatted', get_string('prof_date', 'local_obu_application'));
+			$mform->addElement('static', 'credit_formatted', get_string('credit', 'local_obu_application'));
+			$mform->addElement('static', 'credit_name', get_string('credit_name', 'local_obu_application'));
+			$mform->addElement('static', 'credit_organisation', get_string('credit_organisation', 'local_obu_application'));
 
 			// Current employment
 			$mform->addElement('header', 'employment_head', get_string('employment_head', 'local_obu_application'), '');
@@ -389,7 +400,8 @@ class process_form extends moodleform {
 				$mform->addElement('static', 'approval', '');
 				$mform->closeHeaderBefore('approval');
 				$mform->addElement('html', '<h1>' . get_string('approval_head', 'local_obu_application') . '</h1>');
-				$mform->addElement('text', 'comment', get_string('comment', 'local_obu_application'), 'size="40" maxlength="100"');
+				$mform->addElement('html', '<p><strong>' . get_string('comment', 'local_obu_application') . '</strong></p>');
+				$mform->addElement('text', 'comment', '', 'size="40" maxlength="100"');
 				$mform->setType('comment', PARAM_TEXT);
 				$buttonarray[] = &$mform->createElement('submit', 'rejectbutton', get_string('reject', 'local_obu_application'));
 				if (($approval_sought == 3) && has_capability('local/obu_application:admin', context_system::instance())) { // HLS administrator

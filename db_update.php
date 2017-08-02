@@ -369,6 +369,14 @@ function write_profile($user_id, $form_data) {
     $record->prof_level = $form_data->prof_level;
     $record->prof_award = $form_data->prof_award;
     $record->prof_date = $form_data->prof_date;
+    $record->credit = $form_data->credit;
+	if ($record->credit == '0') {
+		$record->credit_name = '';
+		$record->credit_organisation = '';
+	} else {
+		$record->credit_name = $form_data->credit_name;
+		$record->credit_organisation = $form_data->credit_organisation;
+	}	
     $record->emp_place = $form_data->emp_place;
     $record->emp_area = $form_data->emp_area;
     $record->emp_title = $form_data->emp_title;
@@ -460,6 +468,9 @@ function write_application($user_id, $form_data) {
     $record->prof_level = $applicant->prof_level;
     $record->prof_award = $applicant->prof_award;
     $record->prof_date = $applicant->prof_date;
+    $record->credit = $applicant->credit;
+    $record->credit_name = $applicant->credit_name;
+    $record->credit_organisation = $applicant->credit_organisation;
     $record->emp_place = $applicant->emp_place;
     $record->emp_area = $applicant->emp_area;
     $record->emp_title = $applicant->emp_title;

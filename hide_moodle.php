@@ -28,16 +28,14 @@
 $CFG->sessioncookie = 'email';
 
 // Add our own CSS - mainly to hide the standard Moodle page elements
-$CFG->additionalhtmlhead .= '<style>.langmenu, .usermenu, .logininfo, .homelink, .page-context-header, .breadcrumb, .helplink, .footerlinks, .dropdown, .popover-region { display: none; } .nav { color: white; } .navbar-inverse .nav .divider { border-left-color: #e5e5e5; border-right-color: white; } a.brand { pointer-events: none; } .navbar .nav > li >a, .pull-right { color: #0085a1; } .navbar .nav .divider { border-left-color: #0085a1; }</style>';
+$CFG->additionalhtmlhead .= '<style>.langmenu, .usermenu, .logininfo, .homelink, .page-context-header, .breadcrumb, .helplink, .footerlinks, .dropdown, .popover-region, .navbar .brand, .purgecaches { display: none; } .nav { color: white; } .navbar-inverse .nav .divider { border-left-color: #e5e5e5; border-right-color: white; } a.brand { pointer-events: none; } .navbar .nav > li >a, .pull-right { color: #0085a1; } .navbar .nav .divider { border-left-color: #0085a1; }</style>';
 
 // Add our own menu items for logged-in users
 if (!isloggedin()) {
 	$PAGE->set_context(context_system::instance());
 } else {
 	$PAGE->set_context(context_user::instance($USER->id));
-	$CFG->custommenuitems = fullname($USER, true) . '
-	#####
-	' . get_string('index_page', 'local_obu_application') . '|/local/obu_application/index.php
+	$CFG->custommenuitems = get_string('index_page', 'local_obu_application') . '|/local/obu_application/index.php
 	#####
 	' . get_string('contactdetails', 'local_obu_application') . '|/local/obu_application/contact.php
 	#####

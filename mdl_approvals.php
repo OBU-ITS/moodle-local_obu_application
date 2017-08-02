@@ -19,7 +19,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2016, Oxford Brookes University
+ * @copyright  2017, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -65,7 +65,7 @@ foreach ($approvals as $approval) {
 		get_application_status($USER->id, $application, $text, $button); // get the approval trail and the next action (from the user's perspective)
 		echo '<h4><a href="' . $process . '?id=' . $application->id . '">' . $application->course_code . ' ' . $application->course_name . ' (' . $application->lastname . ' - HLS/' . $application->id . ')</a></h4>';
 		echo $text;
-		if ($application->approval_level < 3) { // Can't redirect away from final HLS approval/processing
+		if (has_capability('local/obu_application:update', $update) && ($application->approval_level < 3)) { // Can't redirect away from final HLS approval/processing
 			echo '<p><a href="' . $redirect . '?id=' . $application->id . '">' . get_string('redirect_application', 'local_obu_application') . '</a></p>';
 		}
 	}

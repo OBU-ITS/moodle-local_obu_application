@@ -53,6 +53,9 @@ class profile_form extends moodleform {
 			'prof_level' => $data->record->prof_level,
 			'prof_award' => $data->record->prof_award,
 			'prof_date' => $data->record->prof_date,
+			'credit' => $data->record->credit,
+			'credit_name' => $data->record->credit_name,
+			'credit_organisation' => $data->record->credit_organisation,
 			'emp_place' => $data->record->emp_place,
 			'emp_area' => $data->record->emp_area,
 			'emp_title' => $data->record->emp_title,
@@ -105,14 +108,26 @@ class profile_form extends moodleform {
         // Professional qualification
 		$mform->addElement('header', 'prof_qual_head', get_string('prof_qual_head', 'local_obu_application'), '');
 		$mform->setExpanded('prof_qual_head');
+		$mform->addElement('html', '<p><strong>' . get_string('prof_level_preamble', 'local_obu_application') . '</strong></p>');
 		$mform->addElement('text', 'prof_level', get_string('prof_level', 'local_obu_application'), 'size="40" maxlength="100"');
 		$mform->setType('prof_level', PARAM_TEXT);
 		$mform->addRule('prof_level', null, 'required', null, 'server');
+		$mform->addElement('html', '<p><strong>' . get_string('prof_award_preamble', 'local_obu_application') . '</strong></p>');
 		$mform->addElement('text', 'prof_award', get_string('prof_award', 'local_obu_application'), 'size="40" maxlength="100"');
 		$mform->setType('prof_award', PARAM_TEXT);
 		$mform->addRule('prof_award', null, 'required', null, 'server');
 		$mform->addElement('date_selector', 'prof_date', get_string('prof_date', 'local_obu_application'));
 		$mform->addRule('prof_date', null, 'required', null, 'server');
+		$mform->addElement('html', '<p \><strong>' . get_string('credit_preamble', 'local_obu_application') . '</strong>');
+		$mform->addElement('advcheckbox', 'credit', get_string('credit', 'local_obu_application'), get_string('credit_text', 'local_obu_application'), null, array(0, 1));
+		$mform->addElement('html', '<p><strong>' . get_string('credit_name_preamble', 'local_obu_application') . '</strong></p>');
+		$mform->addElement('text', 'credit_name', get_string('credit_name', 'local_obu_application'), 'size="40" maxlength="100"');
+		$mform->setType('credit_name', PARAM_TEXT);
+		$mform->disabledIf('credit_name', 'credit', 'eq', '0');
+		$mform->addElement('html', '<p><strong>' . get_string('credit_organisation_preamble', 'local_obu_application') . '</strong></p>');
+		$mform->addElement('text', 'credit_organisation', get_string('credit_organisation', 'local_obu_application'), 'size="40" maxlength="100"');
+		$mform->setType('credit_organisation', PARAM_TEXT);
+		$mform->disabledIf('credit_organisation', 'credit', 'eq', '0');
 
         // Employment
 		$mform->addElement('header', 'employment_head', get_string('employment_head', 'local_obu_application'), '');
@@ -154,6 +169,15 @@ class profile_form extends moodleform {
 		
 		if ($data['nationality_code'] == '0') {
 			$errors['nationality_code'] = get_string('value_required', 'local_obu_application');
+		}
+
+		if ($data['credit'] == '1') {
+			if ($data['credit_name'] == '') {
+				$errors['credit_name'] = get_string('value_required', 'local_obu_application');
+			}
+			if ($data['credit_organisation'] == '') {
+				$errors['credit_organisation'] = get_string('value_required', 'local_obu_application');
+			}
 		}
 
 		if ($data['criminal_record'] == '0') {
