@@ -100,6 +100,11 @@ class process_form extends moodleform {
 					$invoice_address = $organisation->address;
 				}
 			}
+			if ($data->record->fund_programme == '1') {
+				$fund_programme_formatted = '&#10004;'; // Tick
+			} else {
+				$fund_programme_formatted = '&#10008;'; // Cross
+			}
 			
 			$fields = [
 				'name' => $data->record->title . ' ' . $data->record->firstname . ' ' . $data->record->lastname,
@@ -147,7 +152,17 @@ class process_form extends moodleform {
 				'invoice_address' => $invoice_address,
 				'invoice_email' => $data->record->invoice_email,
 				'invoice_phone' => $data->record->invoice_phone,
-				'invoice_contact' => $data->record->invoice_contact
+				'invoice_contact' => $data->record->invoice_contact,
+				'fund_programme_formatted' => $fund_programme_formatted,
+				'fund_module_1' => $data->record->fund_module_1,
+				'fund_module_2' => $data->record->fund_module_2,
+				'fund_module_3' => $data->record->fund_module_3,
+				'fund_module_4' => $data->record->fund_module_4,
+				'fund_module_5' => $data->record->fund_module_5,
+				'fund_module_6' => $data->record->fund_module_6,
+				'fund_module_7' => $data->record->fund_module_7,
+				'fund_module_8' => $data->record->fund_module_8,
+				'fund_module_9' => $data->record->fund_module_9
 			];
 			$this->set_data($fields);
 		}
@@ -370,6 +385,37 @@ class process_form extends moodleform {
 					$mform->addElement('text', 'invoice_contact', get_string('invoice_contact', 'local_obu_application'), 'size="40" maxlength="100"');
 					$mform->setType('invoice_contact', PARAM_TEXT);
 				}
+				if (is_programme($data->record->course_code)) {
+					$mform->addElement('html', '<p></p><strong><i>' . get_string('programme_preamble', 'local_obu_application') . '</i></strong><p></p>');
+					$mform->addElement('advcheckbox', 'fund_programme', get_string('fund_programme', 'local_obu_application'), null, null, array(0, 1));
+					$mform->addElement('text', 'fund_module_1', get_string('fund_module', 'local_obu_application'), 'size="6" maxlength="6"');
+					$mform->setType('fund_module_1', PARAM_TEXT);
+					$mform->disabledIf('fund_module_1', 'fund_programme', 'eq', '1');
+					$mform->addElement('text', 'fund_module_2', get_string('fund_module', 'local_obu_application'), 'size="6" maxlength="6"');
+					$mform->setType('fund_module_2', PARAM_TEXT);
+					$mform->disabledIf('fund_module_2', 'fund_programme', 'eq', '1');
+					$mform->addElement('text', 'fund_module_3', get_string('fund_module', 'local_obu_application'), 'size="6" maxlength="6"');
+					$mform->setType('fund_module_3', PARAM_TEXT);
+					$mform->disabledIf('fund_module_3', 'fund_programme', 'eq', '1');
+					$mform->addElement('text', 'fund_module_4', get_string('fund_module', 'local_obu_application'), 'size="6" maxlength="6"');
+					$mform->setType('fund_module_4', PARAM_TEXT);
+					$mform->disabledIf('fund_module_4', 'fund_programme', 'eq', '1');
+					$mform->addElement('text', 'fund_module_5', get_string('fund_module', 'local_obu_application'), 'size="6" maxlength="6"');
+					$mform->setType('fund_module_5', PARAM_TEXT);
+					$mform->disabledIf('fund_module_5', 'fund_programme', 'eq', '1');
+					$mform->addElement('text', 'fund_module_6', get_string('fund_module', 'local_obu_application'), 'size="6" maxlength="6"');
+					$mform->setType('fund_module_6', PARAM_TEXT);
+					$mform->disabledIf('fund_module_6', 'fund_programme', 'eq', '1');
+					$mform->addElement('text', 'fund_module_7', get_string('fund_module', 'local_obu_application'), 'size="6" maxlength="6"');
+					$mform->setType('fund_module_7', PARAM_TEXT);
+					$mform->disabledIf('fund_module_7', 'fund_programme', 'eq', '1');
+					$mform->addElement('text', 'fund_module_8', get_string('fund_module', 'local_obu_application'), 'size="6" maxlength="6"');
+					$mform->setType('fund_module_8', PARAM_TEXT);
+					$mform->disabledIf('fund_module_8', 'fund_programme', 'eq', '1');
+					$mform->addElement('text', 'fund_module_9', get_string('fund_module', 'local_obu_application'), 'size="6" maxlength="6"');
+					$mform->setType('fund_module_9', PARAM_TEXT);
+					$mform->disabledIf('fund_module_9', 'fund_programme', 'eq', '1');
+				}
 			} else if (($data->record->approval_level > 2) && has_capability('local/obu_application:manage', context_system::instance())) { // Funding available for HLS to view
 				$mform->addElement('header', 'funding', get_string('funding', 'local_obu_application'), '');
 				if ($data->button_text == 'approve') {
@@ -386,6 +432,38 @@ class process_form extends moodleform {
 					$mform->addElement('static', 'invoice_email', get_string('email'));
 					$mform->addElement('static', 'invoice_phone', get_string('phone', 'local_obu_application'));
 					$mform->addElement('static', 'invoice_contact', get_string('invoice_contact', 'local_obu_application'));
+				}
+				if (is_programme($data->record->course_code)) { // Additional funding fields for a programme of study
+					$mform->addElement('static', 'fund_programme_formatted', get_string('fund_programme', 'local_obu_application'));
+					if ($data->record->fund_programme == '0') {
+						if ($data->record->fund_module_1 != '') {
+							$mform->addElement('static', 'fund_module_1', get_string('fund_module', 'local_obu_application'));
+						}
+						if ($data->record->fund_module_2 != '') {
+							$mform->addElement('static', 'fund_module_2', get_string('fund_module', 'local_obu_application'));
+						}
+						if ($data->record->fund_module_3 != '') {
+							$mform->addElement('static', 'fund_module_3', get_string('fund_module', 'local_obu_application'));
+						}
+						if ($data->record->fund_module_4 != '') {
+							$mform->addElement('static', 'fund_module_4', get_string('fund_module', 'local_obu_application'));
+						}
+						if ($data->record->fund_module_5 != '') {
+							$mform->addElement('static', 'fund_module_5', get_string('fund_module', 'local_obu_application'));
+						}
+						if ($data->record->fund_module_6 != '') {
+							$mform->addElement('static', 'fund_module_6', get_string('fund_module', 'local_obu_application'));
+						}
+						if ($data->record->fund_module_7 != '') {
+							$mform->addElement('static', 'fund_module_7', get_string('fund_module', 'local_obu_application'));
+						}
+						if ($data->record->fund_module_8 != '') {
+							$mform->addElement('static', 'fund_module_8', get_string('fund_module', 'local_obu_application'));
+						}
+						if ($data->record->fund_module_9 != '') {
+							$mform->addElement('static', 'fund_module_9', get_string('fund_module', 'local_obu_application'));
+						}
+					}
 				}
 			}
 		}
@@ -406,7 +484,9 @@ class process_form extends moodleform {
 				$buttonarray[] = &$mform->createElement('submit', 'rejectbutton', get_string('reject', 'local_obu_application'));
 				if (($approval_sought == 3) && has_capability('local/obu_application:admin', context_system::instance())) { // HLS administrator
 					$buttonarray[] = &$mform->createElement('submit', 'amendcoursebutton', get_string('amend_course', 'local_obu_application'));
-					$buttonarray[] = &$mform->createElement('submit', 'amendfundingbutton', get_string('amend_funding', 'local_obu_application'));
+					if ($data->record->self_funding == '0') {
+						$buttonarray[] = &$mform->createElement('submit', 'amendfundingbutton', get_string('amend_funding', 'local_obu_application'));
+					}
 				}
 			}
 			$buttonarray[] = &$mform->createElement('cancel');

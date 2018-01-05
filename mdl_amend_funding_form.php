@@ -40,6 +40,7 @@ class mdl_amend_funding_form extends moodleform {
 		$data->organisations = $this->_customdata['organisations'];
 		$data->application = $this->_customdata['application'];
 		
+		// Format the fields nicely before we load them into the form
 		if ($data->application->funding_method == 0) { // non-NHS
 			$funding_method = 1; // Must be 'Invoice'
 			$funding_method_formatted = get_string('other', 'local_obu_application') . ' (' . get_string('invoice', 'local_obu_application') . ')';
@@ -57,16 +58,31 @@ class mdl_amend_funding_form extends moodleform {
 			$funding_method_formatted .= ')';
 			$funding_organisation = '';
 		}
+		if ($data->application->fund_programme == '1') {
+			$fund_programme_formatted = '&#10004;'; // Tick
+		} else {
+			$fund_programme_formatted = '&#10008;'; // Cross
+		}
 		
 		$fields = [
 			'current_funding_method' => $funding_method_formatted,
-			'current_funding_organisation' => $data->application->funding_organisation,
+			'current_funding_organisation' => $funding_organisation,
 			'current_funder_name' => $data->application->funder_name,
 			'current_invoice_ref' => $data->application->invoice_ref,
 			'current_invoice_address' => $data->application->invoice_address,
 			'current_invoice_email' => $data->application->invoice_email,
 			'current_invoice_phone' => $data->application->invoice_phone,
 			'current_invoice_contact' => $data->application->invoice_contact,
+			'current_fund_programme' => $fund_programme_formatted,
+			'current_fund_module_1' => $data->application->fund_module_1,
+			'current_fund_module_2' => $data->application->fund_module_2,
+			'current_fund_module_3' => $data->application->fund_module_3,
+			'current_fund_module_4' => $data->application->fund_module_4,
+			'current_fund_module_5' => $data->application->fund_module_5,
+			'current_fund_module_6' => $data->application->fund_module_6,
+			'current_fund_module_7' => $data->application->fund_module_7,
+			'current_fund_module_8' => $data->application->fund_module_8,
+			'current_fund_module_9' => $data->application->fund_module_9,
 			'funding_id' => $data->application->funding_id,
 			'funding_organisation' => $funding_organisation,
 			'funder_name' => $data->application->funder_name,
@@ -75,7 +91,17 @@ class mdl_amend_funding_form extends moodleform {
 			'invoice_address' => $data->application->invoice_address,
 			'invoice_email' => $data->application->invoice_email,
 			'invoice_phone' => $data->application->invoice_phone,
-			'invoice_contact' => $data->application->invoice_contact
+			'invoice_contact' => $data->application->invoice_contact,
+			'fund_programme' => $data->application->fund_programme,
+			'fund_module_1' => $data->application->fund_module_1,
+			'fund_module_2' => $data->application->fund_module_2,
+			'fund_module_3' => $data->application->fund_module_3,
+			'fund_module_4' => $data->application->fund_module_4,
+			'fund_module_5' => $data->application->fund_module_5,
+			'fund_module_6' => $data->application->fund_module_6,
+			'fund_module_7' => $data->application->fund_module_7,
+			'fund_module_8' => $data->application->fund_module_8,
+			'fund_module_9' => $data->application->fund_module_9
 		];
 		$this->set_data($fields);
 		
@@ -99,6 +125,38 @@ class mdl_amend_funding_form extends moodleform {
 			$mform->addElement('static', 'current_invoice_email', get_string('email'));
 			$mform->addElement('static', 'current_invoice_phone', get_string('phone', 'local_obu_application'));
 			$mform->addElement('static', 'current_invoice_contact', get_string('invoice_contact', 'local_obu_application'));
+		}
+		if (is_programme($data->application->course_code)) { // Additional funding fields for a programme of study
+			$mform->addElement('static', 'current_fund_programme', get_string('fund_programme', 'local_obu_application'));
+			if ($data->application->fund_programme == '0') {
+				if ($data->application->fund_module_1 != '') {
+					$mform->addElement('static', 'current_fund_module_1', get_string('fund_module', 'local_obu_application'));
+				}
+				if ($data->application->fund_module_2 != '') {
+					$mform->addElement('static', 'current_fund_module_2', get_string('fund_module', 'local_obu_application'));
+				}
+				if ($data->application->fund_module_3 != '') {
+					$mform->addElement('static', 'current_fund_module_3', get_string('fund_module', 'local_obu_application'));
+				}
+				if ($data->application->fund_module_4 != '') {
+					$mform->addElement('static', 'current_fund_module_4', get_string('fund_module', 'local_obu_application'));
+				}
+				if ($data->application->fund_module_5 != '') {
+					$mform->addElement('static', 'current_fund_module_5', get_string('fund_module', 'local_obu_application'));
+				}
+				if ($data->application->fund_module_6 != '') {
+					$mform->addElement('static', 'current_fund_module_6', get_string('fund_module', 'local_obu_application'));
+				}
+				if ($data->application->fund_module_7 != '') {
+					$mform->addElement('static', 'current_fund_module_7', get_string('fund_module', 'local_obu_application'));
+				}
+				if ($data->application->fund_module_8 != '') {
+					$mform->addElement('static', 'current_fund_module_8', get_string('fund_module', 'local_obu_application'));
+				}
+				if ($data->application->fund_module_9 != '') {
+					$mform->addElement('static', 'current_fund_module_9', get_string('fund_module', 'local_obu_application'));
+				}
+			}
 		}
 
         // Amended funding
@@ -131,6 +189,37 @@ class mdl_amend_funding_form extends moodleform {
 		$mform->setType('invoice_phone', PARAM_TEXT);
 		$mform->addElement('text', 'invoice_contact', get_string('invoice_contact', 'local_obu_application'), 'size="40" maxlength="100"');
 		$mform->setType('invoice_contact', PARAM_TEXT);
+		if (is_programme($data->application->course_code)) {
+			$mform->addElement('html', '<p></p><strong><i>' . get_string('programme_preamble', 'local_obu_application') . '</i></strong><p></p>');
+			$mform->addElement('advcheckbox', 'fund_programme', get_string('fund_programme', 'local_obu_application'), null, null, array(0, 1));
+			$mform->addElement('text', 'fund_module_1', get_string('fund_module', 'local_obu_application'), 'size="6" maxlength="6"');
+			$mform->setType('fund_module_1', PARAM_TEXT);
+			$mform->disabledIf('fund_module_1', 'fund_programme', 'eq', '1');
+			$mform->addElement('text', 'fund_module_2', get_string('fund_module', 'local_obu_application'), 'size="6" maxlength="6"');
+			$mform->setType('fund_module_2', PARAM_TEXT);
+			$mform->disabledIf('fund_module_2', 'fund_programme', 'eq', '1');
+			$mform->addElement('text', 'fund_module_3', get_string('fund_module', 'local_obu_application'), 'size="6" maxlength="6"');
+			$mform->setType('fund_module_3', PARAM_TEXT);
+			$mform->disabledIf('fund_module_3', 'fund_programme', 'eq', '1');
+			$mform->addElement('text', 'fund_module_4', get_string('fund_module', 'local_obu_application'), 'size="6" maxlength="6"');
+			$mform->setType('fund_module_4', PARAM_TEXT);
+			$mform->disabledIf('fund_module_4', 'fund_programme', 'eq', '1');
+			$mform->addElement('text', 'fund_module_5', get_string('fund_module', 'local_obu_application'), 'size="6" maxlength="6"');
+			$mform->setType('fund_module_5', PARAM_TEXT);
+			$mform->disabledIf('fund_module_5', 'fund_programme', 'eq', '1');
+			$mform->addElement('text', 'fund_module_6', get_string('fund_module', 'local_obu_application'), 'size="6" maxlength="6"');
+			$mform->setType('fund_module_6', PARAM_TEXT);
+			$mform->disabledIf('fund_module_6', 'fund_programme', 'eq', '1');
+			$mform->addElement('text', 'fund_module_7', get_string('fund_module', 'local_obu_application'), 'size="6" maxlength="6"');
+			$mform->setType('fund_module_7', PARAM_TEXT);
+			$mform->disabledIf('fund_module_7', 'fund_programme', 'eq', '1');
+			$mform->addElement('text', 'fund_module_8', get_string('fund_module', 'local_obu_application'), 'size="6" maxlength="6"');
+			$mform->setType('fund_module_8', PARAM_TEXT);
+			$mform->disabledIf('fund_module_8', 'fund_programme', 'eq', '1');
+			$mform->addElement('text', 'fund_module_9', get_string('fund_module', 'local_obu_application'), 'size="6" maxlength="6"');
+			$mform->setType('fund_module_9', PARAM_TEXT);
+			$mform->disabledIf('fund_module_9', 'fund_programme', 'eq', '1');
+		}
 		
 		$this->add_action_buttons(true, get_string('save', 'local_obu_application'));
     }

@@ -318,6 +318,55 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		// obu_application savepoint reached
 		upgrade_plugin_savepoint(true, 2017072800, 'local', 'obu_application');
     }
+
+	if ($oldversion < 2017112000) {
+
+		// Define and add the new fields to local_obu_application
+		$table = new xmldb_table('local_obu_application');
+		$field = new xmldb_field('fund_programme', XMLDB_TYPE_INTEGER, '1', null, null, null, '0', 'invoice_contact');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+		$field = new xmldb_field('fund_module_1', XMLDB_TYPE_CHAR, '100', null, null, null, null, 'fund_programme');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+		$field = new xmldb_field('fund_module_2', XMLDB_TYPE_CHAR, '100', null, null, null, null, 'fund_module_1');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+		$field = new xmldb_field('fund_module_3', XMLDB_TYPE_CHAR, '100', null, null, null, null, 'fund_module_2');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+		$field = new xmldb_field('fund_module_4', XMLDB_TYPE_CHAR, '100', null, null, null, null, 'fund_module_3');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+		$field = new xmldb_field('fund_module_5', XMLDB_TYPE_CHAR, '100', null, null, null, null, 'fund_module_4');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+		$field = new xmldb_field('fund_module_6', XMLDB_TYPE_CHAR, '100', null, null, null, null, 'fund_module_5');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+		$field = new xmldb_field('fund_module_7', XMLDB_TYPE_CHAR, '100', null, null, null, null, 'fund_module_6');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+		$field = new xmldb_field('fund_module_8', XMLDB_TYPE_CHAR, '100', null, null, null, null, 'fund_module_7');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+		$field = new xmldb_field('fund_module_9', XMLDB_TYPE_CHAR, '100', null, null, null, null, 'fund_module_8');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+
+		// obu_application savepoint reached
+		upgrade_plugin_savepoint(true, 2017112000, 'local', 'obu_application');
+    }
     
     return $result;
 }

@@ -829,6 +829,14 @@ function get_course_names() {
 	return $courses;	
 }
 
+function is_programme($course_code) {
+	if ((strlen($course_code) == 4) && ctype_alpha(substr($course_code, 0, 2)) && is_numeric(substr($course_code, 2))) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
 function get_organisations() {
 	
 	$organisations = array();
@@ -1056,13 +1064,40 @@ function update_workflow(&$application, $approved = true, $data = null) {
 				}
 			} else { // Must be an invoice to a non-NHS organisation
 				$application->funding_method = 0;
-				$application->funding_organisation = $data->organisation;
+				$application->funding_organisation = $data->funding_organisation;
 				$application->invoice_ref = $data->invoice_ref;
 				$application->invoice_address = $data->invoice_address;
 				$application->invoice_email = $data->invoice_email;
 				$application->invoice_phone = $data->invoice_phone;
 				$application->invoice_contact = $data->invoice_contact;
 			}
+
+			// Add the additional funding fields for a programme of study
+			if (is_programme($application->course_code)) {
+				$application->fund_programme = $data->fund_programme;
+				if ($data->fund_programme) {
+					$application->fund_module_1 = '';
+					$application->fund_module_2 = '';
+					$application->fund_module_3 = '';
+					$application->fund_module_4 = '';
+					$application->fund_module_5 = '';
+					$application->fund_module_6 = '';
+					$application->fund_module_7 = '';
+					$application->fund_module_8 = '';
+					$application->fund_module_9 = '';
+				} else {
+					$application->fund_module_1 = $data->fund_module_1;
+					$application->fund_module_2 = $data->fund_module_2;
+					$application->fund_module_3 = $data->fund_module_3;
+					$application->fund_module_4 = $data->fund_module_4;
+					$application->fund_module_5 = $data->fund_module_5;
+					$application->fund_module_6 = $data->fund_module_6;
+					$application->fund_module_7 = $data->fund_module_7;
+					$application->fund_module_8 = $data->fund_module_8;
+					$application->fund_module_9 = $data->fund_module_9;
+				}
+			}
+
 			$hls = get_complete_user_data('username', 'hls');
 			$approver_email = $hls->email;
 		}

@@ -173,6 +173,16 @@
         <FIELD NAME="invoice_email" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Invoice email"/>
         <FIELD NAME="invoice_phone" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Invoice phone"/>
         <FIELD NAME="invoice_contact" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Invoice staff member contact"/>
+        <FIELD NAME="fund_programme" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Fund whole programme?"/>
+        <FIELD NAME="fund_module_1" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Funded module 1"/>
+        <FIELD NAME="fund_module_2" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Funded module 2"/>
+        <FIELD NAME="fund_module_3" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Funded module 3"/>
+        <FIELD NAME="fund_module_4" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Funded module 4"/>
+        <FIELD NAME="fund_module_5" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Funded module 5"/>
+        <FIELD NAME="fund_module_6" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Funded module 6"/>
+        <FIELD NAME="fund_module_7" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Funded module 7"/>
+        <FIELD NAME="fund_module_8" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Funded module 8"/>
+        <FIELD NAME="fund_module_9" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Funded module 9"/>
         <FIELD NAME="application_date" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Date of application"/>
         <FIELD NAME="approval_level" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Current level of approval"/>
         <FIELD NAME="approval_state" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Current state of approval"/>

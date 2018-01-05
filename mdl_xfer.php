@@ -201,6 +201,29 @@ else if ($mform_data = $mform->get_data()) {
 					$fields['Phone_No'] = $application->invoice_phone;
 					$fields['Contact_Name'] = $application->invoice_contact;
 				}
+				if (($application->self_funding == 0) && is_programme($application->course_code)) {
+					$fields['Fund_Programme'] = $application->fund_programme;
+					$fields['Fund_Module_1'] = $application->fund_module_1;
+					$fields['Fund_Module_2'] = $application->fund_module_2;
+					$fields['Fund_Module_3'] = $application->fund_module_3;
+					$fields['Fund_Module_4'] = $application->fund_module_4;
+					$fields['Fund_Module_5'] = $application->fund_module_5;
+					$fields['Fund_Module_6'] = $application->fund_module_6;
+					$fields['Fund_Module_7'] = $application->fund_module_7;
+					$fields['Fund_Module_8'] = $application->fund_module_8;
+					$fields['Fund_Module_9'] = $application->fund_module_9;
+				} else {
+					$fields['Fund_Programme'] = '';
+					$fields['Fund_Module_1'] = '';
+					$fields['Fund_Module_2'] = '';
+					$fields['Fund_Module_3'] = '';
+					$fields['Fund_Module_4'] = '';
+					$fields['Fund_Module_5'] = '';
+					$fields['Fund_Module_6'] = '';
+					$fields['Fund_Module_7'] = '';
+					$fields['Fund_Module_8'] = '';
+					$fields['Fund_Module_9'] = '';
+				}
 			}
 
 			if ($index == 0) { // First record

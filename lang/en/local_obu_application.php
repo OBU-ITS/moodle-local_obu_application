@@ -37,7 +37,7 @@ $string['my_applications'] = 'My HLS applications';
 $string['introduction'] = '<span style=\'color:red\'>Whether you are an applicant or a funding approver you will need to register to use this portal.  Once registered you can go directly to log-in for any subsequent visits.</span>
 <h2>First-time users please register here before logging-in</h2>Welcome to the online application portal for the Faculty of Health and Life Sciences.  This service is for applicants hoping to take a one-off module with the Faculty, students taking one module are known as Associates.
 <p>&nbsp;</p>
-You can also use this service if you are applying to undertake an undergraduate top-up degree in health sciences.
+You can also use this service if you are applying to undertake an undergraduate top-up degree in health sciences.  If you have any queries or problems you may contact the Faculty on 01865 482779 or pacreception@brookes.ac.uk.
 <p>&nbsp;</p>
 Applicants to certified programmes (Postgraduate Certificate, Diploma and Masters) will need to apply using the postgraduate UCAS online service.*
 <p>&nbsp;</p>
@@ -215,6 +215,9 @@ $string['amend_course'] = 'Amend Course';
 $string['amend_funding'] = 'Amend Funding';
 
 $string['funding'] = 'Funding';
+$string['programme_preamble'] = 'Please indicate if you will be funding the whole of this programme of study or just individual modules:';
+$string['fund_programme'] = 'Fund Whole Programme';
+$string['fund_module'] = 'Fund Module Code';
 $string['funding_organisation'] = 'Funding Organisation';
 $string['funding_text'] = 'ONLY if \'Other Organisation\' is selected above, enter the funder\'s contact email:';
 $string['trust'] = 'NHS Trust';

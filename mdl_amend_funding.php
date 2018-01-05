@@ -85,6 +85,31 @@ if ($mform_data = $mform->get_data()) {
 	$application->invoice_email = $mform_data->invoice_email;
 	$application->invoice_phone = $mform_data->invoice_phone;
 	$application->invoice_contact = $mform_data->invoice_contact;
+
+	// Add the additional funding fields for a programme of study
+	$application->fund_programme = $mform_data->fund_programme;
+	if ($mform_data->fund_programme) {
+		$application->fund_module_1 = '';
+		$application->fund_module_2 = '';
+		$application->fund_module_3 = '';
+		$application->fund_module_4 = '';
+		$application->fund_module_5 = '';
+		$application->fund_module_6 = '';
+		$application->fund_module_7 = '';
+		$application->fund_module_8 = '';
+		$application->fund_module_9 = '';
+	} else {
+		$application->fund_module_1 = $mform_data->fund_module_1;
+		$application->fund_module_2 = $mform_data->fund_module_2;
+		$application->fund_module_3 = $mform_data->fund_module_3;
+		$application->fund_module_4 = $mform_data->fund_module_4;
+		$application->fund_module_5 = $mform_data->fund_module_5;
+		$application->fund_module_6 = $mform_data->fund_module_6;
+		$application->fund_module_7 = $mform_data->fund_module_7;
+		$application->fund_module_8 = $mform_data->fund_module_8;
+		$application->fund_module_9 = $mform_data->fund_module_9;
+	}
+
 	update_application($application);
 
 	redirect($process);
