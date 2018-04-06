@@ -368,5 +368,18 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		upgrade_plugin_savepoint(true, 2017112000, 'local', 'obu_application');
     }
     
+	if ($oldversion < 2018040400) {
+
+		// Define the new field to be added to local_obu_organisation
+		$table = new xmldb_table('local_obu_organisation');
+		$field = new xmldb_field('suspended', XMLDB_TYPE_INTEGER, '1', null, null, null, '0', 'address');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+
+		// obu_application savepoint reached
+		upgrade_plugin_savepoint(true, 2018040400, 'local', 'obu_application');
+    }
+	
     return $result;
 }

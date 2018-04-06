@@ -40,13 +40,14 @@ class mdl_organisation_form extends moodleform {
 		$data->delete = $this->_customdata['delete'];
 		$data->organisations = $this->_customdata['organisations'];
 		$data->record = $this->_customdata['record'];
-		
+
 		if ($data->record != null) {
 			$fields = [
 				'name' => $data->record->name,
 				'email' => $data->record->email,
 				'code' => $data->record->code,
-				'address' => $data->record->address
+				'address' => $data->record->address,
+				'suspended' => $data->record->suspended
 			];
 			$this->set_data($fields);
 		}
@@ -73,6 +74,12 @@ class mdl_organisation_form extends moodleform {
 			$mform->addElement('static', 'email', get_string('funder_email', 'local_obu_application'));
 			$mform->addElement('static', 'code', get_string('contract_code', 'local_obu_application'));
 			$mform->addElement('static', 'address', get_string('address'));
+			if ($data->record->suspended == '1') {
+				$suspended_formatted = '&#10004;'; // Tick
+			} else {
+				$suspended_formatted = '&#10008;'; // Cross
+			}
+			$mform->addElement('static', 'suspended_formatted', get_string('suspended', 'local_obu_application'), $suspended_formatted);
 		} else {
 			$mform->addElement('text', 'name', get_string('name', 'local_obu_application'), 'size="50" maxlength="100"');
 			$mform->setType('name', PARAM_TEXT);
@@ -82,6 +89,7 @@ class mdl_organisation_form extends moodleform {
 			$mform->setType('code', PARAM_TEXT);
 			$mform->addElement('textarea', 'address', get_string('address'), 'cols="40" rows="5"');
 			$mform->setType('address', PARAM_TEXT);
+			$mform->addElement('advcheckbox', 'suspended', get_string('suspended', 'local_obu_application'), null, null, array(0, 1));
 		}
 
 		// Options
@@ -90,7 +98,7 @@ class mdl_organisation_form extends moodleform {
 			$buttonarray[] = &$mform->createElement('submit', 'submitbutton', get_string('confirm_delete', 'local_obu_application'));
 		} else {
 			$buttonarray[] = &$mform->createElement('submit', 'submitbutton', get_string('save', 'local_obu_application'));
-			if ($data->id != '0') {
+			if (is_siteadmin() && ($data->id != '0')) {
 				$buttonarray[] = &$mform->createElement('submit', 'deletebutton', get_string('delete', 'local_obu_application'));
 			}
 		}

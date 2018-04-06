@@ -239,6 +239,7 @@ function write_organisation($organisation) {
 	$record->email = $organisation->email;
 	$record->code = $organisation->code;
 	$record->address = $organisation->address;
+	$record->suspended = $organisation->suspended;
 
 	if ($id == '0') {
 		$id = $DB->insert_record('local_obu_organisation', $record);
