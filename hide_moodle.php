@@ -28,7 +28,7 @@
 $CFG->sessioncookie = 'email';
 
 // Add our own CSS - mainly to hide the standard Moodle page elements
-$CFG->additionalhtmlhead .= '<style>.langmenu, .usermenu, .logininfo, .homelink, .page-context-header, .breadcrumb, .helplink, .footerlinks, .dropdown, .popover-region, .navbar .brand, .purgecaches { display: none; } .nav { color: white; } .navbar-inverse .nav .divider { border-left-color: #e5e5e5; border-right-color: white; } a.small-logo-container { pointer-events: none; cursor: default; } .navbar .nav > li >a, .pull-right { color: #0085a1; } .navbar .nav .divider { border-left-color: #0085a1; }</style>';
+$CFG->additionalhtmlhead .= '<style>.langmenu, .usermenu, .logininfo, .homelink, .page-context-header, .breadcrumb, .helplink, #footer-left, #footer-middle, #footer-right, .footerlinks, .dropdown, .popover-region, .navbar .brand, .purgecaches { display: none; } .nav { color: white; } .navbar-inverse .nav .divider { border-left-color: #e5e5e5; border-right-color: white; } a.small-logo-container { pointer-events: none; cursor: default; } .navbar .nav > li >a, .pull-right { color: #0085a1; } .navbar .nav .divider { border-left-color: #0085a1; } .loginbox .signuppanel .subcontent{text-align:left}</style>';
 
 // Add our own menu items for logged-in users
 if (!isloggedin()) {

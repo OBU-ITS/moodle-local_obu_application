@@ -30,6 +30,6 @@ defined('MOODLE_INTERNAL') || die;
 if ($hassiteconfig) {
     $settings = new admin_settingpage(get_string('pluginname', 'local_obu_application'), get_string('plugintitle', 'local_obu_application'));
     $ADMIN->add('localplugins', $settings);
-    $settings->add(new admin_setting_configtext('obu_application/support', get_string('supportcontact', 'local_obu_application'),
-		get_string('supportdesc', 'local_obu_application'), 'moodle@brookes.ac.uk', PARAM_TEXT));
+	$settings->add(new admin_setting_confightmleditor('local_obu_application/introduction', get_string('introduction', 'local_obu_application'), get_string('introduction_text', 'local_obu_application'), '<h2>Welcome</h2>'));
+    $settings->add(new admin_setting_confightmleditor('local_obu_application/support', get_string('support', 'local_obu_application'), get_string('support_text', 'local_obu_application'), 'For support, email moodle@brookes.ac.uk'));
 }

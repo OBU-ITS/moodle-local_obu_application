@@ -26,22 +26,22 @@
  *
  */
 
-$string['pluginname'] = 'OBU application';
+$string['pluginname'] = 'obu_application';
 $string['plugintitle'] = 'HLS Application';
+
 $string['obu_application:update'] = 'Update applications in obu_application (non \'read only\')';
 $string['obu_application:apply'] = 'Submit applications in obu_application';
 $string['obu_application:admin'] = 'Administer applications in obu_application';
 $string['obu_application:manage'] = 'Manage, view and approve applications in obu_application';
 $string['my_applications'] = 'My HLS applications';
 
-$string['introduction'] = '<span style=\'color:red\'>Whether you are an applicant or a funding approver you will need to register to use this portal.  Once registered you can go directly to log-in for any subsequent visits.</span>
-<h2>First-time users please register here before logging-in</h2>Welcome to the online application portal for the Faculty of Health and Life Sciences.  This service is for applicants hoping to take a one-off module with the Faculty, students taking one module are known as Associates.
-<p>&nbsp;</p>
-You can also use this service if you are applying to undertake an undergraduate top-up degree in health sciences.  If you have any queries or problems you may contact the Faculty on 01865 482779 or pacreception@brookes.ac.uk.
-<p>&nbsp;</p>
-Applicants to certified programmes (Postgraduate Certificate, Diploma and Masters) will need to apply using the postgraduate UCAS online service.*
-<p>&nbsp;</p>
-<em>* Oxford University Hospital staff please note that for the academic year 2017/18 you are required by your Education Department to apply for modules on an individual basis rather than applying through UCAS for a postgraduate certificate, diploma or masters.</em>';
+$string['introduction'] = 'Introduction';
+$string['introduction_text'] = 'Welcome text';
+$string['support'] = 'Support';
+$string['support_text'] = 'How to get support';
+
+$string['registration'] = 'Registration';
+$string['registrationsteps'] = 'To access to this site you will firstly need to take a minute to register yourself. Here are the steps: <ol> <li>Fill out the <a href="{$a}">Registration</a> form with your details.</li> <li>An email will be immediately sent to your email address.</li> <li>Read your email, and click on the web link it contains.</li> <li>Your account will be confirmed and you will be logged in.</li> <li>You can now access the site. From now on you will only need to enter your personal email and password (in the form opposite) to log in to your account.</li> </ol>';
 
 $string['page_content'] = '<h2>If You Wish To Apply</h2>
 The information you will need in order to complete your application includes the correct name of the course you are applying for and, if you aren\'t self-funding, the details of your funder.
@@ -71,14 +71,9 @@ $string['logout_message'] = '<h1>Thank you.</h1>This application has been passed
 
 $string['invalid_data'] = 'Invalid Data';
 
-$string['supportcontact'] = 'Support contact';
-$string['supportdesc'] = 'Name and or email of the support contact within Brookes';
-
 $string['rememberemail'] = 'Remember email';
 $string['forgotten'] = 'Forgotten your password? ';
 $string['passwordforgotteninstructions'] = '<p>Only external users not using a Brookes login may use the form below. Please enter the email address you used to register. We will search for your account and send you further instructions on how to regain access to the site.</p>';
-$string['registration'] = 'Registration';
-$string['registrationsteps'] = 'To access to this site you will firstly need to take a minute to register yourself. Here are the steps: <ol> <li>Fill out the <a href="{$a}">Registration</a> form with your details.</li> <li>An email will be immediately sent to your email address.</li> <li>Read your email, and click on the web link it contains.</li> <li>Your account will be confirmed and you will be logged in.</li> <li>You can now access the site. From now on you will only need to enter your personal email and password (in the form opposite) to log in to your account.</li> </ol>';
 
 $string['update_course'] = 'Add, Amend or Delete a Course';
 $string['new_course'] = 'New Course';
@@ -252,7 +247,7 @@ Please use this link {$a} to register for the Faculty of Health and Life Science
 $string['index_page'] = 'Home';
 $string['your_approvals'] = 'Your pending approvals';
 $string['your_applications'] = 'Your applications (please quote the HLS application reference in any communication)';
-$string['amend_application'] = 'If you need to amend any details of an application once you have submitted it then you will need to contact the Faculty on 01865 482779 or pacreception@brookes.ac.uk and ask to speak with the administrator for your course.';
+$string['amend_application'] = 'If you need to amend any details of an application once you have submitted it then you will need to contact the Faculty on 01865 482779 or <a href="mailto:pacreception@brookes.ac.uk">pacreception@brookes.ac.uk</a> and ask to speak with the administrator for your course.';
 
 $string['logout'] = 'Log out';
 

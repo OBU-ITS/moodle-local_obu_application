@@ -36,20 +36,21 @@ if (!empty($CFG->loginpasswordautocomplete)) {
 <div class="loginbox clearfix twocolumns">
 	
     <div class="signuppanel">
-		<?php print_string('introduction', 'local_obu_application') ?>
-		<h2><?php print_string('registration', 'local_obu_application') ?></h2>
+		<?php echo get_config('local_obu_application', 'introduction'); ?>
+		<h2><?php print_string('registration', 'local_obu_application'); ?></h2>
 		<div class="subcontent">
 			<?php print_string('registrationsteps', 'local_obu_application', 'signup.php'); ?>
 			<div class="signupform">
 				<form action="signup.php" method="get" id="register">
-					<div><input type="submit" value="<?php print_string('register', 'local_obu_application') ?>" /></div>
+					<div><input type="submit" value="<?php print_string('register', 'local_obu_application'); ?>" /></div>
 				</form>
 			</div>
 		</div>
+		<?php echo get_config('local_obu_application', 'support'); ?>
     </div>
 
 	<div class="loginpanel">
-		<h2><?php print_string("login") ?></h2>
+		<h2><?php print_string("login"); ?></h2>
 		<div class="subcontent loginsub">
 			<?php
 				if (!empty($errormsg)) {
