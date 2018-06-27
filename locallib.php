@@ -1160,7 +1160,7 @@ function update_approver($application, $approver_email) {
 		$approver = get_complete_user_data('email', strtolower($approver_email));
 		if ($approver === false) { // Approver hasn't yet registered
 			// Moodle requires a user to send emails to, not just an email address
-			$approver = new Object();
+			$approver = new stdClass();
 			$approver->email = $approver_email;
 			$approver->firstname = '';
 			$approver->lastname = '';
