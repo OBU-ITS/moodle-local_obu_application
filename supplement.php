@@ -85,7 +85,9 @@ if ($mform_data = (array)$mform->get_data()) {
 		if ($key != 'submitbutton') { // Ignore the standard field
 			if (in_array($key, $files)) { // Is this element a 'file' one?
 				$file = $mform->save_stored_file($key, $context->id, 'local_obu_application', 'file', $value, '/', null, true, null); // Save it to the Moodle pool
-				$data_fields[$key] = $file->get_pathnamehash(); // Store the file's pathname hash (it's unique identifier)
+				if ($file !== false) {
+					$data_fields[$key] = $file->get_pathnamehash(); // Store the file's pathname hash (it's unique identifier)
+				}
 			} else {
 				$data_fields[$key] = $value;
 			}
