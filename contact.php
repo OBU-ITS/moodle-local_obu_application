@@ -44,7 +44,7 @@ $PAGE->set_url($url);
 
 $message ='';
 
-$counties = get_counties();
+$counties = get_counties() + get_countries();
 $parameters = [
 	'user' => read_user($USER->id),
 	'applicant' => read_applicant($USER->id, false),

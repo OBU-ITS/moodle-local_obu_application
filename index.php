@@ -76,6 +76,8 @@ if ($applications) {
 		echo $text;
 	}
 	echo '<h4>' . get_string('amend_application', 'local_obu_application') . '</h4>';
+} else {
+	echo '<h4>' . get_config('local_obu_application', 'support') . '</h4>';
 }
 
 echo $OUTPUT->footer();

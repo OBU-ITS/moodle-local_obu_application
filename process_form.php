@@ -115,8 +115,8 @@ class process_form extends moodleform {
 				'address_2' => $data->record->address_2,
 				'address_3' => $data->record->address_3,
 				'town' => $data->record->town,
-				'county' => $data->record->county,
 				'postcode' => $data->record->postcode,
+				'domicile' => $data->record->county,
 				'phone' => $data->record->phone,
 				'email' => $data->record->email,
 				'birthdate' => $birthdate_formatted,
@@ -206,8 +206,8 @@ class process_form extends moodleform {
 			$mform->addElement('static', 'address_2', get_string('address_2', 'local_obu_application'));
 			$mform->addElement('static', 'address_3', get_string('address_3', 'local_obu_application'));
 			$mform->addElement('static', 'town', get_string('town', 'local_obu_application'));
-			$mform->addElement('static', 'county', get_string('county', 'local_obu_application'));
 			$mform->addElement('static', 'postcode', get_string('postcode', 'local_obu_application'));
+			$mform->addElement('static', 'domicile', get_string('domicile', 'local_obu_application'));
 		}
 		$mform->addElement('static', 'phone', get_string('phone', 'local_obu_application'));
 		$mform->addElement('static', 'email', get_string('email'));

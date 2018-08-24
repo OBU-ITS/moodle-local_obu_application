@@ -28,11 +28,12 @@
 $CFG->sessioncookie = 'email';
 
 // Add our own CSS - mainly to hide the standard Moodle page elements
-$CFG->additionalhtmlhead .= '<style>.langmenu, .usermenu, .logininfo, .homelink, .page-context-header, .breadcrumb, .helplink, #footer-left, #footer-middle, #footer-right, .footerlinks, .dropdown, .popover-region, .navbar .brand, .purgecaches { display: none; } .nav { color: white; } .navbar-inverse .nav .divider { border-left-color: #e5e5e5; border-right-color: white; } a.small-logo-container { pointer-events: none; cursor: default; } .navbar .nav > li >a, .pull-right { color: #0085a1; } .navbar .nav .divider { border-left-color: #0085a1; } .loginbox .signuppanel .subcontent{text-align:left}</style>';
+$CFG->additionalhtmlhead .= '<style>.langmenu, .usermenu, .logininfo, .homelink, .page-context-header, .breadcrumb, .helplink, .dropdown, .popover-region, .navbar .brand, .purgecaches, #page-footer { display: none; } .nav { color: white; } .navbar-inverse .nav .divider { border-left-color: #e5e5e5; border-right-color: white; } a.small-logo-container { pointer-events: none; cursor: default; } .navbar .nav > li >a, .pull-right { color: #0085a1; } .navbar .nav .divider { border-left-color: #0085a1; } .loginbox .signuppanel .subcontent{text-align:left}</style>';
 
 // Add our own menu items for logged-in users
 if (!isloggedin()) {
 	$PAGE->set_context(context_system::instance());
+	$CFG->custommenuitems = '';
 } else {
 	$PAGE->set_context(context_user::instance($USER->id));
 	$CFG->custommenuitems = get_string('index_page', 'local_obu_application') . '|/local/obu_application/index.php
@@ -51,8 +52,6 @@ if (!isloggedin()) {
 		Moodle|/';
 	}
 }
-
-
 
 // Set our own page heading (non-standard $CFG variable)
 $CFG->pageheading = get_string('plugintitle', 'local_obu_application');

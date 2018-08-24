@@ -105,6 +105,10 @@ class contact_form extends moodleform {
 		$mform->setType('town', PARAM_TEXT);
 		$mform->addRule('town', null, 'required', null, 'server');
 
+		$mform->addElement('text', 'postcode', get_string('postcode', 'local_obu_application'), 'size="20" maxlength="20"');
+		$mform->setType('postcode', PARAM_TEXT);
+		$mform->addRule('postcode', null, 'required', null, 'server');
+
 		$options = [];
 		if (($data->applicant === false) || ($data->applicant->domicile_code == 0)) {
 			$options['0'] = get_string('select', 'local_obu_application');
@@ -112,12 +116,9 @@ class contact_form extends moodleform {
 		foreach ($data->counties as $domicile_code => $county_name) {
 			$options[$domicile_code] = $county_name;
 		}
-		$mform->addElement('select', 'domicile_code', get_string('county', 'local_obu_application'), $options, null);
+		$mform->addElement('html', '<p><strong>' . get_string('domicile_preamble', 'local_obu_application') . '</strong></p>');
+		$mform->addElement('select', 'domicile_code', get_string('domicile', 'local_obu_application'), $options);
 		$mform->addRule('domicile_code', null, 'required', null, 'server');
-
-		$mform->addElement('text', 'postcode', get_string('postcode', 'local_obu_application'), 'size="20" maxlength="20"');
-		$mform->setType('postcode', PARAM_TEXT);
-		$mform->addRule('postcode', null, 'required', null, 'server');
 
 		$mform->addElement('text', 'phone1', get_string('phone', 'local_obu_application'), 'size="20" maxlength="20"');
 		$mform->setType('phone1', PARAM_TEXT);
