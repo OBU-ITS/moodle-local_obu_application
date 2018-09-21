@@ -352,7 +352,7 @@ class process_form extends moodleform {
 						$options['0'] = get_string('select', 'local_obu_application');
 					}
 					$options['1'] = get_string('invoice', 'local_obu_application');
-					$options['2'] = get_string('prepaid', 'local_obu_application');
+//					$options['2'] = get_string('prepaid', 'local_obu_application');
 					$options['3'] = get_string('contract', 'local_obu_application');
 					$mform->addElement('select', 'funding_method', get_string('funding_method', 'local_obu_application'), $options);
 					$mform->addElement('static', 'invoice_text', get_string('invoice_text', 'local_obu_application'));

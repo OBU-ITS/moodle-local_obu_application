@@ -158,6 +158,8 @@ else if ($mform_data = $mform->get_data()) {
 				$fields['Course_Name'] = $application->course_name;
 				$fields['Course_Date'] = $application->course_date;
 			} else { // Finance
+				$fields['Course_Code'] = $application->course_code;
+				$fields['Course_Name'] = $application->course_name;
 				if ($application->self_funding == 1) {
 					$fields['Funding_Method'] = 'Self-funding';
 					$fields['Organisation'] = '';
