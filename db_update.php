@@ -227,7 +227,7 @@ function get_course_records() {
 function read_organisation($organisation_id) {
     global $DB;
     
-	return $DB->get_record('local_obu_organisation', array('id' => $organisation_id), '*', MUST_EXIST);
+	return $DB->get_record('local_obu_organisation', array('id' => $organisation_id), '*');
 }
 
 function write_organisation($organisation) {

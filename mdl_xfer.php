@@ -73,6 +73,11 @@ else if ($mform_data = $mform->get_data()) {
 			$batch_number = $param->number + 1;
 		}
 	}
+	if ($xfer_id != 0) {
+		$file_id = $xfer_id;
+	} else {
+		$file_id = $batch_number;
+	}
 	
 	$applications = get_applications(); // Get all applications
 	$xfers = array();
@@ -94,7 +99,7 @@ else if ($mform_data = $mform->get_data()) {
 			$extension = 'txt';
 		}
 		header('Content-Type: text/csv');
-		header('Content-Disposition: attachment;filename=HLS_' . $param_name . sprintf('_%05d.', $batch_number) . $extension);
+		header('Content-Disposition: attachment;filename=HLS_' . $param_name . sprintf('_%05d.', $file_id) . $extension);
 		$fp = fopen('php://output', 'w');
 		foreach ($xfers as $index => $xfer) {
 			$application = read_application($xfer);
@@ -160,6 +165,7 @@ else if ($mform_data = $mform->get_data()) {
 			} else { // Finance
 				$fields['Course_Code'] = $application->course_code;
 				$fields['Course_Name'] = $application->course_name;
+				$fields['Course_Date'] = $application->course_date;
 				if ($application->self_funding == 1) {
 					$fields['Funding_Method'] = 'Self-funding';
 					$fields['Organisation'] = '';
