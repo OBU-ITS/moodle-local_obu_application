@@ -39,6 +39,8 @@ $string['introduction'] = 'Introduction';
 $string['introduction_text'] = 'Welcome text';
 $string['support'] = 'Support';
 $string['support_text'] = 'How to get support';
+$string['privacy'] = 'Privacy';
+$string['privacy_text'] = 'Privacy statement';
 
 $string['registration'] = 'Registration';
 $string['registrationsteps'] = 'To access to this site you will firstly need to take a minute to register yourself. Here are the steps: <ol> <li>Fill out the <a href="{$a}">Registration</a> form with your details.</li> <li>An email will be immediately sent to your email address.</li> <li>Read your email, and click on the web link it contains.</li> <li>Your account will be confirmed and you will be logged in.</li> <li>You can now access the site. From now on you will only need to enter your personal email and password (in the form opposite) to log in to your account.</li> </ol>';
@@ -170,7 +172,7 @@ $string['prof_level'] = 'Level';
 $string['prof_award_preamble'] = 'Award name (eg Adult Nursing/Social Work):';
 $string['prof_award'] = 'Award';
 $string['prof_date'] = 'Date qualified';
-$string['credit_preamble'] = 'Would you like us to consider any previous studies as credit towards an award from Oxford Brookes, for example a postgraduate Certificate/Diploma/Masters award?*';
+$string['credit_preamble'] = 'Would you like us to consider any previous studies (both at Oxford Brookes AND other institutes) as credit towards an award from Oxford Brookes, for example a postgraduate Certificate/Diploma/Masters award?*';
 $string['credit'] = 'Consider Credit';
 $string['credit_text'] = '(*please note that you cannot use credit that has already been counted to an award)';
 $string['credit_name_preamble'] = 'Please give us details of your academic credit:';

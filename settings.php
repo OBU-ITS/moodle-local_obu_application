@@ -21,7 +21,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2016, Oxford Brookes University
+ * @copyright  2018, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -32,4 +32,5 @@ if ($hassiteconfig) {
     $ADMIN->add('localplugins', $settings);
 	$settings->add(new admin_setting_confightmleditor('local_obu_application/introduction', get_string('introduction', 'local_obu_application'), get_string('introduction_text', 'local_obu_application'), '<h2>Welcome</h2>'));
     $settings->add(new admin_setting_confightmleditor('local_obu_application/support', get_string('support', 'local_obu_application'), get_string('support_text', 'local_obu_application'), 'For support, email moodle@brookes.ac.uk'));
+    $settings->add(new admin_setting_confightmleditor('local_obu_application/privacy', get_string('privacy', 'local_obu_application'), get_string('privacy_text', 'local_obu_application'), 'Please see our privacy statement'));
 }

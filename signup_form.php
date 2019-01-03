@@ -36,6 +36,8 @@ class registration_form extends moodleform {
 
         $mform = $this->_form;
 		
+		$mform->addElement('html', get_config('local_obu_application', 'privacy'));
+
 		// This 'dummy' element has two purposes:
 		// - To force open the Moodle Forms invisible fieldset outside of any table on the form (corrupts display otherwise)
 		// - To let us inform the user that there are validation errors without them having to scroll down further
