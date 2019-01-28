@@ -36,6 +36,7 @@ class process_form extends moodleform {
         $mform =& $this->_form;
 
         $data = new stdClass();
+		$data->source = $this->_customdata['source'];
 		$data->organisations = $this->_customdata['organisations'];
 		$data->record = $this->_customdata['record'];
 		$data->status_text = $this->_customdata['status_text'];
@@ -168,6 +169,8 @@ class process_form extends moodleform {
 		}
 		
 		// Start with the required hidden fields
+		$mform->addElement('hidden', 'source', $data->source);
+		$mform->setType('source', PARAM_RAW);
 		$mform->addElement('hidden', 'id', $data->record->id);
 		$mform->setType('id', PARAM_RAW);
 		$mform->addElement('hidden', 'approval_state', $data->record->approval_state);

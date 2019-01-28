@@ -32,23 +32,35 @@ require_once($CFG->libdir . '/moodlelib.php');
 
 require_obu_login();
 
-$manager = has_capability('local/obu_application:manage', context_system::instance());
+$manager = is_manager();
 $home = new moodle_url('/local/obu_application/');
 $logout = $home . 'logout.php';
 
+if (isset($_REQUEST['source'])) {
+	$source = $_REQUEST['source'];
+} else {
+	$source = '';
+}
+$back = $home . urldecode($source);
+
 // We only handle an existing application (id given)
 if (!isset($_REQUEST['id'])) {
-	redirect($home);
+	redirect($back);
 }
 
 $application = read_application($_REQUEST['id']);
 if ($application === false) {
-	redirect($home);
+	redirect($back);
 }
-$process = $home . 'process.php?id=' . $application->id;
 
-$PAGE->set_title($CFG->pageheading . ': ' . get_string('process', 'local_obu_application'));
-$PAGE->set_url($process);
+$url = $home . 'process.php?source=' . $source . '&id=' . $application->id;
+
+$title = get_string('process', 'local_obu_application');
+$heading = get_string('application', 'local_obu_application', $application->id);
+$PAGE->set_url($url);
+$PAGE->set_pagelayout('standard');
+$PAGE->set_title($title);
+$PAGE->set_heading($title);
 
 $message = '';
 
@@ -78,12 +90,13 @@ get_application_status($USER->id, $application, $text, $button_text); // get the
 $status_text .= $text;
 
 if ($button_text != 'approve') { // If not the next approver, check that this user can at least view the application
-	if (!$manager && ($USER->id != $application->userid)) {
+	if (!is_manager() && ($USER->id != $application->userid)) {
 		$message = get_string('application_unavailable', 'local_obu_application');
 	}
 }
 
 $parameters = [
+	'source' => $source,
 	'organisations' => get_organisations(),
 	'record' => $application,
 	'status_text' => $status_text,
@@ -93,7 +106,7 @@ $parameters = [
 $mform = new process_form(null, $parameters);
 
 if ($mform->is_cancelled()) {
-    redirect($home);
+    redirect($back);
 } 
 else if ($mform_data = $mform->get_data()) {
 	if (($button_text == 'approve') && ($mform_data->submitbutton != get_string('continue', 'local_obu_application')) // They can do something (and they want to)
@@ -108,14 +121,14 @@ else if ($mform_data = $mform->get_data()) {
 			redirect($logout);
 		}
 	}
-	redirect($home);
+	redirect($back);
 }
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading(get_string('application', 'local_obu_application', $application->id));
+echo $OUTPUT->heading($heading);
 
 if ($message) {
-    notice($message, $home);
+    notice($message, $back);
 }
 else {
     $mform->display();

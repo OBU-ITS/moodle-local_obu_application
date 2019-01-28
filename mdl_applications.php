@@ -29,17 +29,25 @@ require_once('./locallib.php');
 
 require_login();
 
-$context = context_system::instance();
-$manager = has_capability('local/obu_application:manage', $context);
+$home = new moodle_url('/');
+if (!is_manager()) {
+	redirect($home);
+}
+
+$applications_course = get_applications_course();
+require_login($applications_course);
+$back = $home . 'course/view.php?id=' . $applications_course;
 
 $user_id = optional_param('userid', 0, PARAM_INT);
 
 $url = new moodle_url('/local/obu_application/mdl_applications.php', array('userid' => $user_id));
 $PAGE->set_url($url);
+$PAGE->set_pagelayout('standard');
 
 if (($user_id == 0) || ($user_id == $USER->id)) {
     $user = $USER;
 	$currentuser = true;
+	$title = get_string('myapplications', 'local_obu_application');
 	$heading = get_string('myapplications', 'local_obu_application');
 } else {
     $user = $DB->get_record('user', array('id' => $user_id));
@@ -47,13 +55,13 @@ if (($user_id == 0) || ($user_id == $USER->id)) {
         print_error('invaliduserid');
     }
     $currentuser = false; // If we're looking at someone else's forms we may need to lock/remove some UI elements
+	$title = get_string('applications_management', 'local_obu_application');
 	$heading = get_string('applications', 'local_obu_application') . ': ' . $user->firstname . ' ' . $user->lastname;
+	$PAGE->navbar->add($heading);
 }
 
-$PAGE->set_context($context);
-$PAGE->set_pagelayout('standard');
-$PAGE->set_title(get_string('plugintitle', 'local_obu_application') . ': ' . get_string('applications', 'local_obu_application'));
-$PAGE->navbar->add(get_string('applications', 'local_obu_application'));
+$PAGE->set_title($title);
+$PAGE->set_heading($title);
 
 // The page contents
 echo $OUTPUT->header();
@@ -66,7 +74,7 @@ foreach ($applications as $application) {
 	get_application_status($USER->id, $application, $text, $button); // get the approval trail and the next action (from this user's perspective)
 	$application_title = $application->course_code . ' ' . $application->course_name . ' (Application Ref HLS/' . $application->id . ')';
 	if (($button != 'submit') || $currentuser || $manager) {
-		echo '<h4><a href="' . $process . '?id=' . $application->id . '">' . $application_title . '</a></h4>';
+		echo '<h4><a href="' . $process . '?source=' . urlencode('mdl_applications.php?userid=' . $user_id) . '&id=' . $application->id . '">' . $application_title . '</a></h4>';
 	} else {
 		echo '<h4>' . $application_title . '</h4>';
 	}

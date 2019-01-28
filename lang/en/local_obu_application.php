@@ -21,13 +21,14 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2016, Oxford Brookes University
+ * @copyright  2018, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
 
 $string['pluginname'] = 'obu_application';
 $string['plugintitle'] = 'HLS Application';
+$string['applications_management'] = 'Applications Management';
 
 $string['obu_application:update'] = 'Update applications in obu_application (non \'read only\')';
 $string['obu_application:apply'] = 'Submit applications in obu_application';
@@ -62,7 +63,10 @@ $string['application_approvals'] = 'Application approvals';
 $string['hls_approvals'] = 'HLS approvals';
 $string['list_applications'] = 'List a user\'s applications';
 $string['redirect_application'] = 'Redirect application';
+$string['status_report'] = 'Status report';
+$string['sr_options'] = 'Status report options';
 $string['courses'] = 'Courses';
+$string['all_courses'] = 'All courses';
 $string['supplements'] = 'Supplementary forms';
 $string['course_supplement'] = 'Course (Supplementary Form)';
 $string['organisations'] = 'Organisations';
@@ -111,6 +115,12 @@ $string['save_continue'] = 'Save & Continue';
 $string['applicant'] = 'Applicant';
 $string['application'] = 'Application (Ref HLS/{$a})';
 $string['applications'] = 'Applications';
+$string['application_date'] = 'Applications from';
+$string['sort_order'] = 'Sort order';
+$string['reference'] = 'Reference';
+$string['surname'] = 'Surname';
+$string['course_surname'] = 'Course/Surname';
+$string['course_status'] = 'Course/Status';
 $string['approvals'] = 'Approvals';
 $string['register'] = 'Register';
 $string['process'] = 'Process';

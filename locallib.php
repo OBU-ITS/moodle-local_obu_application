@@ -19,7 +19,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2017, Oxford Brookes University
+ * @copyright  2018, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -28,6 +28,28 @@ require_once($CFG->libdir . '/password_compat/lib/password.php');
 require_once($CFG->dirroot . '/user/lib.php');
 require_once($CFG->dirroot . '/user/profile/lib.php');
 require_once($CFG->dirroot . '/local/obu_application/db_update.php');
+
+// Check if the user is an applications manager
+function is_manager() {
+	global $USER;
+	
+	if (is_siteadmin()) {
+		return true;
+	}
+	
+	return has_applications_role($USER->id, 4, 5);
+}
+
+// Check if the user is an applications administrator
+function is_administrator() {
+	global $USER;
+	
+	if (is_siteadmin()) {
+		return true;
+	}
+	
+	return has_applications_role($USER->id, 4);
+}
 
 /**  Determine where a user should be redirected after they have been logged in.
  * @return string url the user should be redirected to.

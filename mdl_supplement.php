@@ -19,7 +19,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2017, Oxford Brookes University
+ * @copyright  2018, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -29,19 +29,31 @@ require_once('./locallib.php');
 require_once('./db_update.php');
 require_once('./mdl_supplement_form.php');
 
-require_login();
-$context = context_system::instance();
-require_capability('local/obu_application:update', $context);
-require_capability('local/obu_application:manage', $context);
+$home = new moodle_url('/');
+if (!is_manager()) {
+	redirect($home);
+}
 
-$program = '/local/obu_application/mdl_supplement.php';
-$url = new moodle_url($program);
+$applications_course = get_applications_course();
+require_login($applications_course);
+$back = $home . 'course/view.php?id=' . $applications_course;
+if (!is_administrator()) {
+	redirect($back);
+}
 
+if (!has_capability('local/obu_application:update', context_system::instance())) {
+	redirect($back);
+}
+
+$url = $home . 'local/obu_application/mdl_supplement.php';
+
+$title = get_string('applications_management', 'local_obu_application');
+$heading = get_string('supplements', 'local_obu_application');
+$PAGE->set_url($url);
 $PAGE->set_pagelayout('standard');
-$PAGE->set_url($program);
-$PAGE->set_context($context);
-$PAGE->set_heading($SITE->fullname);
-$PAGE->set_title(get_string('supplements', 'local_obu_application'));
+$PAGE->set_title($title);
+$PAGE->set_heading($title);
+$PAGE->navbar->add($heading);
 
 $message = '';
 
@@ -82,7 +94,11 @@ $parameters = [
 $msupplement = new mdl_supplement_form(null, $parameters);
 
 if ($msupplement->is_cancelled()) {
-    redirect($url);
+	if ($ref == '') {
+		redirect($back);
+	} else {
+		redirect($url);
+	}
 } 
 else if ($msupplement_data = $msupplement->get_data()) {
 	if ($msupplement_data->submitbutton == get_string('save', 'local_obu_application')) {

@@ -19,7 +19,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2017, Oxford Brookes University
+ * @copyright  2018, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -29,15 +29,25 @@ require_once('./locallib.php');
 
 require_login();
 
-$context = context_system::instance();
-require_capability('local/obu_application:manage', $context);
+$home = new moodle_url('/');
+if (!is_manager()) {
+	redirect($home);
+}
+
+$applications_course = get_applications_course();
+require_login($applications_course);
+$back = $home . 'course/view.php?id=' . $applications_course->id;
 
 $approver_username = optional_param('approver', '', PARAM_TEXT);
 if ($approver_username) {
 	$approver = get_complete_user_data('username', $approver_username);
 	$approver_email = $approver->email;
 	$url = new moodle_url('/local/obu_application/mdl_approvals.php', array('approver' => $approver_username));
-	$heading = get_string('approvals', 'local_obu_application') . ': ' . $approver->firstname . ' ' . $approver->lastname;
+	if ($approver_username == 'hls') {
+		$heading = $approver->firstname . ' ' . get_string('approvals', 'local_obu_application');
+	}else {
+		$heading = get_string('approvals', 'local_obu_application') . ': ' . $approver->firstname . ' ' . $approver->lastname;
+	}
 } else {
 	$approver = get_complete_user_data('username', 'hls'); // So that we can exclude them later
 	$approver_email = '';
@@ -45,11 +55,12 @@ if ($approver_username) {
 	$heading = get_string('approvals', 'local_obu_application');
 }
 
+$title = get_string('applications_management', 'local_obu_application');
 $PAGE->set_url($url);
 $PAGE->set_pagelayout('standard');
-$PAGE->set_context($context);
-$PAGE->set_title($heading);
-$PAGE->set_heading($heading);
+$PAGE->set_title($title);
+$PAGE->set_heading($title);
+$PAGE->navbar->add($heading);
 
 // The page contents
 echo $OUTPUT->header();
@@ -63,14 +74,12 @@ foreach ($approvals as $approval) {
 	if (($approver_email != '') || ($approval->approver != $approver->email)) {
 		$application = read_application($approval->application_id);
 		get_application_status($USER->id, $application, $text, $button); // get the approval trail and the next action (from the user's perspective)
-		echo '<h4><a href="' . $process . '?id=' . $application->id . '">' . $application->course_code . ' ' . $application->course_name . ' (' . $application->lastname . ' - HLS/' . $application->id . ')</a></h4>';
+		echo '<h4><a href="' . $process . '?source=' . urlencode('mdl_approvals.php?approver=' . $approver_username) . '&id=' . $application->id . '">' . $application->course_code . ' ' . $application->course_name . ' (' . $application->lastname . ' - HLS/' . $application->id . ')</a></h4>';
 		echo $text;
-		if (has_capability('local/obu_application:update', $context) && ($application->approval_level < 3)) { // Can't redirect away from final HLS approval/processing
+		if (has_capability('local/obu_application:update', context_system::instance()) && ($application->approval_level < 3)) { // Can't redirect away from final HLS approval/processing
 			echo '<p><a href="' . $redirect . '?id=' . $application->id . '">' . get_string('redirect_application', 'local_obu_application') . '</a></p>';
 		}
 	}
 }
 
 echo $OUTPUT->footer();
-
-

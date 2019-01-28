@@ -53,7 +53,7 @@ class mdl_supplement_form extends moodleform {
 		if ($data->ref == '') {
 			$mform->addElement('text', 'ref', get_string('suppref', 'local_obu_application'), 'size="10" maxlength="10"');
 			$mform->setType('ref', PARAM_TEXT);
-			$this->add_action_buttons(false, get_string('continue', 'local_obu_application'));
+			$this->add_action_buttons(true, get_string('continue', 'local_obu_application'));
 			return;
 		}
 		$mform->addElement('hidden', 'ref', $data->ref);

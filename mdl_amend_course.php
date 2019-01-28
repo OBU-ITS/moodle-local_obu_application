@@ -19,7 +19,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2017, Oxford Brookes University
+ * @copyright  2018, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -31,27 +31,45 @@ require_once($CFG->libdir . '/moodlelib.php');
 
 require_login();
 
-$context = context_system::instance();
 $home = new moodle_url('/');
-
-// We only allow 'administrator' level access and only to an existing application (id given)
-if (!has_capability('local/obu_application:update', $context) || !has_capability('local/obu_application:admin', $context) || !isset($_REQUEST['id'])) {
+if (!is_manager()) {
 	redirect($home);
+}
+
+$applications_course = get_applications_course();
+require_login($applications_course);
+$back = $home . 'course/view.php?id=' . $applications_course;
+if (!is_administrator()) {
+	redirect($back);
+}
+
+if (!has_capability('local/obu_application:update', context_system::instance())) {
+	redirect($back);
+}
+
+// We only allow access to an existing application (id given)
+if (!isset($_REQUEST['id'])) {
+	redirect($back);
 }
 
 $application = read_application($_REQUEST['id']);
-if (($application === false) || ($application->approval_level != 3) || ($application->approval_state != 0)) { // Must be awaiting approval/rejection by HLS
-	redirect($home);
+if ($application === false) {
+	redirect($back);
 }
 
-$program = $home . 'local/obu_application/mdl_amend_course.php?id=' . $application->id;
+$url = $home . 'local/obu_application/mdl_amend_course.php?id=' . $application->id;
 $process = $home . 'local/obu_application/mdl_process.php?id=' . $application->id;
+if (($application->approval_level != 3) || ($application->approval_state != 0)) { // Must be awaiting approval/rejection by HLS
+	redirect($process);
+}
 
-$PAGE->set_context($context);
+$title = get_string('applications_management', 'local_obu_application');
+$heading = get_string('application', 'local_obu_application', $application->id);
 $PAGE->set_pagelayout('standard');
-$PAGE->set_title(get_string('plugintitle', 'local_obu_application') . ': ' . get_string('process', 'local_obu_application')); // Part of application processing
-$PAGE->set_url($program);
-$PAGE->navbar->add(get_string('application', 'local_obu_application', $application->id));
+$PAGE->set_title($title);
+$PAGE->set_heading($title);
+$PAGE->set_url($url);
+$PAGE->navbar->add($heading);
 
 $message = '';
 
@@ -79,7 +97,7 @@ if ($mform_data = $mform->get_data()) {
 }
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading(get_string('application', 'local_obu_application', $application->id));
+echo $OUTPUT->heading($heading);
 
 if ($message) {
     notice($message, $process);    

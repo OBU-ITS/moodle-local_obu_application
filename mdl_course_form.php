@@ -55,7 +55,7 @@ class mdl_course_form extends moodleform {
 		if ($data->id == '') {
 			$select = $mform->addElement('select', 'id', get_string('course', 'local_obu_application'), $data->courses, null);
 			$select->setSelected(0);
-			$this->add_action_buttons(false, get_string('continue', 'local_obu_application'));
+			$this->add_action_buttons(true, get_string('continue', 'local_obu_application'));
 			return;
 		}
 		

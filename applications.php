@@ -19,7 +19,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2016, Oxford Brookes University
+ * @copyright  2018, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -30,16 +30,18 @@ require_once('./locallib.php');
 
 require_obu_login();
 
-$manager = has_capability('local/obu_application:manage', context_system::instance());
+$manager = is_manager();
 
 $user_id = optional_param('userid', 0, PARAM_INT);
 
 $url = new moodle_url('/local/obu_application/applications.php', array('userid' => $user_id));
 $PAGE->set_url($url);
+$PAGE->set_pagelayout('standard');
 
 if (($user_id == 0) || ($user_id == $USER->id)) {
     $user = $USER;
 	$currentuser = true;
+	$title = get_string('myapplications', 'local_obu_application');
 	$heading = get_string('myapplications', 'local_obu_application');
 } else {
     $user = $DB->get_record('user', array('id' => $user_id));
@@ -48,9 +50,11 @@ if (($user_id == 0) || ($user_id == $USER->id)) {
     }
     $currentuser = false; // If we're looking at someone else's forms we may need to lock/remove some UI elements
 	$heading = get_string('applications', 'local_obu_application') . ': ' . $user->firstname . ' ' . $user->lastname;
+	$PAGE->navbar->add($heading);
 }
 
-$PAGE->set_title($CFG->pageheading . ': ' . get_string('applications', 'local_obu_application'));
+$PAGE->set_title($title);
+$PAGE->set_heading($title);
 
 // The page contents
 echo $OUTPUT->header();
@@ -62,7 +66,7 @@ $applications = get_applications($user->id); // get all applications for the giv
 foreach ($applications as $application) {
 	get_application_status($USER->id, $application, $text, $button); // get the approval trail and the next action (from this user's perspective)
 	if (($button != 'submit') || $currentuser || $manager) {
-		echo '<h4><a href="' . $process . '?id=' . $application->id . '">Ref No ' . $application->id . '</a></h4>';
+		echo '<h4><a href="' . $process . '?source=' . urlencode('applications.php?userid=' . $user_id) . '&id=' . $application->id . '">Ref No ' . $application->id . '</a></h4>';
 	} else {
 		echo '<h4>Ref No ' . $application->id . '</h4>';
 	}
@@ -70,5 +74,3 @@ foreach ($applications as $application) {
 }
 
 echo $OUTPUT->footer();
-
-

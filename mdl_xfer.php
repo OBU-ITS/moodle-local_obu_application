@@ -19,7 +19,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2017, Oxford Brookes University
+ * @copyright  2018, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -30,27 +30,32 @@ require_once('./mdl_xfer_form.php');
 
 require_login();
 
-$context = context_system::instance();
-require_capability('local/obu_application:update', $context);
-require_capability('local/obu_application:manage', $context);
-
 $home = new moodle_url('/');
-$dir = $home . 'local/obu_application/';
-$program = $dir . 'mdl_xfer.php';
-$heading = get_string('data_xfer', 'local_obu_application');
+if (!is_manager()) {
+	redirect($home);
+}
 
-$PAGE->set_url($program);
+$applications_course = get_applications_course();
+require_login($applications_course);
+$back = $home . 'course/view.php?id=' . $applications_course;
+
+$dir = $home . 'local/obu_application/';
+$url = $dir . 'mdl_xfer.php';
+
+$title = get_string('applications_management', 'local_obu_application');
+$heading = get_string('data_xfer', 'local_obu_application');
+$PAGE->set_url($url);
 $PAGE->set_pagelayout('standard');
-$PAGE->set_context($context);
-$PAGE->set_heading($SITE->fullname);
-$PAGE->set_title($heading);
+$PAGE->set_title($title);
+$PAGE->set_heading($title);
+$PAGE->navbar->add($heading);
 
 $message = '';
 
 $mform = new mdl_xfer_form(null, array());
 
 if ($mform->is_cancelled()) {
-    redirect($home);
+    redirect($back);
 } 
 else if ($mform_data = $mform->get_data()) {
 		
@@ -64,7 +69,7 @@ else if ($mform_data = $mform->get_data()) {
 		$xfer_id = $mform_data->xfer_id; // Re-run batch ID
 		$batch_number = 0; // No new batch number
 	} else {
-		$param = read_parameter($param_name);
+		$param = read_parameter_by_name($param_name, true);
 		if ($mform_data->xfer_type == 3) {
 			$xfer_id = $param->number; // Default to last Admissions batch ID
 			$batch_number = 0; // No new batch number

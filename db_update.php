@@ -21,10 +21,45 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2016, Oxford Brookes University
+ * @copyright  2018, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
+
+function get_applications_course() {
+	global $DB;
+	
+	$course = $DB->get_record('course', array('idnumber' => 'SUBS_APPLICATIONS'), 'id', MUST_EXIST);
+	return $course->id;
+}
+
+// Check if the given user has the given role in the applications management course
+function has_applications_role($user_id = 0, $role_id_1 = 0, $role_id_2 = 0, $role_id_3 = 0) {
+	global $DB;
+	
+	if (($user_id == 0) || ($role_id_1 == 0)) { // Both mandatory
+		return false;
+	}
+	
+	$sql = 'SELECT ue.id'
+		. ' FROM {user_enrolments} ue'
+		. ' JOIN {enrol} e ON e.id = ue.enrolid'
+		. ' JOIN {context} ct ON ct.instanceid = e.courseid'
+		. ' JOIN {role_assignments} ra ON ra.contextid = ct.id'
+		. ' JOIN {course} c ON c.id = e.courseid'
+		. ' WHERE ue.userid = ?'
+			. ' AND e.enrol = "manual"'
+			. ' AND ct.contextlevel = 50'
+			. ' AND ra.userid = ue.userid'
+			. ' AND (ra.roleid = ? OR ra.roleid = ? OR ra.roleid = ?)'
+			. ' AND c.idnumber = "SUBS_APPLICATIONS"';
+	$db_ret = $DB->get_records_sql($sql, array($user_id, $role_id_1, $role_id_2, $role_id_3));
+	if (empty($db_ret)) {
+		return false;
+	} else {
+		return true;
+	}
+}
 
 function is_enroled() {
 	global $DB, $USER;
@@ -68,12 +103,16 @@ function is_enroled() {
 	return $modules;
 }
 
-function read_parameter($name) {
+function read_parameter_by_name($name, $strict = false) {
 	global $DB;
 	
-	$parameter = $DB->get_record('local_obu_param', array('name' => $name), '*', MUST_EXIST);
+	if ($strict) {
+		$strictness = MUST_EXIST;
+	} else {
+		$strictness = IGNORE_MISSING;
+	}
 	
-	return $parameter;
+	return $DB->get_record('local_obu_param', array('name' => $name), '*', $strictness);
 }
 
 function read_parameter_by_id($param_id) {
@@ -523,6 +562,21 @@ function get_applications($user_id = null) {
 	}
 	
 	return $applications;
+}
+
+function get_applications_for_courses($selected_courses = '', $application_date = 0, $sort_order = '') {
+    global $DB;
+
+	$sql = 'SELECT * FROM {local_obu_application} WHERE application_date >= ?';
+	if ($selected_courses != '') {
+		$sql .= ' AND course_code IN (' . $selected_courses . ')';
+	}
+	if ($sort_order != '') {
+		$sql .= ' ORDER BY ' . $sort_order;
+	}
+	$sql .= ';';
+
+	return $DB->get_records_sql($sql, array($application_date));
 }
 
 function read_approval($application_id, &$approval) {

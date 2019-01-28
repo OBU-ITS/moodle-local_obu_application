@@ -19,7 +19,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2016, Oxford Brookes University
+ * @copyright  2018, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -31,26 +31,46 @@ require_once($CFG->libdir . '/moodlelib.php');
 
 require_login();
 
-$context = context_system::instance();
-$manager = has_capability('local/obu_application:manage', $context);
 $home = new moodle_url('/');
+if (!is_manager()) {
+	redirect($home);
+}
+
+$applications_course = get_applications_course();
+require_login($applications_course);
+$source = '';
+if (isset($_REQUEST['source'])) {
+	$source = $_REQUEST['source'];
+}
+if ($source) {
+	$back = $home . 'local/obu_application/' . urldecode($source);
+} else {
+	$back = $home . 'course/view.php?id=' . $applications_course;
+}
+
+if (!has_capability('local/obu_application:update', context_system::instance())) {
+	redirect($back);
+}
 
 // We only handle an existing application (id given)
 if (!isset($_REQUEST['id'])) {
-	redirect($home);
+	redirect($back);
 }
 
 $application = read_application($_REQUEST['id']);
 if ($application === false) {
-	redirect($home);
+	redirect($back);
 }
-$process = $home . 'local/obu_application/mdl_process.php?id=' . $application->id;
 
-$PAGE->set_context($context);
+$url = $home . 'local/obu_application/mdl_process.php?source=' . $source . '&id=' . $application->id;
+
+$title = get_string('applications_management', 'local_obu_application');
+$heading = get_string('application', 'local_obu_application', $application->id);
+$PAGE->set_url($url);
 $PAGE->set_pagelayout('standard');
-$PAGE->set_title(get_string('plugintitle', 'local_obu_application') . ': ' . get_string('process', 'local_obu_application'));
-$PAGE->set_url($process);
-$PAGE->navbar->add(get_string('application', 'local_obu_application', $application->id));
+$PAGE->set_title($title);
+$PAGE->set_heading($title);
+$PAGE->navbar->add($heading);
 
 $message = '';
 
@@ -79,13 +99,8 @@ if ($status_text) {
 get_application_status($USER->id, $application, $text, $button_text); // get the approval trail and the next action (from user's perspective)
 $status_text .= $text;
 
-if ($button_text != 'approve') { // If not the next approver, check that this user can view the application
-	if (!$manager && ($USER->id != $application->userid)) {
-		$message = get_string('application_unavailable', 'local_obu_application');
-	}
-}
-
 $parameters = [
+	'source' => $source,
 	'organisations' => get_organisations(),
 	'record' => $application,
 	'status_text' => $status_text,
@@ -95,7 +110,7 @@ $parameters = [
 $mform = new process_form(null, $parameters);
 
 if ($mform->is_cancelled()) {
-    redirect($home);
+    redirect($back);
 }
 
 if ($mform_data = $mform->get_data()) {
@@ -109,14 +124,14 @@ if ($mform_data = $mform->get_data()) {
 		redirect($home . 'local/obu_application/mdl_amend_funding.php?id=' . $application->id); // Amend the funding
 	}
 
-	redirect($home);
+	redirect($back);
 }
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading(get_string('application', 'local_obu_application', $application->id));
+echo $OUTPUT->heading($heading);
 
 if ($message) {
-    notice($message, $home);    
+    notice($message, $back);    
 }
 else {
     $mform->display();
