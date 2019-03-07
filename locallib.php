@@ -1122,8 +1122,6 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 
 	$text = '';
 	$button = '';
-	$context = context_system::instance();
-	$manager = has_capability('local/obu_application:manage', $context);
 	
 	// Prepare the submission/approval trail
 	$date = date_create();
@@ -1218,7 +1216,7 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 						$text .= get_string('actioned_by', 'local_obu_application', array('action' => get_string('approved', 'local_obu_application'), 'by' => $name));
 					}
 					$text .= ' ' . $application->approval_3_comment . '<br />';
-					if ($manager) {
+					if (is_manager()) {
 						if ($application->admissions_xfer > 0) {
 							$text .= get_string('admissions', 'local_obu_application') . ' ' . get_string('data_xfer', 'local_obu_application') . ': ' .$application->admissions_xfer . '<br />';
 						}
@@ -1266,7 +1264,7 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 			if (($approver !== false) && ($approver->id == $user_id)) {
 				$name = 'you';
 				$button = 'approve';
-			} else if (($approver !== false) && ($approver->username == 'hls') && $manager) {
+			} else if (($approver !== false) && ($approver->username == 'hls') && is_manager()) {
 				$button = 'approve';
 			} else {
 				$button = 'continue';

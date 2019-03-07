@@ -76,9 +76,9 @@ function local_obu_application_pluginfile($course, $cm, $context, $filearea, $ar
     }
 	
     // Check the capability
-    if (($USER->id != $file->get_userid()) && !has_capability('local/obu_application:manage', $context)) {
-        return false;
-    }
+//    if (($USER->id != $file->get_userid()) && !has_capability('local/obu_application:manage', $context)) {
+//        return false;
+//    }
  
     // We can now send the file back to the browser 
 	send_stored_file($file, 86400, 0, $forcedownload, $options);

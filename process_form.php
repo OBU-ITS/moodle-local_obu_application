@@ -419,7 +419,7 @@ class process_form extends moodleform {
 					$mform->setType('fund_module_9', PARAM_TEXT);
 					$mform->disabledIf('fund_module_9', 'fund_programme', 'eq', '1');
 				}
-			} else if (($data->record->approval_level > 2) && has_capability('local/obu_application:manage', context_system::instance())) { // Funding available for HLS to view
+			} else if (($data->record->approval_level > 2) && is_manager()) { // Funding available for HLS to view
 				$mform->addElement('header', 'funding', get_string('funding', 'local_obu_application'), '');
 				if ($data->button_text == 'approve') {
 					$mform->setExpanded('funding');
@@ -485,7 +485,7 @@ class process_form extends moodleform {
 				$mform->addElement('text', 'comment', '', 'size="40" maxlength="100"');
 				$mform->setType('comment', PARAM_TEXT);
 				$buttonarray[] = &$mform->createElement('submit', 'rejectbutton', get_string('reject', 'local_obu_application'));
-				if (($approval_sought == 3) && has_capability('local/obu_application:admin', context_system::instance())) { // HLS administrator
+				if (($approval_sought == 3) && is_administrator()) { // HLS administrator
 					$buttonarray[] = &$mform->createElement('submit', 'amendcoursebutton', get_string('amend_course', 'local_obu_application'));
 					if ($data->record->self_funding == '0') {
 						$buttonarray[] = &$mform->createElement('submit', 'amendfundingbutton', get_string('amend_funding', 'local_obu_application'));
