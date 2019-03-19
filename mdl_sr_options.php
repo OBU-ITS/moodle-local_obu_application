@@ -39,9 +39,6 @@ if (!is_manager()) {
 $applications_course = get_applications_course();
 require_login($applications_course);
 $back = $home . 'course/view.php?id=' . $applications_course;
-if (!is_administrator()) {
-	redirect($back);
-}
 
 if (!has_capability('local/obu_application:update', context_system::instance())) {
 	redirect($back);
