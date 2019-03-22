@@ -215,7 +215,11 @@ else if ($mform_data = $mform->get_data()) {
 					$fields['Contact_Name'] = $application->invoice_contact;
 				}
 				if (($application->self_funding == 0) && is_programme($application->course_code)) {
-					$fields['Fund_Programme'] = $application->fund_programme;
+					if ($application->fund_programme) {
+						$fields['Fund_Programme'] = 'Y';
+					} else {
+						$fields['Fund_Programme'] = 'N';
+					}
 					$fields['Fund_Module_1'] = $application->fund_module_1;
 					$fields['Fund_Module_2'] = $application->fund_module_2;
 					$fields['Fund_Module_3'] = $application->fund_module_3;
