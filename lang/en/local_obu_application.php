@@ -65,6 +65,8 @@ $string['list_applications'] = 'List a user\'s applications';
 $string['redirect_application'] = 'Redirect application';
 $string['status_report'] = 'Status report';
 $string['sr_options'] = 'Status report options';
+$string['funding_report'] = 'Funding report';
+$string['funding_options'] = 'Funding report options';
 $string['courses'] = 'Courses';
 $string['all_courses'] = 'All courses';
 $string['supplements'] = 'Supplementary forms';
@@ -101,6 +103,7 @@ $string['admissions'] = 'Admissions';
 $string['finance'] = 'Finance';
 $string['xfer_id'] = 'If re-transferring, enter the Transfer ID';
 $string['no_xfer'] = 'No data to transfer';
+$string['no_applications'] = 'No relevant applications';
 
 $string['add'] = 'Add';
 $string['amend'] = 'Amend';

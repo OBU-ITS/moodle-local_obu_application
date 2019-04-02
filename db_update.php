@@ -579,6 +579,23 @@ function get_applications_for_courses($selected_courses = '', $application_date 
 	return $DB->get_records_sql($sql, array($application_date));
 }
 
+function get_applications_for_funder($funding_id = 0, $application_date = 0, $sort_order = '') {
+    global $DB;
+
+	$sql = 'SELECT * FROM {local_obu_application} WHERE application_date >= ? AND ';
+	if ($funding_id == 0) {
+		$sql .= 'self_funding = 1';
+	} else {
+		$sql .= 'funding_id = ?';
+	}
+	if ($sort_order != '') {
+		$sql .= ' ORDER BY ' . $sort_order;
+	}
+	$sql .= ';';
+
+	return $DB->get_records_sql($sql, array($application_date, $funding_id));
+}
+
 function read_approval($application_id, &$approval) {
     global $DB;
     
