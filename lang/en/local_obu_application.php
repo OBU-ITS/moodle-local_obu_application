@@ -21,10 +21,73 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2018, Oxford Brookes University
+ * @copyright  2019, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
+
+$string['privacy:metadata:local_obu_applicant'] = 'Information about an applicant.';
+$string['privacy:metadata:local_obu_application'] = 'Information about an application and the data entered onto supplementary forms.';
+$string['privacy:metadata:local_obu_application:id'] = 'The applicant\'s Portal ID.';
+$string['privacy:metadata:local_obu_application:userid'] = 'The applicant\'s Moodle user ID.';
+$string['privacy:metadata:local_obu_application:title'] = 'Title.';
+$string['privacy:metadata:local_obu_application:firstname'] = 'First name.';
+$string['privacy:metadata:local_obu_application:lastname'] = 'Last name (surname).';
+$string['privacy:metadata:local_obu_application:address_1'] = 'Address 1.';
+$string['privacy:metadata:local_obu_application:address_2'] = 'Address 2.';
+$string['privacy:metadata:local_obu_application:address_3'] = 'Address 3.';
+$string['privacy:metadata:local_obu_application:town'] = 'Town.';
+$string['privacy:metadata:local_obu_application:domicile_code'] = 'Domicile (county) code.';
+$string['privacy:metadata:local_obu_application:county'] = 'County.';
+$string['privacy:metadata:local_obu_application:postcode'] = 'Postcode.';
+$string['privacy:metadata:local_obu_application:phone'] = 'Phone.';
+$string['privacy:metadata:local_obu_application:email'] = 'Email.';
+$string['privacy:metadata:local_obu_application:birthdate'] = 'Date of birth.';
+$string['privacy:metadata:local_obu_application:nationality_code'] = 'Nationality code.';
+$string['privacy:metadata:local_obu_application:nationality'] = 'Nationality.';
+$string['privacy:metadata:local_obu_application:p16school'] = 'Post 16 School name.';
+$string['privacy:metadata:local_obu_application:p16schoolperiod'] = 'Post 16 School period.';
+$string['privacy:metadata:local_obu_application:p16fe'] = 'Post 16 Further Education.';
+$string['privacy:metadata:local_obu_application:p16feperiod'] = 'Post 16 Further Education period.';
+$string['privacy:metadata:local_obu_application:training'] = 'University/professional training body.';
+$string['privacy:metadata:local_obu_application:trainingperiod'] = 'Training period.';
+$string['privacy:metadata:local_obu_application:prof_level'] = 'Level of qualification.';
+$string['privacy:metadata:local_obu_application:prof_award'] = 'Award name.';
+$string['privacy:metadata:local_obu_application:prof_date'] = 'Date qualified.';
+$string['privacy:metadata:local_obu_application:credit'] = 'Academic credit?.';
+$string['privacy:metadata:local_obu_application:credit_name'] = 'Credit name.';
+$string['privacy:metadata:local_obu_application:credit_organisation'] = 'Awarding organisation.';
+$string['privacy:metadata:local_obu_application:emp_place'] = 'Place of employment.';
+$string['privacy:metadata:local_obu_application:emp_area'] = 'Clinical area.';
+$string['privacy:metadata:local_obu_application:emp_title'] = 'Job title.';
+$string['privacy:metadata:local_obu_application:emp_prof'] = 'Profession.';
+$string['privacy:metadata:local_obu_application:prof_reg_no'] = 'Professional body registration number.';
+$string['privacy:metadata:local_obu_application:criminal_record'] = 'Criminal record?.';
+$string['privacy:metadata:local_obu_application:profile_update'] = 'Date of last profile update.';
+$string['privacy:metadata:local_obu_application:course_code'] = 'Course code.';
+$string['privacy:metadata:local_obu_application:course_name'] = 'Course name.';
+$string['privacy:metadata:local_obu_application:course_date'] = 'Course start date.';
+$string['privacy:metadata:local_obu_application:statement'] = 'Supporting statement.';
+$string['privacy:metadata:local_obu_application:supplement_data'] = 'Course supplementary form data.';
+$string['privacy:metadata:local_obu_application:course_update'] = 'Date of last course update.';
+$string['privacy:metadata:local_obu_application:self_funding'] = 'Self-funding?.';
+$string['privacy:metadata:local_obu_application:manager_email'] = 'Email of manager.';
+$string['privacy:metadata:local_obu_application:declaration'] = 'Mandatory declaration.';
+$string['privacy:metadata:local_obu_application:funder_email'] = 'Email of funder.';
+$string['privacy:metadata:local_obu_application:funding_method'] = 'Funding method.';
+$string['privacy:metadata:local_obu_application:funding_id'] = 'ID of funding organisation.';
+$string['privacy:metadata:local_obu_application:funding_organisation'] = 'Funding organisation.';
+$string['privacy:metadata:local_obu_application:funder_name'] = 'Name of funder.';
+$string['privacy:metadata:local_obu_application:application_date'] = 'Date of application.';
+$string['privacy:metadata:local_obu_application:approval_state'] = 'Status of application.';
+$string['privacy:metadata:local_obu_application:approval_1_comment'] = 'The manager\'s comment.';
+$string['privacy:metadata:local_obu_application:approval_1_date'] = 'The date of the manager\'s approval/rejection.';
+$string['privacy:metadata:local_obu_application:approval_2_comment'] = 'The funder\'s comment.';
+$string['privacy:metadata:local_obu_application:approval_2_date'] = 'The date of the funder\'s approval/rejection.';
+$string['privacy:metadata:local_obu_application:approval_3_comment'] = 'The HLS comment.';
+$string['privacy:metadata:local_obu_application:approval_3_date'] = 'The date of HLS approval/rejection.';
+$string['privacy:applications'] = 'Applications';
+$string['privacy:application'] = 'Application HLS_{$a}';
 
 $string['pluginname'] = 'obu_application';
 $string['plugintitle'] = 'HLS Application';
@@ -49,7 +112,7 @@ $string['registrationsteps'] = 'To access to this site you will firstly need to 
 $string['page_content'] = '<h2>If You Wish To Apply</h2>
 The information you will need in order to complete your application includes the correct name of the course you are applying for and, if you aren\'t self-funding, the details of your funder.
 <p>&nbsp;</p>
-Using the tabs above, please:
+Using the links above, please:
 <ul>
 <li>Check that your contact details are correct and up-to-date</li>
 <li>Enter your personal details (including education history and professional qualifications)</li>

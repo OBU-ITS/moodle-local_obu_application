@@ -146,7 +146,7 @@ class supplement_form extends moodleform {
 				default:
 			}
 			
-			if ($element['rule']) { // An extra validation rule applies to this field
+			if (array_key_exists('rule', $element)) { // An extra validation rule applies to this field
 				if ($element['rule'] == 'group') { // At least one of this group of fields is required
 					$this->required_group[] = $element['id']; // For our own validation
 				} else {

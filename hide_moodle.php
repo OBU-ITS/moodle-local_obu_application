@@ -19,16 +19,24 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2016, Oxford Brookes University
+ * @copyright  2019, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
+
+// Set the name for our micro-site
+$SITE->shortname = get_string('plugintitle', 'local_obu_application');
  
 // Set our login cookie suffix (too late for the session cookie)
 $CFG->sessioncookie = 'email';
 
 // Add our own CSS - mainly to hide the standard Moodle page elements
-$CFG->additionalhtmlhead .= '<style>.langmenu, .usermenu, .logininfo, .homelink, .page-context-header, .breadcrumb, .helplink, .dropdown, .popover-region, .navbar .brand, .purgecaches, #page-footer { display: none; } .nav { color: white; } .navbar-inverse .nav .divider { border-left-color: #e5e5e5; border-right-color: white; } a.small-logo-container { pointer-events: none; cursor: default; } .navbar .nav > li >a, .pull-right { color: #0085a1; } .navbar .nav .divider { border-left-color: #0085a1; } .loginbox .signuppanel .subcontent{text-align:left}</style>';
+$CFG->additionalhtmlhead .= '<style>';
+$CFG->additionalhtmlhead .= 'body.drawer-open-left { margin-left: 0; } #nav-drawer { left: -305px; }'; // Hide the standard navigation
+$CFG->additionalhtmlhead .= '#page-header, #page-footer, .btn.nav-link, .navbar .nav { display: none !important; }'; // Hide other unwanted elements
+$CFG->additionalhtmlhead .= 'a.navbar-brand { pointer-events: none; cursor: default; }'; // Disable the Moodle link
+$CFG->additionalhtmlhead .= '.nav-link { color: #d10373 !important; text-decoration: underline; } .nav-link:hover { color: #86024a !important; text-decoration: none; }'; // Links
+$CFG->additionalhtmlhead .= '</style>';
 
 // Add our own menu items for logged-in users
 if (!isloggedin()) {
@@ -52,10 +60,5 @@ if (!isloggedin()) {
 		Moodle|/';
 	}
 }
-
-// Set our own page heading (non-standard $CFG variable)
-$CFG->pageheading = get_string('plugintitle', 'local_obu_application');
-$PAGE->set_headingmenu('<h1>' . $CFG->pageheading . '</h1>');
-$PAGE->set_heading($CFG->pageheading);
 
 ?>

@@ -24,7 +24,6 @@
  *
  */
  
-require_once($CFG->libdir . '/password_compat/lib/password.php');
 require_once($CFG->dirroot . '/user/lib.php');
 require_once($CFG->dirroot . '/user/profile/lib.php');
 require_once($CFG->dirroot . '/local/obu_application/db_update.php');
