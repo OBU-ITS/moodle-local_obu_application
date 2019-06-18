@@ -107,7 +107,7 @@ $string['privacy'] = 'Privacy';
 $string['privacy_text'] = 'Privacy statement';
 
 $string['registration'] = 'Registration';
-$string['registrationsteps'] = 'To access to this site you will firstly need to take a minute to register yourself. Here are the steps: <ol> <li>Fill out the <a href="{$a}">Registration</a> form with your details.</li> <li>An email will be immediately sent to your email address.</li> <li>Read your email, and click on the web link it contains.</li> <li>Your account will be confirmed and you will be logged in.</li> <li>You can now access the site. From now on you will only need to enter your personal email and password (in the form opposite) to log in to your account.</li> </ol>';
+$string['registrationsteps'] = 'To access to this site you will firstly need to take a minute to register yourself. Here are the steps: <ol> <li>Fill out the <a href="{$a}">Registration</a> form with your details.</li> <li>An email will be immediately sent to your email address.</li> <li>Read your email, and click on the web link it contains.</li> <li>Your account will be confirmed and you will be logged in.</li> <li>You can now access the site. From now on you will only need to enter your personal email and password to log in to your account.</li> </ol>';
 
 $string['page_content'] = '<h2>If You Wish To Apply</h2>
 The information you will need in order to complete your application includes the correct name of the course you are applying for and, if you aren\'t self-funding, the details of your funder.
