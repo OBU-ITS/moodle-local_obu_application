@@ -37,9 +37,6 @@ $url = new moodle_url('/local/obu_application/');
 
 $PAGE->set_title($CFG->pageheading . ': ' . get_string('profile', 'local_obu_application'));
 
-// HTTPS is required in this page when $CFG->loginhttps enabled
-$PAGE->https_required();
-
 $PAGE->set_url('/local/obu_application/profile.php');
 
 $record = read_applicant($USER->id, false); // May not exist yet

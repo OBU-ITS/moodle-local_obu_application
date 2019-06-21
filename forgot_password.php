@@ -34,9 +34,6 @@ require_once('./set_password_form.php');
 
 $token = optional_param('token', false, PARAM_ALPHANUM);
 
-//HTTPS is required in this page when $CFG->loginhttps enabled
-$PAGE->https_required();
-
 $PAGE->set_url('/local/obu_application/forgot_password.php');
 $PAGE->set_title($CFG->pageheading . ': ' . get_string('passwordforgotten'));
 

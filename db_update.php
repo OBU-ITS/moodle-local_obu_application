@@ -21,7 +21,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2018, Oxford Brookes University
+ * @copyright  2019, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -59,48 +59,6 @@ function has_applications_role($user_id = 0, $role_id_1 = 0, $role_id_2 = 0, $ro
 	} else {
 		return true;
 	}
-}
-
-function is_enroled() {
-	global $DB, $USER;
-	
-	// Establish the initial selection criteria to apply
-	$criteria = 'substr(c.shortname, 7, 1) = " " AND substr(c.shortname, 13, 1) = "-" AND length(c.shortname) >= 18';
-	$criteria = $criteria . ' AND ue.userid = ' . $USER->id; // Restrict modules to ones in which this user is enroled
-	
-	// Read the course (module) records that match our chosen criteria
-	$sql = 'SELECT c.id, c.fullname, c.shortname '
-		. 'FROM {course} c '
-		. 'JOIN {enrol} e ON e.courseid = c.id '
-		. 'JOIN {user_enrolments} ue ON ue.enrolid = e.id '
-		. 'WHERE ' . $criteria;
-	$db_ret = $DB->get_records_sql($sql, array());
-	
-	// Create an array of the current modules with the required type (if given)
-	$modules = array();
-	$now = time();
-	foreach ($db_ret as $row) {
-		$module_type = substr($row->fullname, 0, 1);
-		$module_start = strtotime('01 ' . substr($row->shortname, 7, 3) . ' ' . substr($row->shortname, 10, 2));
-		$module_end = strtotime('31 ' .	substr($row->shortname, 13, 3) . ' ' . substr($row->shortname, 16, 2));
-		if ((!$type || ($module_type == $type)) && ($module_end >= $now)) { // Must be the required type and not already ended
-			if ($user_id == 0) { // Just need the module code for validation purposes
-				$split_pos = strpos($row->fullname, ': ');
-				if ($split_pos !== false) {
-					$modules[$row->id] = substr($row->fullname, 0, $split_pos);
-				}
-			} else { // Need the full name
-				$split_pos = strpos($row->fullname, ' (');
-				if ($split_pos !== false) {
-					$modules[$row->id] = substr($row->fullname, 0, $split_pos);
-				} else {
-					$modules[$row->id] = $row->fullname;
-				}
-			}
-		}
-	}
-
-	return $modules;
 }
 
 function read_parameter_by_name($name, $strict = false) {

@@ -39,9 +39,6 @@ $context = context_user::instance($USER->id);
 
 $PAGE->set_title($CFG->pageheading . ': ' . get_string('apply', 'local_obu_application'));
 
-// HTTPS is required in this page when $CFG->loginhttps enabled
-$PAGE->https_required();
-
 $PAGE->set_url($url);
 
 $message = '';

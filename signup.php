@@ -37,9 +37,6 @@ if (!isset($CFG->additionalhtmlhead)) {
 }
 $CFG->additionalhtmlhead .= '<meta name="robots" content="noindex" />';
 
-// HTTPS is required in this page when $CFG->loginhttps enabled
-$PAGE->https_required();
-
 $home = new moodle_url('/local/obu_application/');
 $url = $home . 'signup.php';
 $login = $home . 'login.php';
@@ -95,9 +92,6 @@ if ($mform->is_cancelled()) {
 		exit; //never reached
 	}
 }
-
-// make sure we really are on the https page when https login required
-$PAGE->verify_https_required();
 
 $PAGE->set_title($CFG->pageheading . ': ' . get_string('registration', 'local_obu_application'));
 

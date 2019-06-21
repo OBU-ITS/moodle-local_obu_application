@@ -37,9 +37,6 @@ if ($cancel) {
     redirect(new moodle_url('/local/obu_application/'));
 }
 
-// HTTPS is required in this page when $CFG->loginhttps enabled
-$PAGE->https_required();
-
 $PAGE->set_url($CFG->httpswwwroot . '/local/obu_application/login.php');
 $PAGE->set_pagelayout('login');
 
@@ -164,9 +161,6 @@ if (empty($SESSION->wantsurl)) {
 		&& strpos($_SERVER['HTTP_REFERER'], $CFG->httpswwwroot . '/local/obu_application/login.php') !== 0) // There might be some extra params such as ?lang=.
 			? $_SERVER['HTTP_REFERER'] : NULL;
 }
-
-// Make sure we really are on the https page when https login required
-$PAGE->verify_https_required();
 
 // Generate the login page with forms
 

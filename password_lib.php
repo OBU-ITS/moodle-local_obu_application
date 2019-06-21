@@ -135,9 +135,6 @@ function password_reset_request() {
         die; // Never reached.
     }
 
-    // Make sure we really are on the https page when https login required.
-    $PAGE->verify_https_required();
-
     // DISPLAY FORM.
 
     echo $OUTPUT->header();
@@ -204,7 +201,6 @@ function password_set($token) {
         $setdata->username2 = $user->username;
         $setdata->token = $user->token;
         $mform->set_data($setdata);
-        $PAGE->verify_https_required();
         echo $OUTPUT->header();
         echo $OUTPUT->box(get_string('setpasswordinstructions'), 'generalbox boxwidthnormal boxaligncenter');
         $mform->display();
