@@ -91,6 +91,7 @@ $string['privacy:application'] = 'Application HLS_{$a}';
 
 $string['pluginname'] = 'obu_application';
 $string['plugintitle'] = 'HLS Application';
+$string['applications_administration'] = 'Applications administration';
 $string['applications_management'] = 'Applications Management';
 
 $string['obu_application:update'] = 'Update applications in obu_application (non \'read only\')';
@@ -300,7 +301,7 @@ $string['other'] = 'Other Organisation';
 $string['organisation'] = 'Organisation';
 $string['funder_name'] = 'Name of Funder';
 $string['funding_method'] = 'Funding Method';
-$string['contract'] = 'CPD Contract (HETV)';
+$string['contract'] = 'CPD Contract';
 $string['prepaid'] = 'Pre-paid';
 $string['invoice'] = 'Invoice';
 $string['invoice_text'] = 'If \'Invoice\' enter details here:';

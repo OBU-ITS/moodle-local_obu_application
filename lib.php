@@ -16,35 +16,26 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * OBU Application - Provide left hand navigation links
+ * OBU Application - Public functions
  *
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2018, Oxford Brookes University
+ * @copyright  2019, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
  
 function local_obu_application_extend_navigation($navigation) {
 	
-	if (!isloggedin() || isguestuser() || !is_siteadmin()) {
+	if (!is_siteadmin()) {
 		return;
 	}
+
+	$nodeHome = $navigation->children->get('1')->parent;
+	$node = $nodeHome->add(get_string('applications_administration', 'local_obu_application'), '/local/obu_application/mdl_param.php', navigation_node::TYPE_SYSTEM);
+	$node->showinflatnavigation = true;
 	
-	// Find the 'applications' node
-	$nodeParent = $navigation->find(get_string('applications', 'local_obu_application'), navigation_node::TYPE_SYSTEM);
-	
-	// If necessary, add the 'applications' node to 'home'
-	if (!$nodeParent) {
-		$nodeHome = $navigation->children->get('1')->parent;
-		if ($nodeHome) {
-			$nodeParent = $nodeHome->add(get_string('applications', 'local_obu_application'), null, navigation_node::TYPE_SYSTEM);
-		}
-	}
-	
-	if ($nodeParent) {
-		$node = $nodeParent->add(get_string('parameters', 'local_obu_application'), '/local/obu_application/mdl_param.php');
-	}
+	return;
 }
 
 function local_obu_application_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, $options) {
@@ -75,11 +66,6 @@ function local_obu_application_pluginfile($course, $cm, $context, $filearea, $ar
         return false; // The file does not exist!
     }
 	
-    // Check the capability
-//    if (($USER->id != $file->get_userid()) && !has_capability('local/obu_application:manage', $context)) {
-//        return false;
-//    }
- 
     // We can now send the file back to the browser 
 	send_stored_file($file, 86400, 0, $forcedownload, $options);
 }

@@ -19,7 +19,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2017, Oxford Brookes University
+ * @copyright  2019, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -32,24 +32,12 @@ require_once('./mdl_param_form.php');
 require_login();
 
 $home = new moodle_url('/');
-if (!is_manager()) {
+if (!is_siteadmin() || !has_capability('local/obu_application:update', context_system::instance())) {
 	redirect($home);
 }
 
-$applications_course = get_applications_course();
-require_login($applications_course);
-$back = $home . 'course/view.php?id=' . $applications_course;
-if (!is_administrator()) {
-	redirect($back);
-}
-
-if (!has_capability('local/obu_application:update', context_system::instance())) {
-	redirect($back);
-}
-
 $url = $home . 'local/obu_application/mdl_param.php';
-
-$title = get_string('applications_management', 'local_obu_application');
+$title = get_string('applications_administration', 'local_obu_application');
 $heading = get_string('parameters', 'local_obu_application');
 $PAGE->set_url($url);
 $PAGE->set_pagelayout('standard');
@@ -94,7 +82,11 @@ $parameters = [
 $mform = new mdl_param_form(null, $parameters);
 
 if ($mform->is_cancelled()) {
-    redirect($url);
+	if ($id == '0') {
+		redirect($home);
+	} else {
+		redirect($url);
+	}
 } 
 else if ($mform_data = $mform->get_data()) {
 	if (isset($mform_data->submitbutton)) { // 'Save' or 'Confirm Deletion'
