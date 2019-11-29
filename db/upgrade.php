@@ -21,7 +21,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2016, Oxford Brookes University
+ * @copyright  2019, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -379,6 +379,23 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 
 		// obu_application savepoint reached
 		upgrade_plugin_savepoint(true, 2018040400, 'local', 'obu_application');
+    }
+    
+	if ($oldversion < 2019112800) {
+
+		// Define the new fields to be added to local_obu_course
+		$table = new xmldb_table('local_obu_course');
+		$field = new xmldb_field('programme', XMLDB_TYPE_INTEGER, '1', null, null, null, '0', 'supplement');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+		$field = new xmldb_field('suspended', XMLDB_TYPE_INTEGER, '1', null, null, null, '0', 'programme');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+
+		// obu_application savepoint reached
+		upgrade_plugin_savepoint(true, 2019112800, 'local', 'obu_application');
     }
 	
     return $result;

@@ -19,7 +19,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2018, Oxford Brookes University
+ * @copyright  2019, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -1090,18 +1090,12 @@ function get_course_names() {
 	$courses = array();
 	$recs = get_course_records();
 	foreach ($recs as $rec) {
-		$courses[$rec->code] = $rec->code . ' ' . $rec->name;
+		if ($rec->suspended == 0) {
+			$courses[$rec->code] = $rec->code . ' ' . $rec->name;
+		}
 	}
 	
 	return $courses;	
-}
-
-function is_programme($course_code) {
-	if ((strlen($course_code) == 4) && ctype_alpha(substr($course_code, 0, 2)) && is_numeric(substr($course_code, 2))) {
-		return true;
-	} else {
-		return false;
-	}
 }
 
 function get_organisations() {

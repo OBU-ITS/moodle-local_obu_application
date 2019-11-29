@@ -154,6 +154,7 @@ $string['code'] = 'Code';
 $string['name'] = 'Name';
 $string['number'] = 'Number';
 $string['text'] = 'Text';
+$string['programme'] = 'Programme';
 $string['update_organisation'] = 'Add, Amend or Suspend an Organisation';
 $string['new_organisation'] = 'New Organisation';
 $string['funder_email'] = 'Email of Funder';

@@ -198,6 +198,8 @@ function write_course_record($course) {
 	$record->code = $course->code;
 	$record->name = $course->name;
 	$record->supplement = $course->supplement;
+	$record->programme = $course->programme;
+	$record->suspended = $course->suspended;
 
 	if ($id == '0') {
 		$id = $DB->insert_record('local_obu_course', $record);
@@ -219,6 +221,17 @@ function get_course_records() {
 	global $DB;
 	
 	return $DB->get_records('local_obu_course', null, 'code');
+}
+
+function is_programme($course_code) {
+    global $DB;
+    
+	$course = $DB->get_record('local_obu_course', array('code' => $course_code), 'programme', IGNORE_MISSING);
+	if (($course == NULL) || ($course->programme == 0)) {
+		return false;
+	}
+
+	return true;
 }
 
 function read_organisation($organisation_id) {

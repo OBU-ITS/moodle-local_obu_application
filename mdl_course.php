@@ -19,7 +19,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2018, Oxford Brookes University
+ * @copyright  2019, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -86,6 +86,12 @@ if (isset($_REQUEST['id'])) {
 			$name = $rec->code . ' ' . $rec->name;
 			if ($rec->supplement) {
 				$name .= ' [' . $rec->supplement . ']';
+			}
+			if ($rec->programme) {
+				$name .= ' (Programme)';
+			}
+			if ($rec->suspended) {
+				$name .= ' - SUSPENDED';
 			}
 			$courses[$rec->id] = $name;
 		}

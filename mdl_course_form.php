@@ -21,7 +21,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2016, Oxford Brookes University
+ * @copyright  2019, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -45,7 +45,9 @@ class mdl_course_form extends moodleform {
 			$fields = [
 				'code' => $data->record->code,
 				'name' => $data->record->name,
-				'supplement' => $data->record->supplement
+				'supplement' => $data->record->supplement,
+				'programme' => $data->record->programme,
+				'suspended' => $data->record->suspended
 			];
 			$this->set_data($fields);
 		}
@@ -71,6 +73,18 @@ class mdl_course_form extends moodleform {
 			$mform->addElement('static', 'code', get_string('code', 'local_obu_application'));
 			$mform->addElement('static', 'name', get_string('name', 'local_obu_application'));
 			$mform->addElement('static', 'supplement', get_string('supplement', 'local_obu_application'));
+			if ($data->record->programme == '1') {
+				$programme_formatted = '&#10004;'; // Tick
+			} else {
+				$programme_formatted = '&#10008;'; // Cross
+			}
+			$mform->addElement('static', 'programme_formatted', get_string('programme', 'local_obu_application'), $programme_formatted);
+			if ($data->record->suspended == '1') {
+				$suspended_formatted = '&#10004;'; // Tick
+			} else {
+				$suspended_formatted = '&#10008;'; // Cross
+			}
+			$mform->addElement('static', 'suspended_formatted', get_string('suspended', 'local_obu_application'), $suspended_formatted);
 		} else {
 			$mform->addElement('text', 'code', get_string('code', 'local_obu_application'), 'size="10" maxlength="10"');
 			$mform->setType('code', PARAM_TEXT);
@@ -78,6 +92,8 @@ class mdl_course_form extends moodleform {
 			$mform->setType('name', PARAM_TEXT);
 			$mform->addElement('text', 'supplement', get_string('supplement', 'local_obu_application'), 'size="2" maxlength="2"');
 			$mform->setType('supplement', PARAM_TEXT);
+			$mform->addElement('advcheckbox', 'programme', get_string('programme', 'local_obu_application'), null, null, array(0, 1));
+			$mform->addElement('advcheckbox', 'suspended', get_string('suspended', 'local_obu_application'), null, null, array(0, 1));
 		}
 
 		// Options

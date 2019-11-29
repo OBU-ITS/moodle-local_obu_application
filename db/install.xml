@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="local/obu_application/db" VERSION="20150424" COMMENT="XMLDB file for Moodle local/obu_application"
+<XMLDB PATH="local/obu_application/db" VERSION="20191128" COMMENT="XMLDB file for Moodle local/obu_application"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -26,6 +26,8 @@
         <FIELD NAME="code" TYPE="char" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The course code"/>
         <FIELD NAME="name" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="The name of the course"/>
         <FIELD NAME="supplement" TYPE="char" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Any supplementary form for the course"/>
+        <FIELD NAME="programme" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Programme or not"/>
+        <FIELD NAME="suspended" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Suspended or not"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
