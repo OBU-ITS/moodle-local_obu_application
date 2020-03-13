@@ -21,7 +21,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2016, Oxford Brookes University
+ * @copyright  2020, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -38,6 +38,7 @@ class mdl_amend_course_form extends moodleform {
 
         $data = new stdClass();
 		$data->courses = $this->_customdata['courses'];
+		$data->dates = $this->_customdata['dates'];
 		$data->application = $this->_customdata['application'];
 		
 		$fields = [
@@ -66,9 +67,7 @@ class mdl_amend_course_form extends moodleform {
 		$mform->addElement('header', 'course_head', get_string('course_head', 'local_obu_application'), '');
 		$mform->setExpanded('course_head');
 		$mform->addElement('select', 'course_code', get_string('course', 'local_obu_application'), $data->courses, null);
-		$mform->addElement('text', 'course_date', get_string('course_date', 'local_obu_application'), 'size="40" maxlength="100"');
-		$mform->setType('course_date', PARAM_TEXT);
-		$mform->addRule('course_date', null, 'required', null, 'server');
+		$mform->addElement('select', 'course_date', get_string('course_date', 'local_obu_application'), $data->dates, null);
 		
 		$this->add_action_buttons(true, get_string('save', 'local_obu_application'));
     }

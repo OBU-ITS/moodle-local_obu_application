@@ -21,7 +21,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham (derived from '/login/signup.php')
- * @copyright  2016, Oxford Brookes University
+ * @copyright  2020, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -60,12 +60,8 @@ if (isloggedin()) {
 }
 
 include('./signup_form.php');
-$counties = get_counties();
-$parameters = [
-	'counties' => $counties
-];
 
-$mform = new registration_form(null, $parameters);
+$mform = new registration_form(null);
 
 if ($mform->is_cancelled()) {
     redirect($login);

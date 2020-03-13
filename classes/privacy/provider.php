@@ -49,13 +49,19 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 				'address_1' => 'privacy:metadata:local_obu_application:address_1',
 				'address_2' => 'privacy:metadata:local_obu_application:address_2',
 				'address_3' => 'privacy:metadata:local_obu_application:address_3',
-				'town' => 'privacy:metadata:local_obu_application:town',
+				'city' => 'privacy:metadata:local_obu_application:city',
 				'domicile_code' => 'privacy:metadata:local_obu_application:domicile_code',
-				'county' => 'privacy:metadata:local_obu_application:county',
+				'domicile_country' => 'privacy:metadata:local_obu_application:domicile_country',
 				'postcode' => 'privacy:metadata:local_obu_application:postcode',
+				'birth_code' => 'privacy:metadata:local_obu_application:birth_code',
+				'birth_country' => 'privacy:metadata:local_obu_application:birth_country',
 				'birthdate' => 'privacy:metadata:local_obu_application:birthdate',
 				'nationality_code' => 'privacy:metadata:local_obu_application:nationality_code',
 				'nationality' => 'privacy:metadata:local_obu_application:nationality',
+				'gender' => 'privacy:metadata:local_obu_application:gender',
+				'residence_code' => 'privacy:metadata:local_obu_application:residence_code',
+				'residence_area' => 'privacy:metadata:local_obu_application:residence_area',
+				'settled_status' => 'privacy:metadata:local_obu_application:settled_status',
 				'p16school' => 'privacy:metadata:local_obu_application:p16school',
 				'p16schoolperiod' => 'privacy:metadata:local_obu_application:p16schoolperiod',
 				'p16fe' => 'privacy:metadata:local_obu_application:p16fe',
@@ -78,6 +84,7 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 				'course_code' => 'privacy:metadata:local_obu_application:course_code',
 				'course_name' => 'privacy:metadata:local_obu_application:course_name',
 				'course_date' => 'privacy:metadata:local_obu_application:course_date',
+				'studying' => 'privacy:metadata:local_obu_application:studying',
 				'statement' => 'privacy:metadata:local_obu_application:statement',
 				'supplement_data' => 'privacy:metadata:local_obu_application:supplement_data',
 				'course_update' => 'privacy:metadata:local_obu_application:course_update'
@@ -96,15 +103,22 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 				'address_1' => 'privacy:metadata:local_obu_application:address_1',
 				'address_2' => 'privacy:metadata:local_obu_application:address_2',
 				'address_3' => 'privacy:metadata:local_obu_application:address_3',
-				'town' => 'privacy:metadata:local_obu_application:town',
+				'city' => 'privacy:metadata:local_obu_application:city',
 				'domicile_code' => 'privacy:metadata:local_obu_application:domicile_code',
-				'county' => 'privacy:metadata:local_obu_application:county',
+				'domicile_country' => 'privacy:metadata:local_obu_application:domicile_country',
 				'postcode' => 'privacy:metadata:local_obu_application:postcode',
-				'phone' => 'privacy:metadata:local_obu_application:phone',
+				'home_phone' => 'privacy:metadata:local_obu_application:home_phone',
+				'mobile_phone' => 'privacy:metadata:local_obu_application:mobile_phone',
 				'email' => 'privacy:metadata:local_obu_application:email',
+				'birth_code' => 'privacy:metadata:local_obu_application:birth_code',
+				'birth_country' => 'privacy:metadata:local_obu_application:birth_country',
 				'birthdate' => 'privacy:metadata:local_obu_application:birthdate',
 				'nationality_code' => 'privacy:metadata:local_obu_application:nationality_code',
 				'nationality' => 'privacy:metadata:local_obu_application:nationality',
+				'gender' => 'privacy:metadata:local_obu_application:gender',
+				'residence_code' => 'privacy:metadata:local_obu_application:residence_code',
+				'residence_area' => 'privacy:metadata:local_obu_application:residence_area',
+				'settled_status' => 'privacy:metadata:local_obu_application:settled_status',
 				'p16school' => 'privacy:metadata:local_obu_application:p16school',
 				'p16schoolperiod' => 'privacy:metadata:local_obu_application:p16schoolperiod',
 				'p16fe' => 'privacy:metadata:local_obu_application:p16fe',
@@ -126,6 +140,7 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 				'course_code' => 'privacy:metadata:local_obu_application:course_code',
 				'course_name' => 'privacy:metadata:local_obu_application:course_name',
 				'course_date' => 'privacy:metadata:local_obu_application:course_date',
+				'studying' => 'privacy:metadata:local_obu_application:studying',
 				'statement' => 'privacy:metadata:local_obu_application:statement',
 				'supplement_data' => 'privacy:metadata:local_obu_application:supplement_data',
 				'self_funding' => 'privacy:metadata:local_obu_application:self_funding',
@@ -191,10 +206,12 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 			$data->address_1 = $rec->address_1;
 			$data->address_2 = $rec->address_2;
 			$data->address_3 = $rec->address_3;
-			$data->town = $rec->town;
+			$data->city = $rec->city;
 			$data->domicile_code = $rec->domicile_code;
-			$data->county = $rec->county;
+			$data->domicile_country = $rec->domicile_country;
 			$data->postcode = $rec->postcode;
+			$data->birth_code = $rec->birth_code;
+			$data->birth_country = $rec->birth_country;
 			if ($rec->birthdate == 0) {
 				$data->birthdate = '';
 			} else {
@@ -202,6 +219,10 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 			}
 			$data->nationality_code = $rec->nationality_code;
 			$data->nationality = $rec->nationality;
+			$data->gender = $rec->gender;
+			$data->residence_code = $rec->residence_code;
+			$data->residence_area = $rec->residence_area;
+			$data->settled_status = $rec->settled_status;
 			$data->p16school = $rec->p16school;
 			$data->p16schoolperiod = $rec->p16schoolperiod;
 			$data->p16fe = $rec->p16fe;
@@ -241,6 +262,7 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 			$data->course_code = $rec->course_code;
 			$data->course_name = $rec->course_name;
 			$data->course_date = $rec->course_date;
+			$data->studying = $rec->studying;
 			$data->statement = $rec->statement;
 			if ($rec->supplement_data === NULL) {
 				$data->supplement_data = '';
@@ -270,12 +292,15 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 				$data->address_1 = $rec->address_1;
 				$data->address_2 = $rec->address_2;
 				$data->address_3 = $rec->address_3;
-				$data->town = $rec->town;
+				$data->city = $rec->city;
 				$data->domicile_code = $rec->domicile_code;
-				$data->county = $rec->county;
+				$data->domicile_country = $rec->domicile_country;
 				$data->postcode = $rec->postcode;
-				$data->phone = $rec->phone;
+				$data->home_phone = $rec->home_phone;
+				$data->mobile_phone = $rec->mobile_phone;
 				$data->email = $rec->email;
+				$data->birth_code = $rec->birth_code;
+				$data->birth_country = $rec->birth_country;
 				if ($rec->birthdate == 0) {
 					$data->birthdate = '';
 				} else {
@@ -283,6 +308,10 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 				}
 				$data->nationality_code = $rec->nationality_code;
 				$data->nationality = $rec->nationality;
+				$data->gender = $rec->gender;
+				$data->residence_code = $rec->residence_code;
+				$data->residence_area = $rec->residence_area;
+				$data->settled_status = $rec->settled_status;
 				$data->p16school = $rec->p16school;
 				$data->p16schoolperiod = $rec->p16schoolperiod;
 				$data->p16fe = $rec->p16fe;
@@ -316,6 +345,7 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 				$data->course_code = $rec->course_code;
 				$data->course_name = $rec->course_name;
 				$data->course_date = $rec->course_date;
+				$data->studying = $rec->studying;
 				$data->statement = $rec->statement;
 				if ($rec->supplement_data === NULL) {
 					$data->supplement_data = '';

@@ -21,7 +21,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2019, Oxford Brookes University
+ * @copyright  2020, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -47,7 +47,14 @@ class mdl_course_form extends moodleform {
 				'name' => $data->record->name,
 				'supplement' => $data->record->supplement,
 				'programme' => $data->record->programme,
-				'suspended' => $data->record->suspended
+				'suspended' => $data->record->suspended,
+				'module_subject' => $data->record->module_subject,
+				'module_number' => $data->record->module_number,
+				'campus' => $data->record->campus,
+				'programme_code' => $data->record->programme_code,
+				'major_code' => $data->record->major_code,
+				'level' => $data->record->level,
+				'cohort_code' => $data->record->cohort_code
 			];
 			$this->set_data($fields);
 		}
@@ -94,6 +101,20 @@ class mdl_course_form extends moodleform {
 			$mform->setType('supplement', PARAM_TEXT);
 			$mform->addElement('advcheckbox', 'programme', get_string('programme', 'local_obu_application'), null, null, array(0, 1));
 			$mform->addElement('advcheckbox', 'suspended', get_string('suspended', 'local_obu_application'), null, null, array(0, 1));
+			$mform->addElement('text', 'module_subject', get_string('module_subject', 'local_obu_application'), 'size="4" maxlength="4"');
+			$mform->setType('module_subject', PARAM_TEXT);
+			$mform->addElement('text', 'module_number', get_string('module_number', 'local_obu_application'), 'size="4" maxlength="4"');
+			$mform->setType('module_number', PARAM_TEXT);
+			$mform->addElement('text', 'campus', get_string('campus', 'local_obu_application'), 'size="3" maxlength="3"');
+			$mform->setType('campus', PARAM_TEXT);
+			$mform->addElement('text', 'programme_code', get_string('programme_code', 'local_obu_application'), 'size="12" maxlength="12"');
+			$mform->setType('programme_code', PARAM_TEXT);
+			$mform->addElement('text', 'major_code', get_string('major_code', 'local_obu_application'), 'size="4" maxlength="4"');
+			$mform->setType('major_code', PARAM_TEXT);
+			$mform->addElement('text', 'level', get_string('level', 'local_obu_application'), 'size="2" maxlength="2"');
+			$mform->setType('level', PARAM_TEXT);
+			$mform->addElement('text', 'cohort_code', get_string('cohort_code', 'local_obu_application'), 'size="10" maxlength="10"');
+			$mform->setType('cohort_code', PARAM_TEXT);
 		}
 
 		// Options

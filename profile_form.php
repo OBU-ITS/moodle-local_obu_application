@@ -21,7 +21,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2016, Oxford Brookes University
+ * @copyright  2020, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -39,11 +39,34 @@ class profile_form extends moodleform {
 
         $data = new stdClass();
 		$data->record = $this->_customdata['record'];
-		$data->nationalities = $this->_customdata['nationalities'];
+		$data->nations = $this->_customdata['nations'];
+		$data->areas = $this->_customdata['areas'];
+
+		if ($data->record->birth_code != '') {
+			$data->birth_code = $data->record->birth_code;
+		} else {
+			$data->birth_code = $this->_customdata['default_birth_code'];
+		}
+
+		if ($data->record->nationality_code != '') {
+			$data->nationality_code = $data->record->nationality_code;
+		} else {
+			$data->nationality_code = $this->_customdata['default_nationality_code'];
+		}
+
+		if ($data->record->residence_code != '') {
+			$data->residence_code = $data->record->residence_code;
+		} else {
+			$data->residence_code = $this->_customdata['default_residence_code'];
+		}
 		
 		$fields = [
+			'birth_code' => $data->birth_code,
 			'birthdate' => $data->record->birthdate,
-			'nationality_code' => $data->record->nationality_code,
+			'nationality_code' => $data->nationality_code,
+			'gender' => $data->record->gender,
+			'residence_code' => $data->residence_code,
+			'settled_status' => $data->record->settled_status,
 			'p16school' => $data->record->p16school,
 			'p16schoolperiod' => $data->record->p16schoolperiod,
 			'p16fe' => $data->record->p16fe,
@@ -65,18 +88,6 @@ class profile_form extends moodleform {
 		];
 		$this->set_data($fields);
 		
-		$date_options = array('startyear' => 1950, 'stopyear'  => 2030, 'timezone'  => 99, 'optional' => false);
-		
-		// This 'dummy' element has two purposes:
-		// - To force open the Moodle Forms invisible fieldset outside of any table on the form (corrupts display otherwise)
-		// - To let us inform the user that there are validation errors without them having to scroll down further
-		$mform->addElement('static', 'form_errors');
-
-        // Birth date/nationality
-        $mform->addElement('header', 'birth_head', get_string('birth_head', 'local_obu_application'), '');
-		$mform->setExpanded('birth_head');
-		$mform->addElement('date_selector', 'birthdate', get_string('birthdate', 'local_obu_application'), $date_options);
-		$mform->addRule('birthdate', null, 'required', null, 'server');
 		$options = [];
 		if ($data->record->nationality_code == 0) {
 			$options['0'] = get_string('select', 'local_obu_application');
@@ -84,8 +95,42 @@ class profile_form extends moodleform {
 		foreach ($data->nationalities as $nationality_code => $nationality_name) {
 			$options[$nationality_code] = $nationality_name;
 		}
-		$mform->addElement('select', 'nationality_code', get_string('nationality', 'local_obu_application'), $options, null);
+
+		$date_options = array('startyear' => 1950, 'stopyear'  => 2030, 'timezone'  => 99, 'optional' => false);
+		
+		// This 'dummy' element has two purposes:
+		// - To force open the Moodle Forms invisible fieldset outside of any table on the form (corrupts display otherwise)
+		// - To let us inform the user that there are validation errors without them having to scroll down further
+		$mform->addElement('static', 'form_errors');
+
+        // General - birth country, date, nationality and gender
+        $mform->addElement('header', 'general_head', get_string('general_head', 'local_obu_application'), '');
+		$mform->setExpanded('general_head');
+		$birth_code = $mform->addElement('select', 'birth_code', get_string('birth_country', 'local_obu_application'), $data->nations, null);
+		$birth_code->setSelected($data->birth_code);
+		$mform->addRule('birth_code', null, 'required', null, 'server');
+		$mform->addElement('date_selector', 'birthdate', get_string('birthdate', 'local_obu_application'), $date_options);
+		$mform->addRule('birthdate', null, 'required', null, 'server');
+		$nationality_code = $mform->addElement('select', 'nationality_code', get_string('nationality', 'local_obu_application'), $data->nations, null);
+		$nationality_code->setSelected($data->nationality_code);
 		$mform->addRule('nationality_code', null, 'required', null, 'server');
+		$genders = [];
+		$genders['N'] = get_string('gender_not_available', 'local_obu_application');
+		$genders['F'] = get_string('gender_female', 'local_obu_application');
+		$genders['M'] = get_string('gender_male', 'local_obu_application');
+		$mform->addElement('select', 'gender', get_string('gender', 'local_obu_application'), $genders);
+		$mform->addRule('gender', null, 'required', null, 'server');
+		$mform->addElement('html', '<p><strong>' . get_string('residence_preamble', 'local_obu_application') . '</strong></p>');
+		$residence_code = $mform->addElement('select', 'residence_code', get_string('residence_area', 'local_obu_application'), $data->areas);
+		$residence_code->setSelected($data->residence_code);
+		$mform->addRule('residence_code', null, 'required', null, 'server');
+		$mform->addElement('html', '<p><strong>' . get_string('settled_status_preamble', 'local_obu_application') . '</strong></p>');
+		$options = [];
+		$options['0'] = get_string('not_applicable', 'local_obu_application');
+		$options['1'] = get_string('yes', 'local_obu_application');
+		$options['2'] = get_string('no', 'local_obu_application');
+		$mform->addElement('select', 'settled_status', get_string('settled_status', 'local_obu_application'), $options);
+		$mform->addRule('settled_status', null, 'required', null, 'server');
 
         // Education
 		$mform->addElement('header', 'education_head', get_string('education_head', 'local_obu_application'), '');
@@ -167,8 +212,20 @@ class profile_form extends moodleform {
         global $CFG, $DB;
         $errors = parent::validation($data, $files);
 		
-		if ($data['nationality_code'] == '0') {
+		if ($data['birth_code'] == '') {
+			$errors['birth_code'] = get_string('value_required', 'local_obu_application');
+		}
+		
+		if ((mktime() - $data['birthdate']) < 504921600) { // Must be at least 16 years old!
+			$errors['birthdate'] = get_string('invalid_date', 'local_obu_application');
+		}
+		
+		if ($data['nationality_code'] == '') {
 			$errors['nationality_code'] = get_string('value_required', 'local_obu_application');
+		}
+		
+		if ($data['residence_code'] == '') {
+			$errors['residence_code'] = get_string('value_required', 'local_obu_application');
 		}
 
 		if ($data['credit'] == '1') {

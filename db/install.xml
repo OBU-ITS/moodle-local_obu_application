@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="local/obu_application/db" VERSION="20191128" COMMENT="XMLDB file for Moodle local/obu_application"
+<XMLDB PATH="local/obu_application/db" VERSION="20200201" COMMENT="XMLDB file for Moodle local/obu_application"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -28,6 +28,13 @@
         <FIELD NAME="supplement" TYPE="char" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Any supplementary form for the course"/>
         <FIELD NAME="programme" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Programme or not"/>
         <FIELD NAME="suspended" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Suspended or not"/>
+        <FIELD NAME="module_subject" TYPE="char" LENGTH="4" NOTNULL="false" SEQUENCE="false" COMMENT="Module Subject"/>
+        <FIELD NAME="module_number" TYPE="char" LENGTH="5" NOTNULL="false" SEQUENCE="false" COMMENT="Module Number"/>
+        <FIELD NAME="campus" TYPE="char" LENGTH="3" NOTNULL="false" SEQUENCE="false" COMMENT="Campus"/>
+        <FIELD NAME="programme_code" TYPE="char" LENGTH="12" NOTNULL="false" SEQUENCE="false" COMMENT="Programme Code"/>
+        <FIELD NAME="major_code" TYPE="char" LENGTH="4" NOTNULL="false" SEQUENCE="false" COMMENT="Major Code"/>
+        <FIELD NAME="level" TYPE="char" LENGTH="2" NOTNULL="false" SEQUENCE="false" COMMENT="Level"/>
+        <FIELD NAME="cohort_code" TYPE="char" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Cohort Code"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
@@ -80,13 +87,19 @@
         <FIELD NAME="address_1" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false" COMMENT="Address 1"/>
         <FIELD NAME="address_2" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false" COMMENT="Address 2"/>
         <FIELD NAME="address_3" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false" COMMENT="Address 3"/>
-        <FIELD NAME="town" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false" COMMENT="Town"/>
-        <FIELD NAME="domicile_code" TYPE="int" LENGTH="4" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Domicile (county) code"/>
-        <FIELD NAME="county" TYPE="char" LENGTH="30" NOTNULL="false" SEQUENCE="false" COMMENT="County"/>
+        <FIELD NAME="city" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false" COMMENT="City"/>
+        <FIELD NAME="domicile_code" TYPE="char" LENGTH="4" NOTNULL="false" SEQUENCE="false" COMMENT="Domicile code"/>
+        <FIELD NAME="domicile_country" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Country of domicile"/>
         <FIELD NAME="postcode" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="Postcode"/>
+        <FIELD NAME="birth_code" TYPE="char" LENGTH="4" NOTNULL="false" SEQUENCE="false" COMMENT="Birth code"/>
+        <FIELD NAME="birth_country" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Country of birth"/>
         <FIELD NAME="birthdate" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Date of birth"/>
-        <FIELD NAME="nationality_code" TYPE="int" LENGTH="4" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Nationality code"/>
+        <FIELD NAME="nationality_code" TYPE="char" LENGTH="4" NOTNULL="false" SEQUENCE="false" COMMENT="Nationality code"/>
         <FIELD NAME="nationality" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Nationality"/>
+        <FIELD NAME="gender" TYPE="char" LENGTH="1" NOTNULL="false" DEFAULT="N" SEQUENCE="false" COMMENT="Gender"/>
+        <FIELD NAME="residence_code" TYPE="char" LENGTH="4" NOTNULL="false" SEQUENCE="false" COMMENT="Residence code"/>
+        <FIELD NAME="residence_area" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Area of residence"/>
+        <FIELD NAME="settled_status" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Settled status?"/>
         <FIELD NAME="p16school" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Post 16 School name"/>
         <FIELD NAME="p16schoolperiod" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Post 16 School period"/>
         <FIELD NAME="p16fe" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Post 16 Further Education"/>
@@ -109,6 +122,7 @@
         <FIELD NAME="course_code" TYPE="char" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Course code"/>
         <FIELD NAME="course_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Course name"/>
         <FIELD NAME="course_date" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Course start date"/>
+        <FIELD NAME="studying" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Currently studying?"/>
         <FIELD NAME="statement" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Supporting statement"/>
         <FIELD NAME="supplement_data" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Course supplementary form data"/>
         <FIELD NAME="course_update" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Date of last course update"/>
@@ -131,15 +145,22 @@
         <FIELD NAME="address_1" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false" COMMENT="Address 1"/>
         <FIELD NAME="address_2" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false" COMMENT="Address 2"/>
         <FIELD NAME="address_3" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false" COMMENT="Address 3"/>
-        <FIELD NAME="town" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false" COMMENT="Town"/>
-        <FIELD NAME="domicile_code" TYPE="int" LENGTH="4" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Domicile (county) code"/>
-        <FIELD NAME="county" TYPE="char" LENGTH="30" NOTNULL="false" SEQUENCE="false" COMMENT="County"/>
+        <FIELD NAME="city" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false" COMMENT="City"/>
+        <FIELD NAME="domicile_code" TYPE="char" LENGTH="4" NOTNULL="false" SEQUENCE="false" COMMENT="Domicile code"/>
+        <FIELD NAME="domicile_country" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Country of domicile"/>
         <FIELD NAME="postcode" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="Postcode"/>
-        <FIELD NAME="phone" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="Phone"/>
+        <FIELD NAME="home_phone" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="Home phone"/>
+        <FIELD NAME="mobile_phone" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="Mobile phone"/>
         <FIELD NAME="email" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Email"/>
+        <FIELD NAME="birth_code" TYPE="char" LENGTH="4" NOTNULL="false" SEQUENCE="false" COMMENT="Birth code"/>
+        <FIELD NAME="birth_country" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Country of birth"/>
         <FIELD NAME="birthdate" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Date of birth"/>
-        <FIELD NAME="nationality_code" TYPE="int" LENGTH="4" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Nationality code"/>
+        <FIELD NAME="nationality_code" TYPE="char" LENGTH="4" NOTNULL="false" SEQUENCE="false" COMMENT="Nationality code"/>
         <FIELD NAME="nationality" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Nationality"/>
+        <FIELD NAME="gender" TYPE="char" LENGTH="1" NOTNULL="false" DEFAULT="N" SEQUENCE="false" COMMENT="Gender"/>
+        <FIELD NAME="residence_code" TYPE="char" LENGTH="4" NOTNULL="false" SEQUENCE="false" COMMENT="Residence code"/>
+        <FIELD NAME="residence_area" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Area of residence"/>
+        <FIELD NAME="settled_status" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Settled status?"/>
         <FIELD NAME="p16school" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Post 16 School name"/>
         <FIELD NAME="p16schoolperiod" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Post 16 School period"/>
         <FIELD NAME="p16fe" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Post 16 Further Education"/>
@@ -161,6 +182,7 @@
         <FIELD NAME="course_code" TYPE="char" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Course code"/>
         <FIELD NAME="course_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Course name"/>
         <FIELD NAME="course_date" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Course start date"/>
+        <FIELD NAME="studying" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Currently studying?"/>
         <FIELD NAME="statement" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Supporting statement"/>
         <FIELD NAME="supplement_data" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Course supplementary form data"/>
         <FIELD NAME="self_funding" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Self-funding?"/>

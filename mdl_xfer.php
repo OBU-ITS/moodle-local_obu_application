@@ -19,7 +19,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2018, Oxford Brookes University
+ * @copyright  2020, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -87,6 +87,7 @@ else if ($mform_data = $mform->get_data()) {
 		$file_id = $batch_number;
 	}
 	
+	$months = [ 'JAN' => 1, 'FEB' => 2, 'MAR' => 3, 'APR' => 4, 'MAY' => 5, 'JUN' => 6, 'JUL' => 7, 'AUG' => 8, 'SEP' => 9, 'OCT' => 10, 'NOV' => 11, 'DEC' => 12 ];
 	$applications = get_applications(); // Get all applications
 	$xfers = array();
 	foreach ($applications as $application) {
@@ -121,59 +122,81 @@ else if ($mform_data = $mform->get_data()) {
 			$fields['Form_Id'] = 'HLS/' . $application->id;
 			$fields['Title'] = $application->title;
 			$fields['Surname'] = $application->lastname;
-			$fields['First_Name'] = $application->firstname;
+			$fields['First_Name(s)'] = $application->firstname;
 			if (($mform_data->xfer_type == 1) || ($mform_data->xfer_type == 3)) { // Admissions
 				if ($mform_data->xfer_type == 3) {
 					$fields['Middle_Name'] = '';
 					$fields['Previous_Family_Name'] = '';
 				}
-				$fields['Corr_Address_1'] = $application->address_1;
-				$fields['Corr_Address_2'] = $application->address_2;
-				$fields['Corr_Address_3'] = $application->address_3;
-				$fields['Corr_Town'] = $application->town;
-				if ($mform_data->xfer_type == 1) {
-					$fields['Domicile_Code'] = $application->domicile_code;
-				}
-				$fields['Corr_County'] = $application->county;
-				$fields['Corr_Postcode'] = $application->postcode;
-				if ($mform_data->xfer_type == 3) {
-					$fields['Corr_Country_Code'] = '';
-					$fields['Corr_Country_Label'] = '';
-					$fields['Home_Address_1'] = '';
-					$fields['Home_Address_2'] = '';
-					$fields['Home_Address_3'] = '';
-					$fields['Home_Town'] = '';
-					$fields['Home_County'] = '';
-					$fields['Home_Postcode'] = '';
-					$fields['Home_Country_Code'] = '';
-					$fields['Home_Country_Label'] = '';
-					$fields['Same_Address'] = 'True';
-				}
-				$fields['Telephone'] = $application->phone;
-				$fields['Email'] = $application->email;
-				if ($mform_data->xfer_type < 3) {
-					$fields['DoB'] = date('d/m/Y', $application->birthdate);
+				$fields['Address_Type'] = 'HO';
+				$fields['Address_1'] = $application->address_1;
+				$fields['Address_2'] = $application->address_2;
+				$fields['Address_3'] = $application->address_3;
+				$fields['City'] = $application->city;
+				$fields['Domicile'] = $application->domicile_code;
+				$fields['Residence'] = $application->residence_code;
+				$fields['Postcode'] = $application->postcode;
+				if ($application->mobile_phone != '') {
+					$fields['Telephone_Type'] = 'MO';
+					$fields['Telephone'] = $application->mobile_phone;
 				} else {
-					$fields['DoB'] = $application->birthdate;
-					$fields['Gender'] = '';
-					$fields['Birth_Country_Code'] = '';
-					$fields['Birth_Country_Label'] = '';
-					$fields['Domicile_Country_Code'] = '';
-					$fields['Domicile_Country_Label'] = '';
+					$fields['Telephone_Type'] = 'HO';
+					$fields['Telephone'] = $application->home_phone;
 				}
-				$fields['Nationality_Code'] = $application->nationality_code;
-				$fields['Nationality_Label'] = $application->nationality;
-				if ($mform_data->xfer_type == 3) {
-					$fields['Domicile_Code'] = $application->domicile_code;
+				if (strpos($application->email, '@brookes.ac.uk') !== false) {
+					$fields['Email_Type'] = 'BRKS';
+				} else {
+					$fields['Email_Type'] = 'PERS';
 				}
-				$fields['Criminal_Record'] = $application->criminal_record;
-				$fields['Course_Code'] = $application->course_code;
-				$fields['Course_Name'] = $application->course_name;
-				$fields['Course_Date'] = $application->course_date;
-			} else { // Finance
-				$fields['Course_Code'] = $application->course_code;
-				$fields['Course_Name'] = $application->course_name;
-				$fields['Course_Date'] = $application->course_date;
+				$fields['Email'] = $application->email;
+				$fields['Date_of_Birth'] = date('d/m/Y', $application->birthdate);
+				$fields['Gender'] = $application->gender;
+				$fields['Country_of_Birth'] = $application->birth_code;
+				$fields['Nationality'] = $application->nationality_code;
+			}
+			$course = read_course_record(trim($application->course_code));
+			$fields['Programme_Code'] = $course->programme_code;
+			$fields['Major_Code'] = $course->major_code;
+			$fields['Level'] = $course->level;
+			$fields['Campus'] = $course->campus;
+			$fields['Student_Type'] = 'P';
+			$course_date = $application->course_date;
+			$month = substr($course_date, 0, 3);
+			if (isset($months[$month])) {
+				$year = substr($course_date, 3);
+				if ((strlen($year) == 2) && is_numeric($year)) {
+					$course_date = '20' . $year;
+					if ($months[$month] <= 5) {
+						$course_date .= '01';
+					} else if ($months[$month] <= 8) {
+						$course_date .= '06';
+					} else {
+						$course_date .= '09';
+					}					
+				}
+			}
+			$fields['Admit_Term'] = $course_date;
+			$fields['Admit_Type'] = '60';
+			$fields['Residency_Type'] = 'H';
+			$fields['Cohort'] = $course->cohort_code;
+			$fields['Programme_Stage'] = 'S1';
+			$fields['Module_Subject'] = $course->module_subject;
+			$fields['Module_Number'] = $course->module_number;
+			if ($application->settled_status == '0') {
+				$settled_status_formatted = '';
+			} else if ($application->settled_status == '1') {
+				$settled_status_formatted = get_string('yes', 'local_obu_application');
+			} else {
+				$settled_status_formatted = get_string('no', 'local_obu_application');
+			}
+			$fields['Settled_Status'] = $settled_status_formatted;
+			if ($application->studying == '1') {
+				$studying_formatted = get_string('yes', 'local_obu_application');
+			} else {
+				$studying_formatted = get_string('no', 'local_obu_application');
+			}
+			$fields['Currently_Studying'] = $studying_formatted;
+			if (($mform_data->xfer_type == 1) || ($mform_data->xfer_type == 2)) { // Admissions & Finance (combined) or Finance
 				if ($application->self_funding == 1) {
 					$fields['Funding_Method'] = 'Self-funding';
 					$fields['Organisation'] = '';
@@ -207,13 +230,13 @@ else if ($mform_data = $mform->get_data()) {
 				if (($application->self_funding == 1) || ($application->funding_method > 2)){
 					$fields['PO_Number'] = '';
 					$fields['Address'] = '';
-					$fields['Email'] = '';
+					$fields['Contact_Email'] = '';
 					$fields['Phone_No'] = '';
 					$fields['Contact_Name'] = '';
 				} else {
 					$fields['PO_Number'] = $application->invoice_ref;
 					$fields['Address'] = $application->invoice_address;
-					$fields['Email'] = $application->invoice_email;
+					$fields['Contact_Email'] = $application->invoice_email;
 					$fields['Phone_No'] = $application->invoice_phone;
 					$fields['Contact_Name'] = $application->invoice_contact;
 				}

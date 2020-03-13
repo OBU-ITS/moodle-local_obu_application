@@ -19,7 +19,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2018, Oxford Brookes University
+ * @copyright  2020, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -75,6 +75,7 @@ $message = '';
 
 $parameters = [
 	'courses' => get_course_names(),
+	'dates' => get_dates(),
 	'application' => $application
 ];
 	

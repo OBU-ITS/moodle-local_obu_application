@@ -21,7 +21,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2016, Oxford Brookes University
+ * @copyright  2020, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -37,7 +37,8 @@ class contact_form extends moodleform {
         $data = new stdClass();
 		$data->user = $this->_customdata['user'];
 		$data->applicant = $this->_customdata['applicant'];
-		$data->counties = $this->_customdata['counties'];
+		$data->nations = $this->_customdata['nations'];
+		$data->domicile_code = $this->_customdata['default_domicile_code'];
 		
 		if ($data->user !== false) {
 			$fields = [
@@ -45,17 +46,21 @@ class contact_form extends moodleform {
 				'firstname' => $data->user->firstname,
 				'lastname' => $data->user->lastname,
 				'phone1' => $data->user->phone1,
+				'phone2' => $data->user->phone2,
 				'email' => $data->user->email
 			];
 			
 			if ($data->applicant !== false) {
+				if ($data->applicant->domicile_code != '') {
+					$data->domicile_code = $data->applicant->domicile_code;
+				}
 				$applicant_fields = [
 					'title' => $data->applicant->title,
 					'address_1' => $data->applicant->address_1,
 					'address_2' => $data->applicant->address_2,
 					'address_3' => $data->applicant->address_3,
-					'town' => $data->applicant->town,
-					'domicile_code' => $data->applicant->domicile_code,
+					'city' => $data->applicant->city,
+					'domicile_code' => $data->domicile_code,
 					'postcode' => $data->applicant->postcode
 				];
 				$fields = array_merge($fields, $applicant_fields);
@@ -75,7 +80,7 @@ class contact_form extends moodleform {
 		$mform->setType('title', PARAM_TEXT);
 		$mform->addRule('title', null, 'required', null, 'server');
 		
-		$mform->addElement('text', 'firstname', get_string('firstname'), 'size="30" maxlength="100"');
+		$mform->addElement('text', 'firstname', get_string('firstnames', 'local_obu_application'), 'size="30" maxlength="100"');
 		if ($data->user->email != $data->user->username) {
 			$mform->disabledIf('firstname', 'email', 'neq', $data->user->username);
 		} else {
@@ -101,28 +106,24 @@ class contact_form extends moodleform {
 		$mform->addElement('text', 'address_3', get_string('address_3', 'local_obu_application'), 'size="30" maxlength="50"');
 		$mform->setType('address_3', PARAM_TEXT);
 
-		$mform->addElement('text', 'town', get_string('town', 'local_obu_application'), 'size="30" maxlength="50"');
-		$mform->setType('town', PARAM_TEXT);
-		$mform->addRule('town', null, 'required', null, 'server');
+		$mform->addElement('text', 'city', get_string('city', 'local_obu_application'), 'size="30" maxlength="50"');
+		$mform->setType('city', PARAM_TEXT);
+		$mform->addRule('city', null, 'required', null, 'server');
 
 		$mform->addElement('text', 'postcode', get_string('postcode', 'local_obu_application'), 'size="20" maxlength="20"');
 		$mform->setType('postcode', PARAM_TEXT);
 		$mform->addRule('postcode', null, 'required', null, 'server');
 
-		$options = [];
-		if (($data->applicant === false) || ($data->applicant->domicile_code == 0)) {
-			$options['0'] = get_string('select', 'local_obu_application');
-		}
-		foreach ($data->counties as $domicile_code => $county_name) {
-			$options[$domicile_code] = $county_name;
-		}
 		$mform->addElement('html', '<p><strong>' . get_string('domicile_preamble', 'local_obu_application') . '</strong></p>');
-		$mform->addElement('select', 'domicile_code', get_string('domicile', 'local_obu_application'), $options);
+		$domicile_code = $mform->addElement('select', 'domicile_code', get_string('domicile_country', 'local_obu_application'), $data->nations);
+		$domicile_code->setSelected($data->domicile_code);
 		$mform->addRule('domicile_code', null, 'required', null, 'server');
 
-		$mform->addElement('text', 'phone1', get_string('phone', 'local_obu_application'), 'size="20" maxlength="20"');
+		$mform->addElement('text', 'phone1', get_string('home_phone', 'local_obu_application'), 'size="20" maxlength="20"');
 		$mform->setType('phone1', PARAM_TEXT);
-		$mform->addRule('phone1', null, 'required', null, 'server');
+
+		$mform->addElement('text', 'phone2', get_string('mobile_phone', 'local_obu_application'), 'size="20" maxlength="20"');
+		$mform->setType('phone2', PARAM_TEXT);
 
 		if ($data->user->email != $data->user->username) {
 			$mform->addElement('text', 'email', get_string('email'), 'size="25" maxlength="100"');
@@ -146,8 +147,12 @@ class contact_form extends moodleform {
         global $CFG, $DB;
         $errors = parent::validation($data, $files);
 		
-		if ($data['domicile_code'] == '0') {
+		if (!$data['domicile_code']) {
 			$errors['domicile_code'] = get_string('value_required', 'local_obu_application');
+		}
+		
+		if ((!$data['phone1'] || $data['phone1'] == '') && (!$data['phone2'] || $data['phone2'] == '')) {
+            $errors['phone1'] = get_string('no_phone', 'local_obu_application');
 		}
 
 		if ($data['email'] == $data['username']) {

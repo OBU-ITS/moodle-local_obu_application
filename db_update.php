@@ -21,7 +21,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2019, Oxford Brookes University
+ * @copyright  2020, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -200,6 +200,13 @@ function write_course_record($course) {
 	$record->supplement = $course->supplement;
 	$record->programme = $course->programme;
 	$record->suspended = $course->suspended;
+	$record->module_subject = $course->module_subject;
+	$record->module_number = $course->module_number;
+	$record->campus = $course->campus;
+	$record->programme_code = $course->programme_code;
+	$record->major_code = $course->major_code;
+	$record->level = $course->level;
+	$record->cohort_code = $course->cohort_code;
 
 	if ($id == '0') {
 		$id = $DB->insert_record('local_obu_course', $record);
@@ -294,7 +301,8 @@ function write_user($user_id, $form_data) {
 	$user->lastname = $form_data->lastname;
 	$user->email = strtolower($form_data->email);
 	$user->phone1 = $form_data->phone1;
-	$user->city = $form_data->town;
+	$user->phone2 = $form_data->phone2;
+	$user->city = $form_data->city;
 		
 	user_update_user($user, false, true);
 	profile_save_data($user); // Save custom profile data
@@ -337,14 +345,14 @@ function write_contact_details($user_id, $form_data) {
 	
 	// Update the applicant's title and address details
     $record->title = $form_data->title;
-	if ($form_data->address_1 != '') { // Check we are updating full Contact Details and not Signin sub-set
+	if ($form_data->address_1 != '') { // Check we are updating full Contact Details and not Sign-in sub-set
 		$record->address_1 = $form_data->address_1;
 		$record->address_2 = $form_data->address_2;
 		$record->address_3 = $form_data->address_3;
-		$record->town = $form_data->town;
-		$record->domicile_code = $form_data->domicile_code;
-		$record->county = $form_data->county;
+		$record->city = $form_data->city;
 		$record->postcode = $form_data->postcode;
+		$record->domicile_code = $form_data->domicile_code;
+		$record->domicile_country = $form_data->domicile_country;
 	}
 
 	if ($record->id == 0) { // New record
@@ -368,9 +376,15 @@ function write_profile($user_id, $form_data) {
 	}
 	
 	// Update the applicant's profile fields
+    $record->birth_code = $form_data->birth_code;
+    $record->birth_country = $form_data->birth_country;
     $record->birthdate = $form_data->birthdate;
     $record->nationality_code = $form_data->nationality_code;
     $record->nationality = $form_data->nationality;
+    $record->gender = $form_data->gender;
+    $record->residence_code = $form_data->residence_code;
+    $record->residence_area = $form_data->residence_area;
+    $record->settled_status = $form_data->settled_status;
 	$record->p16school = $form_data->p16school;
     $record->p16schoolperiod = $form_data->p16schoolperiod;
     $record->p16fe = $form_data->p16fe;
@@ -415,6 +429,7 @@ function write_course($user_id, $form_data) {
     $record->course_code = $form_data->course_code;
     $record->course_name = $form_data->course_name;
     $record->course_date = $form_data->course_date;
+    $record->studying = $form_data->studying;
     $record->statement = $form_data->statement;
     $record->course_update = time();
 
@@ -459,17 +474,24 @@ function write_application($user_id, $form_data) {
 	$record->address_1 = $applicant->address_1;
 	$record->address_2 = $applicant->address_2;
 	$record->address_3 = $applicant->address_3;
-	$record->town = $applicant->town;
+	$record->city = $applicant->city;
 	$record->domicile_code = $applicant->domicile_code;
-	$record->county = $applicant->county;
+	$record->domicile_country = $applicant->domicile_country;
 	$record->postcode = $applicant->postcode;
-	$record->phone = $user->phone1;
+	$record->home_phone = $user->phone1;
+	$record->mobile_phone = $user->phone2;
 	$record->email = $user->email;
 
 	// Profile
+	$record->birth_code = $applicant->birth_code;
+    $record->birth_country = $applicant->birth_country;
     $record->birthdate = $applicant->birthdate;
 	$record->nationality_code = $applicant->nationality_code;
     $record->nationality = $applicant->nationality;
+    $record->gender = $applicant->gender;
+	$record->residence_code = $applicant->residence_code;
+    $record->residence_area = $applicant->residence_area;
+    $record->settled_status = $applicant->settled_status;
     $record->p16school = $applicant->p16school;
     $record->p16schoolperiod = $applicant->p16schoolperiod;
     $record->p16fe = $applicant->p16fe;
@@ -497,6 +519,7 @@ function write_application($user_id, $form_data) {
     $record->course_code = $applicant->course_code;
     $record->course_name = $applicant->course_name;
     $record->course_date = $applicant->course_date;
+    $record->studying = $applicant->studying;
     $record->statement = $applicant->statement;
 	$course = read_course_record($applicant->course_code);
 	if ($course->supplement != '') { // There should be supplementary data

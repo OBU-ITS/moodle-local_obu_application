@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * OBU Application - version
+ * OBU Application - Course Update Form [Moodle]
  *
  * @package    obu_application
  * @category   local
@@ -24,9 +24,19 @@
  *
  */
 
-$plugin->component = 'local_obu_application'; // Full name of the plugin (used for diagnostics): plugintype_pluginname
-$plugin->version  = 2020022400;   // The (date) version of this module + 2 extra digital for daily versions
-$plugin->requires = 2015111604;   // Requires this Moodle version - at least 3.0.4
-$plugin->cron     = 0;
-$plugin->release = 'v2.0.0';
-$plugin->maturity = MATURITY_STABLE;
+defined('MOODLE_INTERNAL') || die();
+
+require_once($CFG->libdir.'/formslib.php');
+
+class mdl_course_update_form extends moodleform {
+
+   public function definition () {
+        $mform = $this->_form;
+
+        $mform->addElement('filepicker', 'course_update_file', get_string('course_update_file', 'local_obu_application'));
+        $mform->addRule('course_update_file', null, 'required');
+
+        // buttons
+        $this->add_action_buttons(true, get_string('continue', 'local_obu_application'));
+    }
+}

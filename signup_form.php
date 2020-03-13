@@ -21,7 +21,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham (derived from '/login/signup_form.php')
- * @copyright  2016, Oxford Brookes University
+ * @copyright  2020, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -45,6 +45,7 @@ class registration_form extends moodleform {
 		
         $mform->addElement('header', 'emailandpassword', get_string('emailandpassword', 'local_obu_application'), '');
 		$mform->addElement('static', 'preregistered', get_string('preregistered', 'local_obu_application'));
+
 		$mform->addElement('text', 'email', get_string('email'), 'size="25" maxlength="100"');
 		$mform->setType('email', PARAM_RAW_TRIMMED);
 		$mform->addRule('email', get_string('missingemail'), 'required', null, 'server');
@@ -61,12 +62,13 @@ class registration_form extends moodleform {
         $mform->addRule('password', get_string('missingpassword'), 'required', null, 'server');
 
         $mform->addElement('header', 'contactdetails', get_string('contactdetails', 'local_obu_application'), '');
+		$mform->addElement('static', 'fullname', get_string('fullname', 'local_obu_application'));
 		
 		$mform->addElement('text', 'title', get_string('title', 'local_obu_application'), 'size="10" maxlength="10"');
 		$mform->setType('title', PARAM_TEXT);
 		$mform->addRule('title', null, 'required', null, 'server');
 		
-		$mform->addElement('text', 'firstname', get_string('firstname'), 'size="30" maxlength="100"');
+		$mform->addElement('text', 'firstname', get_string('firstnames', 'local_obu_application'), 'size="30" maxlength="100"');
 		$mform->setType('firstname', PARAM_TEXT);
 		$mform->addRule('firstname', null, 'required', null, 'server');
 		
@@ -74,9 +76,11 @@ class registration_form extends moodleform {
 		$mform->setType('lastname', PARAM_TEXT);
 		$mform->addRule('lastname', null, 'required', null, 'server');
 		
-		$mform->addElement('text', 'phone1', get_string('phone', 'local_obu_application'), 'size="20" maxlength="20"');
+		$mform->addElement('text', 'phone1', get_string('home_phone', 'local_obu_application'), 'size="20" maxlength="20"');
 		$mform->setType('phone1', PARAM_TEXT);
-		$mform->addRule('phone1', null, 'required', null, 'server');
+		
+		$mform->addElement('text', 'phone2', get_string('mobile_phone', 'local_obu_application'), 'size="20" maxlength="20"');
+		$mform->setType('phone2', PARAM_TEXT);
 
         // Use reCAPTCHA if it's setup
 		if (!empty($CFG->recaptchapublickey) && !empty($CFG->recaptchaprivatekey)) {
@@ -119,6 +123,10 @@ class registration_form extends moodleform {
         if (!check_password_policy($data['password'], $errmsg)) {
             $errors['password'] = $errmsg;
         }
+		
+		if ((!$data['phone1'] || $data['phone1'] == '') && (!$data['phone2'] || $data['phone2'] == '')) {
+            $errors['phone1'] = get_string('no_phone', 'local_obu_application');
+		}
 
         // If reCAPTCHA is setup we would have used it - so check it!
 		if (!empty($CFG->recaptchapublickey) && !empty($CFG->recaptchaprivatekey)) {

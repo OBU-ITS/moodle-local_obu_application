@@ -19,7 +19,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2018, Oxford Brookes University
+ * @copyright  2020, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -78,8 +78,9 @@ if ($option_o === false) {
 $courses = array();
 $recs = get_course_records();
 foreach ($recs as $rec) {
-	$courses['"' . $rec->code . '"'] = $rec->code . ' ' . $rec->name;
+	$courses['"' . $rec->code . '"'] = $rec->name . ' [' . $rec->code . ']';
 }
+asort($courses);
 
 $sort_orders = array();
 $sort_orders[''] = get_string('reference', 'local_obu_application');

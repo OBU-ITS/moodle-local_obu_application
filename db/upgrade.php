@@ -21,7 +21,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2019, Oxford Brookes University
+ * @copyright  2020, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -397,6 +397,195 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		// obu_application savepoint reached
 		upgrade_plugin_savepoint(true, 2019112800, 'local', 'obu_application');
     }
+    
+	if ($oldversion < 2020022000) {
+
+		// Update/add local_obu_applicant fields
+		$table = new xmldb_table('local_obu_applicant');
+		$field = new xmldb_field('town', XMLDB_TYPE_CHAR, '50', null, null, null, null, 'address_3');
+		if ($dbman->field_exists($table, $field)) {
+			$dbman->rename_field($table, $field, 'city');
+		}
+		$field = new xmldb_field('domicile_code', XMLDB_TYPE_CHAR, '4', null, null, null, null, 'city');
+		if ($dbman->field_exists($table, $field)) {
+			$dbman->change_field_type($table, $field);
+		}
+		$field = new xmldb_field('county', XMLDB_TYPE_CHAR, '30', null, null, null, null, 'domicile_code');
+		if ($dbman->field_exists($table, $field)) {
+			$dbman->rename_field($table, $field, 'domicile_country');
+		}
+		$field = new xmldb_field('domicile_country', XMLDB_TYPE_CHAR, '100', null, null, null, null, 'domicile_code');
+		if ($dbman->field_exists($table, $field)) {
+			$dbman->change_field_type($table, $field);
+		}
+		$field = new xmldb_field('birth_code', XMLDB_TYPE_CHAR, '4', null, null, null, null, 'postcode');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+		$field = new xmldb_field('birth_country', XMLDB_TYPE_CHAR, '100', null, null, null, null, 'birth_code');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+		$field = new xmldb_field('nationality_code', XMLDB_TYPE_CHAR, '4', null, null, null, null, 'birthdate');
+		if ($dbman->field_exists($table, $field)) {
+			$dbman->change_field_type($table, $field);
+		}
+		$field = new xmldb_field('gender', XMLDB_TYPE_CHAR, '1', null, null, null, 'N', 'nationality');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+
+		// Update/add local_obu_application fields
+		$table = new xmldb_table('local_obu_application');
+		$field = new xmldb_field('town', XMLDB_TYPE_CHAR, '50', null, null, null, null, 'address_3');
+		if ($dbman->field_exists($table, $field)) {
+			$dbman->rename_field($table, $field, 'city');
+		}
+		$field = new xmldb_field('domicile_code', XMLDB_TYPE_CHAR, '4', null, null, null, null, 'city');
+		if ($dbman->field_exists($table, $field)) {
+			$dbman->change_field_type($table, $field);
+		}
+		$field = new xmldb_field('county', XMLDB_TYPE_CHAR, '30', null, null, null, null, 'domicile_code');
+		if ($dbman->field_exists($table, $field)) {
+			$dbman->rename_field($table, $field, 'domicile_country');
+		}
+		$field = new xmldb_field('domicile_country', XMLDB_TYPE_CHAR, '100', null, null, null, null, 'domicile_code');
+		if ($dbman->field_exists($table, $field)) {
+			$dbman->change_field_type($table, $field);
+		}
+		$field = new xmldb_field('phone', XMLDB_TYPE_CHAR, '20', null, null, null, null, 'postcode');
+		if ($dbman->field_exists($table, $field)) {
+			$dbman->rename_field($table, $field, 'home_phone');
+		}
+		$field = new xmldb_field('mobile_phone', XMLDB_TYPE_CHAR, '20', null, null, null, null, 'home_phone');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+		$field = new xmldb_field('birth_code', XMLDB_TYPE_CHAR, '4', null, null, null, null, 'email');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+		$field = new xmldb_field('birth_country', XMLDB_TYPE_CHAR, '100', null, null, null, null, 'birth_code');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+		$field = new xmldb_field('nationality_code', XMLDB_TYPE_CHAR, '4', null, null, null, null, 'birthdate');
+		if ($dbman->field_exists($table, $field)) {
+			$dbman->change_field_type($table, $field);
+		}
+		$field = new xmldb_field('gender', XMLDB_TYPE_CHAR, '1', null, null, null, 'N', 'nationality');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+
+		// obu_application savepoint reached
+		upgrade_plugin_savepoint(true, 2020022000, 'local', 'obu_application');
+    }
+    
+	if ($oldversion < 2020022100) {
+
+		// Update/add local_obu_applicant fields
+		$table = new xmldb_table('local_obu_applicant');
+		$field = new xmldb_field('residence_code', XMLDB_TYPE_CHAR, '4', null, null, null, null, 'gender');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+		$field = new xmldb_field('residence_area', XMLDB_TYPE_CHAR, '100', null, null, null, null, 'residence_code');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+
+		// Update/add local_obu_application fields
+		$table = new xmldb_table('local_obu_application');
+		$field = new xmldb_field('residence_code', XMLDB_TYPE_CHAR, '4', null, null, null, null, 'gender');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+		$field = new xmldb_field('residence_area', XMLDB_TYPE_CHAR, '100', null, null, null, null, 'residence_code');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+
+		// obu_application savepoint reached
+		upgrade_plugin_savepoint(true, 2020022100, 'local', 'obu_application');
+    }
+    
+	if ($oldversion < 2020022200) {
+
+		// Update/add local_obu_course fields
+		$table = new xmldb_table('local_obu_course');
+		$field = new xmldb_field('module_subject', XMLDB_TYPE_CHAR, '4', null, null, null, null, 'suspended');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+		$field = new xmldb_field('module_number', XMLDB_TYPE_CHAR, '5', null, null, null, null, 'module_subject');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+		$field = new xmldb_field('campus', XMLDB_TYPE_CHAR, '3', null, null, null, null, 'module_number');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+		$field = new xmldb_field('programme_code', XMLDB_TYPE_CHAR, '12', null, null, null, null, 'campus');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+		$field = new xmldb_field('major_code', XMLDB_TYPE_CHAR, '4', null, null, null, null, 'programme_code');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+		$field = new xmldb_field('level', XMLDB_TYPE_CHAR, '2', null, null, null, null, 'major_code');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+		$field = new xmldb_field('cohort_code', XMLDB_TYPE_CHAR, '10', null, null, null, null, 'level');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+
+		// obu_application savepoint reached
+		upgrade_plugin_savepoint(true, 2020022200, 'local', 'obu_application');
+    }
 	
+	if ($oldversion < 2020022300) {
+
+		// Update/add local_obu_applicant fields
+		$table = new xmldb_table('local_obu_applicant');
+		$field = new xmldb_field('studying', XMLDB_TYPE_INTEGER, '1', null, null, null, '0', 'course_date');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+
+		// Update/add local_obu_application fields
+		$table = new xmldb_table('local_obu_application');
+		$field = new xmldb_field('studying', XMLDB_TYPE_INTEGER, '1', null, null, null, '0', 'course_date');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+
+		// obu_application savepoint reached
+		upgrade_plugin_savepoint(true, 2020022300, 'local', 'obu_application');
+    }
+	
+	if ($oldversion < 2020022400) {
+
+		// Update/add local_obu_applicant fields
+		$table = new xmldb_table('local_obu_applicant');
+		$field = new xmldb_field('settled_status', XMLDB_TYPE_INTEGER, '1', null, null, null, '0', 'residence_area');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+
+		// Update/add local_obu_application fields
+		$table = new xmldb_table('local_obu_application');
+		$field = new xmldb_field('settled_status', XMLDB_TYPE_INTEGER, '1', null, null, null, '0', 'residence_area');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+
+		// obu_application savepoint reached
+		upgrade_plugin_savepoint(true, 2020022400, 'local', 'obu_application');
+    }
+
     return $result;
 }

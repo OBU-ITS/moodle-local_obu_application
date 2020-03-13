@@ -19,7 +19,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2015, Oxford Brookes University
+ * @copyright  2020, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -52,9 +52,23 @@ class process_form extends moodleform {
 			
 			// Format the fields nicely before we load them into the form
 			$date = date_create();
-			$date_format = 'd-m-y';
+			$date_format = 'd/m/Y';
 			date_timestamp_set($date, $data->record->birthdate);
 			$birthdate_formatted = date_format($date, $date_format);
+			if ($data->record->gender == 'F') {
+				$gender = get_string('gender_female', 'local_obu_application');
+			} else if ($data->record->gender == 'M') {
+				$gender = get_string('gender_male', 'local_obu_application');
+			} else {
+				$gender = get_string('gender_not_available', 'local_obu_application');
+			}
+			if ($data->record->settled_status == '0') {
+				$settled_status = get_string('not_applicable', 'local_obu_application');
+			} else if ($data->record->settled_status == '1') {
+				$settled_status = get_string('yes', 'local_obu_application');
+			} else {
+				$settled_status = get_string('no', 'local_obu_application');
+			}
 			date_timestamp_set($date, $data->record->prof_date);
 			$prof_date_formatted = date_format($date, $date_format);
 			if ($data->record->credit == '1') {
@@ -63,9 +77,14 @@ class process_form extends moodleform {
 				$credit_formatted = '&#10008;'; // Cross
 			}
 			if ($data->record->criminal_record == '1') {
-				$criminal_record_formatted = 'Yes';
+				$criminal_record_formatted = get_string('yes', 'local_obu_application');
 			} else {
-				$criminal_record_formatted = 'No';
+				$criminal_record_formatted = get_string('no', 'local_obu_application');
+			}
+			if ($data->record->studying == '1') {
+				$studying_formatted = 'Yes';
+			} else {
+				$studying_formatted = 'No';
 			}
 			if ($data->record->self_funding == '1') {
 				$self_funding_formatted = '&#10004;'; // Tick
@@ -115,13 +134,18 @@ class process_form extends moodleform {
 				'address_1' => $data->record->address_1,
 				'address_2' => $data->record->address_2,
 				'address_3' => $data->record->address_3,
-				'town' => $data->record->town,
+				'city' => $data->record->city,
 				'postcode' => $data->record->postcode,
-				'domicile' => $data->record->county,
-				'phone' => $data->record->phone,
+				'domicile_country' => $data->record->domicile_country,
+				'home_phone' => $data->record->home_phone,
+				'mobile_phone' => $data->record->mobile_phone,
 				'email' => $data->record->email,
+				'birth_country' => $data->record->birth_country,
 				'birthdate' => $birthdate_formatted,
 				'nationality' => $data->record->nationality,
+				'gender' => $gender,
+				'residence_area' => $data->record->residence_area,
+				'settled_status' => $settled_status,
 				'p16school' => $data->record->p16school,
 				'p16schoolperiod' => $data->record->p16schoolperiod,
 				'p16fe' => $data->record->p16fe,
@@ -142,6 +166,7 @@ class process_form extends moodleform {
 				'criminal_record_formatted' => $criminal_record_formatted,
 				'course_name' => $data->record->course_code . ' ' . $data->record->course_name,
 				'course_date' => $data->record->course_date,
+				'studying_formatted' => $studying_formatted,
 				'statement' => $data->record->statement,
 				'self_funding_formatted' => $self_funding_formatted,
 				'manager_email' => $data->record->manager_email,
@@ -208,22 +233,27 @@ class process_form extends moodleform {
 			$mform->addElement('static', 'address_1', get_string('address_1', 'local_obu_application'));
 			$mform->addElement('static', 'address_2', get_string('address_2', 'local_obu_application'));
 			$mform->addElement('static', 'address_3', get_string('address_3', 'local_obu_application'));
-			$mform->addElement('static', 'town', get_string('town', 'local_obu_application'));
+			$mform->addElement('static', 'city', get_string('city', 'local_obu_application'));
 			$mform->addElement('static', 'postcode', get_string('postcode', 'local_obu_application'));
-			$mform->addElement('static', 'domicile', get_string('domicile', 'local_obu_application'));
+			$mform->addElement('static', 'domicile_country', get_string('domicile_country', 'local_obu_application'));
 		}
-		$mform->addElement('static', 'phone', get_string('phone', 'local_obu_application'));
+		$mform->addElement('static', 'home_phone', get_string('home_phone', 'local_obu_application'));
+		$mform->addElement('static', 'mobile_phone', get_string('mobile_phone', 'local_obu_application'));
 		$mform->addElement('static', 'email', get_string('email'));
 
         if (($approval_sought == 0) || ($approval_sought == 3)) {
 			
-			// Birth details
-			$mform->addElement('header', 'birth_head', get_string('birth_head', 'local_obu_application'), '');
+			// General details
+			$mform->addElement('header', 'general_head', get_string('general_head', 'local_obu_application'), '');
 			if ($data->button_text == 'approve') {
-				$mform->setExpanded('birth_head');
+				$mform->setExpanded('general_head');
 			}
+			$mform->addElement('static', 'birth_country', get_string('birth_country', 'local_obu_application'));
 			$mform->addElement('static', 'birthdate', get_string('birthdate', 'local_obu_application'));
 			$mform->addElement('static', 'nationality', get_string('nationality', 'local_obu_application'));
+			$mform->addElement('static', 'gender', get_string('gender', 'local_obu_application'));
+			$mform->addElement('static', 'residence_area', get_string('residence_area', 'local_obu_application'));
+			$mform->addElement('static', 'settled_status', get_string('settled_status', 'local_obu_application'));
 
 			// Education
 			$mform->addElement('header', 'education_head', get_string('education_head', 'local_obu_application'), '');
@@ -281,6 +311,9 @@ class process_form extends moodleform {
 		}
 		$mform->addElement('static', 'course_name', get_string('name', 'local_obu_application'));
 		$mform->addElement('static', 'course_date', get_string('course_date', 'local_obu_application'));
+		
+		// Currently studying?
+		$mform->addElement('static', 'studying_formatted', get_string('studying', 'local_obu_application'));
 		
         // Supporting statement
 		$mform->addElement('header', 'statement_head', get_string('statement_head', 'local_obu_application'), '');

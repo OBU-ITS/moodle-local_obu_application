@@ -21,7 +21,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2016, Oxford Brookes University
+ * @copyright  2020, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -46,10 +46,15 @@ if (($record === false) || ($record->address_1 == '')) { // Must complete the co
 	$message = '';
 }
 
-$nationalities = get_nationalities();
+$nations = get_nations();
+$areas = get_areas();
 $parameters = [
 	'record' => $record,
-	'nationalities' => $nationalities
+	'nations' => $nations,
+	'areas' => $areas,
+	'default_birth_code' => 'GB',
+	'default_nationality_code' => 'GB',
+	'default_residence_code' => 'XF'
 ];
 
 $mform = new profile_form(null, $parameters);
@@ -59,7 +64,9 @@ if ($mform->is_cancelled()) {
 } 
 else if ($mform_data = $mform->get_data()) {
 	if ($mform_data->submitbutton == get_string('save', 'local_obu_application')) {
-		$mform_data->nationality = $nationalities[$mform_data->nationality_code];
+		$mform_data->birth_country = $nations[$mform_data->birth_code];
+		$mform_data->nationality = $nations[$mform_data->nationality_code];
+		$mform_data->residence_area = $areas[$mform_data->residence_code];
 		write_profile($USER->id, $mform_data);
 		redirect($url);
     }

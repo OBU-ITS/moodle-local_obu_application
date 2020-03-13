@@ -21,7 +21,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2016, Oxford Brookes University
+ * @copyright  2020, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -38,12 +38,14 @@ class course_form extends moodleform {
 
         $data = new stdClass();
 		$data->courses = $this->_customdata['courses'];
+		$data->dates = $this->_customdata['dates'];
 		$data->record = $this->_customdata['record'];
 		
 		if ($data->record !== false) {
 			$fields = [
 				'course_code' => $data->record->course_code,
 				'course_date' => $data->record->course_date,
+				'studying' => $data->record->studying,
 				'statement' => $data->record->statement
 			];
 			$this->set_data($fields);
@@ -57,9 +59,16 @@ class course_form extends moodleform {
         $mform->addElement('header', 'course_head', get_string('course_head', 'local_obu_application'), '');
 		$mform->setExpanded('course_head');
 		$mform->addElement('select', 'course_code', get_string('course', 'local_obu_application'), $data->courses, null);
-		$mform->addElement('text', 'course_date', get_string('course_date', 'local_obu_application'), 'size="40" maxlength="100"');
-		$mform->setType('course_date', PARAM_TEXT);
-		$mform->addRule('course_date', null, 'required', null, 'server');
+		$mform->addElement('select', 'course_date', get_string('course_date', 'local_obu_application'), $data->dates, null);
+		$mform->addElement('html', '<p><strong>' . get_string('studying_preamble', 'local_obu_application') . '</strong></p>');
+		$options = [];
+		if ($data->record->studying == 0) { // A mandatory field so must be the first time thru
+			$options['0'] = ''; // No choice made yet
+		}
+		$options['1'] = get_string('yes', 'local_obu_application');
+		$options['2'] = get_string('no', 'local_obu_application');
+		$mform->addElement('select', 'studying', get_string('studying', 'local_obu_application'), $options);
+		$mform->addRule('studying', null, 'required', null, 'server');
         $mform->addElement('header', 'statement_head', get_string('statement_head', 'local_obu_application'), '');
 		$mform->setExpanded('statement_head');
 		$mform->addElement('textarea', 'statement', get_string('statement', 'local_obu_application'), 'cols="60" rows="10"');
@@ -71,6 +80,10 @@ class course_form extends moodleform {
     function validation($data, $files) {
         global $CFG, $DB;
         $errors = parent::validation($data, $files);
+
+		if ($data['studying'] == '0') {
+			$errors['studying'] = get_string('value_required', 'local_obu_application');
+		}
 
 		if (!empty($errors)) {
 			$errors['form_errors'] = get_string('form_errors', 'local_obu_application');

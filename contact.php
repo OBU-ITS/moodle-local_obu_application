@@ -21,7 +21,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2016, Oxford Brookes University
+ * @copyright  2020, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -42,11 +42,12 @@ $PAGE->set_url($url);
 
 $message ='';
 
-$counties = get_counties() + get_countries();
+$nations = get_nations();
 $parameters = [
 	'user' => read_user($USER->id),
 	'applicant' => read_applicant($USER->id, false),
-	'counties' => $counties
+	'nations' => $nations,
+	'default_domicile_code' => 'GB'
 ];
 
 $mform = new contact_form(null, $parameters);
@@ -56,7 +57,7 @@ if ($mform->is_cancelled()) {
 } 
 else if ($mform_data = $mform->get_data()) {
 	if ($mform_data->submitbutton == get_string('save', 'local_obu_application')) {
-		$mform_data->county = $counties[$mform_data->domicile_code];
+		$mform_data->domicile_country = $nations[$mform_data->domicile_code];
 		write_user($USER->id, $mform_data);
 		write_contact_details($USER->id, $mform_data);
     }
