@@ -93,8 +93,12 @@ class mdl_course_form extends moodleform {
 			}
 			$mform->addElement('static', 'suspended_formatted', get_string('suspended', 'local_obu_application'), $suspended_formatted);
 		} else {
-			$mform->addElement('text', 'code', get_string('code', 'local_obu_application'), 'size="10" maxlength="10"');
-			$mform->setType('code', PARAM_TEXT);
+			if (($data->id != '0') && !is_siteadmin()) {
+				$mform->addElement('static', 'code', get_string('code', 'local_obu_application'));
+			} else {
+				$mform->addElement('text', 'code', get_string('code', 'local_obu_application'), 'size="10" maxlength="10"');
+				$mform->setType('code', PARAM_TEXT);
+			}
 			$mform->addElement('text', 'name', get_string('name', 'local_obu_application'), 'size="50" maxlength="100"');
 			$mform->setType('name', PARAM_TEXT);
 			$mform->addElement('text', 'supplement', get_string('supplement', 'local_obu_application'), 'size="2" maxlength="2"');
@@ -123,7 +127,7 @@ class mdl_course_form extends moodleform {
 			$buttonarray[] = &$mform->createElement('submit', 'submitbutton', get_string('confirm_delete', 'local_obu_application'));
 		} else {
 			$buttonarray[] = &$mform->createElement('submit', 'submitbutton', get_string('save', 'local_obu_application'));
-			if ($data->id != '0') {
+			if (($data->id != '0') && is_siteadmin()) {
 				$buttonarray[] = &$mform->createElement('submit', 'deletebutton', get_string('delete', 'local_obu_application'));
 			}
 		}

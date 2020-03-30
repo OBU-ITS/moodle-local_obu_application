@@ -156,7 +156,7 @@ $string['rememberemail'] = 'Remember email';
 $string['forgotten'] = 'Forgotten your password? ';
 $string['passwordforgotteninstructions'] = '<p>Only external users not using a Brookes login may use the form below. Please enter the email address you used to register. We will search for your account and send you further instructions on how to regain access to the site.</p>';
 
-$string['update_course'] = 'Add, Amend or Delete a Course';
+$string['update_course'] = 'Course Maintenance';
 $string['new_course'] = 'New Course';
 $string['existing_course'] = 'Error - Course already exists';
 $string['code'] = 'Code';
