@@ -384,7 +384,6 @@ function write_profile($user_id, $form_data) {
     $record->gender = $form_data->gender;
     $record->residence_code = $form_data->residence_code;
     $record->residence_area = $form_data->residence_area;
-    $record->settled_status = $form_data->settled_status;
 	$record->p16school = $form_data->p16school;
     $record->p16schoolperiod = $form_data->p16schoolperiod;
     $record->p16fe = $form_data->p16fe;
@@ -491,7 +490,6 @@ function write_application($user_id, $form_data) {
     $record->gender = $applicant->gender;
 	$record->residence_code = $applicant->residence_code;
     $record->residence_area = $applicant->residence_area;
-    $record->settled_status = $applicant->settled_status;
     $record->p16school = $applicant->p16school;
     $record->p16schoolperiod = $applicant->p16schoolperiod;
     $record->p16fe = $applicant->p16fe;

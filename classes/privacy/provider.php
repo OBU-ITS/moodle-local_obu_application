@@ -61,7 +61,6 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 				'gender' => 'privacy:metadata:local_obu_application:gender',
 				'residence_code' => 'privacy:metadata:local_obu_application:residence_code',
 				'residence_area' => 'privacy:metadata:local_obu_application:residence_area',
-				'settled_status' => 'privacy:metadata:local_obu_application:settled_status',
 				'p16school' => 'privacy:metadata:local_obu_application:p16school',
 				'p16schoolperiod' => 'privacy:metadata:local_obu_application:p16schoolperiod',
 				'p16fe' => 'privacy:metadata:local_obu_application:p16fe',
@@ -118,7 +117,6 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 				'gender' => 'privacy:metadata:local_obu_application:gender',
 				'residence_code' => 'privacy:metadata:local_obu_application:residence_code',
 				'residence_area' => 'privacy:metadata:local_obu_application:residence_area',
-				'settled_status' => 'privacy:metadata:local_obu_application:settled_status',
 				'p16school' => 'privacy:metadata:local_obu_application:p16school',
 				'p16schoolperiod' => 'privacy:metadata:local_obu_application:p16schoolperiod',
 				'p16fe' => 'privacy:metadata:local_obu_application:p16fe',
@@ -222,7 +220,6 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 			$data->gender = $rec->gender;
 			$data->residence_code = $rec->residence_code;
 			$data->residence_area = $rec->residence_area;
-			$data->settled_status = $rec->settled_status;
 			$data->p16school = $rec->p16school;
 			$data->p16schoolperiod = $rec->p16schoolperiod;
 			$data->p16fe = $rec->p16fe;
@@ -311,7 +308,6 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 				$data->gender = $rec->gender;
 				$data->residence_code = $rec->residence_code;
 				$data->residence_area = $rec->residence_area;
-				$data->settled_status = $rec->settled_status;
 				$data->p16school = $rec->p16school;
 				$data->p16schoolperiod = $rec->p16schoolperiod;
 				$data->p16fe = $rec->p16fe;

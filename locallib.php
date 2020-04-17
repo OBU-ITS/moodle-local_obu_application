@@ -929,7 +929,8 @@ function get_organisations() {
 	$organisations = array();
 	$recs = get_organisation_records();
 	foreach ($recs as $rec) {
-		if (($rec->code != 0) && ($rec->suspended == 0)) {
+//		if (($rec->code != 0) && ($rec->suspended == 0)) {
+		if ($rec->suspended == 0) {
 			$organisations[$rec->id] = $rec->name;
 		}
 	}

@@ -66,7 +66,6 @@ class profile_form extends moodleform {
 			'nationality_code' => $data->nationality_code,
 			'gender' => $data->record->gender,
 			'residence_code' => $data->residence_code,
-			'settled_status' => $data->record->settled_status,
 			'p16school' => $data->record->p16school,
 			'p16schoolperiod' => $data->record->p16schoolperiod,
 			'p16fe' => $data->record->p16fe,
@@ -124,13 +123,6 @@ class profile_form extends moodleform {
 		$residence_code = $mform->addElement('select', 'residence_code', get_string('residence_area', 'local_obu_application'), $data->areas);
 		$residence_code->setSelected($data->residence_code);
 		$mform->addRule('residence_code', null, 'required', null, 'server');
-		$mform->addElement('html', '<p><strong>' . get_string('settled_status_preamble', 'local_obu_application') . '</strong></p>');
-		$options = [];
-		$options['0'] = get_string('not_applicable', 'local_obu_application');
-		$options['1'] = get_string('yes', 'local_obu_application');
-		$options['2'] = get_string('no', 'local_obu_application');
-		$mform->addElement('select', 'settled_status', get_string('settled_status', 'local_obu_application'), $options);
-		$mform->addRule('settled_status', null, 'required', null, 'server');
 
         // Education
 		$mform->addElement('header', 'education_head', get_string('education_head', 'local_obu_application'), '');

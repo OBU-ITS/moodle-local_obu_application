@@ -99,7 +99,6 @@
         <FIELD NAME="gender" TYPE="char" LENGTH="1" NOTNULL="false" DEFAULT="N" SEQUENCE="false" COMMENT="Gender"/>
         <FIELD NAME="residence_code" TYPE="char" LENGTH="4" NOTNULL="false" SEQUENCE="false" COMMENT="Residence code"/>
         <FIELD NAME="residence_area" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Area of residence"/>
-        <FIELD NAME="settled_status" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Settled status?"/>
         <FIELD NAME="p16school" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Post 16 School name"/>
         <FIELD NAME="p16schoolperiod" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Post 16 School period"/>
         <FIELD NAME="p16fe" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Post 16 Further Education"/>
@@ -160,7 +159,6 @@
         <FIELD NAME="gender" TYPE="char" LENGTH="1" NOTNULL="false" DEFAULT="N" SEQUENCE="false" COMMENT="Gender"/>
         <FIELD NAME="residence_code" TYPE="char" LENGTH="4" NOTNULL="false" SEQUENCE="false" COMMENT="Residence code"/>
         <FIELD NAME="residence_area" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Area of residence"/>
-        <FIELD NAME="settled_status" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Settled status?"/>
         <FIELD NAME="p16school" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Post 16 School name"/>
         <FIELD NAME="p16schoolperiod" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Post 16 School period"/>
         <FIELD NAME="p16fe" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Post 16 Further Education"/>

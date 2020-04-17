@@ -182,14 +182,6 @@ else if ($mform_data = $mform->get_data()) {
 			$fields['Programme_Stage'] = 'S1';
 			$fields['Module_Subject'] = $course->module_subject;
 			$fields['Module_Number'] = $course->module_number;
-			if ($application->settled_status == '0') {
-				$settled_status_formatted = '';
-			} else if ($application->settled_status == '1') {
-				$settled_status_formatted = get_string('yes', 'local_obu_application');
-			} else {
-				$settled_status_formatted = get_string('no', 'local_obu_application');
-			}
-			$fields['Settled_Status'] = $settled_status_formatted;
 			if ($application->studying == '1') {
 				$studying_formatted = get_string('yes', 'local_obu_application');
 			} else {
@@ -200,7 +192,7 @@ else if ($mform_data = $mform->get_data()) {
 				if ($application->self_funding == 1) {
 					$fields['Funding_Method'] = 'Self-funding';
 					$fields['Organisation'] = '';
-					$fields['Contract'] = '';
+//					$fields['Contract'] = '';
 					$fields['Funder_Name'] = '';
 				} else {
 					if ($application->funding_method < 2) {
@@ -211,7 +203,7 @@ else if ($mform_data = $mform->get_data()) {
 						$fields['Funding_Method'] = 'Contract';
 					}
 					$fields['Organisation'] = $application->funding_organisation;
-					if ($application->funding_method < 3) {
+/*					if ($application->funding_method < 3) {
 						$fields['Contract'] = '';
 					} else {
 						$organisation = read_organisation($application->funding_id);
@@ -221,7 +213,7 @@ else if ($mform_data = $mform->get_data()) {
 							$fields['Contract'] = $organisation->code;
 						}
 					}
-					if ($application->funding_method == 0) {
+*/					if ($application->funding_method == 0) {
 						$fields['Funder_Name'] = '';
 					} else {
 						$fields['Funder_Name'] = $application->funder_name;

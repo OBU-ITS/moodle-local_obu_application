@@ -62,13 +62,6 @@ class process_form extends moodleform {
 			} else {
 				$gender = get_string('gender_not_available', 'local_obu_application');
 			}
-			if ($data->record->settled_status == '0') {
-				$settled_status = get_string('not_applicable', 'local_obu_application');
-			} else if ($data->record->settled_status == '1') {
-				$settled_status = get_string('yes', 'local_obu_application');
-			} else {
-				$settled_status = get_string('no', 'local_obu_application');
-			}
 			date_timestamp_set($date, $data->record->prof_date);
 			$prof_date_formatted = date_format($date, $date_format);
 			if ($data->record->credit == '1') {
@@ -145,7 +138,6 @@ class process_form extends moodleform {
 				'nationality' => $data->record->nationality,
 				'gender' => $gender,
 				'residence_area' => $data->record->residence_area,
-				'settled_status' => $settled_status,
 				'p16school' => $data->record->p16school,
 				'p16schoolperiod' => $data->record->p16schoolperiod,
 				'p16fe' => $data->record->p16fe,
@@ -253,7 +245,6 @@ class process_form extends moodleform {
 			$mform->addElement('static', 'nationality', get_string('nationality', 'local_obu_application'));
 			$mform->addElement('static', 'gender', get_string('gender', 'local_obu_application'));
 			$mform->addElement('static', 'residence_area', get_string('residence_area', 'local_obu_application'));
-			$mform->addElement('static', 'settled_status', get_string('settled_status', 'local_obu_application'));
 
 			// Education
 			$mform->addElement('header', 'education_head', get_string('education_head', 'local_obu_application'), '');
@@ -383,30 +374,36 @@ class process_form extends moodleform {
 				if ($data->record->funding_organisation != '') { // Must be an organisation previously selected by the manager
 					$mform->addElement('text', 'funder_name', get_string('funder_name', 'local_obu_application'), 'size="40" maxlength="100"');
 					$mform->setType('funder_name', PARAM_TEXT);
-					$options = [];
+/*					$options = [];
 					if ($data->record->funding_method == 0) {
 						$options['0'] = get_string('select', 'local_obu_application');
 					}
 					$options['1'] = get_string('invoice', 'local_obu_application');
-//					$options['2'] = get_string('prepaid', 'local_obu_application');
+					$options['2'] = get_string('prepaid', 'local_obu_application');
 					$options['3'] = get_string('contract', 'local_obu_application');
 					$mform->addElement('select', 'funding_method', get_string('funding_method', 'local_obu_application'), $options);
-					$mform->addElement('static', 'invoice_text', get_string('invoice_text', 'local_obu_application'));
+*/					if ($data->record->funding_method == 0) {
+						$mform->addElement('hidden', 'funding_method', '1');
+					} else {
+						$mform->addElement('hidden', 'funding_method', $data->record->funding_method);
+					}
+					$mform->setType('funding_method', PARAM_RAW);
+//					$mform->addElement('static', 'invoice_text', get_string('invoice_text', 'local_obu_application'));
 					$mform->addElement('text', 'invoice_ref', get_string('invoice_ref', 'local_obu_application'), 'size="40" maxlength="100"');
 					$mform->setType('invoice_ref', PARAM_TEXT);
-					$mform->disabledIf('invoice_ref', 'funding_method', 'neq', '1');
+//					$mform->disabledIf('invoice_ref', 'funding_method', 'neq', '1');
 					$mform->addElement('textarea', 'invoice_address', get_string('address'), 'cols="40" rows="5"');
 					$mform->setType('invoice_address', PARAM_TEXT);
-					$mform->disabledIf('invoice_address', 'funding_method', 'neq', '1');
+//					$mform->disabledIf('invoice_address', 'funding_method', 'neq', '1');
 					$mform->addElement('text', 'invoice_email', get_string('email'), 'size="40" maxlength="100"');
 					$mform->setType('invoice_email', PARAM_RAW_TRIMMED);
-					$mform->disabledIf('invoice_email', 'funding_method', 'neq', '1');
+//					$mform->disabledIf('invoice_email', 'funding_method', 'neq', '1');
 					$mform->addElement('text', 'invoice_phone', get_string('phone', 'local_obu_application'), 'size="40" maxlength="100"');
 					$mform->setType('invoice_phone', PARAM_TEXT);
-					$mform->disabledIf('invoice_phone', 'funding_method', 'neq', '1');
+//					$mform->disabledIf('invoice_phone', 'funding_method', 'neq', '1');
 					$mform->addElement('text', 'invoice_contact', get_string('invoice_contact', 'local_obu_application'), 'size="40" maxlength="100"');
 					$mform->setType('invoice_contact', PARAM_TEXT);
-					$mform->disabledIf('invoice_contact', 'funding_method', 'neq', '1');
+//					$mform->disabledIf('invoice_contact', 'funding_method', 'neq', '1');
 				} else { // 'Other Organisation' (must be payable by invoice)
 					$mform->addElement('text', 'funding_organisation', get_string('organisation', 'local_obu_application'), 'size="40" maxlength="100"');
 					$mform->setType('funding_organisation', PARAM_TEXT);
