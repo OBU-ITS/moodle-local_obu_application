@@ -176,7 +176,7 @@ class mdl_amend_funding_form extends moodleform {
 		$options = [];
 		$options['1'] = get_string('invoice', 'local_obu_application');
 //		$options['2'] = get_string('prepaid', 'local_obu_application');
-		$options['3'] = get_string('contract', 'local_obu_application');
+//		$options['3'] = get_string('contract', 'local_obu_application');
 		$mform->addElement('select', 'funding_method', get_string('funding_method', 'local_obu_application'), $options);
 		$mform->disabledIf('funding_method', 'funding_id', 'eq', '0');
 		$mform->addElement('text', 'invoice_ref', get_string('invoice_ref', 'local_obu_application'), 'size="40" maxlength="100"');

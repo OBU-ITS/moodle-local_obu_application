@@ -19,7 +19,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2018, Oxford Brookes University
+ * @copyright  2020, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -41,8 +41,8 @@ $PAGE->set_pagelayout('standard');
 if (($user_id == 0) || ($user_id == $USER->id)) {
     $user = $USER;
 	$currentuser = true;
-	$title = get_string('myapplications', 'local_obu_application');
-	$heading = get_string('myapplications', 'local_obu_application');
+	$title = get_string('my_applications', 'local_obu_application');
+	$heading = get_string('my_applications', 'local_obu_application');
 } else {
     $user = $DB->get_record('user', array('id' => $user_id));
     if (!$user) {

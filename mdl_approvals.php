@@ -19,7 +19,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2018, Oxford Brookes University
+ * @copyright  2020, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -36,7 +36,7 @@ if (!is_manager()) {
 
 $applications_course = get_applications_course();
 require_login($applications_course);
-$back = $home . 'course/view.php?id=' . $applications_course->id;
+$back = $home . 'course/view.php?id=' . $applications_course;
 
 $approver_username = optional_param('approver', '', PARAM_TEXT);
 if ($approver_username) {
