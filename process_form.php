@@ -79,6 +79,11 @@ class process_form extends moodleform {
 			} else {
 				$studying_formatted = 'No';
 			}
+			if ($data->record->visa_requirement == '') {
+				$visa_requirement = 'NONE';
+			} else {
+				$visa_requirement = $data->record->visa_requirement;
+			}
 			if ($data->record->self_funding == '1') {
 				$self_funding_formatted = '&#10004;'; // Tick
 			} else {
@@ -160,6 +165,7 @@ class process_form extends moodleform {
 				'course_date' => $data->record->course_date,
 				'studying_formatted' => $studying_formatted,
 				'statement' => $data->record->statement,
+				'visa_requirement' => $visa_requirement,
 				'self_funding_formatted' => $self_funding_formatted,
 				'manager_email' => $data->record->manager_email,
 				'declaration_formatted' => $declaration_formatted,
@@ -312,6 +318,24 @@ class process_form extends moodleform {
 			$mform->setExpanded('statement_head');
 		}
 		$mform->addElement('static', 'statement', get_string('statement', 'local_obu_application'));
+		
+        if ((($approval_sought == 0) || ($approval_sought == 3)) && ($data->record->nationality != 'GB')) {
+			// Visa requirement?
+			$mform->addElement('header', 'visa_head', get_string('visa_requirement', 'local_obu_application'), '');
+			if ($data->button_text == 'approve') {
+				$mform->setExpanded('visa_head');
+			}
+			$mform->addElement('static', 'visa_requirement', get_string('visa_requirement', 'local_obu_application'));
+			if ($visa_requirement != 'NONE') {
+				unpack_supplement_data($data->record->visa_data, $fields);
+				if (!empty($fields)) {
+					$supplement = read_supplement_form($fields['supplement'], $fields['version']);
+					if ($supplement !== false) {
+						$this->supplement_display($supplement, $fields);
+					}
+				}
+			}
+		}
 		
         if (($approval_sought == 0) || ($approval_sought == 3)) {
 			// Supplementary course information (if any)

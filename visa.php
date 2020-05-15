@@ -16,7 +16,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * OBU Application - Course page
+ * OBU Application - Visa page
  *
  * @package    obu_application
  * @category   local
@@ -29,34 +29,43 @@
 require('../../config.php');
 require_once('./hide_moodle.php');
 require_once('./locallib.php');
-require_once('./course_form.php');
+require_once('./visa_form.php');
 
 require_obu_login();
 
 $home = new moodle_url('/local/obu_application/');
-$url = $home . 'course.php';
-$visa = $home . 'visa.php';
+$url = $home . 'visa.php';
+$visa = $home . 'visa_supplement.php';
 $supplement = $home . 'supplement.php';
 $apply = $home . 'apply.php';
 
 $PAGE->set_title($CFG->pageheading . ': ' . get_string('apply', 'local_obu_application'));
-
 $PAGE->set_url($url);
 
+$message = '';
+
 $record = read_applicant($USER->id, false);
-if (($record === false) || ($record->birthdate == 0)) { // Must complete the profile first
-	$message = get_string('complete_profile', 'local_obu_application');
+if (!isset($record->course_code) || ($record->course_code === '')) { // Must complete the course first
+	$message = get_string('complete_course', 'local_obu_application');
+}
+
+if ($record->nationality_code == 'GB') {
+	$message = get_string('visa_not_required', 'local_obu_application');
+}
+
+if ($record->visa_requirement == 'Tier 4') {
+	$visa_requirement = '1';
+} else if ($record->visa_requirement == 'Tier 2') {
+	$visa_requirement = '2';
 } else {
-	$message = '';
+	$visa_requirement = '0';
 }
 
 $parameters = [
-	'courses' => get_course_names(),
-	'dates' => get_dates(),
-	'record' => $record
+	'visa_requirement' => $visa_requirement
 ];
 
-$mform = new course_form(null, $parameters);
+$mform = new visa_form(null, $parameters);
 
 if ($mform->is_cancelled()) {
     redirect($home);
@@ -64,21 +73,29 @@ if ($mform->is_cancelled()) {
 
 if ($mform_data = $mform->get_data()) {
 	if ($mform_data->submitbutton == get_string('save_continue', 'local_obu_application')) {
-		$course = read_course_record($mform_data->course_code);
-		$mform_data->course_name = $course->name;
-		write_course($USER->id, $mform_data);
-		if ($record->nationality_code != 'GB') {
-			redirect($visa);
-		} else if ($course->supplement != '') {
-			redirect($supplement); 
+		if ($mform_data->visa_requirement == '1') {
+			$visa_requirement = 'Tier 4';
+		} else if ($mform_data->visa_requirement == '2') {
+			$visa_requirement = 'Tier 2';
 		} else {
-			redirect($apply);
+			$visa_requirement = '';
+		}
+		write_visa_requirement($USER->id, $visa_requirement);
+		if ($visa_requirement != '') {
+			redirect($visa);
+		} else {
+			$course = read_course_record($record->course_code);
+			if ($course->supplement != '') {
+				redirect($supplement); 
+			} else {
+				redirect($apply);
+			}
 		}
     }
 }	
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading(get_string('course', 'local_obu_application'));
+echo $OUTPUT->heading(get_string('visa_requirement', 'local_obu_application'));
 
 if ($message) {
     notice($message, $home);    

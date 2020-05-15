@@ -14,12 +14,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * OBU Application - Handler for supplementary forms
+ * OBU Application - Handler for visa supplementary forms
  *
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2016, Oxford Brookes University
+ * @copyright  2020, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -32,7 +32,8 @@ require_once('./supplement_form.php');
 require_obu_login();
 
 $home = new moodle_url('/local/obu_application/');
-$url = $home . 'supplement.php';
+$url = $home . 'visa_supplement.php';
+$course_supplement = $home . 'supplement.php';
 $apply = $home . 'apply.php';
 
 $context = context_user::instance($USER->id);
@@ -47,33 +48,16 @@ if ($record === false) { // Must complete the profile first
 	$message = get_string('complete_profile', 'local_obu_application');
 } else if (!isset($record->course_code) || ($record->course_code === '')) { // Must have completed the course
 	$message = get_string('complete_course', 'local_obu_application');
-}
-
-if (($message == '') && ($record->visa_requirement != '')) {
+} else if ($record->visa_requirement == '') {
+	$message = get_string('visa_not_required', 'local_obu_application'); // No visa supplement required so we shouldn't be here
+} else {
 	$supplement = get_supplement_form($record->visa_requirement, is_siteadmin());
 	if (!$supplement) {
-		$message = get_string('invalid_data', 'local_obu_application'); // Shouldn't be here
-	} else {
-		unpack_supplement_data($record->visa_data, $fields);
-		if (($fields['supplement'] != $supplement->ref) || ($fields['version'] != $supplement->version)) {
-			$message = get_string('complete_course', 'local_obu_application'); // Shouldn't be here
-		}
+		$message = get_string('invalid_data', 'local_obu_application'); // Summutsup
 	}
 }
 
-if ($message == '') {
-	$course = read_course_record($record->course_code);
-	if ($course->supplement == '') {
-		$message = get_string('invalid_data', 'local_obu_application'); // No supplement required so we shouldn't be here
-	} else {
-		$supplement = get_supplement_form($course->supplement, is_siteadmin());
-		if (!$supplement) {
-			$message = get_string('invalid_data', 'local_obu_application'); // Summutsup
-		}
-	}
-}
-
-unpack_supplement_data($record->supplement_data, $fields);
+unpack_supplement_data($record->visa_data, $fields);
 if (!empty($fields) && (($fields['supplement'] != $supplement->ref) || ($fields['version'] != $supplement->version))) {
 	$fields = array();
 }
@@ -104,12 +88,17 @@ if ($mform_data = (array)$mform->get_data()) {
 			}
 		}
 	}
-	write_supplement_data($USER->id, pack_supplement_data($data_fields));
-	redirect($apply);
+	write_visa_data($USER->id, pack_supplement_data($data_fields));
+	$course = read_course_record($record->course_code);
+	if ($course->supplement != '') {
+		redirect($course_supplement); 
+	} else {
+		redirect($apply);
+	}
 }
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading(get_string('course_supplement', 'local_obu_application'));
+echo $OUTPUT->heading(get_string('visa_supplement', 'local_obu_application'));
 
 if ($message) {
     notice($message, $home);    

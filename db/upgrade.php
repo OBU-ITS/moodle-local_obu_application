@@ -606,6 +606,34 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		// obu_application savepoint reached
 		upgrade_plugin_savepoint(true, 2020040900, 'local', 'obu_application');
     }
+	
+	if ($oldversion < 2020042800) {
+
+		// Update local_obu_applicant
+		$table = new xmldb_table('local_obu_applicant');
+		$field = new xmldb_field('visa_requirement', XMLDB_TYPE_CHAR, '10', null, XMLDB_NOTNULL, null, '', 'statement');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+		$field = new xmldb_field('visa_data', XMLDB_TYPE_TEXT, 'big', null, null, null, null, 'visa_requirement');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+
+		// Update local_obu_application
+		$table = new xmldb_table('local_obu_application');
+		$field = new xmldb_field('visa_requirement', XMLDB_TYPE_CHAR, '10', null, XMLDB_NOTNULL, null, '', 'statement');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+		$field = new xmldb_field('visa_data', XMLDB_TYPE_TEXT, 'big', null, null, null, null, 'visa_requirement');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+
+		// obu_application savepoint reached
+		upgrade_plugin_savepoint(true, 2020042800, 'local', 'obu_application');
+    }
 
     return $result;
 }

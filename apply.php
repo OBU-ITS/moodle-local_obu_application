@@ -48,7 +48,21 @@ if (($record === false) || ($record->birthdate == 0)) { // Must have completed t
 }
 else if (!isset($record->course_code) || ($record->course_code === '')) { // They must complete the course
 	$message = get_string('complete_course', 'local_obu_application');
-} else {
+}
+
+if (($message == '') && ($record->visa_requirement != '')) {
+	$supplement = get_supplement_form($record->visa_requirement, is_siteadmin());
+	if (!$supplement) {
+		$message = get_string('invalid_data', 'local_obu_application'); // Shouldn't be here
+	} else {
+		unpack_supplement_data($record->visa_data, $fields);
+		if (($fields['supplement'] != $supplement->ref) || ($fields['version'] != $supplement->version)) {
+			$message = get_string('complete_course', 'local_obu_application'); // Shouldn't be here
+		}
+	}
+}
+
+if ($message == '') {
 	$course = read_course_record($record->course_code);
 	if ($course->supplement != '') {
 		$supplement = get_supplement_form($course->supplement, is_siteadmin());

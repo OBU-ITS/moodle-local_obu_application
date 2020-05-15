@@ -123,6 +123,8 @@
         <FIELD NAME="course_date" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Course start date"/>
         <FIELD NAME="studying" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Currently studying?"/>
         <FIELD NAME="statement" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Supporting statement"/>
+        <FIELD NAME="visa_requirement" TYPE="char" LENGTH="10" NOTNULL="true" DEFAULT="" SEQUENCE="false" COMMENT="Visa requirement"/>
+        <FIELD NAME="visa_data" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Visa supplementary form data"/>
         <FIELD NAME="supplement_data" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Course supplementary form data"/>
         <FIELD NAME="course_update" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Date of last course update"/>
       </FIELDS>
@@ -182,6 +184,8 @@
         <FIELD NAME="course_date" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Course start date"/>
         <FIELD NAME="studying" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Currently studying?"/>
         <FIELD NAME="statement" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Supporting statement"/>
+        <FIELD NAME="visa_requirement" TYPE="char" LENGTH="10" NOTNULL="true" DEFAULT="" SEQUENCE="false" COMMENT="Visa requirement"/>
+        <FIELD NAME="visa_data" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Visa supplementary form data"/>
         <FIELD NAME="supplement_data" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Course supplementary form data"/>
         <FIELD NAME="self_funding" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Self-funding?"/>
         <FIELD NAME="manager_email" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Email of manager"/>

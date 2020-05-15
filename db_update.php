@@ -435,6 +435,35 @@ function write_course($user_id, $form_data) {
 	return $DB->update_record('local_obu_applicant', $record);
 }
 
+function write_visa_requirement($user_id, $visa_requirement) {
+	global $DB;
+	
+	$record = read_applicant($user_id, true); // Must already exist
+
+	// Only update requirement/data if necessary
+	if ($record->visa_requirement == $visa_requirement) {
+		return;
+	}
+
+	$record->visa_requirement = $visa_requirement;
+	$record->visa_data = '';
+	$record->course_update = time();
+
+	return $DB->update_record('local_obu_applicant', $record);
+}
+
+function write_visa_data($user_id, $visa_data) {
+	global $DB;
+	
+	$record = read_applicant($user_id, true); // Must already exist
+
+	// Update the visa data for the applicant's course
+    $record->visa_data = $visa_data;
+    $record->course_update = time();
+
+	return $DB->update_record('local_obu_applicant', $record);
+}
+
 function write_supplement_data($user_id, $supplement_data) {
 	global $DB;
 	
@@ -519,6 +548,10 @@ function write_application($user_id, $form_data) {
     $record->course_date = $applicant->course_date;
     $record->studying = $applicant->studying;
     $record->statement = $applicant->statement;
+    $record->visa_requirement = $applicant->visa_requirement;
+	if ($record->visa_requirement != '') { // There should be visa data
+		$record->visa_data = $applicant->visa_data;
+	}
 	$course = read_course_record($applicant->course_code);
 	if ($course->supplement != '') { // There should be supplementary data
 		$record->supplement_data = $applicant->supplement_data;
