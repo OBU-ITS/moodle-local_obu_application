@@ -87,7 +87,7 @@ else if ($mform_data = $mform->get_data()) {
 		$file_id = $batch_number;
 	}
 	
-	$months = [ 'JAN' => 1, 'FEB' => 2, 'MAR' => 3, 'APR' => 4, 'MAY' => 5, 'JUN' => 6, 'JUL' => 7, 'AUG' => 8, 'SEP' => 9, 'OCT' => 10, 'NOV' => 11, 'DEC' => 12 ];
+	$months = [ 'JAN' => '01', 'FEB' => '02', 'MAR' => '03', 'APR' => '04', 'MAY' => '05', 'JUN' => '06', 'JUL' => '07', 'AUG' => '08', 'SEP' => '09', 'OCT' => '10', 'NOV' => '11', 'DEC' => '12' ];
 	$applications = get_applications(); // Get all applications
 	$xfers = array();
 	foreach ($applications as $application) {
@@ -162,13 +162,16 @@ else if ($mform_data = $mform->get_data()) {
 			$fields['Student_Type'] = 'P';
 			$course_date = $application->course_date;
 			$month = substr($course_date, 0, 3);
-			if (isset($months[$month])) {
+			if (!isset($months[$month])) {
+				$month = '';
+			} else {
+				$month = $months[$month];
 				$year = substr($course_date, 3);
 				if ((strlen($year) == 2) && is_numeric($year)) {
 					$course_date = '20' . $year;
-					if ($months[$month] <= 5) {
+					if ($month <= '05') {
 						$course_date .= '01';
-					} else if ($months[$month] <= 8) {
+					} else if ($month <= '08') {
 						$course_date .= '06';
 					} else {
 						$course_date .= '09';
@@ -178,7 +181,11 @@ else if ($mform_data = $mform->get_data()) {
 			$fields['Admit_Term'] = $course_date;
 			$fields['Admit_Type'] = '60';
 			$fields['Residency_Type'] = 'H';
-			$fields['Cohort'] = $course->cohort_code;
+			if ($course->cohort_code == '') {
+				$fields['Cohort'] = $month;
+			} else {
+				$fields['Cohort'] = $course->cohort_code . ', ' . $month;
+			}
 			$fields['Programme_Stage'] = 'S1';
 			$fields['Module_Subject'] = $course->module_subject;
 			$fields['Module_Number'] = $course->module_number;
