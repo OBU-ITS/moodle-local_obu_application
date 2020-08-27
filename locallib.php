@@ -382,6 +382,19 @@ function require_obu_login() {
 	user_accesstime_log();
 }
 
+function get_titles() {
+	$titles = array (
+		'Dr' => 'Dr',
+		'Miss' => 'Miss',
+		'Mr' => 'Mr',
+		'Mrs' => 'Mrs',
+		'Ms' => 'Ms',
+		'Prof' => 'Prof'
+	);
+	
+	return $titles;	
+}
+
 function get_areas() {
 	$areas = array (
 		'AF' => 'Afghanistan',

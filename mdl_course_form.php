@@ -117,7 +117,7 @@ class mdl_course_form extends moodleform {
 			$mform->setType('major_code', PARAM_TEXT);
 			$mform->addElement('text', 'level', get_string('level', 'local_obu_application'), 'size="2" maxlength="2"');
 			$mform->setType('level', PARAM_TEXT);
-			$mform->addElement('text', 'cohort_code', get_string('cohort_code', 'local_obu_application'), 'size="10" maxlength="10"');
+			$mform->addElement('text', 'cohort_code', get_string('cohort_code', 'local_obu_application'), 'size="25" maxlength="25"');
 			$mform->setType('cohort_code', PARAM_TEXT);
 		}
 

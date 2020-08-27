@@ -634,6 +634,19 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		// obu_application savepoint reached
 		upgrade_plugin_savepoint(true, 2020042800, 'local', 'obu_application');
     }
+	
+	if ($oldversion < 2020080200) {
+
+		// Update local_obu_course
+		$table = new xmldb_table('local_obu_course');
+		$field = new xmldb_field('cohort_code', XMLDB_TYPE_CHAR, '25', null, null, null, null, 'level');
+		if ($dbman->field_exists($table, $field)) {
+			$dbman->change_field_type($table, $field);
+		}
+
+		// obu_application savepoint reached
+		upgrade_plugin_savepoint(true, 2020080200, 'local', 'obu_application');
+    }
 
     return $result;
 }
