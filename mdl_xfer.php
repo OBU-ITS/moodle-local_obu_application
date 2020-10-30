@@ -120,22 +120,26 @@ else if ($mform_data = $mform->get_data()) {
 			}
 			$fields['Applicant_Id'] = 'H' . sprintf('%07d', $application->userid);
 			$fields['Form_Id'] = 'HLS/' . $application->id;
+
 			$fields['Title'] = $application->title;
 			$fields['Surname'] = $application->lastname;
 			$fields['First_Name(s)'] = $application->firstname;
 			if (($mform_data->xfer_type == 1) || ($mform_data->xfer_type == 3)) { // Admissions
-				if ($mform_data->xfer_type == 3) {
-					$fields['Middle_Name'] = '';
+				$fields['Middle_Name'] = '';
+				if ($mform_data->xfer_type == 1) {
+					$fields['Banner_ID'] = '';
+				} else {
 					$fields['Previous_Family_Name'] = '';
 				}
 				$fields['Address_Type'] = 'HO';
 				$fields['Address_1'] = $application->address_1;
 				$fields['Address_2'] = $application->address_2;
 				$fields['Address_3'] = $application->address_3;
+				$fields['Address_4'] = '';
 				$fields['City'] = $application->city;
 				$fields['Domicile'] = $application->domicile_code;
-				$fields['Residence'] = $application->residence_code;
 				$fields['Postcode'] = $application->postcode;
+				$fields['Address_From'] = '';
 				if ($application->mobile_phone != '') {
 					$fields['Telephone_Type'] = 'MO';
 					$fields['Telephone'] = $application->mobile_phone;
@@ -159,7 +163,11 @@ else if ($mform_data = $mform->get_data()) {
 			$fields['Major_Code'] = $course->major_code;
 			$fields['Level'] = $course->level;
 			$fields['Campus'] = $course->campus;
-			$fields['Student_Type'] = 'P';
+			if ($application->visa_requirement == 'Tier 4') {
+				$fields['Student_Type'] = 'F';
+			} else {
+				$fields['Student_Type'] = 'P';
+			}
 			$course_date = $application->course_date;
 			$month = substr($course_date, 0, 3);
 			if (!isset($months[$month])) {
@@ -181,12 +189,14 @@ else if ($mform_data = $mform->get_data()) {
 			$fields['Admit_Term'] = $course_date;
 			$fields['Admit_Type'] = '60';
 			$fields['Residency_Type'] = 'H';
+			$fields['Programme_Stage'] = 'S1';
+			$fields['Decision'] = 'UT';
 			if ($course->cohort_code == '') {
 				$fields['Cohort'] = $month;
 			} else {
 				$fields['Cohort'] = $course->cohort_code . ', ' . $month;
 			}
-			$fields['Programme_Stage'] = 'S1';
+
 			$fields['Module_Subject'] = $course->module_subject;
 			$fields['Module_Number'] = $course->module_number;
 			if ($application->studying == '1') {
@@ -195,6 +205,7 @@ else if ($mform_data = $mform->get_data()) {
 				$studying_formatted = get_string('no', 'local_obu_application');
 			}
 			$fields['Currently_Studying'] = $studying_formatted;
+			$fields['Residence'] = $application->residence_code;
 			if (($mform_data->xfer_type == 1) || ($mform_data->xfer_type == 2)) { // Admissions & Finance (combined) or Finance
 				if ($application->self_funding == 1) {
 					$fields['Funding_Method'] = 'Self-funding';

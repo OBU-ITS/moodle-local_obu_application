@@ -567,26 +567,6 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		upgrade_plugin_savepoint(true, 2020022300, 'local', 'obu_application');
     }
 	
-	if ($oldversion < 2020022400) {
-
-		// Update local_obu_applicant
-		$table = new xmldb_table('local_obu_applicant');
-		$field = new xmldb_field('settled_status', XMLDB_TYPE_INTEGER, '1', null, null, null, '0', 'residence_area');
-		if (!$dbman->field_exists($table, $field)) {
-			$dbman->add_field($table, $field);
-		}
-
-		// Update local_obu_application
-		$table = new xmldb_table('local_obu_application');
-		$field = new xmldb_field('settled_status', XMLDB_TYPE_INTEGER, '1', null, null, null, '0', 'residence_area');
-		if (!$dbman->field_exists($table, $field)) {
-			$dbman->add_field($table, $field);
-		}
-
-		// obu_application savepoint reached
-		upgrade_plugin_savepoint(true, 2020022400, 'local', 'obu_application');
-    }
-	
 	if ($oldversion < 2020040900) {
 
 		// Update local_obu_applicant
@@ -646,6 +626,19 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 
 		// obu_application savepoint reached
 		upgrade_plugin_savepoint(true, 2020080200, 'local', 'obu_application');
+    }
+	
+	if ($oldversion < 2020100100) {
+
+		// Update local_obu_course
+		$table = new xmldb_table('local_obu_course');
+		$field = new xmldb_field('administrator', XMLDB_TYPE_CHAR, '8', null, null, null, null, 'suspended');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+
+		// obu_application savepoint reached
+		upgrade_plugin_savepoint(true, 2020100100, 'local', 'obu_application');
     }
 
     return $result;

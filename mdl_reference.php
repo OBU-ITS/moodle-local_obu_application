@@ -1,7 +1,5 @@
 <?php
 
-// This file is part of Moodle - http://moodle.org/
-//
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
@@ -16,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * OBU Application - Contact details
+ * OBU Application - Get an application by reference [Moodle]
  *
  * @package    obu_application
  * @category   local
@@ -25,50 +23,52 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
- 
-require('../../config.php');
-require_once('./hide_moodle.php');
+
+require_once('../../config.php');
 require_once('./locallib.php');
-require_once('./contact_form.php');
+require_once('./db_update.php');
+require_once('./mdl_reference_form.php');
 
-require_obu_login();
+require_login();
 
-$home = new moodle_url('/local/obu_application/');
-$url = $home . 'contact.php';
+$home = new moodle_url('/');
+if (!is_manager()) {
+	redirect($home);
+}
 
-$PAGE->set_title($CFG->pageheading . ': ' . get_string('contactdetails', 'local_obu_application'));
+$applications_course = get_applications_course();
+require_login($applications_course);
+$back = $home . 'course/view.php?id=' . $applications_course;
 
+$dir = $home . 'local/obu_application/';
+$url = $dir . 'mdl_reference.php';
+
+$title = get_string('applications_management', 'local_obu_application');
+$heading = get_string('application_by_ref', 'local_obu_application');
 $PAGE->set_url($url);
+$PAGE->set_pagelayout('standard');
+$PAGE->set_title($title);
+$PAGE->set_heading($title);
+$PAGE->navbar->add($heading);
 
-$message ='';
+$message = '';
+$applicants = null;
 
-$nations = get_nations();
-$parameters = [
-	'user' => read_user($USER->id),
-	'applicant' => read_applicant($USER->id, false),
-	'titles' => get_titles(),
-	'nations' => $nations,
-	'default_domicile_code' => 'GB'
-];
-
-$mform = new contact_form(null, $parameters);
+$mform = new mdl_reference_form(null, array());
 
 if ($mform->is_cancelled()) {
-    redirect($home);
+    redirect($back);
 } 
 else if ($mform_data = $mform->get_data()) {
-	if ($mform_data->submitbutton == get_string('save', 'local_obu_application')) {
-		$mform_data->domicile_country = $nations[$mform_data->domicile_code];
-		write_user($USER->id, $mform_data);
-		write_contact_details($USER->id, $mform_data);
-    }
-	redirect($home);
+	$url = $dir . 'mdl_process.php?source=mdl_reference.php&id=' . $mform_data->id;
+	redirect($url);
 }	
 
 echo $OUTPUT->header();
+echo $OUTPUT->heading($heading);
 
 if ($message) {
-    notice($message, $home);    
+    notice($message, $url);    
 }
 else {
     $mform->display();

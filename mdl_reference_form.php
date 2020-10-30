@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * OBU Application - Input form for user applications listing
+ * OBU Application - Input form for application reference
  *
  * @package    obu_application
  * @category   local
@@ -26,12 +26,12 @@
 
 require_once("{$CFG->libdir}/formslib.php");
 
-class mdl_list_form extends moodleform {
+class mdl_reference_form extends moodleform {
 
     function definition() {
         $mform =& $this->_form;
 		
-		$mform->addElement('text', 'lastname', get_string('lastname'), 'size="30" maxlength="100"');
+		$mform->addElement('text', 'id', get_string('reference', 'local_obu_application') . ' HLS/' , 'size="10" maxlength="10"');
 
         $this->add_action_buttons(true, get_string('continue', 'local_obu_application'));
     }
@@ -39,12 +39,12 @@ class mdl_list_form extends moodleform {
 	function validation($data, $files) {
 		$errors = parent::validation($data, $files); // Ensure we don't miss errors from any higher-level validation
 		
-		if ($data['lastname'] == '') {
-			$errors['lastname'] = get_string('value_required', 'local_obu_application');
+		if ($data['id'] == '') {
+			$errors['id'] = get_string('value_required', 'local_obu_application');
 		} else {
-			$applicants = get_applicants_by_name($data['lastname']);
-			if (count($applicants) == 0) {
-				$errors['lastname'] = get_string('user_not_found', 'local_obu_application');
+			$application = read_application($data['id'], false);
+			if ($application == null) {
+				$errors['id'] = get_string('application_not_found', 'local_obu_application');
 			}
 		}
 		

@@ -537,7 +537,7 @@ class process_form extends moodleform {
 				$mform->addElement('text', 'comment', '', 'size="40" maxlength="100"');
 				$mform->setType('comment', PARAM_TEXT);
 				$buttonarray[] = &$mform->createElement('submit', 'rejectbutton', get_string('reject', 'local_obu_application'));
-				if (($approval_sought == 3) && is_administrator()) { // HLS administrator
+				if (($approval_sought == 3) && is_manager()) { // HLS manager
 					$buttonarray[] = &$mform->createElement('submit', 'amendcoursebutton', get_string('amend_course', 'local_obu_application'));
 					if ($data->record->self_funding == '0') {
 						$buttonarray[] = &$mform->createElement('submit', 'amendfundingbutton', get_string('amend_funding', 'local_obu_application'));

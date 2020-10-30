@@ -61,7 +61,11 @@ if (isloggedin()) {
 
 include('./signup_form.php');
 
-$mform = new registration_form(null);
+$parameters = [
+	'titles' => get_titles(),
+];
+
+$mform = new registration_form(null, $parameters);
 
 if ($mform->is_cancelled()) {
     redirect($login);

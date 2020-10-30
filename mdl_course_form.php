@@ -40,6 +40,7 @@ class mdl_course_form extends moodleform {
 		$data->delete = $this->_customdata['delete'];
 		$data->courses = $this->_customdata['courses'];
 		$data->record = $this->_customdata['record'];
+		$data->administrator = $this->_customdata['administrator'];
 		
 		if ($data->record != null) {
 			$fields = [
@@ -48,6 +49,7 @@ class mdl_course_form extends moodleform {
 				'supplement' => $data->record->supplement,
 				'programme' => $data->record->programme,
 				'suspended' => $data->record->suspended,
+				'administrator' => $data->record->administrator,
 				'module_subject' => $data->record->module_subject,
 				'module_number' => $data->record->module_number,
 				'campus' => $data->record->campus,
@@ -61,6 +63,7 @@ class mdl_course_form extends moodleform {
 		
 		$mform->addElement('html', '<h2>' . get_string('update_course', 'local_obu_application') . '</h2>');
 
+		// If we don't have a course yet, let them select one
 		if ($data->id == '') {
 			$select = $mform->addElement('select', 'id', get_string('course', 'local_obu_application'), $data->courses, null);
 			$select->setSelected(0);
@@ -105,6 +108,11 @@ class mdl_course_form extends moodleform {
 			$mform->setType('supplement', PARAM_TEXT);
 			$mform->addElement('advcheckbox', 'programme', get_string('programme', 'local_obu_application'), null, null, array(0, 1));
 			$mform->addElement('advcheckbox', 'suspended', get_string('suspended', 'local_obu_application'), null, null, array(0, 1));
+			$mform->addElement('text', 'administrator', get_string('administrator', 'local_obu_application'), 'size="8" maxlength="8"');
+			$mform->setType('administrator', PARAM_TEXT);
+			if ($data->administrator != '') {
+				$mform->addElement('static', 'administrator_name', null, $data->administrator);
+			}
 			$mform->addElement('text', 'module_subject', get_string('module_subject', 'local_obu_application'), 'size="4" maxlength="4"');
 			$mform->setType('module_subject', PARAM_TEXT);
 			$mform->addElement('text', 'module_number', get_string('module_number', 'local_obu_application'), 'size="4" maxlength="4"');
@@ -147,6 +155,12 @@ class mdl_course_form extends moodleform {
 			}
 			if ($data['name'] == '') {
 				$errors['name'] = get_string('value_required', 'local_obu_application');
+			}
+			if ($data['administrator'] != '') {
+				$user = read_user_by_username($data['administrator']);
+				if ($user == null) {
+					$errors['administrator'] = get_string('user_not_found', 'local_obu_application');
+				}
 			}
 		}
 		

@@ -37,6 +37,7 @@ class contact_form extends moodleform {
         $data = new stdClass();
 		$data->user = $this->_customdata['user'];
 		$data->applicant = $this->_customdata['applicant'];
+		$data->titles = $this->_customdata['titles'];
 		$data->nations = $this->_customdata['nations'];
 		$data->domicile_code = $this->_customdata['default_domicile_code'];
 		
@@ -76,8 +77,8 @@ class contact_form extends moodleform {
 
         $mform->addElement('header', 'contactdetails', get_string('contactdetails', 'local_obu_application'), '');
 		
-		$mform->addElement('text', 'title', get_string('title', 'local_obu_application'), 'size="10" maxlength="10"');
-		$mform->setType('title', PARAM_TEXT);
+		$title = $mform->addElement('select', 'title', get_string('title', 'local_obu_application'), $data->titles);
+		$title->setSelected($data->title);
 		$mform->addRule('title', null, 'required', null, 'server');
 		
 		$mform->addElement('text', 'firstname', get_string('firstnames', 'local_obu_application'), 'size="30" maxlength="100"');

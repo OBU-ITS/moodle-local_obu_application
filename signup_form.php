@@ -36,6 +36,9 @@ class registration_form extends moodleform {
 
         $mform = $this->_form;
 		
+        $data = new stdClass();
+		$data->titles = $this->_customdata['titles'];
+
 		$mform->addElement('html', get_config('local_obu_application', 'privacy'));
 
 		// This 'dummy' element has two purposes:
@@ -64,9 +67,7 @@ class registration_form extends moodleform {
         $mform->addElement('header', 'contactdetails', get_string('contactdetails', 'local_obu_application'), '');
 		$mform->addElement('static', 'fullname', get_string('fullname', 'local_obu_application'));
 		
-		$mform->addElement('text', 'title', get_string('title', 'local_obu_application'), 'size="10" maxlength="10"');
-		$mform->setType('title', PARAM_TEXT);
-		$mform->addRule('title', null, 'required', null, 'server');
+		$mform->addElement('select', 'title', get_string('title', 'local_obu_application'), $data->titles);
 		
 		$mform->addElement('text', 'firstname', get_string('firstnames', 'local_obu_application'), 'size="30" maxlength="100"');
 		$mform->setType('firstname', PARAM_TEXT);

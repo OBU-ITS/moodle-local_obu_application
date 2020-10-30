@@ -64,6 +64,7 @@ $delete = false;
 $codes = array();
 $courses = array();
 $record = null;
+$administrator = null;
 
 if (isset($_REQUEST['id'])) {
 	$id = $_REQUEST['id'];
@@ -71,7 +72,15 @@ if (isset($_REQUEST['id'])) {
 		$record = read_course_record_by_id($id);
 		if (isset($_REQUEST['delete'])) {
 			$delete = true;
-		}		
+		}
+		if ($record->administrator != '') {		
+			$user = read_user_by_username($record->administrator);
+			if ($user == null) {
+				$administrator = get_string('user_not_found', 'local_obu_application');
+			} else {
+				$administrator = $user->firstname . ' ' . $user->lastname;
+			}
+		}
 	} else { // Store existing course codes so we can check if any given code is really new
 		$recs = get_course_records();
 		foreach ($recs as $rec) {
@@ -83,9 +92,9 @@ if (isset($_REQUEST['id'])) {
 	if ($recs) { // Do they have a choice?
 		$courses[0] = get_string('new_course', 'local_obu_application'); // The 'New Course' option
 		foreach ($recs as $rec) {
-			$name = $rec->code . ' ' . $rec->name;
+			$name = $rec->name . ' [' . $rec->code . ']';
 			if ($rec->supplement) {
-				$name .= ' [' . $rec->supplement . ']';
+				$name .= ' {' . $rec->supplement . '}';
 			}
 			if ($rec->programme) {
 				$name .= ' (Programme)';
@@ -104,7 +113,8 @@ $parameters = [
 	'id' => $id,
 	'delete' => $delete,
 	'courses' => $courses,
-	'record' => $record
+	'record' => $record,
+	'administrator' => $administrator
 ];
 
 $mform = new mdl_course_form(null, $parameters);

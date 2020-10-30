@@ -200,6 +200,7 @@ function write_course_record($course) {
 	$record->supplement = $course->supplement;
 	$record->programme = $course->programme;
 	$record->suspended = $course->suspended;
+	$record->administrator = $course->administrator;
 	$record->module_subject = $course->module_subject;
 	$record->module_number = $course->module_number;
 	$record->campus = $course->campus;
@@ -227,7 +228,7 @@ function delete_course_record($course_id) {
 function get_course_records() {
 	global $DB;
 	
-	return $DB->get_records('local_obu_course', null, 'code');
+	return $DB->get_records('local_obu_course', null, 'name');
 }
 
 function is_programme($course_code) {
@@ -287,6 +288,12 @@ function read_user($user_id) {
 	profile_load_data($user); // Add custom profile data
 	
 	return $user;	
+}
+ 
+function read_user_by_username($username) {
+    global $DB;
+    
+	return $DB->get_record('user', array('username' => $username), '*', IGNORE_MISSING);
 }
 
 function write_user($user_id, $form_data) {
@@ -476,10 +483,10 @@ function write_supplement_data($user_id, $supplement_data) {
 	return $DB->update_record('local_obu_applicant', $record);
 }
 
-function read_application($application_id) {
+function read_application($application_id, $must_exist = true) {
     global $DB;
     
-	$application = $DB->get_record('local_obu_application', array('id' => $application_id), '*', MUST_EXIST);
+	$application = $DB->get_record('local_obu_application', array('id' => $application_id), '*', $must_exist);
 	
 	return $application;	
 }

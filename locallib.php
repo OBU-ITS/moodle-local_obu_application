@@ -384,11 +384,11 @@ function require_obu_login() {
 
 function get_titles() {
 	$titles = array (
-		'Dr' => 'Dr',
-		'Miss' => 'Miss',
-		'Mr' => 'Mr',
-		'Mrs' => 'Mrs',
 		'Ms' => 'Ms',
+		'Miss' => 'Miss',
+		'Mrs' => 'Mrs',
+		'Mr' => 'Mr',
+		'Dr' => 'Dr',
 		'Prof' => 'Prof'
 	);
 	

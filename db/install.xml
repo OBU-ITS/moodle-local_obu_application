@@ -28,6 +28,7 @@
         <FIELD NAME="supplement" TYPE="char" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Any supplementary form for the course"/>
         <FIELD NAME="programme" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Programme or not"/>
         <FIELD NAME="suspended" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Suspended or not"/>
+        <FIELD NAME="administrator" TYPE="char" LENGTH="8" NOTNULL="false" SEQUENCE="false" COMMENT="Brookes Administrator"/>
         <FIELD NAME="module_subject" TYPE="char" LENGTH="4" NOTNULL="false" SEQUENCE="false" COMMENT="Module Subject"/>
         <FIELD NAME="module_number" TYPE="char" LENGTH="5" NOTNULL="false" SEQUENCE="false" COMMENT="Module Number"/>
         <FIELD NAME="campus" TYPE="char" LENGTH="3" NOTNULL="false" SEQUENCE="false" COMMENT="Campus"/>
