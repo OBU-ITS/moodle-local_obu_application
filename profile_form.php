@@ -87,14 +87,6 @@ class profile_form extends moodleform {
 		];
 		$this->set_data($fields);
 		
-		$options = [];
-		if ($data->record->nationality_code == 0) {
-			$options['0'] = get_string('select', 'local_obu_application');
-		}
-		foreach ($data->nationalities as $nationality_code => $nationality_name) {
-			$options[$nationality_code] = $nationality_name;
-		}
-
 		$date_options = array('startyear' => 1950, 'stopyear'  => 2030, 'timezone'  => 99, 'optional' => false);
 		
 		// This 'dummy' element has two purposes:
@@ -102,7 +94,7 @@ class profile_form extends moodleform {
 		// - To let us inform the user that there are validation errors without them having to scroll down further
 		$mform->addElement('static', 'form_errors');
 
-        // General - birth country, date, nationality and gender
+        // General - birth country, date, nationality, gender and residence
         $mform->addElement('header', 'general_head', get_string('general_head', 'local_obu_application'), '');
 		$mform->setExpanded('general_head');
 		$birth_code = $mform->addElement('select', 'birth_code', get_string('birth_country', 'local_obu_application'), $data->nations, null);

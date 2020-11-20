@@ -21,7 +21,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2017, Oxford Brookes University
+ * @copyright  2020, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -44,20 +44,7 @@ class apply_form extends moodleform {
 		// - To force open the Moodle Forms invisible fieldset outside of any table on the form (corrupts display otherwise)
 		// - To let us inform the user that there are validation errors without them having to scroll down further
 		$mform->addElement('static', 'form_errors');
-/*
-        $mform->addElement('header', 'manager_to_approve', get_string('manager_to_approve', 'local_obu_application'), '');
-		
-		// Bucks Healthcare want to bypass the manager's approval stage
-		$mform->addElement('static', 'bucks_email', get_string('bucks_email', 'local_obu_application'));
-		
-		$mform->addElement('text', 'email', get_string('email'), 'size="25" maxlength="100"');
-		$mform->setType('email', PARAM_RAW_TRIMMED);
-		$mform->addRule('email', get_string('missingemail'), 'required', null, 'server');
 
-		$mform->addElement('text', 'emailagain', get_string('confirm_email', 'local_obu_application'), 'size="25" maxlength="100"');
-		$mform->setType('emailagain', PARAM_RAW_TRIMMED);
-		$mform->addRule('emailagain', get_string('missingemail'), 'required', null, 'server');
-*/
 		$mform->addElement('advcheckbox', 'self_funding', get_string('self_funding', 'local_obu_application'),
 			get_string('self_funding_text', 'local_obu_application'), null, array(0, 1));
 
@@ -86,7 +73,7 @@ class apply_form extends moodleform {
 		
         $mform->addElement('header', 'declaration_head', get_string('declaration', 'local_obu_application'), '');
 		
-		$conditions = '<a href="http://www.brookes.ac.uk/studying-at-brookes/how-to-apply/conditions-of-acceptance/" target="_blank">' . get_string('conditions', 'local_obu_application') . '</a>';
+		$conditions = '<a href="https://www.brookes.ac.uk/studying-at-brookes/how-to-apply/conditions-of-acceptance/" target="_blank">' . get_string('conditions', 'local_obu_application') . '</a>';
 		$mform->addElement('checkbox', 'declaration', get_string('declaration', 'local_obu_application'), get_string('declaration_text', 'local_obu_application', $conditions));
 		$mform->addRule('declaration', null, 'required', null, 'server');
 		
@@ -97,16 +84,6 @@ class apply_form extends moodleform {
         global $CFG, $DB;
         $errors = parent::validation($data, $files);
 
-/*		if (!validate_email($data['email']) || ($data['email'] != strtolower($data['email']))) {
-			$errors['email'] = get_string('invalidemail');
-		}
-		
-		if (empty($data['emailagain'])) {
-			$errors['emailagain'] = get_string('missingemail');
-		} else if ($data['emailagain'] != $data['email']) {
-			$errors['emailagain'] = get_string('invalidemail');
-		}
-*/		
 		// if not self-funding, the applicant must enter either the organisation or email of funder to approve
 		if ($data['self_funding'] == '0') {
 			if ($data['funding_organisation'] == -1) { // Not entered

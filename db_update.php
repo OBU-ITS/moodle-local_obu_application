@@ -559,14 +559,29 @@ function write_application($user_id, $form_data) {
 	if ($record->visa_requirement != '') { // There should be visa data
 		$record->visa_data = $applicant->visa_data;
 	}
-	$course = read_course_record($applicant->course_code);
+	$course = read_course_record($record->course_code);
 	if ($course->supplement != '') { // There should be supplementary data
 		$record->supplement_data = $applicant->supplement_data;
 	}
+	if ($course->administrator != '') {
+		$record->manager_email = $course->administrator . '@brookes.ac.uk';
+	}
 	
-	// Final details
+	// Funding
 	$record->self_funding = $form_data->self_funding;
-//	$record->manager_email = $form_data->email;
+	if ($record->self_funding == 0) {
+		$record->funding_id = $form_data->funding_organisation;
+		if ($record->funding_id == 0) { // 'Other Organisation'
+			$record->funding_organisation = '';
+			$record->funder_email = $form_data->funder_email; // Must have been given
+		} else { // A known organisation with a fixed email address
+			$organisation = read_organisation($record->funding_id);
+			$record->funding_organisation = $organisation->name;
+			$record->funder_email = $organisation->email;
+		}
+	}
+
+	// Declaration
 	if (isset($form_data->declaration)) { // Only set if checked
 		$record->declaration = 1;
 	} else {

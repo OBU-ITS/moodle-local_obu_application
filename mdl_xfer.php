@@ -55,13 +55,19 @@ $PAGE->navbar->add($heading);
 
 $message = '';
 
-$mform = new mdl_xfer_form(null, array());
+$parameters = [
+	'dates' => get_dates()
+];
+
+$mform = new mdl_xfer_form(null, $parameters);
 
 if ($mform->is_cancelled()) {
     redirect($back);
 } 
 else if ($mform_data = $mform->get_data()) {
 		
+	$months = [ 'JAN' => '01', 'FEB' => '02', 'MAR' => '03', 'APR' => '04', 'MAY' => '05', 'JUN' => '06', 'JUL' => '07', 'AUG' => '08', 'SEP' => '09', 'OCT' => '10', 'NOV' => '11', 'DEC' => '12' ];
+
 	if (($mform_data->xfer_type == 1) || ($mform_data->xfer_type == 3)) {
 		$param_name = 'ADM'; // Admissions
 	} else {
@@ -71,6 +77,7 @@ else if ($mform_data = $mform->get_data()) {
 	if ($mform_data->xfer_id != '') { // A re-run
 		$xfer_id = $mform_data->xfer_id; // Re-run batch ID
 		$batch_number = 0; // No new batch number
+		$start_date = 0;
 	} else {
 		$param = read_parameter_by_name($param_name, true);
 		if ($mform_data->xfer_type == 3) {
@@ -80,6 +87,7 @@ else if ($mform_data = $mform->get_data()) {
 			$xfer_id = 0; // No existing batch number
 			$batch_number = $param->number + 1;
 		}
+		$start_date = (substr($mform_data->course_date, 3) * 100) + $months[substr($mform_data->course_date, 0, 3)];
 	}
 	if ($xfer_id != 0) {
 		$file_id = $xfer_id;
@@ -87,14 +95,21 @@ else if ($mform_data = $mform->get_data()) {
 		$file_id = $batch_number;
 	}
 	
-	$months = [ 'JAN' => '01', 'FEB' => '02', 'MAR' => '03', 'APR' => '04', 'MAY' => '05', 'JUN' => '06', 'JUL' => '07', 'AUG' => '08', 'SEP' => '09', 'OCT' => '10', 'NOV' => '11', 'DEC' => '12' ];
 	$applications = get_applications(); // Get all applications
 	$xfers = array();
 	foreach ($applications as $application) {
 		if ((($application->approval_level == 3) && ($application->approval_state == 2)) // Approved by HLS so is/was OK to go...
-			&& (((($mform_data->xfer_type == 1) || ($mform_data->xfer_type == 3)) && ($application->admissions_xfer == $xfer_id)) // Admissions or Process (Admissions data processing)
-			|| (($mform_data->xfer_type == 2) && ($application->finance_xfer == $xfer_id)))) { // Finance
+				&& (((($mform_data->xfer_type == 1) || ($mform_data->xfer_type == 3)) && ($application->admissions_xfer == $xfer_id)) // Admissions or Process (Admissions data processing)
+				|| (($mform_data->xfer_type == 2) && ($application->finance_xfer == $xfer_id)))) { // Finance
+			// OK - check the date if necessary
+			if (($start_date == 0) || !isset($months[substr($application->course_date, 0, 3)])) { // No check (or we can't)
+				$course_date = 0;
+			} else {
+				$course_date = (substr($application->course_date, 3) * 100) + $months[substr($application->course_date, 0, 3)];
+			}
+			if ($course_date <= $start_date) {
 				$xfers[] = $application->id;
+			}
 		}
 	}
 	if (empty($xfers)) {

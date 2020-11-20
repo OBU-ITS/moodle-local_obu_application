@@ -19,7 +19,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2019, Oxford Brookes University
+ * @copyright  2020, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -1089,13 +1089,14 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 				$button = 'submit';
 			} else {
 				$approver = get_complete_user_data('id', $application->userid);
-				$name = $approver->firstname . ' ' . $approver->lastname;
+				$name = $approver->firstname . ' ' . $approver->lastname . ' (' . $approver->email . ')';
 				$button = 'continue';
 			}
-			$action = html_writer::span(get_string('awaiting_action', 'local_obu_application', array('action' => get_string('submission', 'local_obu_application'), 'by' => $name)), '', array('style' => 'color:red'));
+			$action = html_writer::span(get_string('awaiting_action', 'local_obu_application', array('action' => get_string('submission', 'local_obu_application'), 'by' => $name)), '',
+				array('style' => 'color:red'));
 			$text .= '<p />' . $action;
 		} else {
-			if ($application->approval_level == 1) { // Manager
+			if ($application->approval_level == 1) { // Programme administrator/manager
 				$approver = get_complete_user_data('email', strtolower($application->manager_email));
 				if ($approver === false) {
 					$name = $application->manager_email;
@@ -1107,7 +1108,7 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 				if ($approver === false) {
 					$name = $application->funder_email;
 				} else {
-					$name = $approver->firstname . ' ' . $approver->lastname;
+					$name = $approver->firstname . ' ' . $approver->lastname . ' (' . $approver->email . ')';
 				}
 			} else { // HLS
 				$approver = get_complete_user_data('username', 'hls');
@@ -1121,7 +1122,8 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 			} else {
 				$button = 'continue';
 			}
-			$action = html_writer::span(get_string('awaiting_action', 'local_obu_application', array('action' => get_string('approval', 'local_obu_application'), 'by' => $name)), '', array('style' => 'color:red'));
+			$action = html_writer::span(get_string('awaiting_action', 'local_obu_application', array('action' => get_string('approval', 'local_obu_application'), 'by' => $name)), '',
+				array('style' => 'color:red'));
 			$text .= '<p />' . $action;
 		}
 	} else { // Application processed - nothing more to say...
@@ -1134,26 +1136,18 @@ function update_workflow(&$application, $approved = true, $data = null) {
 	$approver_email = '';
 	
 	// Update the application record
-	if ($application->approval_level == 0) { // Being submitted
-/*		$application->approval_level = 1;
+	if (($application->approval_level == 0) && ($application->manager_email != '')) { // Submitter (with a programme administrator/manager)
+		$application->approval_level = 1;
 		$approver_email = $application->manager_email;
-	} else if ($application->approval_level == 1) { // Manager
-		$application->approval_1_comment = $data->comment;
-		$application->approval_1_date = time();
+	} else if ($application->approval_level <= 1) { // Submitter (without a programme administrator/manager) or administrator/manager
+		if ($application->approval_level == 1) { // Programme administrator/manager
+			$application->approval_1_comment = $data->comment;
+			$application->approval_1_date = time();
+		}
 		if (!$approved) {
 			$application->approval_state = 1; // Rejected
-		} else*/
-		if ($application->self_funding == 0) {
+		} else if ($application->self_funding == 0) {
 			$application->approval_level = 2; // Funder
-			$application->funding_id = $data->funding_organisation;
-			if ($application->funding_id == 0) { // 'Other Organisation'
-				$application->funding_organisation = '';
-				$application->funder_email = $data->funder_email; // Must have been given
-			} else { // A known organisation with a fixed email address
-				$organisation = read_organisation($application->funding_id);
-				$application->funding_organisation = $organisation->name;
-				$application->funder_email = $organisation->email;
-			}
 			$approver_email = $application->funder_email;
 		} else {
 			$application->approval_level = 3; // Brookes
@@ -1169,7 +1163,7 @@ function update_workflow(&$application, $approved = true, $data = null) {
 			$application->approval_level = 3; // Brookes
 			
 			// Store the funding details
-			if ($application->funding_organisation != '') { // NHS trust (previously selected by the manager)
+			if ($application->funding_organisation != '') { // NHS trust (previously selected by the applicant)
 				$application->funding_method = $data->funding_method;
 				$application->funder_name = $data->funder_name;
 				if ($application->funding_method == 1) { // Invoice
@@ -1270,7 +1264,8 @@ function update_approver($application, $approver_email) {
 	if ($approver_email != $hls->email) { // Update HLS unless they are the next approver
 		get_application_status($hls->id, $application, $text, $button_text); // get the status from the HLS's perspective
 		$html = '<h4><a href="' . $mdl_process . '">' . $application->course_code . ' ' . $application->course_name . ' (Application Ref HLS/' . $application->id . ')</a></h4>' . $text;
-//		email_to_user($hls, $applicant, 'Status Update: ' . $application->course_code . ' ' . $application->course_name . ' (' . $applicant->firstname . ' ' . $applicant->lastname . ')', html_to_text($html), $html);
+//		email_to_user($hls, $applicant, 'Status Update: ' . $application->course_code . ' ' . $application->course_name . ' (' . $applicant->firstname . ' ' . $applicant->lastname . ')',
+//			html_to_text($html), $html);
 	}
 	
 	// Notify the next approver (if there is one)

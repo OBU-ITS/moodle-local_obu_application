@@ -78,7 +78,7 @@ $string['privacy:metadata:local_obu_application:statement'] = 'Supporting statem
 $string['privacy:metadata:local_obu_application:supplement_data'] = 'Course supplementary form data.';
 $string['privacy:metadata:local_obu_application:course_update'] = 'Date of last course update.';
 $string['privacy:metadata:local_obu_application:self_funding'] = 'Self-funding?.';
-$string['privacy:metadata:local_obu_application:manager_email'] = 'Email of manager.';
+$string['privacy:metadata:local_obu_application:manager_email'] = 'Email of programme administrator/manager.';
 $string['privacy:metadata:local_obu_application:declaration'] = 'Mandatory declaration.';
 $string['privacy:metadata:local_obu_application:funder_email'] = 'Email of funder.';
 $string['privacy:metadata:local_obu_application:funding_method'] = 'Funding method.';
@@ -87,8 +87,8 @@ $string['privacy:metadata:local_obu_application:funding_organisation'] = 'Fundin
 $string['privacy:metadata:local_obu_application:funder_name'] = 'Name of funder.';
 $string['privacy:metadata:local_obu_application:application_date'] = 'Date of application.';
 $string['privacy:metadata:local_obu_application:approval_state'] = 'Status of application.';
-$string['privacy:metadata:local_obu_application:approval_1_comment'] = 'The manager\'s comment.';
-$string['privacy:metadata:local_obu_application:approval_1_date'] = 'The date of the manager\'s approval/rejection.';
+$string['privacy:metadata:local_obu_application:approval_1_comment'] = 'The programme administrator/manager\'s comment.';
+$string['privacy:metadata:local_obu_application:approval_1_date'] = 'The date of the programme administrator/manager\'s approval/rejection.';
 $string['privacy:metadata:local_obu_application:approval_2_comment'] = 'The funder\'s comment.';
 $string['privacy:metadata:local_obu_application:approval_2_date'] = 'The date of the funder\'s approval/rejection.';
 $string['privacy:metadata:local_obu_application:approval_3_comment'] = 'The HLS comment.';
@@ -117,17 +117,21 @@ $string['privacy_text'] = 'Privacy statement';
 $string['registration'] = 'Registration';
 $string['registrationsteps'] = 'To access to this site you will firstly need to take a minute to register yourself. Here are the steps: <ol> <li>Fill out the <a href="{$a}">Registration</a> form with your details.</li> <li>An email will be immediately sent to your email address.</li> <li>Read your email, and click on the web link it contains.</li> <li>Your account will be confirmed and you will be logged in.</li> <li>You can now access the site. From now on you will only need to enter your personal email and password to log in to your account.</li> </ol>';
 
-$string['page_content'] = '<h2>If You Wish To Apply</h2>
-The information you will need in order to complete your application includes the correct name of the course you are applying for and, if you aren\'t self-funding, the details of your funder.
-<p>&nbsp;</p>
+$string['page_content'] = '<h2>How to Apply</h2>
 Using the links above, please:
 <ul>
-<li>Check that your contact details are correct and up-to-date</li>
-<li>Enter your personal details (including education history and professional qualifications)</li>
-<li>Click \'Apply\' to enter details of the course that you wish to undertake, supply the funding details and submit your application</li>
+<li>Complete the \'Contact details\' section or, if you have ever made an application in the past through this portal, please check that your contact details are correct and up-to-date</li>
+<li>Complete the \'Personal details\' section (please note that you will be unable to submit your application until all mandatory sections have been completed)</li>
+<li>When you have completed the above two sections, please proceed to the \'Apply\' section, then:</li>
+<li>Choose the course from the drop down list</li>
+<li>Enter the start date (please choose September or January as these are the University standard start dates - unless you are taking a bespoke course with a non-standard start date)</li>
+<li>Add your personal statement and proceed to the next sections and complete/upload any other information that may be required (some courses will require references and documents to be uploaded)</li>
+<li>If you are self-funding, please enter a \'tick\' in the box \'Are you a self-funding applicant?\'</li>
+<li>If you work for an organisation who has confirmed that they will fund your tuition fees, please select the <strong>correct organisation</strong> from the drop down list.
+<strong>If your organisation does not appear in this list, please choose \'other organisation\'</strong> and enter the e-mail address of the person who will be able to approve your application</li>
 </ul>
 <p>
-Once you have submitted your application your funder (if any) will receive a request to support your plans. This request will be delivered to their organisation or to their email address as provided by you. If your request is supported then your application will be submitted to the Faculty of Health and Life Sciences for consideration.
+Once you have successfully submitted your application, it will go forward for approval. If your tuition fees are being funded by your organisation, an e-mail will be sent to the organisation or e-mail address you have entered in your application, for that person to approve, and let Oxford Brookes know that it is ready to be processed and submitted to the Faculty of Health & Life Sciences for consideration.
 </p>';
 
 $string['application_approvals'] = 'Application approvals';
@@ -164,10 +168,11 @@ $string['existing_course'] = 'Error - Course already exists';
 $string['code'] = 'Code';
 $string['name'] = 'Name';
 $string['administrator'] = 'Administrator';
+$string['funder'] = 'Funder';
 $string['module_subject'] = 'Module Subject';
 $string['module_number'] = 'Module Number';
 $string['campus'] = 'Campus';
-$string['programme_code'] = 'Program Code';
+$string['programme_code'] = 'Programme Code';
 $string['major_code'] = 'Major Code';
 $string['level'] = 'Level (UG/PG)';
 $string['cohort_code'] = 'Cohort Code';
@@ -217,6 +222,8 @@ $string['process'] = 'Process';
 $string['continue'] = 'Continue';
 $string['approve'] = 'Approve';
 $string['reject'] = 'Reject';
+$string['defer'] = 'Defer';
+$string['withdraw'] = 'Withdraw';
 $string['comment'] = 'Comment or Reason for Rejection (for Applicant)';
 
 $string['supplement'] = 'Supplement';
@@ -320,8 +327,6 @@ $string['attachments_head'] = 'File attachments';
 $string['attachments'] = 'Attachments';
 $string['apply'] = 'Apply';
 $string['complete_course'] = 'Please complete your course first';
-$string['manager_to_approve'] = 'Manager to approve';
-$string['bucks_email'] = 'NOTE - Staff from Bucks Healthcare should use LBR@buckshealthcare.nhs.uk instead of a manager\'s email address.';
 $string['self_funding'] = 'Self-funding';
 $string['self_funding_text'] = 'Are you a self-funding applicant?';
 $string['declaration'] = 'Declaration';
@@ -330,6 +335,7 @@ $string['declaration_text'] = 'I confirm that the information given in this appl
 requested or other material information has been omitted. I give my consent to the processing of my data by Oxford Brookes University.
 I have read the {$a} and undertake to be bound by those conditions.';
 $string['approval_head'] = 'Approval';
+$string['amend_details'] = 'Amend Details';
 $string['amend_course'] = 'Amend Course';
 $string['amend_funding'] = 'Amend Funding';
 
@@ -355,6 +361,8 @@ $string['actioned_by'] = '{$a->action} by {$a->by}.';
 $string['submitted'] = 'Submitted';
 $string['approved'] = 'Approved';
 $string['rejected'] = 'Rejected';
+$string['deferred'] = 'Deferred';
+$string['withdrawn'] = 'Withdrawn';
 $string['processed'] = 'Processed';
 
 $string['awaiting_action'] = 'Awaiting {$a->action} by {$a->by}.';
@@ -363,7 +371,6 @@ $string['submission'] = 'submission';
 $string['approval'] = 'approval';
 
 $string['request_approval'] = 'A member of staff from your organisation has submitted a request for staff development support in order to attend a course at Oxford Brookes.  
-If you are a manager we are asking you to confirm the appropriateness of your staff member for their chosen course.  
 If you are responsible for staff development and training you will be asked to confirm funding.  
 Please use this link {$a} to register for the Faculty of Health and Life Sciences application portal where you can view this request.  Thank you.';
 

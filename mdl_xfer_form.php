@@ -30,6 +30,9 @@ class mdl_xfer_form extends moodleform {
 
     function definition() {
         $mform =& $this->_form;
+
+        $data = new stdClass();
+		$data->dates = $this->_customdata['dates'];
 		
 		$options = [];
 //		$options['0'] = get_string('select', 'local_obu_application');
@@ -39,6 +42,8 @@ class mdl_xfer_form extends moodleform {
 		$mform->addElement('select', 'xfer_type', get_string('xfer_type', 'local_obu_application'), $options);
 		$mform->addRule('xfer_type', null, 'required', null, 'server');
 		$mform->addElement('text', 'xfer_id', get_string('xfer_id', 'local_obu_application'), 'size="10" maxlength="10"');
+		$mform->addElement('select', 'course_date', get_string('course_date', 'local_obu_application'), $data->dates, null);
+		$mform->disabledIf('course_date', 'xfer_id', 'neq', '');
 
         $this->add_action_buttons(true, get_string('continue', 'local_obu_forms'));
     }

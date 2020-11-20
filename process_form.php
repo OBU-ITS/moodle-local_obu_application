@@ -352,12 +352,6 @@ class process_form extends moodleform {
 			}
 		}
 		
-        if (($approval_sought == 0) && ($data->record->approval_level == 1)) {
-			// Manager to approve
-			$mform->addElement('header', 'manager_head', get_string('manager_to_approve', 'local_obu_application'), '');
-			$mform->addElement('static', 'manager_email', get_string('email'));
-		}
-		
         if (($approval_sought == 0) || ($approval_sought == 3)) {
 			// Declaration
 			$mform->addElement('header', 'declaration_head', get_string('declaration', 'local_obu_application'), '');
@@ -537,9 +531,17 @@ class process_form extends moodleform {
 				$mform->addElement('text', 'comment', '', 'size="40" maxlength="100"');
 				$mform->setType('comment', PARAM_TEXT);
 				$buttonarray[] = &$mform->createElement('submit', 'rejectbutton', get_string('reject', 'local_obu_application'));
-				if (($approval_sought == 3) && is_manager()) { // HLS manager
+				if (is_manager() && (($approval_sought == 1) || ($approval_sought == 3))) { // HLS
+					$buttonarray[] = &$mform->createElement('submit', 'amenddetailsbutton', get_string('amend_details', 'local_obu_application'));
 					$buttonarray[] = &$mform->createElement('submit', 'amendcoursebutton', get_string('amend_course', 'local_obu_application'));
-					if ($data->record->self_funding == '0') {
+					if (($approval_sought == 3) && ($data->record->self_funding == '0')) {
+						$buttonarray[] = &$mform->createElement('submit', 'amendfundingbutton', get_string('amend_funding', 'local_obu_application'));
+					}
+				}
+				if (is_administrator() && ($approval_sought == 3)) { // HLS
+					$buttonarray[] = &$mform->createElement('submit', 'amenddetailsbutton', get_string('amend_details', 'local_obu_application'));
+					$buttonarray[] = &$mform->createElement('submit', 'amendcoursebutton', get_string('amend_course', 'local_obu_application'));
+					if (($approval_sought == 3) && ($data->record->self_funding == '0')) {
 						$buttonarray[] = &$mform->createElement('submit', 'amendfundingbutton', get_string('amend_funding', 'local_obu_application'));
 					}
 				}

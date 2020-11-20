@@ -118,6 +118,8 @@ if ($mform_data = $mform->get_data()) {
 		update_workflow($application, true, $mform_data); // Approved
 	} else if (isset($mform_data->rejectbutton) && ($mform_data->rejectbutton == get_string('reject', 'local_obu_application'))) {
 		update_workflow($application, false, $mform_data); // Rejected
+	} else if (isset($mform_data->amenddetailsbutton) && ($mform_data->amenddetailsbutton == get_string('amend_details', 'local_obu_application'))) {
+		redirect($home . 'local/obu_application/mdl_amend_details.php?id=' . $application->id); // Amend the personal details
 	} else if (isset($mform_data->amendcoursebutton) && ($mform_data->amendcoursebutton == get_string('amend_course', 'local_obu_application'))) {
 		redirect($home . 'local/obu_application/mdl_amend_course.php?id=' . $application->id); // Amend the course
 	} else if (isset($mform_data->amendfundingbutton) && ($mform_data->amendfundingbutton == get_string('amend_funding', 'local_obu_application'))) {
