@@ -19,7 +19,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2016, Oxford Brookes University
+ * @copyright  2020, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -51,6 +51,12 @@ if (!isset($_REQUEST['id'])) {
 $application = read_application($_REQUEST['id']);
 if ($application === false) {
 	redirect($back);
+}
+
+// Take managers to where they belong - Moodle
+if ($manager) {
+	$url = $home . 'mdl_process.php?source=' . $source . '&id=' . $application->id;
+	redirect($url);
 }
 
 $url = $home . 'process.php?source=' . $source . '&id=' . $application->id;
