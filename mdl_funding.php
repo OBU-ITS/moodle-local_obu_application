@@ -19,7 +19,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2019, Oxford Brookes University
+ * @copyright  2020, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -160,11 +160,13 @@ if ($mform_data = $mform->get_data()) {
 				$fields['Fund_Module_9'] = '';
 			}
 			if ($application->approval_state == 1) {
-				$fields['Status'] = 'Rejected';
+				$fields['Status'] = get_string('rejected', 'local_obu_application');
 			} else if ($application->approval_state == 2) {
-				$fields['Status'] = 'Approved';
+				$fields['Status'] = get_string('approved', 'local_obu_application');
+			} else if ($application->approval_state == 3) {
+				$fields['Status'] = get_string('withdrawn', 'local_obu_application');
 			} else if ($application->approval_level == 1) {
-				$fields['Status'] = 'Manager to approve';
+				$fields['Status'] = 'Administrator pre-check';
 			} else if ($application->approval_level == 2) {
 				$fields['Status'] = 'Funder to approve';
 			} else {

@@ -44,8 +44,11 @@ $PAGE->set_title($CFG->pageheading . ': ' . get_string('apply', 'local_obu_appli
 $PAGE->set_url($url);
 
 $record = read_applicant($USER->id, false);
-if (($record === false) || ($record->residence_code == '')) { // Must complete the profile first
-	$message = get_string('complete_profile', 'local_obu_application');
+if (($record === false)
+	|| ($record->birth_code == '') || ($record->birth_code == 'ZZ')
+	|| ($record->nationality_code == '') || ($record->nationality_code == 'ZZ')
+	|| ($record->residence_code == '') || ($record->residence_code == 'ZZ')) {
+		$message = get_string('complete_profile', 'local_obu_application');
 } else {
 	$message = '';
 }

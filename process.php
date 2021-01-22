@@ -32,7 +32,6 @@ require_once($CFG->libdir . '/moodlelib.php');
 
 require_obu_login();
 
-$manager = is_manager();
 $home = new moodle_url('/local/obu_application/');
 $logout = $home . 'logout.php';
 
@@ -54,7 +53,7 @@ if ($application === false) {
 }
 
 // Take managers to where they belong - Moodle
-if ($manager) {
+if (is_manager()) {
 	$url = $home . 'mdl_process.php?source=' . $source . '&id=' . $application->id;
 	redirect($url);
 }
@@ -80,8 +79,8 @@ if (($application->approval_state == 0) && ($application->approval_level == 0)) 
 	// We currently auto-submit the application to avoid a two-stage process for the applicant
 	update_workflow($application);
 	$status_text = '';
-	
-} else if ($application->approval_state == 1) { // Application rejected
+
+} else if (($application->approval_state == 1) || ($application->approval_state == 3)) { // Application rejected or withdrawn
 	$status_text = get_string('status_rejected', 'local_obu_application');
 } else if ($application->approval_state == 2) { // Application processed
 	$status_text = get_string('status_processed', 'local_obu_application');
@@ -95,8 +94,8 @@ if ($status_text) {
 get_application_status($USER->id, $application, $text, $button_text); // get the approval trail and the next action (from user's perspective)
 $status_text .= $text;
 
-if ($button_text != 'approve') { // If not the next approver, check that this user can at least view the application
-	if (!is_manager() && ($USER->id != $application->userid)) {
+if ($button_text != 'approve') { // If not the next approver, check that this user is the applicant
+	if ($USER->id != $application->userid) {
 		$message = get_string('application_unavailable', 'local_obu_application');
 	}
 }

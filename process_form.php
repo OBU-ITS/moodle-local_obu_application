@@ -516,10 +516,17 @@ class process_form extends moodleform {
 				if (is_manager() && (($approval_sought == 1) || ($approval_sought == 3))) { // HLS
 					$buttonarray[] = &$mform->createElement('submit', 'amenddetailsbutton', get_string('amend_details', 'local_obu_application'));
 					$buttonarray[] = &$mform->createElement('submit', 'amendcoursebutton', get_string('amend_course', 'local_obu_application'));
-					if (($approval_sought == 3) && ($data->record->self_funding == '0')) {
-						$buttonarray[] = &$mform->createElement('submit', 'amendfundingbutton', get_string('amend_funding', 'local_obu_application'));
+					if ($data->record->self_funding == '0') {
+						if ($approval_sought == 1) {
+							$buttonarray[] = &$mform->createElement('submit', 'amendfunderbutton', get_string('amend_funder', 'local_obu_application'));
+						}
+						else {
+							$buttonarray[] = &$mform->createElement('submit', 'amendfundingbutton', get_string('amend_funding', 'local_obu_application'));
+						}
 					}
 				}
+			} else if ($data->button_text == 'revoke') { // A manager can revoke or withdraw an HLS-approved application
+				$buttonarray[] = &$mform->createElement('submit', 'withdrawbutton', get_string('withdraw', 'local_obu_application'));
 			}
 			$buttonarray[] = &$mform->createElement('cancel');
 		}

@@ -646,8 +646,7 @@ function get_areas() {
 		'EH' => 'Western Sahara',
 		'YE' => 'Yemen',
 		'ZM' => 'Zambia',
-		'ZW' => 'Zimbabwe',
-		'ZZ' => 'Not known'
+		'ZW' => 'Zimbabwe'
 	);
 	
 	return $areas;	
@@ -915,8 +914,7 @@ function get_nations() {
 		'XO' => 'Yugoslavia not specified',
 		'ZM' => 'Zambia',
 		'ZW' => 'Zimbabwe',
-		'AA' => 'Stateless',
-		'ZZ' => 'Not known'
+		'AA' => 'Stateless'
 	);
 	
 	return $nations;	
@@ -974,6 +972,7 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 
 	$text = '';
 	$button = '';
+	$manager = is_manager();
 	
 	// Prepare the submission/approval trail
 	$date = date_create();
@@ -1038,7 +1037,7 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 					$text .= get_string('actioned_by', 'local_obu_application', array('action' => get_string('approved', 'local_obu_application'), 'by' => $name));
 				}
 				$text .= ' ' . $application->approval_2_comment . '<br />';
-			} else if ($application->approval_level > 2) {
+			} else if ($application->approval_level > 2) { // HLS
 				if ($application->self_funding == '0') { // This step would have been skipped
 					date_timestamp_set($date, $application->approval_2_date);
 					$text .= date_format($date, $format) . ' ';
@@ -1064,11 +1063,13 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 					}
 					if ($application->approval_state == 1) {
 						$text .= get_string('actioned_by', 'local_obu_application', array('action' => get_string('rejected', 'local_obu_application'), 'by' => $name));
-					} else {
+					} else if ($application->approval_state == 2) {
 						$text .= get_string('actioned_by', 'local_obu_application', array('action' => get_string('approved', 'local_obu_application'), 'by' => $name));
+					} else {
+						$text .= get_string('actioned_by', 'local_obu_application', array('action' => get_string('withdrawn', 'local_obu_application'), 'by' => $name));
 					}
 					$text .= ' ' . $application->approval_3_comment . '<br />';
-					if (is_manager()) {
+					if ($manager) {
 						if ($application->admissions_xfer > 0) {
 							$text .= get_string('admissions', 'local_obu_application') . ' ' . get_string('data_xfer', 'local_obu_application') . ': ' .$application->admissions_xfer . '<br />';
 						}
@@ -1117,7 +1118,7 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 			if (($approver !== false) && ($approver->id == $user_id)) {
 				$name = 'you';
 				$button = 'approve';
-			} else if (($approver !== false) && ($approver->username == 'hls') && is_manager()) {
+			} else if (($approver !== false) && ($approver->username == 'hls') && $manager) {
 				$button = 'approve';
 			} else {
 				$button = 'continue';
@@ -1126,6 +1127,8 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 				array('style' => 'color:red'));
 			$text .= '<p />' . $action;
 		}
+	} else if ($manager && ($application->approval_level == 3) && ($application->approval_state == 2)) { // A manager can revoke or withdraw an HLS-approved application
+		$button = 'revoke';
 	} else { // Application processed - nothing more to say...
 		$button = 'continue';
 	}
@@ -1212,13 +1215,26 @@ function update_workflow(&$application, $approved = true, $data = null) {
 			$hls = get_complete_user_data('username', 'hls');
 			$approver_email = $hls->email;
 		}
-	} else { // Brookes
-		$application->approval_3_comment = $data->comment;
-		$application->approval_3_date = time();
-		if (!$approved) {
-			$application->approval_state = 1; // Rejected
-		} else {
-			$application->approval_state = 2; // It ends here
+	} else { // HLS
+		if ($application->approval_state == 0) { // Not yet approved or rejected
+			$application->approval_3_comment = $data->comment;
+			$application->approval_3_date = time();
+			if ($approved) { // Approved
+				$application->approval_state = 2;
+			} else { // Rejected
+				$application->approval_state = 1;
+			}
+		} else { // Already approved/rejected so must be revoking or withdrawing
+			$application->approval_3_comment = '';
+			if ($approved) { // Revoked
+				$application->approval_state = 0;
+				$application->approval_3_date = 0;
+				$application->admissions_xfer = 0;
+				$application->finance_xfer = 0;
+			} else { // Withdrawn
+				$application->approval_state = 3;
+				$application->approval_3_date = time();
+			}
 		}
 	}
 	update_application($application);

@@ -42,19 +42,19 @@ class profile_form extends moodleform {
 		$data->nations = $this->_customdata['nations'];
 		$data->areas = $this->_customdata['areas'];
 
-		if ($data->record->birth_code != '') {
+		if (($data->record->birth_code != '') && ($data->record->birth_code != 'ZZ')) {
 			$data->birth_code = $data->record->birth_code;
 		} else {
 			$data->birth_code = $this->_customdata['default_birth_code'];
 		}
 
-		if ($data->record->nationality_code != '') {
+		if (($data->record->nationality_code != '') && ($data->record->nationality_code != 'ZZ')) {
 			$data->nationality_code = $data->record->nationality_code;
 		} else {
 			$data->nationality_code = $this->_customdata['default_nationality_code'];
 		}
 
-		if ($data->record->residence_code != '') {
+		if (($data->record->residence_code != '') && ($data->record->residence_code != 'ZZ')) {
 			$data->residence_code = $data->record->residence_code;
 		} else {
 			$data->residence_code = $this->_customdata['default_residence_code'];

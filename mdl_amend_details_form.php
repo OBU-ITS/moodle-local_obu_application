@@ -41,12 +41,30 @@ class mdl_amend_details_form extends moodleform {
 		$data->nations = $this->_customdata['nations'];
 		$data->areas = $this->_customdata['areas'];
 
+		if (($data->record->birth_code != '') && ($data->record->birth_code != 'ZZ')) {
+			$data->birth_code = $data->record->birth_code;
+		} else {
+			$data->birth_code = $this->_customdata['default_birth_code'];
+		}
+
+		if (($data->record->nationality_code != '') && ($data->record->nationality_code != 'ZZ')) {
+			$data->nationality_code = $data->record->nationality_code;
+		} else {
+			$data->nationality_code = $this->_customdata['default_nationality_code'];
+		}
+
+		if (($data->record->residence_code != '') && ($data->record->residence_code != 'ZZ')) {
+			$data->residence_code = $data->record->residence_code;
+		} else {
+			$data->residence_code = $this->_customdata['default_residence_code'];
+		}
+
 		$fields = [
-			'birth_code' => $data->record->birth_code,
+			'birth_code' => $data->birth_code,
 			'birthdate' => $data->record->birthdate,
-			'nationality_code' => $data->record->nationality_code,
+			'nationality_code' => $data->nationality_code,
 			'gender' => $data->record->gender,
-			'residence_code' => $data->record->residence_code
+			'residence_code' => $data->residence_code
 		];
 		$this->set_data($fields);
 		

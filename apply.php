@@ -43,10 +43,14 @@ $PAGE->set_url($url);
 
 $message = '';
 $record = read_applicant($USER->id, false);
-if (($record === false) || ($record->residence_code == '')) { // Must have completed the profile
-	$message = get_string('complete_profile', 'local_obu_application');
-}
-else if (!isset($record->course_code) || ($record->course_code === '')) { // They must complete the course
+
+// Must have completed the profile
+if (($record === false)
+	|| ($record->birth_code == '') || ($record->birth_code == 'ZZ')
+	|| ($record->nationality_code == '') || ($record->nationality_code == 'ZZ')
+	|| ($record->residence_code == '') || ($record->residence_code == 'ZZ')) {
+		$message = get_string('complete_profile', 'local_obu_application');
+} else if (!isset($record->course_code) || ($record->course_code === '') || ($record->course_code === '0')) { // They must complete the course
 	$message = get_string('complete_course', 'local_obu_application');
 }
 

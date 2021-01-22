@@ -222,7 +222,7 @@ $string['process'] = 'Process';
 $string['continue'] = 'Continue';
 $string['approve'] = 'Approve';
 $string['reject'] = 'Reject';
-$string['defer'] = 'Defer';
+$string['revoke'] = 'Revoke';
 $string['withdraw'] = 'Withdraw';
 $string['comment'] = 'Comment or Reason for Rejection (for Applicant)';
 
@@ -247,6 +247,7 @@ $string['status'] = 'Status';
 $string['status_not_submitted'] = 'Has not been submitted.';
 $string['status_rejected'] = 'Cannot be processed.';
 $string['status_processed'] = 'Has been processed.';
+$string['status_withdrawn'] = 'Has been withdrawn.';
 
 $string['preregistered'] = '<strong>NOTE:</strong> If you have a \'brookes.ac.uk\' email address you are pre-registered.  Click <a href="/local/obu_application/mdl_login.php">here</a> to login.';
 $string['emailandpassword'] = 'Please enter your NHS (or preferred) email address (lowercase only) and choose a password';
@@ -320,7 +321,7 @@ $string['statement_head'] = 'Supporting statement';
 $string['statement'] = 'How will your studies enhance your professional practice?';
 $string['visa_requirement'] = 'Visa Requirement';
 $string['visa_not_required'] = 'Visa not required';
-$string['visa_tier4'] = 'Tier 4 visa required';
+$string['visa_tier4'] = 'International Student Visa required';
 $string['visa_tier2'] = 'Other immigration status (e.g. Tier 2) which allows you to study';
 $string['visa_supplement'] = 'Visa Supplement';
 $string['attachments_head'] = 'File attachments';
@@ -336,9 +337,11 @@ requested or other material information has been omitted. I give my consent to t
 I have read the {$a} and undertake to be bound by those conditions.';
 $string['approval_head'] = 'Approval';
 $string['amend_details'] = 'Amend Details';
+$string['amend_funder'] = 'Amend Funder';
 $string['amend_course'] = 'Amend Course';
 $string['amend_funding'] = 'Amend Funding';
 
+$string['funder'] = 'Funder';
 $string['funding'] = 'Funding';
 $string['programme_preamble'] = 'Please indicate if you will be funding the whole of this programme of study or just individual modules:';
 $string['fund_programme'] = 'Fund Whole Programme';
@@ -361,7 +364,6 @@ $string['actioned_by'] = '{$a->action} by {$a->by}.';
 $string['submitted'] = 'Submitted';
 $string['approved'] = 'Approved';
 $string['rejected'] = 'Rejected';
-$string['deferred'] = 'Deferred';
 $string['withdrawn'] = 'Withdrawn';
 $string['processed'] = 'Processed';
 

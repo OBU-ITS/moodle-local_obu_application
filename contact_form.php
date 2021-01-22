@@ -52,7 +52,7 @@ class contact_form extends moodleform {
 			];
 			
 			if ($data->applicant !== false) {
-				if ($data->applicant->domicile_code != '') {
+				if (($data->applicant->domicile_code != '') && ($data->applicant->domicile_code != 'ZZ')) {
 					$data->domicile_code = $data->applicant->domicile_code;
 				}
 				$applicant_fields = [

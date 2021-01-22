@@ -89,6 +89,8 @@ if (($application->approval_state == 0) && ($application->approval_level == 0)) 
 	$status_text = get_string('status_rejected', 'local_obu_application');
 } else if ($application->approval_state == 2) { // Application processed
 	$status_text = get_string('status_processed', 'local_obu_application');
+} else if ($application->approval_state == 3) { // Application withdrawn
+	$status_text = get_string('status_withdrawn', 'local_obu_application');
 } else {
 	$status_text = '';
 }
@@ -115,13 +117,17 @@ if ($mform->is_cancelled()) {
 
 if ($mform_data = $mform->get_data()) {
 	if (isset($mform_data->submitbutton) && ($mform_data->submitbutton != get_string('continue', 'local_obu_application'))) {
-		update_workflow($application, true, $mform_data); // Approved
+		update_workflow($application, true, $mform_data); // Approved (or Revoked)
 	} else if (isset($mform_data->rejectbutton) && ($mform_data->rejectbutton == get_string('reject', 'local_obu_application'))) {
 		update_workflow($application, false, $mform_data); // Rejected
+	} else if (isset($mform_data->withdrawbutton) && ($mform_data->withdrawbutton == get_string('withdraw', 'local_obu_application'))) {
+		update_workflow($application, false, $mform_data); // Withdrawn
 	} else if (isset($mform_data->amenddetailsbutton) && ($mform_data->amenddetailsbutton == get_string('amend_details', 'local_obu_application'))) {
 		redirect($home . 'local/obu_application/mdl_amend_details.php?id=' . $application->id); // Amend the personal details
 	} else if (isset($mform_data->amendcoursebutton) && ($mform_data->amendcoursebutton == get_string('amend_course', 'local_obu_application'))) {
 		redirect($home . 'local/obu_application/mdl_amend_course.php?id=' . $application->id); // Amend the course
+	} else if (isset($mform_data->amendfunderbutton) && ($mform_data->amendfunderbutton == get_string('amend_funder', 'local_obu_application'))) {
+		redirect($home . 'local/obu_application/mdl_amend_funder.php?id=' . $application->id); // Amend the funder
 	} else if (isset($mform_data->amendfundingbutton) && ($mform_data->amendfundingbutton == get_string('amend_funding', 'local_obu_application'))) {
 		redirect($home . 'local/obu_application/mdl_amend_funding.php?id=' . $application->id); // Amend the funding
 	}
