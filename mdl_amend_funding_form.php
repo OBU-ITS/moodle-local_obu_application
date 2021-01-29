@@ -21,7 +21,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2016, Oxford Brookes University
+ * @copyright  2021, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -192,31 +192,31 @@ class mdl_amend_funding_form extends moodleform {
 		if (is_programme($data->application->course_code)) {
 			$mform->addElement('html', '<p></p><strong><i>' . get_string('programme_preamble', 'local_obu_application') . '</i></strong><p></p>');
 			$mform->addElement('advcheckbox', 'fund_programme', get_string('fund_programme', 'local_obu_application'), null, null, array(0, 1));
-			$mform->addElement('text', 'fund_module_1', get_string('fund_module', 'local_obu_application'), 'size="6" maxlength="6"');
+			$mform->addElement('text', 'fund_module_1', get_string('fund_module', 'local_obu_application'), 'size="8" maxlength="8"');
 			$mform->setType('fund_module_1', PARAM_TEXT);
 			$mform->disabledIf('fund_module_1', 'fund_programme', 'eq', '1');
-			$mform->addElement('text', 'fund_module_2', get_string('fund_module', 'local_obu_application'), 'size="6" maxlength="6"');
+			$mform->addElement('text', 'fund_module_2', get_string('fund_module', 'local_obu_application'), 'size="8" maxlength="8"');
 			$mform->setType('fund_module_2', PARAM_TEXT);
 			$mform->disabledIf('fund_module_2', 'fund_programme', 'eq', '1');
-			$mform->addElement('text', 'fund_module_3', get_string('fund_module', 'local_obu_application'), 'size="6" maxlength="6"');
+			$mform->addElement('text', 'fund_module_3', get_string('fund_module', 'local_obu_application'), 'size="8" maxlength="8"');
 			$mform->setType('fund_module_3', PARAM_TEXT);
 			$mform->disabledIf('fund_module_3', 'fund_programme', 'eq', '1');
-			$mform->addElement('text', 'fund_module_4', get_string('fund_module', 'local_obu_application'), 'size="6" maxlength="6"');
+			$mform->addElement('text', 'fund_module_4', get_string('fund_module', 'local_obu_application'), 'size="8" maxlength="8"');
 			$mform->setType('fund_module_4', PARAM_TEXT);
 			$mform->disabledIf('fund_module_4', 'fund_programme', 'eq', '1');
-			$mform->addElement('text', 'fund_module_5', get_string('fund_module', 'local_obu_application'), 'size="6" maxlength="6"');
+			$mform->addElement('text', 'fund_module_5', get_string('fund_module', 'local_obu_application'), 'size="8" maxlength="8"');
 			$mform->setType('fund_module_5', PARAM_TEXT);
 			$mform->disabledIf('fund_module_5', 'fund_programme', 'eq', '1');
-			$mform->addElement('text', 'fund_module_6', get_string('fund_module', 'local_obu_application'), 'size="6" maxlength="6"');
+			$mform->addElement('text', 'fund_module_6', get_string('fund_module', 'local_obu_application'), 'size="8" maxlength="8"');
 			$mform->setType('fund_module_6', PARAM_TEXT);
 			$mform->disabledIf('fund_module_6', 'fund_programme', 'eq', '1');
-			$mform->addElement('text', 'fund_module_7', get_string('fund_module', 'local_obu_application'), 'size="6" maxlength="6"');
+			$mform->addElement('text', 'fund_module_7', get_string('fund_module', 'local_obu_application'), 'size="8" maxlength="8"');
 			$mform->setType('fund_module_7', PARAM_TEXT);
 			$mform->disabledIf('fund_module_7', 'fund_programme', 'eq', '1');
-			$mform->addElement('text', 'fund_module_8', get_string('fund_module', 'local_obu_application'), 'size="6" maxlength="6"');
+			$mform->addElement('text', 'fund_module_8', get_string('fund_module', 'local_obu_application'), 'size="8" maxlength="8"');
 			$mform->setType('fund_module_8', PARAM_TEXT);
 			$mform->disabledIf('fund_module_8', 'fund_programme', 'eq', '1');
-			$mform->addElement('text', 'fund_module_9', get_string('fund_module', 'local_obu_application'), 'size="6" maxlength="6"');
+			$mform->addElement('text', 'fund_module_9', get_string('fund_module', 'local_obu_application'), 'size="8" maxlength="8"');
 			$mform->setType('fund_module_9', PARAM_TEXT);
 			$mform->disabledIf('fund_module_9', 'fund_programme', 'eq', '1');
 		}

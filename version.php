@@ -19,14 +19,14 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2020, Oxford Brookes University
+ * @copyright  2021, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
 
 $plugin->component = 'local_obu_application'; // Full name of the plugin (used for diagnostics): plugintype_pluginname
-$plugin->version  = 2020120100;   // The (date) version of this module + 2 extra digital for daily versions
+$plugin->version  = 2021012800;   // The (date) version of this module + 2 extra digital for daily versions
 $plugin->requires = 2015111604;   // Requires this Moodle version - at least 3.0.4
 $plugin->cron     = 0;
-$plugin->release = 'v2.4.2';
+$plugin->release = 'v2.4.3';
 $plugin->maturity = MATURITY_STABLE;
