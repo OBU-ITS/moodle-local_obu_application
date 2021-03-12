@@ -14,12 +14,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * OBU Application - List all courses [Moodle]
+ * OBU Application - List all organisations [Moodle]
  *
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2020, Oxford Brookes University
+ * @copyright  2021, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -37,61 +37,37 @@ if (!is_manager()) {
 $applications_course = get_applications_course();
 require_login($applications_course);
 $back = $home . 'course/view.php?id=' . $applications_course;
-//if (!is_administrator()) {
-//	redirect($back);
-//}
+if (!is_administrator()) {
+	redirect($back);
+}
 
 $dir = $home . 'local/obu_application/';
-$url = $dir . 'mdl_course_list.php';
+$url = $dir . 'mdl_organisation_list.php';
 
 $table = new html_table();
-$table->head = array('Name', 'Code', 'Supplement', 'Programme', 'Suspended', 'Administrator', 'Module Subject', 'Module Number', 'Campus', 'Program Code', 'Major Code', 'Level', 'Cohort Code');
+$table->head = array('Name', 'Email', 'Code', 'Address', 'Suspended');
 
-$courses = get_course_records();
-if ($courses != null) {
-	foreach ($courses as $course) {
-		if ($course->programme == 1) {
-			$programme = 'Yes';
-		} else {
-			$programme = '';
-		}
-		if ($course->suspended == 1) {
+$organisations = get_organisation_records();
+if ($organisations != null) {
+	foreach ($organisations as $organisation) {
+		if ($organisation->suspended == 1) {
 			$suspended = 'Yes';
 		} else {
 			$suspended = '';
 		}
-		if ($course->administrator == '') {
-			$administrator = '';
-		} else {
-			$user = read_user_by_username($course->administrator);
-			if ($user == null) {
-				$administrator = get_string('user_not_found', 'local_obu_application');
-			} else {
-				$administrator = $user->username . ' (' . $user->firstname . ' ' . $user->lastname . ')';
-			}
-		}
-			
 		$table->data[] = array(
-			$course->name,
-			$course->code,
-			$course->supplement,
-			$programme,
-			$suspended,
-			$administrator,
-			$course->module_subject,
-			$course->module_number,
-			$course->campus,
-			$course->programme_code,
-			$course->major_code,
-			$course->level,
-			$course->cohort_code
+			$organisation->name,
+			$organisation->email,
+			$organisation->code,
+			$organisation->address,
+			$suspended
 		);
 	}
 }
 
 if (!isset($_REQUEST['export'])) {
 	$title = get_string('applications_management', 'local_obu_application');
-	$heading = get_string('course_list', 'local_obu_application');
+	$heading = get_string('organisation_list', 'local_obu_application');
 	$PAGE->set_url($url);
 	$PAGE->set_pagelayout('standard');
 	$PAGE->set_title($title);
@@ -109,7 +85,7 @@ if (!isset($_REQUEST['export'])) {
 	echo $OUTPUT->footer();
 } else {
 	header('Content-Type: text/csv');
-	header('Content-Disposition: attachment;filename=course_list.csv');
+	header('Content-Disposition: attachment;filename=organisation_list.csv');
 	$fp = fopen('php://output', 'w');
 	fputcsv($fp, $table->head, ',');
 	foreach ($table->data as $row) {

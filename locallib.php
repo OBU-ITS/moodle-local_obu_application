@@ -50,6 +50,11 @@ function is_administrator() {
 	return has_applications_role($USER->id, 4);
 }
 
+// Get all applications managers/administrators
+function get_managers() {
+	return get_users_by_role(4, 5);
+}
+
 /**  Determine where a user should be redirected after they have been logged in.
  * @return string url the user should be redirected to.
  */

@@ -21,7 +21,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2020, Oxford Brookes University
+ * @copyright  2021, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -59,6 +59,32 @@ function has_applications_role($user_id = 0, $role_id_1 = 0, $role_id_2 = 0, $ro
 	} else {
 		return true;
 	}
+}
+
+// Get users with the given role(s) in the applications management course
+function get_users_by_role($role_id_1 = 0, $role_id_2 = 0, $role_id_3 = 0) {
+	global $DB;
+	
+	if ($role_id_1 == 0) { // Mandatory
+		return false;
+	}
+	
+	$sql = 'SELECT u.id, u.lastname, u.firstname, u.username, ra.roleid, FROM_UNIXTIME(ula.timeaccess, "%b-%y") AS access'
+		. ' FROM {user_enrolments} ue'
+		. ' JOIN {enrol} e ON e.id = ue.enrolid'
+		. ' JOIN {context} ct ON ct.instanceid = e.courseid'
+		. ' JOIN {role_assignments} ra ON ra.contextid = ct.id'
+		. ' JOIN {course} c ON c.id = e.courseid'
+		. ' JOIN {user} u ON u.id = ue.userid'
+		. ' LEFT JOIN {user_lastaccess} ula ON ula.userid = u.id AND ula.courseid = c.id'
+		. ' WHERE e.enrol = "manual"'
+			. ' AND ct.contextlevel = 50'
+			. ' AND ra.userid = ue.userid'
+			. ' AND (ra.roleid = ? OR ra.roleid = ? OR ra.roleid = ?)'
+			. ' AND c.idnumber = "SUBS_APPLICATIONS"'
+		. ' ORDER BY u.lastname, u.firstname, u.username';
+
+	return $DB->get_records_sql($sql, array($role_id_1, $role_id_2, $role_id_3));
 }
 
 function read_parameter_by_name($name, $strict = false) {

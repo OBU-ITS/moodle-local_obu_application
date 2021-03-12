@@ -21,7 +21,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2020, Oxford Brookes University
+ * @copyright  2021, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -150,6 +150,8 @@ $string['supplements'] = 'Supplementary forms';
 $string['course_visa'] = 'Course (Visa Requirement)';
 $string['course_supplement'] = 'Course (Supplementary Form)';
 $string['organisations'] = 'Organisations';
+$string['organisation_list'] = 'Organisation list';
+$string['manager_list'] = 'Manager list';
 $string['parameter'] = 'Parameter';
 $string['parameters'] = 'Parameters';
 $string['hls_applications'] = 'HLS applications';
