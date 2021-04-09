@@ -21,7 +21,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2020, Oxford Brookes University
+ * @copyright  2021, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -53,9 +53,9 @@ if ($record->nationality_code == 'GB') {
 	$message = get_string('visa_not_required', 'local_obu_application');
 }
 
-if ($record->visa_requirement == 'Tier 4') {
+if (($record->visa_requirement == 'Tier 4') || ($record->visa_requirement == 'Student')) {
 	$visa_requirement = '1';
-} else if ($record->visa_requirement == 'Tier 2') {
+} else if (($record->visa_requirement == 'Tier 2') || ($record->visa_requirement == 'Other')) {
 	$visa_requirement = '2';
 } else {
 	$visa_requirement = '0';
@@ -74,9 +74,9 @@ if ($mform->is_cancelled()) {
 if ($mform_data = $mform->get_data()) {
 	if ($mform_data->submitbutton == get_string('save_continue', 'local_obu_application')) {
 		if ($mform_data->visa_requirement == '1') {
-			$visa_requirement = 'Tier 4';
+			$visa_requirement = 'Student';
 		} else if ($mform_data->visa_requirement == '2') {
-			$visa_requirement = 'Tier 2';
+			$visa_requirement = 'Other';
 		} else {
 			$visa_requirement = '';
 		}

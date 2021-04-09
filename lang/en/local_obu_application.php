@@ -74,6 +74,7 @@ $string['privacy:metadata:local_obu_application:course_code'] = 'Course code.';
 $string['privacy:metadata:local_obu_application:course_name'] = 'Course name.';
 $string['privacy:metadata:local_obu_application:course_date'] = 'Course start date.';
 $string['privacy:metadata:local_obu_application:studying'] = 'Currently studying.';
+$string['privacy:metadata:local_obu_application:student_number'] = 'Current student number.';
 $string['privacy:metadata:local_obu_application:statement'] = 'Supporting statement.';
 $string['privacy:metadata:local_obu_application:supplement_data'] = 'Course supplementary form data.';
 $string['privacy:metadata:local_obu_application:course_update'] = 'Date of last course update.';
@@ -99,6 +100,7 @@ $string['privacy:application'] = 'Application HLS_{$a}';
 $string['pluginname'] = 'obu_application';
 $string['plugintitle'] = 'HLS Application';
 $string['applications_administration'] = 'Applications administration';
+$string['administration_menu'] = 'Administration menu';
 $string['applications_management'] = 'Applications Management';
 
 $string['obu_application:update'] = 'Update applications in obu_application (non \'read only\')';
@@ -152,6 +154,9 @@ $string['course_supplement'] = 'Course (Supplementary Form)';
 $string['organisations'] = 'Organisations';
 $string['organisation_list'] = 'Organisation list';
 $string['manager_list'] = 'Manager list';
+$string['courses'] = 'Courses';
+$string['applicants'] = 'Applicants';
+$string['delete_applicant'] = 'Delete applicant';
 $string['parameter'] = 'Parameter';
 $string['parameters'] = 'Parameters';
 $string['hls_applications'] = 'HLS applications';
@@ -277,6 +282,10 @@ $string['general_head'] = 'General';
 $string['birthdate'] = 'Date of birth';
 $string['birth_country'] = 'Country of Birth';
 $string['nationality'] = 'Nationality';
+$string['nationality_note'] = 'If your nationality is not \'United Kingdom\' you will either need to apply for a Student visa or show us a copy of your visa/immigration permission which
+allows you to study in the UK - for example, Skilled Worker visa, Tier 2 visa, Dependant visa, Pre Settled or Settled Status or Indefinite leave to remain. Our International Student Compliance Team will ask you to
+fill in a Visa Information Form and send us a copy of your visa after you have accepted your unconditional offer.  For more details please see our
+<a href="https://www.brookes.ac.uk/students/isat/visas/" target="_blank">Visa and immigration advice</a> page.';
 $string['gender'] = 'Gender';
 $string['gender_not_available'] = 'Prefer not to say';
 $string['gender_female'] = 'Female';
@@ -317,14 +326,18 @@ $string['complete_profile'] = 'Please complete your personal details first';
 $string['course_head'] = 'Select the required course';
 $string['course_code'] = 'Course code/name';
 $string['course_date'] = 'Start date';
-$string['studying_preamble'] = 'Please indicate if you are currently studying on a PGDIP, PG cert, BSc or Masters Health Care programme:';
-$string['studying'] = 'Currently studying?';
+$string['studying_preamble'] = 'Please indicate if you are currently studying at Brookes on a PGDIP, PG cert, BSc or Masters Health Care programme:';
+$string['studying'] = 'Currently studying at Brookes?';
+$string['student_number'] = 'Brookes student number';
 $string['statement_head'] = 'Supporting statement';
 $string['statement'] = 'How will your studies enhance your professional practice?';
 $string['visa_requirement'] = 'Visa Requirement';
+$string['visa_note'] = 'Please note that if your Nationality is other than United Kingdom, the University is required to see evidence of your current immigration status,
+this is usually your passport.  This is required even if you are currently working in the UK.  You will need to supply an Immigration Status document (e.g. passport) to meet the conditions
+of entry to this course.';
 $string['visa_not_required'] = 'Visa not required';
-$string['visa_tier4'] = 'International Student Visa required';
-$string['visa_tier2'] = 'Other immigration status (e.g. Tier 2) which allows you to study';
+$string['student_visa'] = 'International Student Visa required';
+$string['other_status'] = 'Skilled Worker Visa/Other Immigration Status';
 $string['visa_supplement'] = 'Visa Supplement';
 $string['attachments_head'] = 'File attachments';
 $string['attachments'] = 'Attachments';

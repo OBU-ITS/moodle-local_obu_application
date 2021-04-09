@@ -19,7 +19,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2019, Oxford Brookes University
+ * @copyright  2021, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -65,6 +65,7 @@ $codes = array();
 $courses = array();
 $record = null;
 $administrator = null;
+$applications = 0;
 
 if (isset($_REQUEST['id'])) {
 	$id = $_REQUEST['id'];
@@ -81,6 +82,7 @@ if (isset($_REQUEST['id'])) {
 				$administrator = $user->firstname . ' ' . $user->lastname;
 			}
 		}
+		$applications = count_applications_for_course($record->code);
 	} else { // Store existing course codes so we can check if any given code is really new
 		$recs = get_course_records();
 		foreach ($recs as $rec) {
@@ -114,7 +116,8 @@ $parameters = [
 	'delete' => $delete,
 	'courses' => $courses,
 	'record' => $record,
-	'administrator' => $administrator
+	'administrator' => $administrator,
+	'applications' => $applications
 ];
 
 $mform = new mdl_course_form(null, $parameters);

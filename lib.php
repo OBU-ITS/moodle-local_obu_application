@@ -21,7 +21,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2019, Oxford Brookes University
+ * @copyright  2021, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
  
@@ -32,7 +32,7 @@ function local_obu_application_extend_navigation($navigation) {
 	}
 
 	$nodeHome = $navigation->children->get('1')->parent;
-	$node = $nodeHome->add(get_string('applications_administration', 'local_obu_application'), '/local/obu_application/mdl_param.php', navigation_node::TYPE_SYSTEM);
+	$node = $nodeHome->add(get_string('applications_administration', 'local_obu_application'), '/local/obu_application/mdl_site_admin.php', navigation_node::TYPE_SYSTEM);
 	$node->showinflatnavigation = true;
 	
 	return;

@@ -19,7 +19,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2019, Oxford Brookes University
+ * @copyright  2021, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -36,7 +36,10 @@ if (!is_siteadmin() || !has_capability('local/obu_application:update', context_s
 	redirect($home);
 }
 
-$url = $home . 'local/obu_application/mdl_param.php';
+$dir = $home . 'local/obu_application/';
+$url = $dir . 'mdl_param.php';
+$back = $dir . 'mdl_site_admin.php';
+
 $title = get_string('applications_administration', 'local_obu_application');
 $heading = get_string('parameters', 'local_obu_application');
 $PAGE->set_url($url);
@@ -83,7 +86,7 @@ $mform = new mdl_param_form(null, $parameters);
 
 if ($mform->is_cancelled()) {
 	if ($id == '0') {
-		redirect($home);
+		redirect($back);
 	} else {
 		redirect($url);
 	}

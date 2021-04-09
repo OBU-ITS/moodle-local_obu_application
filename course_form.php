@@ -21,13 +21,14 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2020, Oxford Brookes University
+ * @copyright  2021, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once('./db_update.php');
 require_once($CFG->libdir . '/formslib.php');
 
 class course_form extends moodleform {
@@ -46,6 +47,7 @@ class course_form extends moodleform {
 				'course_code' => $data->record->course_code,
 				'course_date' => $data->record->course_date,
 				'studying' => $data->record->studying,
+				'student_number' => $data->record->student_number,
 				'statement' => $data->record->statement
 			];
 			$this->set_data($fields);
@@ -69,6 +71,9 @@ class course_form extends moodleform {
 		$options['2'] = get_string('no', 'local_obu_application');
 		$mform->addElement('select', 'studying', get_string('studying', 'local_obu_application'), $options);
 		$mform->addRule('studying', null, 'required', null, 'server');
+		$mform->addElement('text', 'student_number', get_string('student_number', 'local_obu_application'), 'size="10" maxlength="10"');
+		$mform->setType('student_number', PARAM_TEXT);
+		$mform->disabledIf('student_number', 'studying', 'neq', '1');
         $mform->addElement('header', 'statement_head', get_string('statement_head', 'local_obu_application'), '');
 		$mform->setExpanded('statement_head');
 		$mform->addElement('textarea', 'statement', get_string('statement', 'local_obu_application'), 'cols="60" rows="10"');
@@ -83,6 +88,12 @@ class course_form extends moodleform {
 
 		if ($data['studying'] == '0') {
 			$errors['studying'] = get_string('value_required', 'local_obu_application');
+		} else if ($data['studying'] == '1') {
+			if ($data['student_number'] == '') {
+				$errors['student_number'] = get_string('value_required', 'local_obu_application');
+			} else if (read_user_by_username($data['student_number']) == null) {
+				$errors['student_number'] = get_string('user_not_found', 'local_obu_application');
+			}			
 		}
 
 		if (!empty($errors)) {

@@ -19,7 +19,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2018, Oxford Brookes University
+ * @copyright  2021, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -63,6 +63,7 @@ $id = '';
 $delete = false;
 $organisations = array();
 $record = null;
+$applications = 0;
 
 if (isset($_REQUEST['id'])) {
 	$id = $_REQUEST['id'];
@@ -71,6 +72,7 @@ if (isset($_REQUEST['id'])) {
 		if (isset($_REQUEST['delete'])) {
 			$delete = true;
 		}		
+		$applications = count_applications_for_funder($id);
 	}
 } else {
 	$recs = get_organisation_records();
@@ -92,7 +94,8 @@ $parameters = [
 	'id' => $id,
 	'delete' => $delete,
 	'organisations' => $organisations,
-	'record' => $record
+	'record' => $record,
+	'applications' => $applications
 ];
 
 $mform = new mdl_organisation_form(null, $parameters);

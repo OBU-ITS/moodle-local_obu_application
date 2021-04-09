@@ -52,9 +52,7 @@ class apply_form extends moodleform {
 		$mform->closeHeaderBefore('funding');
 		$mform->addElement('html', '<h1>' . get_string('funding_organisation', 'local_obu_application') . '</h1>');
 		$options = [];
-		if ($data->record->funding_organisation == '') {
-			$options['-1'] = get_string('select', 'local_obu_application');
-		}
+		$options['-1'] = get_string('select', 'local_obu_application');
 		foreach ($data->organisations as $organisation_id => $organisation_name) {
 			$options[$organisation_id] = $organisation_name;
 		}

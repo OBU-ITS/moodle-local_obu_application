@@ -19,7 +19,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2020, Oxford Brookes University
+ * @copyright  2021, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -115,6 +115,13 @@ function application_user_confirm($username, $confirmsecret) { // Derived from e
 	} else {
 		return AUTH_CONFIRM_ERROR;
 	}
+}
+
+function application_user_delete($user) {
+	
+	delete_applicant($user->id); // Delete our own records first
+	
+	return user_delete_user($user);
 }
 
 function send_application_confirmation_email($user) {

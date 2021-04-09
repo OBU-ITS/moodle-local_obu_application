@@ -344,10 +344,11 @@ function write_user($user_id, $form_data) {
 function get_applicants_by_name($lastname) {
     global $DB;
     
-	$sql = 'SELECT DISTINCT a.userid, a.firstname, a.lastname '
-		. 'FROM {local_obu_application} a '
-		. 'WHERE a.lastname LIKE "' . $lastname . '%" '
-		. 'ORDER BY a.userid';
+	$sql = 'SELECT a.userid, u.firstname, u.lastname '
+		. 'FROM {local_obu_applicant} a '
+		. 'JOIN {user} u ON u.id = a.userid '
+		. 'WHERE u.lastname LIKE "' . $lastname . '%" '
+		. 'ORDER BY u.lastname, u.firstname, a.userid';
 	
 	return $DB->get_records_sql($sql, array());
 }
@@ -364,6 +365,24 @@ function read_applicant($user_id, $must_exist) {
 	$applicant = $DB->get_record('local_obu_applicant', array('userid' => $user_id), '*', $strictness);
 	
 	return $applicant;	
+}
+
+function delete_applicant($user_id) {
+    global $DB;
+    
+	// Delete any outstanding approvals
+	$recs = $DB->get_records('local_obu_application', ['userid' => $user_id]);
+	foreach ($recs as $rec) {
+		$DB->delete_records('local_obu_approval', ['application_id' => $rec->id]);
+	}
+
+	// Delete any applications
+	$DB->delete_records('local_obu_application', ['userid' => $user_id]);
+
+	// Delete the applicant record
+	$DB->delete_records('local_obu_applicant', ['userid' => $user_id]);
+	
+	return;	
 }
 
 function write_contact_details($user_id, $form_data) {
@@ -461,6 +480,12 @@ function write_course($user_id, $form_data) {
     $record->course_code = $form_data->course_code;
     $record->course_name = $form_data->course_name;
     $record->course_date = $form_data->course_date;
+    $record->studying = $form_data->studying;
+    if ($record->studying == 1) {
+		$record->student_number = $form_data->student_number;
+	} else {
+		$record->student_number = '';
+	}
     $record->studying = $form_data->studying;
     $record->statement = $form_data->statement;
     $record->course_update = time();
@@ -580,6 +605,7 @@ function write_application($user_id, $form_data) {
     $record->course_name = $applicant->course_name;
     $record->course_date = $applicant->course_date;
     $record->studying = $applicant->studying;
+    $record->student_number = $applicant->student_number;
     $record->statement = $applicant->statement;
     $record->visa_requirement = $applicant->visa_requirement;
 	if ($record->visa_requirement != '') { // There should be visa data
@@ -667,6 +693,18 @@ function get_applications_for_funder($funding_id = 0, $application_date = 0, $so
 	$sql .= ';';
 
 	return $DB->get_records_sql($sql, array($application_date, $funding_id));
+}
+
+function count_applications_for_course($code) {
+    global $DB;
+
+	return $DB->count_records('local_obu_application', array('course_code' => $code));
+}
+
+function count_applications_for_funder($id) {
+    global $DB;
+
+	return $DB->count_records('local_obu_application', array('funding_id' => $id));
 }
 
 function read_approval($application_id, &$approval) {

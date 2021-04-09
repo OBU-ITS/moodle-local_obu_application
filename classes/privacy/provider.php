@@ -20,7 +20,7 @@
  *
  * @package    local_obu_application
  * @author     Peter Welham
- * @copyright  2019, Oxford Brookes University
+ * @copyright  2021, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -84,6 +84,7 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 				'course_name' => 'privacy:metadata:local_obu_application:course_name',
 				'course_date' => 'privacy:metadata:local_obu_application:course_date',
 				'studying' => 'privacy:metadata:local_obu_application:studying',
+				'student_number' => 'privacy:metadata:local_obu_application:student_number',
 				'statement' => 'privacy:metadata:local_obu_application:statement',
 				'supplement_data' => 'privacy:metadata:local_obu_application:supplement_data',
 				'course_update' => 'privacy:metadata:local_obu_application:course_update'
@@ -139,6 +140,7 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 				'course_name' => 'privacy:metadata:local_obu_application:course_name',
 				'course_date' => 'privacy:metadata:local_obu_application:course_date',
 				'studying' => 'privacy:metadata:local_obu_application:studying',
+				'student_number' => 'privacy:metadata:local_obu_application:student_number',
 				'statement' => 'privacy:metadata:local_obu_application:statement',
 				'supplement_data' => 'privacy:metadata:local_obu_application:supplement_data',
 				'self_funding' => 'privacy:metadata:local_obu_application:self_funding',
@@ -259,7 +261,12 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 			$data->course_code = $rec->course_code;
 			$data->course_name = $rec->course_name;
 			$data->course_date = $rec->course_date;
-			$data->studying = $rec->studying;
+			if ($rec->studying == 1) {
+				$data->studying = 'Y';
+			} else {
+				$data->studying = 'N';
+			}
+			$data->student_number = $rec->student_number;
 			$data->statement = $rec->statement;
 			if ($rec->supplement_data === NULL) {
 				$data->supplement_data = '';
@@ -341,7 +348,12 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 				$data->course_code = $rec->course_code;
 				$data->course_name = $rec->course_name;
 				$data->course_date = $rec->course_date;
-				$data->studying = $rec->studying;
+				if ($rec->studying == 1) {
+					$data->studying = 'Y';
+				} else {
+					$data->studying = 'N';
+				}
+				$data->student_number = $rec->student_number;
 				$data->statement = $rec->statement;
 				if ($rec->supplement_data === NULL) {
 					$data->supplement_data = '';

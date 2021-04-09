@@ -21,7 +21,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2020, Oxford Brookes University
+ * @copyright  2021, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -36,8 +36,12 @@ class visa_form extends moodleform {
 		
         $mform =& $this->_form;
 
+		$visa_requirement = $this->_customdata['visa_requirement'];
+		if ($visa_requirement == 0) {
+			$visa_requirement = 1;
+		}
 		$fields = [
-			'visa_requirement' => $this->_customdata['visa_requirement']
+			'visa_requirement' => $visa_requirement
 		];
 		$this->set_data($fields);
 
@@ -45,11 +49,13 @@ class visa_form extends moodleform {
 		// - To force open the Moodle Forms invisible fieldset outside of any table on the form (corrupts display otherwise)
 		// - To let us inform the user that there are validation errors without them having to scroll down further
 		$mform->addElement('static', 'form_errors');
+		
+		$mform->addElement('static', 'visa_note', get_string('visa_note', 'local_obu_application'));
 
 		$visa_requirement = array();
-		$visa_requirement[] = $mform->createElement('radio', 'visa_requirement', '', get_string('visa_not_required', 'local_obu_application'), 0);
-		$visa_requirement[] = $mform->createElement('radio', 'visa_requirement', '', get_string('visa_tier4', 'local_obu_application'), 1);
-		$visa_requirement[] = $mform->createElement('radio', 'visa_requirement', '', get_string('visa_tier2', 'local_obu_application'), 2);
+//		$visa_requirement[] = $mform->createElement('radio', 'visa_requirement', '', get_string('visa_not_required', 'local_obu_application'), 0);
+		$visa_requirement[] = $mform->createElement('radio', 'visa_requirement', '', get_string('student_visa', 'local_obu_application'), 1);
+		$visa_requirement[] = $mform->createElement('radio', 'visa_requirement', '', get_string('other_status', 'local_obu_application'), 2);
 		$mform->addGroup($visa_requirement, 'visa_requirement', '', '<br />', false);
 
 		$this->add_action_buttons(true, get_string('save_continue', 'local_obu_application'));

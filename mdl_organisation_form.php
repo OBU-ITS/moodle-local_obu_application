@@ -21,7 +21,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2016, Oxford Brookes University
+ * @copyright  2021, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -40,6 +40,7 @@ class mdl_organisation_form extends moodleform {
 		$data->delete = $this->_customdata['delete'];
 		$data->organisations = $this->_customdata['organisations'];
 		$data->record = $this->_customdata['record'];
+		$data->applications = $this->_customdata['applications'];
 
 		if ($data->record != null) {
 			$fields = [
@@ -90,6 +91,7 @@ class mdl_organisation_form extends moodleform {
 			$mform->addElement('textarea', 'address', get_string('address'), 'cols="40" rows="5"');
 			$mform->setType('address', PARAM_TEXT);
 			$mform->addElement('advcheckbox', 'suspended', get_string('suspended', 'local_obu_application'), null, null, array(0, 1));
+			$mform->addElement('static', 'applications', get_string('applications', 'local_obu_application'), $data->applications);
 		}
 
 		// Options
@@ -98,7 +100,7 @@ class mdl_organisation_form extends moodleform {
 			$buttonarray[] = &$mform->createElement('submit', 'submitbutton', get_string('confirm_delete', 'local_obu_application'));
 		} else {
 			$buttonarray[] = &$mform->createElement('submit', 'submitbutton', get_string('save', 'local_obu_application'));
-			if (is_siteadmin() && ($data->id != '0')) {
+			if (($data->id != '0') && ($data->applications == 0)) {
 				$buttonarray[] = &$mform->createElement('submit', 'deletebutton', get_string('delete', 'local_obu_application'));
 			}
 		}

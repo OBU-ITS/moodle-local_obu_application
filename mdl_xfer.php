@@ -19,7 +19,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2020, Oxford Brookes University
+ * @copyright  2021, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -99,7 +99,8 @@ else if ($mform_data = $mform->get_data()) {
 	$xfers = array();
 	foreach ($applications as $application) {
 		if ((($application->approval_level == 3) && ($application->approval_state == 2)) // Approved by HLS so is/was OK to go...
-				&& (((($mform_data->xfer_type == 1) || ($mform_data->xfer_type == 3)) && ($application->admissions_xfer == $xfer_id)) // Admissions or Process (Admissions data processing)
+				&& (((($mform_data->xfer_type == 1) || ($mform_data->xfer_type == 3))
+					&& ($application->studying <> 1) && ($application->admissions_xfer == $xfer_id)) // Admissions or Process (Admissions data processing)
 				|| (($mform_data->xfer_type == 2) && ($application->finance_xfer == $xfer_id)))) { // Finance
 			// OK - check the date if necessary
 			if (($start_date == 0) || !isset($months[substr($application->course_date, 0, 3)])) { // No check (or we can't)
@@ -128,57 +129,53 @@ else if ($mform_data = $mform->get_data()) {
 		foreach ($xfers as $index => $xfer) {
 			$application = read_application($xfer);
 			$fields = array();
-			if ($mform_data->xfer_type == 3) {
+
+			if ($mform_data->xfer_type == 2) {
+				$fields['Applicant_Id'] = 'H' . sprintf('%07d', $application->userid);
+				$fields['Form_Id'] = 'HLS/' . $application->id;
+			} else if ($mform_data->xfer_type == 3) {
 				$fields['Form_Released_Date'] = date('d/m/Y');
 				$fields['Institution_Label'] = 'Ox Brookes';
 				$fields['Course_Type'] = 'HLS';
 			}
-			$fields['Applicant_Id'] = 'H' . sprintf('%07d', $application->userid);
-			$fields['Form_Id'] = 'HLS/' . $application->id;
 
 			$fields['Title'] = $application->title;
 			$fields['Surname'] = $application->lastname;
 			$fields['First_Name(s)'] = $application->firstname;
-			if (($mform_data->xfer_type == 1) || ($mform_data->xfer_type == 3)) { // Admissions
-				$fields['Middle_Name'] = '';
-				if ($mform_data->xfer_type == 1) {
-					$fields['Banner_ID'] = '';
-				} else {
-					$fields['Previous_Family_Name'] = '';
-				}
-				$fields['Address_Type'] = 'HO';
-				$fields['Address_1'] = $application->address_1;
-				$fields['Address_2'] = $application->address_2;
-				$fields['Address_3'] = $application->address_3;
-				$fields['Address_4'] = '';
-				$fields['City'] = $application->city;
-				$fields['Domicile'] = $application->domicile_code;
-				$fields['Postcode'] = $application->postcode;
-				$fields['Address_From'] = '';
-				if ($application->mobile_phone != '') {
-					$fields['Telephone_Type'] = 'MO';
-					$fields['Telephone'] = $application->mobile_phone;
-				} else {
-					$fields['Telephone_Type'] = 'HO';
-					$fields['Telephone'] = $application->home_phone;
-				}
-				if (strpos($application->email, '@brookes.ac.uk') !== false) {
-					$fields['Email_Type'] = 'BRKS';
-				} else {
-					$fields['Email_Type'] = 'PERS';
-				}
-				$fields['Email'] = $application->email;
-				$fields['Date_of_Birth'] = date('d/m/Y', $application->birthdate);
-				$fields['Gender'] = $application->gender;
-				$fields['Country_of_Birth'] = $application->birth_code;
-				$fields['Nationality'] = $application->nationality_code;
+			$fields['Middle_Name'] = '';
+			$fields['Banner_ID'] = '';
+			$fields['Address_Type'] = 'HO';
+			$fields['Address_1'] = $application->address_1;
+			$fields['Address_2'] = $application->address_2;
+			$fields['Address_3'] = $application->address_3;
+			$fields['Address_4'] = '';
+			$fields['City'] = $application->city;
+			$fields['Domicile'] = $application->domicile_code;
+			$fields['Postcode'] = $application->postcode;
+			$fields['Address_From'] = '';
+			if ($application->mobile_phone != '') {
+				$fields['Telephone_Type'] = 'MO';
+				$fields['Telephone'] = $application->mobile_phone;
+			} else {
+				$fields['Telephone_Type'] = 'HO';
+				$fields['Telephone'] = $application->home_phone;
 			}
+			if (strpos($application->email, '@brookes.ac.uk') !== false) {
+				$fields['Email_Type'] = 'BRKS';
+			} else {
+				$fields['Email_Type'] = 'PERS';
+			}
+			$fields['Email'] = $application->email;
+			$fields['Date_of_Birth'] = date('d/m/Y', $application->birthdate);
+			$fields['Gender'] = $application->gender;
+			$fields['Country_of_Birth'] = $application->birth_code;
+			$fields['Nationality'] = $application->nationality_code;
 			$course = read_course_record(trim($application->course_code));
 			$fields['Programme_Code'] = $course->programme_code;
 			$fields['Major_Code'] = $course->major_code;
 			$fields['Level'] = $course->level;
 			$fields['Campus'] = $course->campus;
-			if ($application->visa_requirement == 'Tier 4') {
+			if (($application->visa_requirement == 'Tier 4') || ($application->visa_requirement == 'Student')) {
 				$fields['Student_Type'] = 'F';
 			} else {
 				$fields['Student_Type'] = 'P';
@@ -212,20 +209,21 @@ else if ($mform_data = $mform->get_data()) {
 				$fields['Cohort'] = $course->cohort_code . ', ' . $month;
 			}
 
-			$fields['Module_Subject'] = $course->module_subject;
-			$fields['Module_Number'] = $course->module_number;
-			if ($application->studying == '1') {
-				$studying_formatted = get_string('yes', 'local_obu_application');
-			} else {
-				$studying_formatted = get_string('no', 'local_obu_application');
-			}
-			$fields['Currently_Studying'] = $studying_formatted;
-			$fields['Residence'] = $application->residence_code;
-			if (($mform_data->xfer_type == 1) || ($mform_data->xfer_type == 2)) { // Admissions & Finance (combined) or Finance
+			if ($mform_data->xfer_type == 2) {
+				$fields['Module_Subject'] = $course->module_subject;
+				$fields['Module_Number'] = $course->module_number;
+				if ($application->studying == '1') {
+					$studying_formatted = get_string('yes', 'local_obu_application');
+				} else {
+					$studying_formatted = get_string('no', 'local_obu_application');
+				}
+				$fields['Currently_Studying'] = $studying_formatted;
+				$fields['Student_Number'] = $application->student_number;
+				$fields['Residence'] = $application->residence_code;
 				if ($application->self_funding == 1) {
 					$fields['Funding_Method'] = 'Self-funding';
 					$fields['Organisation'] = '';
-//					$fields['Contract'] = '';
+					$fields['Contract'] = '';
 					$fields['Funder_Name'] = '';
 				} else {
 					if ($application->funding_method < 2) {
@@ -246,51 +244,57 @@ else if ($mform_data = $mform->get_data()) {
 							$fields['Contract'] = $organisation->code;
 						}
 					}
-*/					if ($application->funding_method == 0) {
+*/					$cohort_code = strtoupper(str_replace(' ', '', $course->cohort_code));
+					if (strpos($course->cohort_code, 'FFAC,ZF') === false) {
+						$fields['Contract'] = '';
+					} else {
+						$fields['Contract'] = 'Y';
+					}
+					if ($application->funding_method == 0) {
 						$fields['Funder_Name'] = '';
 					} else {
 						$fields['Funder_Name'] = $application->funder_name;
 					}
-				}
-				if (($application->self_funding == 1) || ($application->funding_method > 2)){
-					$fields['PO_Number'] = '';
-					$fields['Address'] = '';
-					$fields['Contact_Email'] = '';
-					$fields['Phone_No'] = '';
-					$fields['Contact_Name'] = '';
-				} else {
-					$fields['PO_Number'] = $application->invoice_ref;
-					$fields['Address'] = $application->invoice_address;
-					$fields['Contact_Email'] = $application->invoice_email;
-					$fields['Phone_No'] = $application->invoice_phone;
-					$fields['Contact_Name'] = $application->invoice_contact;
-				}
-				if (($application->self_funding == 0) && is_programme($application->course_code)) {
-					if ($application->fund_programme) {
-						$fields['Fund_Programme'] = 'Y';
+					if (($application->self_funding == 1) || ($application->funding_method > 2)){
+						$fields['PO_Number'] = '';
+						$fields['Address'] = '';
+						$fields['Contact_Email'] = '';
+						$fields['Phone_No'] = '';
+						$fields['Contact_Name'] = '';
 					} else {
-						$fields['Fund_Programme'] = 'N';
+						$fields['PO_Number'] = $application->invoice_ref;
+						$fields['Address'] = $application->invoice_address;
+						$fields['Contact_Email'] = $application->invoice_email;
+						$fields['Phone_No'] = $application->invoice_phone;
+						$fields['Contact_Name'] = $application->invoice_contact;
 					}
-					$fields['Fund_Module_1'] = $application->fund_module_1;
-					$fields['Fund_Module_2'] = $application->fund_module_2;
-					$fields['Fund_Module_3'] = $application->fund_module_3;
-					$fields['Fund_Module_4'] = $application->fund_module_4;
-					$fields['Fund_Module_5'] = $application->fund_module_5;
-					$fields['Fund_Module_6'] = $application->fund_module_6;
-					$fields['Fund_Module_7'] = $application->fund_module_7;
-					$fields['Fund_Module_8'] = $application->fund_module_8;
-					$fields['Fund_Module_9'] = $application->fund_module_9;
-				} else {
-					$fields['Fund_Programme'] = '';
-					$fields['Fund_Module_1'] = '';
-					$fields['Fund_Module_2'] = '';
-					$fields['Fund_Module_3'] = '';
-					$fields['Fund_Module_4'] = '';
-					$fields['Fund_Module_5'] = '';
-					$fields['Fund_Module_6'] = '';
-					$fields['Fund_Module_7'] = '';
-					$fields['Fund_Module_8'] = '';
-					$fields['Fund_Module_9'] = '';
+					if (($application->self_funding == 0) && is_programme($application->course_code)) {
+						if ($application->fund_programme) {
+							$fields['Fund_Programme'] = 'Y';
+						} else {
+							$fields['Fund_Programme'] = 'N';
+						}
+						$fields['Fund_Module_1'] = $application->fund_module_1;
+						$fields['Fund_Module_2'] = $application->fund_module_2;
+						$fields['Fund_Module_3'] = $application->fund_module_3;
+						$fields['Fund_Module_4'] = $application->fund_module_4;
+						$fields['Fund_Module_5'] = $application->fund_module_5;
+						$fields['Fund_Module_6'] = $application->fund_module_6;
+						$fields['Fund_Module_7'] = $application->fund_module_7;
+						$fields['Fund_Module_8'] = $application->fund_module_8;
+						$fields['Fund_Module_9'] = $application->fund_module_9;
+					} else {
+						$fields['Fund_Programme'] = '';
+						$fields['Fund_Module_1'] = '';
+						$fields['Fund_Module_2'] = '';
+						$fields['Fund_Module_3'] = '';
+						$fields['Fund_Module_4'] = '';
+						$fields['Fund_Module_5'] = '';
+						$fields['Fund_Module_6'] = '';
+						$fields['Fund_Module_7'] = '';
+						$fields['Fund_Module_8'] = '';
+						$fields['Fund_Module_9'] = '';
+					}
 				}
 			}
 

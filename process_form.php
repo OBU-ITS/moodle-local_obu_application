@@ -164,6 +164,7 @@ class process_form extends moodleform {
 				'course_name' => $data->record->course_code . ' ' . $data->record->course_name,
 				'course_date' => $data->record->course_date,
 				'studying_formatted' => $studying_formatted,
+				'student_number' => $data->record->student_number,
 				'statement' => $data->record->statement,
 				'visa_requirement' => $visa_requirement,
 				'self_funding_formatted' => $self_funding_formatted,
@@ -312,6 +313,7 @@ class process_form extends moodleform {
 		
 		// Currently studying?
 		$mform->addElement('static', 'studying_formatted', get_string('studying', 'local_obu_application'));
+		$mform->addElement('static', 'student_number', get_string('student_number', 'local_obu_application'));
 		
         // Supporting statement
 		$mform->addElement('header', 'statement_head', get_string('statement_head', 'local_obu_application'), '');

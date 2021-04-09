@@ -21,7 +21,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2020, Oxford Brookes University
+ * @copyright  2021, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -72,10 +72,13 @@ if ($mform_data = $mform->get_data()) {
 		write_course($USER->id, $mform_data);
 		if ($record->nationality_code != 'GB') {
 			redirect($visa);
-		} else if ($course->supplement != '') {
-			redirect($supplement); 
 		} else {
-			redirect($apply);
+			write_visa_requirement($USER->id, '');
+			if ($course->supplement != '') {
+				redirect($supplement); 
+			} else {
+				redirect($apply);
+			}
 		}
     }
 }	

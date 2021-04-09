@@ -21,7 +21,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2020, Oxford Brookes University
+ * @copyright  2021, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -105,6 +105,7 @@ class profile_form extends moodleform {
 		$nationality_code = $mform->addElement('select', 'nationality_code', get_string('nationality', 'local_obu_application'), $data->nations, null);
 		$nationality_code->setSelected($data->nationality_code);
 		$mform->addRule('nationality_code', null, 'required', null, 'server');
+		$mform->addElement('static', 'nationality_note', null, get_string('nationality_note', 'local_obu_application'));
 		$genders = [];
 		$genders['N'] = get_string('gender_not_available', 'local_obu_application');
 		$genders['F'] = get_string('gender_female', 'local_obu_application');

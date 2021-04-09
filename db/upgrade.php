@@ -640,6 +640,26 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		// obu_application savepoint reached
 		upgrade_plugin_savepoint(true, 2020100100, 'local', 'obu_application');
     }
+	
+	if ($oldversion < 2021030300) {
+
+		// Update local_obu_applicant
+		$table = new xmldb_table('local_obu_applicant');
+		$field = new xmldb_field('student_number', XMLDB_TYPE_CHAR, '10', null, XMLDB_NOTNULL, null, '', 'studying');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+
+		// Update local_obu_application
+		$table = new xmldb_table('local_obu_application');
+		$field = new xmldb_field('student_number', XMLDB_TYPE_CHAR, '10', null, XMLDB_NOTNULL, null, '', 'studying');
+		if (!$dbman->field_exists($table, $field)) {
+			$dbman->add_field($table, $field);
+		}
+
+		// obu_application savepoint reached
+		upgrade_plugin_savepoint(true, 2021030300, 'local', 'obu_application');
+    }
 
     return $result;
 }

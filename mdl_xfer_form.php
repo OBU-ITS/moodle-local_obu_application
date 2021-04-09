@@ -19,7 +19,7 @@
  * @package    obu_application
  * @category   local
  * @author     Peter Welham
- * @copyright  2020, Oxford Brookes University
+ * @copyright  2021, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -35,9 +35,9 @@ class mdl_xfer_form extends moodleform {
 		$data->dates = $this->_customdata['dates'];
 		
 		$options = [];
-//		$options['0'] = get_string('select', 'local_obu_application');
+		$options['0'] = get_string('select', 'local_obu_application');
 		$options['1'] = get_string('admissions', 'local_obu_application');
-//		$options['2'] = get_string('finance', 'local_obu_application');
+		$options['2'] = get_string('finance', 'local_obu_application');
 //		$options['3'] = get_string('process', 'local_obu_application');
 		$mform->addElement('select', 'xfer_type', get_string('xfer_type', 'local_obu_application'), $options);
 		$mform->addRule('xfer_type', null, 'required', null, 'server');
