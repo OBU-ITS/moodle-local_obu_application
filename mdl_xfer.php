@@ -166,7 +166,7 @@ else if ($mform_data = $mform->get_data()) {
 				$fields['Email_Type'] = 'PERS';
 			}
 			$fields['Email'] = $application->email;
-			$fields['Date_of_Birth'] = date('d/m/Y', $application->birthdate);
+			$fields['Date_of_Birth'] = strtoupper(date('d-M-Y', $application->birthdate));
 			$fields['Gender'] = $application->gender;
 			$fields['Country_of_Birth'] = $application->birth_code;
 			$fields['Nationality'] = $application->nationality_code;
@@ -245,7 +245,7 @@ else if ($mform_data = $mform->get_data()) {
 						}
 					}
 */					$cohort_code = strtoupper(str_replace(' ', '', $course->cohort_code));
-					if (strpos($course->cohort_code, 'FFAC,ZF') === false) {
+					if (strpos($cohort_code, 'FFAC,ZF') === false) {
 						$fields['Contract'] = '';
 					} else {
 						$fields['Contract'] = 'Y';

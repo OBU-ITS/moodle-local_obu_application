@@ -45,7 +45,9 @@ class mdl_amend_course_form extends moodleform {
 			'current_course_name' => $data->application->course_code . ' ' . $data->application->course_name,
 			'current_course_date' => $data->application->course_date,
 			'course_code' => $data->application->course_code,
-			'course_date' => $data->application->course_date
+			'course_date' => $data->application->course_date,
+			'studying' => $data->application->studying,
+			'student_number' => $data->application->student_number
 		];
 		$this->set_data($fields);
 		
@@ -68,13 +70,37 @@ class mdl_amend_course_form extends moodleform {
 		$mform->setExpanded('course_head');
 		$mform->addElement('select', 'course_code', get_string('course', 'local_obu_application'), $data->courses, null);
 		$mform->addElement('select', 'course_date', get_string('course_date', 'local_obu_application'), $data->dates, null);
+
+		// Already studying
+		$options = [];
+		if ($data->application->studying == 0) { // A mandatory field so must be the first time thru
+			$options['0'] = 'Please select'; // No choice made yet
+		}
+		$options['1'] = get_string('yes', 'local_obu_application');
+		$options['2'] = get_string('no', 'local_obu_application');
+		$mform->addElement('select', 'studying', get_string('studying', 'local_obu_application'), $options);
+		$mform->addRule('studying', null, 'required', null, 'server');
+		$mform->addElement('text', 'student_number', get_string('student_number', 'local_obu_application'), 'size="10" maxlength="10"');
+		$mform->setType('student_number', PARAM_TEXT);
+		$mform->disabledIf('student_number', 'studying', 'neq', '1');
 		
 		$this->add_action_buttons(true, get_string('save', 'local_obu_application'));
     }
 
     function validation($data, $files) {
         global $CFG, $DB;
+
         $errors = parent::validation($data, $files);
+
+		if ($data['studying'] == '0') {
+			$errors['studying'] = get_string('value_required', 'local_obu_application');
+		} else if ($data['studying'] == '1') {
+			if ($data['student_number'] == '') {
+				$errors['student_number'] = get_string('value_required', 'local_obu_application');
+			} else if (read_user_by_username($data['student_number']) == null) {
+				$errors['student_number'] = get_string('user_not_found', 'local_obu_application');
+			}			
+		}
 
 		if (!empty($errors)) {
 			$errors['form_errors'] = get_string('form_errors', 'local_obu_application');

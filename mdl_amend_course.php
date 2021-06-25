@@ -92,6 +92,12 @@ if ($mform_data = $mform->get_data()) {
 	$application->course_code = $course->code;
 	$application->course_name = $course->name;
 	$application->course_date = $mform_data->course_date;
+	$application->studying = $mform_data->studying;
+    if ($application->studying == 1) {
+		$application->student_number = $mform_data->student_number;
+	} else {
+		$application->student_number = '';
+	}
 	update_application($application);
 
 	redirect($process);
