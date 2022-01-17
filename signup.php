@@ -83,7 +83,7 @@ if ($mform->is_cancelled()) {
 		$user->auth = 'email';
 	
 		// Initialize alternate name fields to empty strings.
-		$namefields = array_diff(get_all_user_name_fields(), useredit_get_required_name_fields());
+		$namefields = array_diff(\core\user_fields::get_name_fields(), useredit_get_required_name_fields());
 		foreach ($namefields as $namefield) {
 			$user->$namefield = '';
 		}
