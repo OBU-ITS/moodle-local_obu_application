@@ -200,7 +200,16 @@ else if ($mform_data = $mform->get_data()) {
 			}
 			$fields['Admit_Term'] = $course_date;
 			$fields['Admit_Type'] = '60';
-			$fields['Residency_Type'] = 'H';
+
+            // England, Scotland, Wales, N.Ireland, Jersey, Guernsey
+			$homeResidencies = array('XF', 'XH', 'XI', 'XG', 'JE', 'GG');
+            $residencyCode = $application->residence_code;
+            $residencyType = 'O';
+            if(in_array($residencyCode, $homeResidencies)) {
+                $residencyType = 'H';
+            }
+			$fields['Residency_Type'] = $residencyType;
+
 			$fields['Programme_Stage'] = 'S1';
 			$fields['Decision'] = 'UT';
 			if ($course->cohort_code == '') {
