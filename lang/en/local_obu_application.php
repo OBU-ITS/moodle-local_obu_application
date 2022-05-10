@@ -394,7 +394,7 @@ Please use this link {$a} to register for the Faculty of Health and Life Science
 $string['index_page'] = 'Home';
 $string['your_approvals'] = 'Your pending approvals';
 $string['your_applications'] = 'Your applications (please quote the HLS application reference in any communication)';
-$string['amend_application'] = 'If you need to amend any details of an application once you have submitted it then you will need to contact the Faculty on 01865 482779 or <a href="mailto:pacreception@brookes.ac.uk">pacreception@brookes.ac.uk</a> and ask to speak with the administrator for your course.';
+$string['amend_application'] = 'If you need to amend any details of an application once you have submitted it then you will need to contact the Faculty on 01865 482779 or <a href="mailto:hlscpdadmissions@brookes.ac.uk">hlscpdadmissions@brookes.ac.uk</a> and ask to speak with the administrator for your course.';
 
 $string['logout'] = 'Log out';
 
