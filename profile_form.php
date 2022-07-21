@@ -87,7 +87,7 @@ class profile_form extends moodleform {
 		];
 		$this->set_data($fields);
 		
-		$date_options = array('startyear' => 1950, 'stopyear'  => 2030, 'timezone'  => 99, 'optional' => false);
+		$date_options = array('startyear' => 1931, 'stopyear'  => 2030, 'timezone'  => 99, 'optional' => false);
 		
 		// This 'dummy' element has two purposes:
 		// - To force open the Moodle Forms invisible fieldset outside of any table on the form (corrupts display otherwise)
