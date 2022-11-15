@@ -985,6 +985,7 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 	$text = '';
 	$button = '';
 	$manager = is_manager();
+	$administrator = is_administrator();
 	
 	// Prepare the submission/approval trail
 	$date = date_create();
@@ -1141,6 +1142,8 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 		}
 	} else if ($manager && ($application->approval_level == 3) && ($application->approval_state == 2)) { // A manager can revoke or withdraw an HLS-approved application
 		$button = 'revoke';
+	} else if ($administrator && ($application->approval_state == 1)) { // An administrator can reinstate a rejected application
+		$button = 'reinstate';
 	} else { // Application processed - nothing more to say...
 		$button = 'continue';
 	}
