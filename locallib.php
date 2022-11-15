@@ -1166,7 +1166,7 @@ function update_workflow(&$application, $approved = true, $data = null) {
 			$application->approval_state = 1; // Rejected
 		} else if (isset($data->reinstatebutton)) {
 			$application->approval_1_comment = '';
-			$application->approval_1_date = '';
+			$application->approval_1_date = 0;
 			$application->approval_level = 1; // Reinstated
 			$application->approval_state = 0;
 		} else if ($application->self_funding == 0) {
@@ -1184,7 +1184,7 @@ function update_workflow(&$application, $approved = true, $data = null) {
 			$application->approval_state = 1; // Rejected
 		} else if (isset($data->reinstatebutton)) {
 			$application->approval_2_comment = '';
-			$application->approval_2_date = '';
+			$application->approval_2_date = 0;
 			$application->approval_level = 2; // Reinstated
 			$application->approval_state = 0;
 		} else {
@@ -1253,7 +1253,7 @@ function update_workflow(&$application, $approved = true, $data = null) {
 			$application->approval_3_comment = '';
 			if (isset($data->reinstatebutton)) {
 				$application->approval_3_comment = '';
-				$application->approval_3_date = '';
+				$application->approval_3_date = 0;
 				$application->approval_level = 3; // Reinstated
 				$application->approval_state = 0;
 			}
