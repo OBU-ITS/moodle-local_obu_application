@@ -529,9 +529,7 @@ class process_form extends moodleform {
 				}
 			} else if ($data->button_text == 'revoke') { // A manager can revoke or withdraw an HLS-approved application
 				$buttonarray[] = &$mform->createElement('submit', 'withdrawbutton', get_string('withdraw', 'local_obu_application'));
-			} else if ($data->button_text == 'reinstate') { // An admin can reinstate a rejected application
-                $buttonarray[] = &$mform->createElement('submit', 'reinstatebutton', get_string('reinstate', 'local_obu_application'));
-            }
+			}
 			$buttonarray[] = &$mform->createElement('cancel');
 		}
 		$mform->addGroup($buttonarray, 'buttonarray', '', array(' '), false);

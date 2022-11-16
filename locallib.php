@@ -1164,11 +1164,11 @@ function update_workflow(&$application, $approved = true, $data = null) {
 		}
 		if (!$approved) {
 			$application->approval_state = 1; // Rejected
-		} else if (isset($data->reinstatebutton)) {
+		} else if ($application->approval_state == 1) {
 			$application->approval_1_comment = '';
-			$application->approval_1_date = 0;
-			$application->approval_level = 1; // Reinstated
+			$application->approval_1_date = 0; // Reinstated
 			$application->approval_state = 0;
+			$approver_email = $application->manager_email;
 		} else if ($application->self_funding == 0) {
 			$application->approval_level = 2; // Funder
 			$approver_email = $application->funder_email;
@@ -1182,11 +1182,11 @@ function update_workflow(&$application, $approved = true, $data = null) {
 		$application->approval_2_date = time();
 		if (!$approved) {
 			$application->approval_state = 1; // Rejected
-		} else if (isset($data->reinstatebutton)) {
+		} else if ($application->approval_state == 1) {
 			$application->approval_2_comment = '';
-			$application->approval_2_date = 0;
-			$application->approval_level = 2; // Reinstated
+			$application->approval_2_date = 0; // Reinstated
 			$application->approval_state = 0;
+			$approver_email = $application->funder_email;
 		} else {
 			$application->approval_level = 3; // Brookes
 			
@@ -1251,11 +1251,11 @@ function update_workflow(&$application, $approved = true, $data = null) {
 			}
 		} else { // Already approved/rejected so must be revoking or withdrawing
 			$application->approval_3_comment = '';
-			if (isset($data->reinstatebutton)) {
-				$application->approval_3_comment = '';
-				$application->approval_3_date = 0;
-				$application->approval_level = 3; // Reinstated
+			if ($approved && $application->approval_state == 1) {
+				$application->approval_3_date = 0; // Reinstated
 				$application->approval_state = 0;
+				$hls = get_complete_user_data('username', 'hls');
+				$approver_email = $hls->email;
 			}
 			else if ($approved) { // Revoked
 				$application->approval_state = 0;
