@@ -337,6 +337,7 @@ this is usually your passport.  This is required even if you are currently worki
 of entry to this course.';
 $string['visa_not_required'] = 'Visa not required';
 $string['student_visa'] = 'International Student Visa required';
+$string['international_dl'] = 'International Distance Learning Applicant';
 $string['other_status'] = 'Skilled Worker Visa/Other Immigration Status';
 $string['visa_supplement'] = 'Visa Supplement';
 $string['attachments_head'] = 'File attachments';
