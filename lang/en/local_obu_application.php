@@ -231,6 +231,7 @@ $string['approve'] = 'Approve';
 $string['reject'] = 'Reject';
 $string['revoke'] = 'Revoke';
 $string['withdraw'] = 'Withdraw';
+$string['reinstate'] = 'Reinstate';
 $string['comment'] = 'Comment or Reason for Rejection (for Applicant)';
 
 $string['supplement'] = 'Supplement';

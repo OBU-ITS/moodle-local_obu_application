@@ -117,7 +117,7 @@ if ($mform->is_cancelled()) {
 
 if ($mform_data = $mform->get_data()) {
 	if (isset($mform_data->submitbutton) && ($mform_data->submitbutton != get_string('continue', 'local_obu_application'))) {
-		update_workflow($application, true, $mform_data); // Approved (or Revoked)
+		update_workflow($application, true, $mform_data); // Approved / Revoked / Reinstated
 	} else if (isset($mform_data->rejectbutton) && ($mform_data->rejectbutton == get_string('reject', 'local_obu_application'))) {
 		update_workflow($application, false, $mform_data); // Rejected
 	} else if (isset($mform_data->withdrawbutton) && ($mform_data->withdrawbutton == get_string('withdraw', 'local_obu_application'))) {
