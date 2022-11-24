@@ -57,6 +57,8 @@ if (($record->visa_requirement == 'Tier 4') || ($record->visa_requirement == 'St
 	$visa_requirement = '1';
 } else if (($record->visa_requirement == 'Tier 2') || ($record->visa_requirement == 'Other')) {
 	$visa_requirement = '2';
+} else if ($record->visa_requirement == 'InterDL') {
+    $visa_requirement = '3';
 } else {
 	$visa_requirement = '0';
 }
@@ -77,7 +79,9 @@ if ($mform_data = $mform->get_data()) {
 			$visa_requirement = 'Student';
 		} else if ($mform_data->visa_requirement == '2') {
 			$visa_requirement = 'Other';
-		} else {
+		} else if ($mform_data->visa_requirement == '3') {
+            $visa_requirement = 'InterDL';
+        } else {
 			$visa_requirement = '';
 		}
 		write_visa_requirement($USER->id, $visa_requirement);

@@ -55,6 +55,7 @@ class visa_form extends moodleform {
 		$visa_requirement = array();
 //		$visa_requirement[] = $mform->createElement('radio', 'visa_requirement', '', get_string('visa_not_required', 'local_obu_application'), 0);
 		$visa_requirement[] = $mform->createElement('radio', 'visa_requirement', '', get_string('student_visa', 'local_obu_application'), 1);
+        $visa_requirement[] = $mform->createElement('radio', 'visa_requirement', '', get_string('international_dl', 'local_obu_application'), 3);
 		$visa_requirement[] = $mform->createElement('radio', 'visa_requirement', '', get_string('other_status', 'local_obu_application'), 2);
 		$mform->addGroup($visa_requirement, 'visa_requirement', '', '<br />', false);
 
