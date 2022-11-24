@@ -231,6 +231,7 @@ $string['approve'] = 'Approve';
 $string['reject'] = 'Reject';
 $string['revoke'] = 'Revoke';
 $string['withdraw'] = 'Withdraw';
+$string['reinstate'] = 'Reinstate';
 $string['comment'] = 'Comment or Reason for Rejection (for Applicant)';
 
 $string['supplement'] = 'Supplement';
@@ -337,6 +338,7 @@ this is usually your passport.  This is required even if you are currently worki
 of entry to this course.';
 $string['visa_not_required'] = 'Visa not required';
 $string['student_visa'] = 'International Student Visa required';
+$string['international_dl'] = 'International Distance Learning Applicant';
 $string['other_status'] = 'Skilled Worker Visa/Other Immigration Status';
 $string['visa_supplement'] = 'Visa Supplement';
 $string['attachments_head'] = 'File attachments';
@@ -394,7 +396,7 @@ Please use this link {$a} to register for the Faculty of Health and Life Science
 $string['index_page'] = 'Home';
 $string['your_approvals'] = 'Your pending approvals';
 $string['your_applications'] = 'Your applications (please quote the HLS application reference in any communication)';
-$string['amend_application'] = 'If you need to amend any details of an application once you have submitted it then you will need to contact the Faculty on 01865 482779 or <a href="mailto:pacreception@brookes.ac.uk">pacreception@brookes.ac.uk</a> and ask to speak with the administrator for your course.';
+$string['amend_application'] = 'If you need to amend any details of an application once you have submitted it then you will need to contact the Faculty on 01865 482779 or <a href="mailto:hlscpdadmissions@brookes.ac.uk">hlscpdadmissions@brookes.ac.uk</a> and ask to speak with the administrator for your course.';
 
 $string['logout'] = 'Log out';
 
