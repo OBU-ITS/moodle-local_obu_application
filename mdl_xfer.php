@@ -209,7 +209,6 @@ else if ($mform_data = $mform->get_data()) {
                 $residencyType = 'H';
             }
             $fields['Residency_Type'] = $residencyType;
-            
 			$fields['Programme_Stage'] = 'S1';
 			$fields['Decision'] = 'UT';
 			if ($course->cohort_code == '') {
