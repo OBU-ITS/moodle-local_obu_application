@@ -258,7 +258,7 @@ $string['status_processed'] = 'Has been processed.';
 $string['status_withdrawn'] = 'Has been withdrawn.';
 
 $string['preregistered'] = '<strong>NOTE:</strong> If you have a \'brookes.ac.uk\' email address you are pre-registered.  Click <a href="/local/obu_application/mdl_login.php">here</a> to login.';
-$string['emailandpassword'] = 'Please enter your NHS (or preferred) email address (lowercase only) and choose a password';
+$string['emailandpassword'] = 'Please enter a contact email address (not NHS addresses due to firewall restrictions) and choose a password';
 $string['newemail'] = 'Email (Note - you would need to use any new address to log in)';
 $string['confirm_email'] = 'Confirm email';
 $string['contactdetails'] = 'Contact details';
