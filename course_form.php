@@ -73,7 +73,6 @@ class course_form extends moodleform {
 		$mform->addRule('studying', null, 'required', null, 'server');
 		$mform->addElement('text', 'student_number', get_string('student_number', 'local_obu_application'), 'size="10" maxlength="10"');
 		$mform->setType('student_number', PARAM_TEXT);
-		$mform->disabledIf('student_number', 'studying', 'neq', '1');
         $mform->addElement('header', 'statement_head', get_string('statement_head', 'local_obu_application'), '');
 		$mform->setExpanded('statement_head');
 		$mform->addElement('textarea', 'statement', get_string('statement', 'local_obu_application'), 'cols="60" rows="10"');
