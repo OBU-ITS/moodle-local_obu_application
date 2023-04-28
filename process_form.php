@@ -119,9 +119,9 @@ class process_form extends moodleform {
 				}
 			}
 			if ($data->record->fund_programme == '1') {
-				$fund_programme_formatted = '&#10004;'; // Tick
+				$fund_programme_formatted = '&#10004; YES'; // Tick
 			} else {
-				$fund_programme_formatted = '&#10008;'; // Cross
+				$fund_programme_formatted = '&#10008; NO'; // Cross
 			}
 			
 			$fields = [
