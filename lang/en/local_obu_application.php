@@ -42,8 +42,7 @@ $string['privacy:metadata:local_obu_application:domicile_country'] = 'Country of
 $string['privacy:metadata:local_obu_application:postcode'] = 'Home postcode.';
 $string['privacy:metadata:local_obu_application:home_phone'] = 'Home phone.';
 $string['privacy:metadata:local_obu_application:mobile_phone'] = 'Mobile phone.';
-$string['privacy:metadata:local_obu_application:email'] = 'Brookes email (if applicable)';
-$string['privacy:metadata:local_obu_application:personalemail'] = 'Personal email (NOT Brookes or NHS)';
+$string['privacy:metadata:local_obu_application:email'] = 'Email address';
 $string['privacy:metadata:local_obu_application:birth_code'] = 'Birth code.';
 $string['privacy:metadata:local_obu_application:birth_country'] = 'Country of birth.';
 $string['privacy:metadata:local_obu_application:birthdate'] = 'Date of birth.';
@@ -260,6 +259,7 @@ $string['status_withdrawn'] = 'Has been withdrawn.';
 
 $string['preregistered'] = '<strong>NOTE:</strong> If you have a \'brookes.ac.uk\' email address you are pre-registered.  Click <a href="/local/obu_application/mdl_login.php">here</a> to login.';
 $string['emailandpassword'] = 'Please enter a contact email address (not NHS or previous Brookes addresses due to firewall restrictions) and choose a password';
+$string['personalemail'] = 'Personal email (not NHS or Brookes)';
 $string['newemail'] = 'Email (Note - you would need to use any new address to log in)';
 $string['confirm_email'] = 'Confirm email';
 $string['contactdetails'] = 'Contact details';
