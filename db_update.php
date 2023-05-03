@@ -695,6 +695,23 @@ function get_applications_for_funder($funding_id = 0, $application_date = 0, $so
 	return $DB->get_records_sql($sql, array($application_date, $funding_id));
 }
 
+function get_applications_for_manager($manager_id = 0, $application_date = 0, $application_second_date = 0, $sort_order = '') {
+    global $DB;
+
+    $sql = 'SELECT * FROM {local_obu_application} WHERE application_date >= ? AND  application_second_date <= ? AND';
+    if ($manager_id == 0) {
+        return null;
+    } else {
+        $sql .= 'manager_id = ?';
+    }
+    if ($sort_order != '') {
+        $sql .= ' ORDER BY ' . $sort_order;
+    }
+    $sql .= ';';
+
+    return $DB->get_records_sql($sql, array($application_date, $application_second_date, $manager_id));
+}
+
 function count_applications_for_course($code) {
     global $DB;
 
