@@ -57,8 +57,8 @@ $message = '';
 
 $managers = array();
 $mgrs = get_managers();
-foreach ($mgrs as $id => $mgr) {
-    $managers[$id] = $mgr;
+foreach ($mgrs as $mgr) {
+    $managers[$mgr->username] = $mgr->firstname . " " . $mgr->lastname . " (" . $mgr->username . ")";
 }
 
 $parameters = [
@@ -72,10 +72,12 @@ if ($mform->is_cancelled()) {
 }
 
 if ($mform_data = $mform->get_data()) {
-    $applications = get_applications_for_funder($mform_data->manager, $mform_data->application_date, $mform_data->application_second_date); // Get the applications
+    $applications = get_applications_for_manager($mform_data->manager, $mform_data->application_date, $mform_data->application_second_date); // Get the applications
     if (empty($applications)) {
         $message = get_string('no_applications', 'local_obu_application');
     }
+    var_dump($applications);
+
 }
 
 echo $OUTPUT->header();
