@@ -26,7 +26,7 @@
 
 require_once('../../config.php');
 require_once('./locallib.php');
-require_once('./mdl_report_form.php');
+require_once('./mdl_manager_report_form.php');
 
 require_login();
 
@@ -43,10 +43,10 @@ if (!is_manager()) {
 }
 
 $dir = $home . 'local/obu_application/';
-$url = $dir . 'mdl_report.php';
+$url = $dir . 'mdl_manager_report.php';
 
 $title = get_string('applications_management', 'local_obu_application');
-$heading = get_string('export_report', 'local_obu_application');
+$heading = get_string('manager_report', 'local_obu_application');
 $PAGE->set_url($url);
 $PAGE->set_pagelayout('standard');
 $PAGE->set_title($title);
@@ -56,6 +56,7 @@ $PAGE->navbar->add($heading);
 $message = '';
 
 $managers = array();
+$managers[0] = "";
 $mgrs = get_managers();
 foreach ($mgrs as $mgr) {
     $managers[$mgr->username] = $mgr->firstname . " " . $mgr->lastname . " (" . $mgr->username . ")";
@@ -65,7 +66,7 @@ $parameters = [
     'managers' => $managers
 ];
 
-$mform = new mdl_report_form(null, $parameters);
+$mform = new mdl_manager_report_form(null, $parameters);
 
 if ($mform->is_cancelled()) {
     redirect($back);
@@ -75,9 +76,45 @@ if ($mform_data = $mform->get_data()) {
     $applications = get_applications_for_manager($mform_data->manager, $mform_data->application_date, $mform_data->application_second_date); // Get the applications
     if (empty($applications)) {
         $message = get_string('no_applications', 'local_obu_application');
-    }
-    var_dump($applications);
+    } else {
+        //var_dump($applications);
 
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment;filename=HLS_' . get_string('applications', 'local_obu_application') . '.csv');
+        $fp = fopen('php://output', 'w');
+        $first_record = true;
+        foreach ($applications as $application) {
+            $fields = array();
+            $fields['Form_Id'] = 'HLS/' . $application->id;
+            $fields['Title'] = $application->title;
+            $fields['First_Name'] = $application->firstname;
+            $fields['Surname'] = $application->lastname;
+            $fields['Course'] = $application->course_code . ': ' . $application->course_name;
+            $fields['Course_Date'] = $application->course_date;
+
+            if ($application->approval_state == 1) {
+                $fields['Status'] = get_string('rejected', 'local_obu_application');
+            } else if ($application->approval_state == 2) {
+                $fields['Status'] = get_string('approved', 'local_obu_application');
+            } else if ($application->approval_state == 3) {
+                $fields['Status'] = get_string('withdrawn', 'local_obu_application');
+            } else if ($application->approval_level == 1) {
+                $fields['Status'] = 'Administrator pre-check';
+            } else if ($application->approval_level == 2) {
+                $fields['Status'] = 'Funder to approve';
+            } else {
+                $fields['Status'] = 'HLS to approve';
+            }
+
+            if ($first_record) { // Write headings
+                fputcsv($fp, array_keys($fields));
+                $first_record = false;
+            }
+            fputcsv($fp, $fields);
+        }
+        fclose($fp);
+        exit();
+    }
 }
 
 echo $OUTPUT->header();

@@ -16,7 +16,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * OBU Application - Export Report options form
+ * OBU Application - Manager Report options form
  *
  * @package    obu_application
  * @category   local
@@ -30,7 +30,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/formslib.php');
 
-class mdl_report_form extends moodleform{
+class mdl_manager_report_form extends moodleform{
 
     function definition() {
         $mform =& $this->_form;
@@ -38,7 +38,7 @@ class mdl_report_form extends moodleform{
         $data = new stdClass();
         $data->managers = $this->_customdata['managers'];
 
-        $mform->addElement('html', '<h2>' . get_string('export_options', 'local_obu_application') . '</h2>');
+        $mform->addElement('html', '<h2>' . get_string('manager_options', 'local_obu_application') . '</h2>');
 
         // This 'dummy' element has two purposes:
         // - To force open the Moodle Forms invisible fieldset outside of any table on the form (corrupts display otherwise)
@@ -46,7 +46,8 @@ class mdl_report_form extends moodleform{
         $mform->addElement('static', 'form_errors');
 
         // Manager
-        $select = $mform->addElement('autocomplete', 'manager', get_string('manager', 'local_obu_application'), $data->managers, null);
+        $mform->addElement('autocomplete', 'manager', get_string('manager', 'local_obu_application'), $data->managers, null);
+        $mform->addRule('manager', get_string('required'), 'required');
 
         // Date
         $mform->addElement('date_selector', 'application_date', get_string('application_date', 'local_obu_application'));
