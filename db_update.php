@@ -697,8 +697,7 @@ function get_applications_for_funder($funding_id = 0, $application_date = 0, $so
 
 function get_applications_for_manager($manager_username = '', $application_from_date = 0, $application_to_date = 0, $sort_order = '') {
     global $DB;
-
-    $sql = 'SELECT * FROM {local_obu_application} WHERE application_date >= ? AND application_date <= ? AND ';
+    $sql = 'SELECT * FROM {local_obu_application} WHERE application_date >= ? AND application_date < ? AND ';
     if ($manager_username == '') {
         return null;
     } else {
