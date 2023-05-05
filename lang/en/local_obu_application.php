@@ -155,6 +155,7 @@ $string['course_visa'] = 'Course (Visa Requirement)';
 $string['course_supplement'] = 'Course (Supplementary Form)';
 $string['organisations'] = 'Organisations';
 $string['organisation_list'] = 'Organisation list';
+$string['manager_list'] = 'Manager list';
 $string['manager'] = 'Manager';
 $string['courses'] = 'Courses';
 $string['applicants'] = 'Applicants';
