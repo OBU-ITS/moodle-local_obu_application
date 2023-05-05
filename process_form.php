@@ -518,6 +518,7 @@ class process_form extends moodleform {
 				if (is_manager() && (($approval_sought == 1) || ($approval_sought == 3))) { // HLS
 					$buttonarray[] = &$mform->createElement('submit', 'amenddetailsbutton', get_string('amend_details', 'local_obu_application'));
 					$buttonarray[] = &$mform->createElement('submit', 'amendcoursebutton', get_string('amend_course', 'local_obu_application'));
+                    $buttonarray[] = &$mform->createElement('submit', 'amenddocumentsbutton', get_string('amend_documents', 'local_obu_application'));
 					if ($data->record->self_funding == '0') {
 						if ($approval_sought == 1) {
 							$buttonarray[] = &$mform->createElement('submit', 'amendfunderbutton', get_string('amend_funder', 'local_obu_application'));
