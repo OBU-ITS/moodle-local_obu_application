@@ -73,6 +73,9 @@ if ($mform->is_cancelled()) {
 }
 
 if ($mform_data = $mform->get_data()) {
+    if ($mform_data->application_date == $mform_data->application_second_date){
+        $mform_data->application_second_date = date_add($mform_data->application_second_date, date_interval_create_from_date_string("1 day"));
+    }
     $applications = get_applications_for_manager($mform_data->manager, $mform_data->application_date, $mform_data->application_second_date); // Get the applications
     if (empty($applications)) {
         $message = get_string('no_applications', 'local_obu_application');
