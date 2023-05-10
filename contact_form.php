@@ -48,8 +48,7 @@ class contact_form extends moodleform {
 				'lastname' => $data->user->lastname,
 				'phone1' => $data->user->phone1,
 				'phone2' => $data->user->phone2,
-				'email' => $data->user->email,
-                'personalemail' => $data->user->personalemail
+				'email' => $data->user->email
 			];
 			
 			if ($data->applicant !== false) {
@@ -130,9 +129,6 @@ class contact_form extends moodleform {
 		if ($data->user->email != $data->user->username) {
 			$mform->addElement('text', 'email', get_string('email'), 'size="25" maxlength="100"');
 			$mform->disabledIf('email', 'firstname', 'neq', '?****?');
-
-            $mform->addElement('text', 'personalemail', get_string('personalemail'), 'size="25" maxlength="100"');
-            $mform->disabledIf('personalemail', 'firstname', 'neq', '?****?');
 		} else {
 			$mform->addElement('header', 'newemail', get_string('newemail', 'local_obu_application'), '');
 			$mform->addElement('text', 'email', get_string('email'), 'size="25" maxlength="100"');
