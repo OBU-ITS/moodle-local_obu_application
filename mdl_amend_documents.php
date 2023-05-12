@@ -91,7 +91,7 @@ if ($mform->is_cancelled()) {
 if ($mform_data = $mform->get_data()) {
 
     // Update the applications's details fields
-
+    $application->
     update_application($application);
 
     redirect($process);
