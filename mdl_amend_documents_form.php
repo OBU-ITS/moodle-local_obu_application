@@ -36,9 +36,25 @@ class mdl_amend_documents_form extends moodleform{
 
         $data = new stdClass();
         $data->record = $this->_customdata['record'];
-        $data->nations = $this->_customdata['nations'];
-        $data->areas = $this->_customdata['areas'];
 
+        if ($data->record->visa_data){
+            $mform->addElement('filepicker', 'visafile' , get_string('visa_file', 'local_obu_application'), null, array('maxbytes' => 2097152, 'accepted_types' => array('.pdf')));
 
+        }
+        if ($data->record->supplement_data){
+            $mform->addElement('filepicker', 'supplementfile' , get_string('supplement_file', 'local_obu_application'), null, array('maxbytes' => 2097152, 'accepted_types' => array('.pdf')));
+
+        }
+    }
+
+    function validation($data, $files) {
+        global $CFG, $DB;
+        $errors = parent::validation($data, $files);
+
+        if (!empty($errors)) {
+            $errors['form_errors'] = get_string('form_errors', 'local_obu_application');
+        }
+
+        return $errors;
     }
 }

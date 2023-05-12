@@ -71,15 +71,11 @@ $PAGE->navbar->add($heading);
 
 $message = '';
 
-$nations = get_nations();
-$areas = get_areas();
+//unpack_supplement_data($application->visa_data, $visafields);
+
 $parameters = [
     'record' => $application,
-    'nations' => $nations,
-    'areas' => $areas,
-    'default_birth_code' => 'GB',
-    'default_nationality_code' => 'GB',
-    'default_residence_code' => 'XF'
+    //'visafields' => $visafields,
 ];
 
 $mform = new mdl_amend_documents_form(null, $parameters);
@@ -91,7 +87,7 @@ if ($mform->is_cancelled()) {
 if ($mform_data = $mform->get_data()) {
 
     // Update the applications's details fields
-    $application->
+
     update_application($application);
 
     redirect($process);
