@@ -86,7 +86,7 @@ $parameters = [
     'fields' => $fields
 ];
 
-$mform = new supplement_form(null, $parameters);
+$mform = new supplement_form(null, $parameters, $application->id);
 
 if ($mform->is_cancelled()) {
     redirect($process);

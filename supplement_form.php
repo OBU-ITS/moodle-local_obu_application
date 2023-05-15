@@ -40,12 +40,17 @@ class supplement_form extends moodleform {
         $data = new stdClass();
 		$data->supplement = $this->_customdata['supplement'];
         $data->fields = $this->_customdata['fields'];
+        $data->applicationId = $this->_customdata['applicationId'];
 		$this->set_data($data->fields);
 		
 		$mform->addElement('hidden', 'supplement', $data->supplement->ref);
 		$mform->setType('supplement', PARAM_RAW);
 		$mform->addElement('hidden', 'version', $data->supplement->version);
 		$mform->setType('version', PARAM_RAW);
+        if ($data->applicationId){
+            $mform->addElement('hidden', 'applicationId', $data->applicationId->id);
+            $mform->setType('applicationId', PARAM_RAW);
+        }
 		
         // Process the form
 		$fld_start = '<input ';
@@ -61,6 +66,8 @@ class supplement_form extends moodleform {
 		// - To force open the Moodle Forms invisible fieldset outside of any table on the form (corrupts display otherwise)
 		// - To let us inform the user that there are validation errors without them having to scroll down further
 		$mform->addElement('static', 'form_error');
+
+
 
 		do {
 			$pos = strpos($data->supplement->template, $fld_start, $offset);
