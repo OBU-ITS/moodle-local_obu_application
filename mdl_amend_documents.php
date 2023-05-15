@@ -26,7 +26,7 @@
 
 require_once('../../config.php');
 require_once('./locallib.php');
-require_once('./mdl_amend_documents_form.php');
+require_once('./supplement_form.php');
 require_once($CFG->libdir . '/moodlelib.php');
 
 require_login();
@@ -71,14 +71,23 @@ $PAGE->navbar->add($heading);
 
 $message = '';
 
-//unpack_supplement_data($application->visa_data, $visafields);
+if ($application->visa_data){
+    unpack_supplement_data($application->visa_data, $visafields);
+    $parameters = [
+        'record' => $application,
+        'visafields' => $visafields,
+    ];
+    $mform = new supplement_form(null, $parameters);
+}
 
-$parameters = [
-    'record' => $application,
-    //'visafields' => $visafields,
-];
-
-$mform = new mdl_amend_documents_form(null, $parameters);
+if ($application->supplement_data){
+    unpack_supplement_data($application->supplement_data, $supplementfields);
+    $parameters2 = [
+        'record' => $application,
+        'supplementfields' => $supplementfields,
+    ];
+    $mform = new supplement_form(null, $parameters2);
+}
 
 if ($mform->is_cancelled()) {
     redirect($process);
@@ -92,3 +101,15 @@ if ($mform_data = $mform->get_data()) {
 
     redirect($process);
 }
+
+echo $OUTPUT->header();
+echo $OUTPUT->heading($heading);
+
+if ($message) {
+    notice($message, $process);
+}
+else {
+    $mform->display();
+}
+
+echo $OUTPUT->footer();
