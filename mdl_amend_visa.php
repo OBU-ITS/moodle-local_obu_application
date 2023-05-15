@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * OBU Application - Amend the Documents in an application [Moodle]
+ * OBU Application - Amend the Supplementary document in an application [Moodle]
  *
  * @package    obu_application
  * @category   local
@@ -32,6 +32,8 @@ require_once($CFG->libdir . '/moodlelib.php');
 require_login();
 
 $home = new moodle_url('/');
+$context = context_user::instance($USER->id);
+
 if (!is_manager()) {
     redirect($home);
 }
@@ -54,7 +56,7 @@ if ($application === false) {
     redirect($back);
 }
 
-$url = $home . 'local/obu_application/mdl_amend_documents.php?id=' . $application->id;
+$url = $home . 'local/obu_application/mdl_amend_visa.php?id=' . $application->id;
 $process = $home . 'local/obu_application/mdl_process.php?id=' . $application->id;
 
 if ((($application->approval_level != 1) && ($application->approval_level != 3)) || ($application->approval_state != 0)) { // Must be awaiting approval/rejection by HLS staff
@@ -71,42 +73,49 @@ $PAGE->navbar->add($heading);
 
 $message = '';
 
-if ($application->visa_data){
-    unpack_supplement_data($application->visa_data, $visafields);
-    $parameters = [
-        'record' => $application,
-        'visafields' => $visafields,
-    ];
-    $mform = new supplement_form(null, $parameters);
+if ($message == '') {
+    unpack_supplement_data($application->visa_data, $fields);
+    $supplement = get_supplement_form_by_version($fields['supplement'], $fields['version']);
+    if (!$supplement) {
+        $message = get_string('invalid_data', 'local_obu_application');
+    }
 }
 
-if ($application->supplement_data){
-    unpack_supplement_data($application->supplement_data, $supplementfields);
-    $parameters2 = [
-        'record' => $application,
-        'supplementfields' => $supplementfields,
-    ];
-    $mform = new supplement_form(null, $parameters2);
-}
+$parameters = [
+    'supplement' => $supplement,
+    'fields' => $fields
+];
+
+$mform = new supplement_form(null, $parameters);
 
 if ($mform->is_cancelled()) {
     redirect($process);
 }
 
-if ($mform_data = $mform->get_data()) {
-
-    // Update the applications's details fields
-
-    update_application($application);
-
+if ($mform_data = (array)$mform->get_data()) {
+    $files = get_file_elements($supplement->template); // Get the list of the 'file' elements from the supplementary form's template
+    $data_fields = array();
+    foreach ($mform_data as $key => $value) {
+        if ($key != 'submitbutton') { // Ignore the standard field
+            if (in_array($key, $files)) { // Is this element a 'file' one?
+                $file = $mform->save_stored_file($key, $context->id, 'local_obu_application', 'file', $value, '/', null, true, null); // Save it to the Moodle pool
+                if ($file !== false) {
+                    $data_fields[$key] = $file->get_pathnamehash(); // Store the file's pathname hash (it's unique identifier)
+                }
+            } else {
+                $data_fields[$key] = $value;
+            }
+        }
+    }
+    write_visa_data($USER->id, pack_supplement_data($data_fields));
     redirect($process);
 }
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading($heading);
+echo $OUTPUT->heading(get_string('course_supplement', 'local_obu_application'));
 
 if ($message) {
-    notice($message, $process);
+    notice($message, $home);
 }
 else {
     $mform->display();
