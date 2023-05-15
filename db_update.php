@@ -541,6 +541,17 @@ function write_visa_data($user_id, $visa_data) {
 	return $DB->update_record('local_obu_applicant', $record);
 }
 
+function write_visa_data_by_id($application_id, $visa_data) {
+    global $DB;
+
+    $application = read_application($application_id, true); // Must already exist
+
+    // Update the visa data for the applicant's course
+    $application->visa_data = $visa_data;
+
+    return update_application($application);
+}
+
 function write_supplement_data($user_id, $supplement_data) {
 	global $DB;
 
@@ -551,6 +562,17 @@ function write_supplement_data($user_id, $supplement_data) {
     $record->course_update = time();
 
 	return $DB->update_record('local_obu_applicant', $record);
+}
+
+function write_supplement_data_by_id($application_id, $supplement_data) {
+    global $DB;
+
+    $application = read_application($application_id, true); // Must already exist
+
+    // Update the supplement data for the applicant's course
+    $application->supplement_data = $supplement_data;
+
+    return update_application($application);
 }
 
 function read_application($application_id, $must_exist = true) {

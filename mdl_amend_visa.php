@@ -83,10 +83,11 @@ if ($message == '') {
 
 $parameters = [
     'supplement' => $supplement,
-    'fields' => $fields
+    'fields' => $fields,
+    'applicationId' => $application->id
 ];
 
-$mform = new supplement_form(null, $parameters, $application->id);
+$mform = new supplement_form(null, $parameters);
 
 if ($mform->is_cancelled()) {
     redirect($process);
@@ -96,18 +97,23 @@ if ($mform_data = (array)$mform->get_data()) {
     $files = get_file_elements($supplement->template); // Get the list of the 'file' elements from the supplementary form's template
     $data_fields = array();
     foreach ($mform_data as $key => $value) {
-        if ($key != 'submitbutton') { // Ignore the standard field
-            if (in_array($key, $files)) { // Is this element a 'file' one?
+        if ($key == 'submitbutton' || $key == 'id') {
+            continue;
+        }
+        if (in_array($key, $files)) { // Is this element a 'file' one?
+            if($value){
                 $file = $mform->save_stored_file($key, $context->id, 'local_obu_application', 'file', $value, '/', null, true, null); // Save it to the Moodle pool
                 if ($file !== false) {
                     $data_fields[$key] = $file->get_pathnamehash(); // Store the file's pathname hash (it's unique identifier)
                 }
-            } else {
-                $data_fields[$key] = $value;
+            }else{
+                $data_fields[$key] = $fields[$key];
             }
+        } else {
+            $data_fields[$key] = $value;
         }
     }
-    write_visa_data($USER->id, pack_supplement_data($data_fields));
+    write_visa_data_by_id($application->id, pack_supplement_data($data_fields));
     redirect($process);
 }
 

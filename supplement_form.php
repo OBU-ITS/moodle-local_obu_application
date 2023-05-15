@@ -48,8 +48,8 @@ class supplement_form extends moodleform {
 		$mform->addElement('hidden', 'version', $data->supplement->version);
 		$mform->setType('version', PARAM_RAW);
         if ($data->applicationId){
-            $mform->addElement('hidden', 'applicationId', $data->applicationId->id);
-            $mform->setType('applicationId', PARAM_RAW);
+            $mform->addElement('hidden', 'id', $data->applicationId);
+            $mform->setType('id', PARAM_RAW);
         }
 		
         // Process the form
@@ -153,7 +153,7 @@ class supplement_form extends moodleform {
 				default:
 			}
 			
-			if (array_key_exists('rule', $element)) { // An extra validation rule applies to this field
+			if (!$data->applicationId && array_key_exists('rule', $element)) { // An extra validation rule applies to this field
 				if ($element['rule'] == 'group') { // At least one of this group of fields is required
 					$this->required_group[] = $element['id']; // For our own validation
 				} else {
