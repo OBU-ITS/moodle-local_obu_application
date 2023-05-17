@@ -354,7 +354,7 @@ requested or other material information has been omitted. I give my consent to t
 I have read the {$a} and undertake to be bound by those conditions.';
 $string['approval_head'] = 'Approval';
 $string['amend_details'] = 'Amend Details';
-$string['amend_supplement_document'] = 'Amend Supplementary Documents';
+$string['amend_supplement_documents'] = 'Amend Supplementary Documents';
 $string['amend_visa'] = 'Amend Visa Documents';
 $string['amend_funder'] = 'Amend Funder';
 $string['amend_course'] = 'Amend Course';

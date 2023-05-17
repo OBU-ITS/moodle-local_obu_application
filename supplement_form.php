@@ -67,8 +67,6 @@ class supplement_form extends moodleform {
 		// - To let us inform the user that there are validation errors without them having to scroll down further
 		$mform->addElement('static', 'form_error');
 
-
-
 		do {
 			$pos = strpos($data->supplement->template, $fld_start, $offset);
 			if ($pos === false) {

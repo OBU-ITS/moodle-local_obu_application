@@ -517,7 +517,7 @@ class process_form extends moodleform {
 				$buttonarray[] = &$mform->createElement('submit', 'rejectbutton', get_string('reject', 'local_obu_application'));
 				if (is_manager() && (($approval_sought == 1) || ($approval_sought == 3))) { // HLS
                     if ($data->record->supplement_data){
-                        $buttonarray[] = &$mform->createElement('submit', 'amendsupplementdocbutton', get_string('amend_supplement_document', 'local_obu_application'));
+                        $buttonarray[] = &$mform->createElement('submit', 'amendsupplementdocbutton', get_string('amend_supplement_documents', 'local_obu_application'));
                     }
                     if ($data->record->visa_data){
                         $buttonarray[] = &$mform->createElement('submit', 'amendvisabutton', get_string('amend_visa', 'local_obu_application'));
