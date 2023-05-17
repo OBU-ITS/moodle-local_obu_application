@@ -74,14 +74,15 @@ if ($mform->is_cancelled()) {
 
 if ($mform_data = $mform->get_data()) {
     if ($mform_data->application_date == $mform_data->application_second_date){
-        $mform_data->application_second_date = strtotime('+1 day', $mform_data->application_second_date);
+        $mform_data->application_second_date = strtotime('+23 hours + 59 minutes + 59 seconds', $mform_data->application_second_date);
     }
     $applications = get_applications_for_manager($mform_data->manager, $mform_data->application_date, $mform_data->application_second_date); // Get the applications
     if (empty($applications)) {
         $message = get_string('no_applications', 'local_obu_application');
     } else {
         header('Content-Type: text/csv');
-        header('Content-Disposition: attachment;filename=HLS_' . get_string('applications', 'local_obu_application') . '.csv');
+        header('Content-Disposition: attachment;filename=HLS_' . get_string('managers_report', 'local_obu_application') . '_' .
+            $mform_data->manager . '_' . date("YMd", $mform_data->application_date) . '-' . date("YMd", $mform_data->application_second_date) . '.csv');
         $fp = fopen('php://output', 'w');
         $first_record = true;
         foreach ($applications as $application) {

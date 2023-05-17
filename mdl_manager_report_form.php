@@ -30,7 +30,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/formslib.php');
 
-class mdl_manager_report_form extends moodleform{
+class mdl_manager_report_form extends moodleform {
 
     function definition() {
         $mform =& $this->_form;
