@@ -73,12 +73,10 @@ $PAGE->navbar->add($heading);
 
 $message = '';
 
-if ($message == '') {
-    unpack_supplement_data($application->supplement_data, $fields);
-    $supplement = get_supplement_form_by_version($fields['supplement'], $fields['version']);
-    if (!$supplement) {
-        $message = get_string('invalid_data', 'local_obu_application');
-    }
+unpack_supplement_data($application->supplement_data, $fields);
+$supplement = get_supplement_form_by_version($fields['supplement'], $fields['version']);
+if (!$supplement) {
+    $message = get_string('invalid_data', 'local_obu_application');
 }
 
 $parameters = [

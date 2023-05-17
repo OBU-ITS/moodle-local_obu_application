@@ -212,7 +212,7 @@ function get_supplement_form($ref, $include_unpublished = false) { // Return the
 	return false;
 }
 
-function get_supplement_form_by_version($ref, $version) { // Return the latest version of the supplement form
+function get_supplement_form_by_version($ref, $version) {
     global $DB;
 
     $supplement = read_supplement_form_by_version($ref, $version);
@@ -544,9 +544,8 @@ function write_visa_data($user_id, $visa_data) {
 function write_visa_data_by_id($application_id, $visa_data) {
     global $DB;
 
-    $application = read_application($application_id, true); // Must already exist
+    $application = read_application($application_id, true);
 
-    // Update the visa data for the applicant's course
     $application->visa_data = $visa_data;
 
     return update_application($application);
@@ -567,9 +566,8 @@ function write_supplement_data($user_id, $supplement_data) {
 function write_supplement_data_by_id($application_id, $supplement_data) {
     global $DB;
 
-    $application = read_application($application_id, true); // Must already exist
+    $application = read_application($application_id, true);
 
-    // Update the supplement data for the applicant's course
     $application->supplement_data = $supplement_data;
 
     return update_application($application);
