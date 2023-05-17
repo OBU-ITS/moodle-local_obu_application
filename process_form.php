@@ -425,7 +425,6 @@ class process_form extends moodleform {
 				if (is_programme($data->record->course_code)) {
 					$mform->addElement('html', '<p></p><strong><i>' . get_string('programme_preamble', 'local_obu_application') . '</i></strong><p></p>');
                     $mform->addElement('select', 'fund_programme', get_string('fund_programme', 'local_obu_application'), array("0"=>"No", "1"=>"Yes"));
-                    $mform->addRule('select', null, 'required', null, 'server');
 					$mform->addElement('text', 'fund_module_1', get_string('fund_module', 'local_obu_application'), 'size="8" maxlength="8"');
 					$mform->setType('fund_module_1', PARAM_TEXT);
 					$mform->disabledIf('fund_module_1', 'fund_programme', 'eq', '1');
