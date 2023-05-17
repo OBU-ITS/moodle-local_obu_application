@@ -73,15 +73,16 @@ $PAGE->navbar->add($heading);
 
 $message = '';
 
-unpack_supplement_data($application->supplement_data, $fields);
-$supplement = get_supplement_form_by_version($fields['supplement'], $fields['version']);
+unpack_supplement_data($application->supplement_data, $current_supplement_data);
+$supplement = get_supplement_form_by_version($current_supplement_data['supplement'], $current_supplement_data['version']);
 if (!$supplement) {
     $message = get_string('invalid_data', 'local_obu_application');
+    redirect($process);
 }
 
 $parameters = [
     'supplement' => $supplement,
-    'fields' => $fields,
+    'fields' => $current_supplement_data,
     'applicationId' => $application->id
 ];
 
@@ -93,25 +94,24 @@ if ($mform->is_cancelled()) {
 
 if ($mform_data = (array)$mform->get_data()) {
     $files = get_file_elements($supplement->template); // Get the list of the 'file' elements from the supplementary form's template
-    $data_fields = array();
+    $updated_supplement_data = array();
     foreach ($mform_data as $key => $value) {
         if ($key == 'submitbutton' || $key == 'id') {
             continue;
         }
-        if (in_array($key, $files)) { // Is this element a 'file' one?
-            if($value){
-                $file = $mform->save_stored_file($key, $context->id, 'local_obu_application', 'file', $value, '/', null, true, null); // Save it to the Moodle pool
-                if ($file !== false) {
-                    $data_fields[$key] = $file->get_pathnamehash(); // Store the file's pathname hash (it's unique identifier)
-                }
-            }else{
-                $data_fields[$key] = $fields[$key];
-            }
-        } else {
-            $data_fields[$key] = $value;
+        if (!in_array($key, $files)) {// Is this element a 'file' one?
+            $updated_supplement_data[$key] = $value;
+            continue;
+        }
+        if(!$value) {
+            $updated_supplement_data[$key] = $current_supplement_data[$key];
+        }
+        $file = $mform->save_stored_file($key, $context->id, 'local_obu_application', 'file', $value, '/', null, true, null); // Save it to the Moodle pool
+        if ($file !== false) {
+            $updated_supplement_data[$key] = $file->get_pathnamehash(); // Store the file's pathname hash (it's unique identifier)
         }
     }
-    write_supplement_data_by_id($application->id, pack_supplement_data($data_fields));
+    write_supplement_data_by_id($application->id, pack_supplement_data($updated_supplement_data));
     redirect($process);
 }
 
