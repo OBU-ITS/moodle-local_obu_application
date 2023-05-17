@@ -105,6 +105,7 @@ if ($mform_data = (array)$mform->get_data()) {
         }
         if(!$value) {
             $updated_supplement_data[$key] = $current_supplement_data[$key];
+            continue;
         }
         $file = $mform->save_stored_file($key, $context->id, 'local_obu_application', 'file', $value, '/', null, true, null); // Save it to the Moodle pool
         if ($file !== false) {
