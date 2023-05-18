@@ -28,7 +28,7 @@
 
 function get_applications_course() {
 	global $DB;
-	
+
 	$course = $DB->get_record('course', array('idnumber' => 'SUBS_APPLICATIONS'), 'id', MUST_EXIST);
 	return $course->id;
 }
@@ -36,11 +36,11 @@ function get_applications_course() {
 // Check if the given user has the given role in the applications management course
 function has_applications_role($user_id = 0, $role_id_1 = 0, $role_id_2 = 0, $role_id_3 = 0) {
 	global $DB;
-	
+
 	if (($user_id == 0) || ($role_id_1 == 0)) { // Both mandatory
 		return false;
 	}
-	
+
 	$sql = 'SELECT ue.id'
 		. ' FROM {user_enrolments} ue'
 		. ' JOIN {enrol} e ON e.id = ue.enrolid'
@@ -64,11 +64,11 @@ function has_applications_role($user_id = 0, $role_id_1 = 0, $role_id_2 = 0, $ro
 // Get users with the given role(s) in the applications management course
 function get_users_by_role($role_id_1 = 0, $role_id_2 = 0, $role_id_3 = 0) {
 	global $DB;
-	
+
 	if ($role_id_1 == 0) { // Mandatory
 		return false;
 	}
-	
+
 	$sql = 'SELECT u.id, u.lastname, u.firstname, u.username, ra.roleid, FROM_UNIXTIME(ula.timeaccess, "%b-%y") AS access'
 		. ' FROM {user_enrolments} ue'
 		. ' JOIN {enrol} e ON e.id = ue.enrolid'
@@ -89,27 +89,27 @@ function get_users_by_role($role_id_1 = 0, $role_id_2 = 0, $role_id_3 = 0) {
 
 function read_parameter_by_name($name, $strict = false) {
 	global $DB;
-	
+
 	if ($strict) {
 		$strictness = MUST_EXIST;
 	} else {
 		$strictness = IGNORE_MISSING;
 	}
-	
+
 	return $DB->get_record('local_obu_param', array('name' => $name), '*', $strictness);
 }
 
 function read_parameter_by_id($param_id) {
     global $DB;
-    
+
 	$parameter = $DB->get_record('local_obu_param', array('id' => $param_id), '*', MUST_EXIST);
-	
-	return $parameter;	
+
+	return $parameter;
 }
 
 function write_parameter($parameter) {
 	global $DB;
-	
+
     $record = new stdClass();
 	$id = $parameter->id;
 	$record->name = $parameter->name;
@@ -122,49 +122,57 @@ function write_parameter($parameter) {
 		$record->id = $id;
 		$DB->update_record('local_obu_param', $record);
 	}
-	
+
 	return $id;
 }
 
 function delete_parameter($param_id) {
     global $DB;
-    
+
 	$DB->delete_records('local_obu_param', array('id' => $param_id));
 }
 
 function get_parameter_records() {
 	global $DB;
-	
+
 	return $DB->get_records('local_obu_param', null, 'name');
 }
 
 function read_supplement_forms($ref) {
-	global $DB;
-	
-	$supplements = $DB->get_records('local_obu_supplement', array('ref' => $ref), 'version', '*');
-	
-	return $supplements;
+    global $DB;
+
+    $supplements = $DB->get_records('local_obu_supplement', array('ref' => $ref), 'version', '*');
+
+    return $supplements;
 }
-	
+
+function read_supplement_form_by_version($ref, $version) {
+    global $DB;
+
+    $supplement = $DB->get_record('local_obu_supplement', array('ref' => $ref, 'version' => $version),'*');
+
+    return $supplement;
+}
+
 function read_supplement_form($ref, $version) {
     global $DB;
-    
+
 	$supplement = $DB->get_record('local_obu_supplement', array('ref' => $ref, 'version' => $version), '*', IGNORE_MISSING);
-	
-	return $supplement;	
+
+	return $supplement;
 }
 
 function read_supplement_form_by_id($supplement_id) {
     global $DB;
-    
+
 	$supplement = $DB->get_record('local_obu_supplement', array('id' => $supplement_id), '*', MUST_EXIST);
-	
-	return $supplement;	
+
+	return $supplement;
 }
 
 function write_supplement_form($author, $supplement) {
 	global $DB;
-	
+
     $record = new stdClass();
 	$record->ref = $supplement->ref;
     $record->version = $supplement->version;
@@ -178,16 +186,16 @@ function write_supplement_form($author, $supplement) {
 		$id = $supplement_form->id;
 		$record->id = $id;
 		$DB->update_record('local_obu_supplement', $record);
-	} else {		
+	} else {
 		$id = $DB->insert_record('local_obu_supplement', $record);
 	}
-	
+
 	return $id;
 }
 
 function get_supplement_form($ref, $include_unpublished = false) { // Return the latest version of the supplement form
     global $DB;
-    
+
     // Return the latest version
 	$supplement = null;
 	$supplements = read_supplement_forms($ref);
@@ -196,29 +204,40 @@ function get_supplement_form($ref, $include_unpublished = false) { // Return the
 			$supplement = $s;
 		}
 	}
-	
+
 	if ($supplement) {
 		return $supplement;
 	}
-	
+
 	return false;
+}
+
+function get_supplement_form_by_version($ref, $version) {
+    global $DB;
+
+    $supplement = read_supplement_form_by_version($ref, $version);
+    if ($supplement) {
+        return $supplement;
+    }
+
+    return false;
 }
 
 function read_course_record_by_id($course_id) {
     global $DB;
-    
+
 	return $DB->get_record('local_obu_course', array('id' => $course_id), '*', MUST_EXIST);
 }
 
 function read_course_record($course_code) {
     global $DB;
-    
+
 	return $DB->get_record('local_obu_course', array('code' => $course_code), '*', MUST_EXIST);
 }
 
 function write_course_record($course) {
 	global $DB;
-	
+
     $record = new stdClass();
 	$id = $course->id;
 	$record->code = $course->code;
@@ -241,25 +260,25 @@ function write_course_record($course) {
 		$record->id = $id;
 		$DB->update_record('local_obu_course', $record);
 	}
-	
+
 	return $id;
 }
 
 function delete_course_record($course_id) {
     global $DB;
-    
+
 	$DB->delete_records('local_obu_course', array('id' => $course_id));
 }
 
 function get_course_records() {
 	global $DB;
-	
+
 	return $DB->get_records('local_obu_course', null, 'name');
 }
 
 function is_programme($course_code) {
     global $DB;
-    
+
 	$course = $DB->get_record('local_obu_course', array('code' => $course_code), 'programme', IGNORE_MISSING);
 	if (($course == NULL) || ($course->programme == 0)) {
 		return false;
@@ -270,13 +289,13 @@ function is_programme($course_code) {
 
 function read_organisation($organisation_id) {
     global $DB;
-    
+
 	return $DB->get_record('local_obu_organisation', array('id' => $organisation_id), '*');
 }
 
 function write_organisation($organisation) {
 	global $DB;
-	
+
     $record = new stdClass();
 	$id = $organisation->id;
 	$record->name = $organisation->name;
@@ -291,42 +310,42 @@ function write_organisation($organisation) {
 		$record->id = $id;
 		$DB->update_record('local_obu_organisation', $record);
 	}
-	
+
 	return $id;
 }
 
 function delete_organisation($organisation_id) {
     global $DB;
-    
+
 	$DB->delete_records('local_obu_organisation', array('id' => $organisation_id));
 }
 
 function get_organisation_records() {
 	global $DB;
-	
+
 	return $DB->get_records('local_obu_organisation', null, 'name');
 }
- 
+
 function read_user($user_id) {
     global $DB;
-    
+
 	$user = $DB->get_record('user', array('id' => $user_id), '*', MUST_EXIST);
 	profile_load_data($user); // Add custom profile data
-	
-	return $user;	
+
+	return $user;
 }
- 
+
 function read_user_by_username($username) {
     global $DB;
-    
+
 	return $DB->get_record('user', array('username' => $username), '*', IGNORE_MISSING);
 }
 
 function write_user($user_id, $form_data) {
 	global $DB;
-	
+
 	$user = read_user($user_id);
-	
+
 	if (isset($form_data->username)) {
 		$user->username = $form_data->username;
 	}
@@ -336,40 +355,40 @@ function write_user($user_id, $form_data) {
 	$user->phone1 = $form_data->phone1;
 	$user->phone2 = $form_data->phone2;
 	$user->city = $form_data->city;
-		
+
 	user_update_user($user, false, true);
 	profile_save_data($user); // Save custom profile data
 }
 
 function get_applicants_by_name($lastname) {
     global $DB;
-    
+
 	$sql = 'SELECT a.userid, u.firstname, u.lastname '
 		. 'FROM {local_obu_applicant} a '
 		. 'JOIN {user} u ON u.id = a.userid '
 		. 'WHERE u.lastname LIKE "' . $lastname . '%" '
 		. 'ORDER BY u.lastname, u.firstname, a.userid';
-	
+
 	return $DB->get_records_sql($sql, array());
 }
 
 function read_applicant($user_id, $must_exist) {
     global $DB;
-    
+
 	if ($must_exist) {
 		$strictness = MUST_EXIST;
 	} else {
 		$strictness = IGNORE_MISSING;
 	}
-	
+
 	$applicant = $DB->get_record('local_obu_applicant', array('userid' => $user_id), '*', $strictness);
-	
-	return $applicant;	
+
+	return $applicant;
 }
 
 function delete_applicant($user_id) {
     global $DB;
-    
+
 	// Delete any outstanding approvals
 	$recs = $DB->get_records('local_obu_application', ['userid' => $user_id]);
 	foreach ($recs as $rec) {
@@ -381,20 +400,20 @@ function delete_applicant($user_id) {
 
 	// Delete the applicant record
 	$DB->delete_records('local_obu_applicant', ['userid' => $user_id]);
-	
-	return;	
+
+	return;
 }
 
 function write_contact_details($user_id, $form_data) {
 	global $DB;
-	
+
 	$record = read_applicant($user_id, false); // May not exist yet
 	if ($record === false) {
 		$record = new stdClass();
 		$record->id = 0;
 		$record->userid = $user_id;
 	}
-	
+
 	// Update the applicant's title and address details
     $record->title = $form_data->title;
 	if ($form_data->address_1 != '') { // Check we are updating full Contact Details and not Sign-in sub-set
@@ -409,24 +428,24 @@ function write_contact_details($user_id, $form_data) {
 
 	if ($record->id == 0) { // New record
 		$id = $DB->insert_record('local_obu_applicant', $record);
-	} else {		
+	} else {
 		$id = $record->id;
 		$DB->update_record('local_obu_applicant', $record);
 	}
-	
+
 	return $id;
 }
 
 function write_profile($user_id, $form_data) {
 	global $DB;
-	
+
 	$record = read_applicant($user_id, false); // May not exist yet
 	if ($record === false) {
 		$record = new stdClass();
 		$record->id = 0;
 		$record->userid = $user_id;
 	}
-	
+
 	// Update the applicant's profile fields
     $record->birth_code = $form_data->birth_code;
     $record->birth_country = $form_data->birth_country;
@@ -452,7 +471,7 @@ function write_profile($user_id, $form_data) {
 	} else {
 		$record->credit_name = $form_data->credit_name;
 		$record->credit_organisation = $form_data->credit_organisation;
-	}	
+	}
     $record->emp_place = $form_data->emp_place;
     $record->emp_area = $form_data->emp_area;
     $record->emp_title = $form_data->emp_title;
@@ -463,17 +482,17 @@ function write_profile($user_id, $form_data) {
 
 	if ($record->id == 0) { // New record
 		$id = $DB->insert_record('local_obu_applicant', $record);
-	} else {		
+	} else {
 		$id = $record->id;
 		$DB->update_record('local_obu_applicant', $record);
 	}
-	
+
 	return $id;
 }
 
 function write_course($user_id, $form_data) {
 	global $DB;
-	
+
 	$record = read_applicant($user_id, true); // Must already exist
 
 	// Update the applicant's course fields
@@ -495,7 +514,7 @@ function write_course($user_id, $form_data) {
 
 function write_visa_requirement($user_id, $visa_requirement) {
 	global $DB;
-	
+
 	$record = read_applicant($user_id, true); // Must already exist
 
 	// Only update requirement/data if necessary
@@ -512,7 +531,7 @@ function write_visa_requirement($user_id, $visa_requirement) {
 
 function write_visa_data($user_id, $visa_data) {
 	global $DB;
-	
+
 	$record = read_applicant($user_id, true); // Must already exist
 
 	// Update the visa data for the applicant's course
@@ -522,9 +541,19 @@ function write_visa_data($user_id, $visa_data) {
 	return $DB->update_record('local_obu_applicant', $record);
 }
 
+function write_visa_data_by_id($application_id, $visa_data) {
+    global $DB;
+
+    $application = read_application($application_id, true);
+
+    $application->visa_data = $visa_data;
+
+    return update_application($application);
+}
+
 function write_supplement_data($user_id, $supplement_data) {
 	global $DB;
-	
+
 	$record = read_applicant($user_id, true); // Must already exist
 
 	// Update the supplement data for the applicant's course
@@ -534,25 +563,35 @@ function write_supplement_data($user_id, $supplement_data) {
 	return $DB->update_record('local_obu_applicant', $record);
 }
 
+function write_supplement_data_by_id($application_id, $supplement_data) {
+    global $DB;
+
+    $application = read_application($application_id, true);
+
+    $application->supplement_data = $supplement_data;
+
+    return update_application($application);
+}
+
 function read_application($application_id, $must_exist = true) {
     global $DB;
-    
+
 	$application = $DB->get_record('local_obu_application', array('id' => $application_id), '*', $must_exist);
-	
-	return $application;	
+
+	return $application;
 }
 
 function write_application($user_id, $form_data) {
 	global $DB;
-	
+
 	$user = read_user($user_id); // Contact details
 	$applicant = read_applicant($user_id, true); // Profile & course must exist
-	
+
 	// Initialise the new record
 	$record = new stdClass();
 	$record->id = 0;
 	$record->userid = $user_id;
-	
+
 	// Contact details
 	$record->title = $applicant->title;
 	$record->firstname = $user->firstname;
@@ -599,7 +638,7 @@ function write_application($user_id, $form_data) {
 	} else {
 		$record->criminal_record = '0'; // No
 	}
-	
+
 	// Course
     $record->course_code = $applicant->course_code;
     $record->course_name = $applicant->course_name;
@@ -618,7 +657,7 @@ function write_application($user_id, $form_data) {
 	if ($course->administrator != '') {
 		$record->manager_email = $course->administrator . '@brookes.ac.uk';
 	}
-	
+
 	// Funding
 	$record->self_funding = $form_data->self_funding;
 	if ($record->self_funding == 0) {
@@ -639,7 +678,7 @@ function write_application($user_id, $form_data) {
 	} else {
 		$record->declaration = 0;
 	}
-	
+
     $record->application_date = time();
 
 	return $DB->insert_record('local_obu_application', $record); // The remaining fields will have default values
@@ -647,19 +686,19 @@ function write_application($user_id, $form_data) {
 
 function update_application($application) {
     global $DB;
-    
+
 	return $DB->update_record('local_obu_application', $application);
 }
 
 function get_applications($user_id = null) {
     global $DB;
-    
+
 	if ($user_id != null) { // Required for just this user
 		$applications = $DB->get_records('local_obu_application', array('userid' => $user_id), 'application_date DESC');
 	} else { // All applications
 		$applications = $DB->get_records('local_obu_application');
 	}
-	
+
 	return $applications;
 }
 
@@ -709,7 +748,7 @@ function count_applications_for_funder($id) {
 
 function read_approval($application_id, &$approval) {
     global $DB;
-    
+
 	$approval = $DB->get_record('local_obu_approval', array('application_id' => $application_id), '*', IGNORE_MISSING);
 	if ($approval === false) {
 		$approval = new stdClass();
@@ -722,20 +761,20 @@ function read_approval($application_id, &$approval) {
 
 function write_approval($approval) {
     global $DB;
-    
+
 	if ($approval->id == 0) {
 		$id = $DB->insert_record('local_obu_approval', $approval);
 	} else {
 		$id = $approval->id;
 		$DB->update_record('local_obu_approval', $approval);
 	}
-	
+
 	return $id;
 }
 
 function delete_approval($approval) {
     global $DB;
-    
+
 	if ($approval->id != 0) {
 		$DB->delete_records('local_obu_approval', array('id' => $approval->id));
 	}
@@ -745,7 +784,7 @@ function get_approvals($approver_email) {
     global $DB;
 
 	$conditions = array();
-	
+
 	if ($approver_email != '') {
 		$conditions['approver'] = strtolower($approver_email);
 	}
