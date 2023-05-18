@@ -119,9 +119,9 @@ class process_form extends moodleform {
 				}
 			}
 			if ($data->record->fund_programme == '1') {
-				$fund_programme_formatted = '&#10004;'; // Tick
+				$fund_programme_formatted = '&#10004; YES'; // Tick
 			} else {
-				$fund_programme_formatted = '&#10008;'; // Cross
+				$fund_programme_formatted = '&#10008; NO'; // Cross
 			}
 			
 			$fields = [
@@ -424,7 +424,7 @@ class process_form extends moodleform {
 				}
 				if (is_programme($data->record->course_code)) {
 					$mform->addElement('html', '<p></p><strong><i>' . get_string('programme_preamble', 'local_obu_application') . '</i></strong><p></p>');
-					$mform->addElement('advcheckbox', 'fund_programme', get_string('fund_programme', 'local_obu_application'), null, null, array(0, 1));
+                    $mform->addElement('select', 'fund_programme', get_string('fund_programme', 'local_obu_application'), array("0"=>"No", "1"=>"Yes"));
 					$mform->addElement('text', 'fund_module_1', get_string('fund_module', 'local_obu_application'), 'size="8" maxlength="8"');
 					$mform->setType('fund_module_1', PARAM_TEXT);
 					$mform->disabledIf('fund_module_1', 'fund_programme', 'eq', '1');
