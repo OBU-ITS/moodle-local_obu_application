@@ -71,12 +71,9 @@ $PAGE->set_heading($title);
 $PAGE->set_url($url);
 $PAGE->navbar->add($heading);
 
-$message = '';
-
 unpack_supplement_data($application->supplement_data, $current_supplement_data);
 $supplement = get_supplement_form_by_version($current_supplement_data['supplement'], $current_supplement_data['version']);
 if (!$supplement) {
-    $message = get_string('invalid_data', 'local_obu_application');
     redirect($process);
 }
 
@@ -119,11 +116,6 @@ if ($mform_data = (array)$mform->get_data()) {
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('course_supplement', 'local_obu_application'));
 
-if ($message) {
-    notice($message, $home);
-}
-else {
-    $mform->display();
-}
+$mform->display();
 
 echo $OUTPUT->footer();
