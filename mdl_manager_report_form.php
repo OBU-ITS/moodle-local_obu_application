@@ -66,6 +66,10 @@ class mdl_manager_report_form extends moodleform {
         global $CFG, $DB;
         $errors = parent::validation($data, $files);
 
+        if ($data['application_second_date'] < $data['application_date']) {
+            $errors['application_second_date'] = get_string('form_error_second_date', 'local_obu_application');
+        }
+
         if (!empty($errors)) {
             $errors['form_errors'] = get_string('form_errors', 'local_obu_application');
         }

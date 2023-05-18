@@ -251,6 +251,7 @@ $string['published'] = 'Published';
 
 $string['application_unavailable'] = 'Sorry, this application is unavailable to you.';
 $string['form_errors'] = 'Sorry, your form has errors (please see below).';
+$string['form_error_second_date'] = 'Application date range invalid.';
 $string['user_not_found'] = 'User not found.';
 $string['application_not_found'] = 'Application not found.';
 $string['value_required'] = 'You must supply a value here.';
