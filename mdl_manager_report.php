@@ -93,6 +93,14 @@ if ($mform_data = $mform->get_data()) {
             $fields['Surname'] = $application->lastname;
             $fields['Course'] = $application->course_code . ': ' . $application->course_name;
             $fields['Course_Date'] = $application->course_date;
+            if ($application->self_funding == 1) {
+                $fields['Self_Funding'] = 'Yes';
+            }
+            else {
+                $fields['Self_Funding'] = 'No';
+            }
+            $fields['Funding_Organisation'] = $application->funding_organisation;
+            $fields['Funder_Email'] = $application->funder_email;
 
             if ($application->approval_state == 1) {
                 $fields['Status'] = get_string('rejected', 'local_obu_application');
