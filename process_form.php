@@ -85,11 +85,10 @@ class process_form extends moodleform {
 				$visa_requirement = $data->record->visa_requirement;
 			}
 			if ($data->record->self_funding == '1') {
-				$self_funding_formatted = '&#10004;'; // Tick
+				$self_funding_formatted = '&#10004; YES'; // Tick
 			} else {
-				$self_funding_formatted = '&#10008;'; // Cross
+				$self_funding_formatted = '&#10008; NO'; // Cross
 			}
-			$self_funding_formatted .= ' ' . get_string('self_funding_text', 'local_obu_application');
 			if ($data->record->declaration == '1') {
 				$declaration_formatted = '&#10004;'; // Tick
 			} else {

@@ -45,8 +45,7 @@ class apply_form extends moodleform {
 		// - To let us inform the user that there are validation errors without them having to scroll down further
 		$mform->addElement('static', 'form_errors');
 
-		$mform->addElement('advcheckbox', 'self_funding', get_string('self_funding', 'local_obu_application'),
-			get_string('self_funding_text', 'local_obu_application'), null, array(0, 1));
+        $mform->addElement('select', 'self_funding', get_string('self_funding', 'local_obu_application'), array("0"=>"No", "1"=>"Yes"));
 
 		$mform->addElement('static', 'funding', '');
 		$mform->closeHeaderBefore('funding');
