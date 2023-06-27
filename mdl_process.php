@@ -126,7 +126,11 @@ if ($mform_data = $mform->get_data()) {
 		redirect($home . 'local/obu_application/mdl_amend_details.php?id=' . $application->id); // Amend the personal details
 	} else if (isset($mform_data->amendcoursebutton) && ($mform_data->amendcoursebutton == get_string('amend_course', 'local_obu_application'))) {
 		redirect($home . 'local/obu_application/mdl_amend_course.php?id=' . $application->id); // Amend the course
-	} else if (isset($mform_data->amendfunderbutton) && ($mform_data->amendfunderbutton == get_string('amend_funder', 'local_obu_application'))) {
+	} else if (isset($mform_data->amendsupplementdocbutton) && ($mform_data->amendsupplementdocbutton == get_string('amend_supplement_documents', 'local_obu_application'))) {
+        redirect($home . 'local/obu_application/mdl_amend_supplement.php?id=' . $application->id); // Amend the supplementary document
+    } else if (isset($mform_data->amendvisabutton) && ($mform_data->amendvisabutton == get_string('amend_visa', 'local_obu_application'))) {
+        redirect($home . 'local/obu_application/mdl_amend_visa.php?id=' . $application->id); // Amend the supplementary document
+    } else if (isset($mform_data->amendfunderbutton) && ($mform_data->amendfunderbutton == get_string('amend_funder', 'local_obu_application'))) {
 		redirect($home . 'local/obu_application/mdl_amend_funder.php?id=' . $application->id); // Amend the funder
 	} else if (isset($mform_data->amendfundingbutton) && ($mform_data->amendfundingbutton == get_string('amend_funding', 'local_obu_application'))) {
 		redirect($home . 'local/obu_application/mdl_amend_funding.php?id=' . $application->id); // Amend the funding

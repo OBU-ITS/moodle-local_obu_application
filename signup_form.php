@@ -49,7 +49,7 @@ class registration_form extends moodleform {
         $mform->addElement('header', 'emailandpassword', get_string('emailandpassword', 'local_obu_application'), '');
 		$mform->addElement('static', 'preregistered', get_string('preregistered', 'local_obu_application'));
 
-		$mform->addElement('text', 'email', get_string('email'), 'size="25" maxlength="100"');
+		$mform->addElement('text', 'email', get_string('personalemail', 'local_obu_application'), 'size="25" maxlength="100"');
 		$mform->setType('email', PARAM_RAW_TRIMMED);
 		$mform->addRule('email', get_string('missingemail'), 'required', null, 'server');
 
