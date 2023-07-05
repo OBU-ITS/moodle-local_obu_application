@@ -85,11 +85,10 @@ class process_form extends moodleform {
 				$visa_requirement = $data->record->visa_requirement;
 			}
 			if ($data->record->self_funding == '1') {
-				$self_funding_formatted = '&#10004;'; // Tick
+				$self_funding_formatted = '&#10004; YES'; // Tick
 			} else {
-				$self_funding_formatted = '&#10008;'; // Cross
+				$self_funding_formatted = '&#10008; NO'; // Cross
 			}
-			$self_funding_formatted .= ' ' . get_string('self_funding_text', 'local_obu_application');
 			if ($data->record->declaration == '1') {
 				$declaration_formatted = '&#10004;'; // Tick
 			} else {
@@ -119,9 +118,9 @@ class process_form extends moodleform {
 				}
 			}
 			if ($data->record->fund_programme == '1') {
-				$fund_programme_formatted = '&#10004;'; // Tick
+				$fund_programme_formatted = '&#10004; YES'; // Tick
 			} else {
-				$fund_programme_formatted = '&#10008;'; // Cross
+				$fund_programme_formatted = '&#10008; NO'; // Cross
 			}
 			
 			$fields = [
@@ -424,7 +423,7 @@ class process_form extends moodleform {
 				}
 				if (is_programme($data->record->course_code)) {
 					$mform->addElement('html', '<p></p><strong><i>' . get_string('programme_preamble', 'local_obu_application') . '</i></strong><p></p>');
-					$mform->addElement('advcheckbox', 'fund_programme', get_string('fund_programme', 'local_obu_application'), null, null, array(0, 1));
+                    $mform->addElement('select', 'fund_programme', get_string('fund_programme', 'local_obu_application'), array("0"=>"No", "1"=>"Yes"));
 					$mform->addElement('text', 'fund_module_1', get_string('fund_module', 'local_obu_application'), 'size="8" maxlength="8"');
 					$mform->setType('fund_module_1', PARAM_TEXT);
 					$mform->disabledIf('fund_module_1', 'fund_programme', 'eq', '1');
@@ -516,7 +515,13 @@ class process_form extends moodleform {
 				$mform->setType('comment', PARAM_TEXT);
 				$buttonarray[] = &$mform->createElement('submit', 'rejectbutton', get_string('reject', 'local_obu_application'));
 				if (is_manager() && (($approval_sought == 1) || ($approval_sought == 3))) { // HLS
-					$buttonarray[] = &$mform->createElement('submit', 'amenddetailsbutton', get_string('amend_details', 'local_obu_application'));
+                    if ($data->record->supplement_data){
+                        $buttonarray[] = &$mform->createElement('submit', 'amendsupplementdocbutton', get_string('amend_supplement_documents', 'local_obu_application'));
+                    }
+                    if ($data->record->visa_data){
+                        $buttonarray[] = &$mform->createElement('submit', 'amendvisabutton', get_string('amend_visa', 'local_obu_application'));
+                    }
+                    $buttonarray[] = &$mform->createElement('submit', 'amenddetailsbutton', get_string('amend_details', 'local_obu_application'));
 					$buttonarray[] = &$mform->createElement('submit', 'amendcoursebutton', get_string('amend_course', 'local_obu_application'));
 					if ($data->record->self_funding == '0') {
 						if ($approval_sought == 1) {

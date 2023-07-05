@@ -40,12 +40,17 @@ class supplement_form extends moodleform {
         $data = new stdClass();
 		$data->supplement = $this->_customdata['supplement'];
         $data->fields = $this->_customdata['fields'];
+        $data->applicationId = $this->_customdata['applicationId'];
 		$this->set_data($data->fields);
 		
 		$mform->addElement('hidden', 'supplement', $data->supplement->ref);
 		$mform->setType('supplement', PARAM_RAW);
 		$mform->addElement('hidden', 'version', $data->supplement->version);
 		$mform->setType('version', PARAM_RAW);
+        if ($data->applicationId){
+            $mform->addElement('hidden', 'id', $data->applicationId);
+            $mform->setType('id', PARAM_RAW);
+        }
 		
         // Process the form
 		$fld_start = '<input ';
@@ -146,7 +151,7 @@ class supplement_form extends moodleform {
 				default:
 			}
 			
-			if (array_key_exists('rule', $element)) { // An extra validation rule applies to this field
+			if (!$data->applicationId && array_key_exists('rule', $element)) { // An extra validation rule applies to this field
 				if ($element['rule'] == 'group') { // At least one of this group of fields is required
 					$this->required_group[] = $element['id']; // For our own validation
 				} else {

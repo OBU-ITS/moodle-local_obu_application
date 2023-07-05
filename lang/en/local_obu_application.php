@@ -117,7 +117,7 @@ $string['privacy'] = 'Privacy';
 $string['privacy_text'] = 'Privacy statement';
 
 $string['registration'] = 'Registration';
-$string['registrationsteps'] = 'To access to this site you will firstly need to take a minute to register yourself. Here are the steps: <ol> <li>Fill out the <a href="{$a}">Registration</a> form with your details.</li> <li>An email will be immediately sent to your email address.</li> <li>Read your email, and click on the web link it contains.</li> <li>Your account will be confirmed and you will be logged in.</li> <li>You can now access the site. From now on you will only need to enter your personal email and password to log in to your account.</li> </ol>';
+$string['registrationsteps'] = 'To access this site you will firstly need to take a minute to register yourself. Here are the steps: <ol> <li>Fill out the <a href="{$a}">Registration</a> form with your details.</li> <li>An email will be immediately sent to your email address.</li> <li>Read your email, and click on the web link it contains.</li> <li>Your account will be confirmed and you will be logged in.</li> <li>You can now access the site. From now on you will only need to enter your personal email and password to log in to your account.</li> </ol> Please note, do not use an NHS or previous Brookes email address for registering. The NHS firewall may filter out our replies, which will mean you cannot access the portal to apply. Once you have registered, you can enter your NHS email address in the Contact Details section, and this will become your primary contact email until you have completed enrolment.';
 
 $string['page_content'] = '<h2>How to Apply</h2>
 Using the links above, please:
@@ -145,6 +145,8 @@ $string['status_report'] = 'Status report';
 $string['sr_options'] = 'Status report options';
 $string['funding_report'] = 'Funding report';
 $string['funding_options'] = 'Funding report options';
+$string['manager_report'] = 'Manager report';
+$string['manager_options'] = 'Manager report options';
 $string['courses'] = 'Courses';
 $string['course_list'] = 'Course list';
 $string['all_courses'] = 'All courses';
@@ -154,6 +156,7 @@ $string['course_supplement'] = 'Course (Supplementary Form)';
 $string['organisations'] = 'Organisations';
 $string['organisation_list'] = 'Organisation list';
 $string['manager_list'] = 'Manager list';
+$string['manager'] = 'Manager';
 $string['courses'] = 'Courses';
 $string['applicants'] = 'Applicants';
 $string['delete_applicant'] = 'Delete applicant';
@@ -215,7 +218,9 @@ $string['save_continue'] = 'Save & Continue';
 $string['applicant'] = 'Applicant';
 $string['application'] = 'Application (Ref HLS/{$a})';
 $string['applications'] = 'Applications';
+$string['managers_report'] = 'managersReport';
 $string['application_date'] = 'Applications from';
+$string['application_second_date'] = 'Applications to';
 $string['sort_order'] = 'Sort order';
 $string['reference'] = 'Reference';
 $string['surname'] = 'Surname';
@@ -246,6 +251,7 @@ $string['published'] = 'Published';
 
 $string['application_unavailable'] = 'Sorry, this application is unavailable to you.';
 $string['form_errors'] = 'Sorry, your form has errors (please see below).';
+$string['form_error_second_date'] = 'Application date range invalid.';
 $string['user_not_found'] = 'User not found.';
 $string['application_not_found'] = 'Application not found.';
 $string['value_required'] = 'You must supply a value here.';
@@ -258,7 +264,8 @@ $string['status_processed'] = 'Has been processed.';
 $string['status_withdrawn'] = 'Has been withdrawn.';
 
 $string['preregistered'] = '<strong>NOTE:</strong> If you have a \'brookes.ac.uk\' email address you are pre-registered.  Click <a href="/local/obu_application/mdl_login.php">here</a> to login.';
-$string['emailandpassword'] = 'Please enter your NHS (or preferred) email address (lowercase only) and choose a password';
+$string['emailandpassword'] = 'Please enter a contact email address (not NHS or previous Brookes addresses due to firewall restrictions) and choose a password';
+$string['personalemail'] = 'Personal email (not NHS or Brookes)';
 $string['newemail'] = 'Email (Note - you would need to use any new address to log in)';
 $string['confirm_email'] = 'Confirm email';
 $string['contactdetails'] = 'Contact details';
@@ -329,7 +336,7 @@ $string['course_code'] = 'Course code/name';
 $string['course_date'] = 'Start date';
 $string['studying_preamble'] = 'Please indicate if you are currently studying at Brookes on a PGDIP, PG cert, BSc or Masters Health Care programme:';
 $string['studying'] = 'Currently studying at Brookes?';
-$string['student_number'] = 'Brookes student number';
+$string['student_number'] = 'Brookes student number (for all previous and continuing students)';
 $string['statement_head'] = 'Supporting statement';
 $string['statement'] = 'How will your studies enhance your professional practice?';
 $string['visa_requirement'] = 'Visa Requirement';
@@ -345,17 +352,17 @@ $string['attachments_head'] = 'File attachments';
 $string['attachments'] = 'Attachments';
 $string['apply'] = 'Apply';
 $string['complete_course'] = 'Please complete your course first';
-$string['self_funding'] = 'Self-funding';
-$string['self_funding_text'] = 'Are you a self-funding applicant?';
+$string['self_funding'] = 'Are you a self-funding applicant?';
 $string['declaration'] = 'Declaration';
 $string['conditions'] = 'Conditions of Acceptance';
-$string['declaration_text'] = 'I confirm that the information given in this application is complete and accurate and that no information
-requested or other material information has been omitted. I give my consent to the processing of my data by Oxford Brookes University.
-I have read the {$a} and undertake to be bound by those conditions.';
+$string['declaration_text'] = 'I confirm that the information given in this application is complete and accurate and that no information requested or other material information has been omitted. I give my consent to the processing of my data by Oxford Brookes University. I give my consent to application and progress data being shared with the employer and/or funder listed in my application. I have read the {$a} and undertake to be bound by those conditions.';
 $string['approval_head'] = 'Approval';
 $string['amend_details'] = 'Amend Details';
+$string['amend_supplement_documents'] = 'Amend Supplementary Documents';
+$string['amend_visa'] = 'Amend Visa Documents';
 $string['amend_funder'] = 'Amend Funder';
 $string['amend_course'] = 'Amend Course';
+$string['amend_documents'] = 'Amend Documents';
 $string['amend_funding'] = 'Amend Funding';
 
 $string['funder'] = 'Funder';
