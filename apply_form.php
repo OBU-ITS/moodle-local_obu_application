@@ -70,7 +70,7 @@ class apply_form extends moodleform {
 		
         $mform->addElement('header', 'declaration_head', get_string('declaration', 'local_obu_application'), '');
 		
-		$conditions = '<a href="https://www.brookes.ac.uk/studying-at-brookes/how-to-apply/conditions-of-acceptance/" target="_blank">' . get_string('conditions', 'local_obu_application') . '</a>';
+		$conditions = '<a href="https://www.brookes.ac.uk/about-brookes/structure-and-governance/policies-and-financial-statements/terms-and-conditions-of-enrolment#other" target="_blank">' . get_string('conditions', 'local_obu_application') . '</a>';
 		$mform->addElement('checkbox', 'declaration', get_string('declaration', 'local_obu_application'), get_string('declaration_text', 'local_obu_application', $conditions));
 		$mform->addRule('declaration', null, 'required', null, 'server');
 		
