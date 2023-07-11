@@ -355,9 +355,7 @@ $string['complete_course'] = 'Please complete your course first';
 $string['self_funding'] = 'Are you a self-funding applicant?';
 $string['declaration'] = 'Declaration';
 $string['conditions'] = 'Conditions of Acceptance';
-$string['declaration_text'] = 'I confirm that the information given in this application is complete and accurate and that no information
-requested or other material information has been omitted. I give my consent to the processing of my data by Oxford Brookes University.
-I have read the {$a} and undertake to be bound by those conditions.';
+$string['declaration_text'] = 'I confirm that the information given in this application is complete and accurate and that no information requested or other material information has been omitted. I give my consent to the processing of my data by Oxford Brookes University. I give my consent to application and progress data being shared with the employer and/or funder listed in my application. I have read the {$a} and undertake to be bound by those conditions.';
 $string['approval_head'] = 'Approval';
 $string['amend_details'] = 'Amend Details';
 $string['amend_supplement_documents'] = 'Amend Supplementary Documents';
