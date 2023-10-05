@@ -28,5 +28,5 @@ $plugin->component = 'local_obu_application'; // Full name of the plugin (used f
 $plugin->version  = 2023100401;   // The (date) version of this module + 2 extra digital for daily versions
 $plugin->requires = 2015111604;   // Requires this Moodle version - at least 3.0.4
 $plugin->cron     = 0;
-$plugin->release = 'v2.6.1';
+$plugin->release = 'v2.6.2';
 $plugin->maturity = MATURITY_STABLE;
