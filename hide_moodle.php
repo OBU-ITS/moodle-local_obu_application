@@ -26,7 +26,7 @@
 
 // Set the name for our micro-site
 $SITE->shortname = get_string('plugintitle', 'local_obu_application');
- 
+
 // Set our login cookie suffix (too late for the session cookie)
 $CFG->sessioncookie = 'email';
 
@@ -36,6 +36,7 @@ $CFG->additionalhtmlhead .= 'body.drawer-open-left { margin-left: 0; } #nav-draw
 $CFG->additionalhtmlhead .= '#page-header, #page-footer, .btn.nav-link, .navbar .nav { display: none !important; }'; // Hide other unwanted elements
 $CFG->additionalhtmlhead .= 'a.navbar-brand { pointer-events: none; cursor: default; }'; // Disable the Moodle link
 $CFG->additionalhtmlhead .= '.nav-link { color: #d10373 !important; text-decoration: underline; } .nav-link:hover { color: #86024a !important; text-decoration: none; }'; // Links
+$CFG->additionalhtmlhead .= 'body.hls-cpd.pagelayout-login #page {background-image: url(' . $CFG->httpswwwroot . '/local/obu_application/moodle-hls-login-bg.jpg);}'; // BG
 $CFG->additionalhtmlhead .= '</style>';
 
 // Add our own menu items for logged-in users
@@ -53,7 +54,7 @@ if (!isloggedin()) {
 	' . get_string('apply', 'local_obu_application') . '|/local/obu_application/course.php
 	#####
 	' . get_string('logout', 'local_obu_application') . '|/local/obu_application/logout.php?loginpage=1';
-	
+
 	if (strpos($USER->email, '@brookes.ac.uk') !== false) {
 		$CFG->custommenuitems .= '
 		#####

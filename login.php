@@ -25,7 +25,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
- 
+
 require('../../config.php');
 require_once('./hide_moodle.php');
 require_once('./locallib.php');
@@ -39,6 +39,7 @@ if ($cancel) {
 
 $PAGE->set_url($CFG->httpswwwroot . '/local/obu_application/login.php');
 $PAGE->set_pagelayout('login');
+$PAGE->add_body_class("hls-cpd");
 
 // Initialize variables
 $errormsg = '';
@@ -95,7 +96,7 @@ if ($frm and isset($frm->username)) { // Login WITH cookies
         echo $OUTPUT->footer();
         die;
     }
-	
+
 	// Language setup
 	if (!empty($user->lang)) { // Unset previous session language - use user preference instead
 		unset($SESSION->lang);
@@ -127,11 +128,11 @@ if ($frm and isset($frm->username)) { // Login WITH cookies
 
         // Discard any errors before the last redirect.
         unset($SESSION->loginerrormsg);
-		
+
         // test the session actually works by redirecting to self
         $SESSION->wantsurl = $urltogo;
         redirect(new moodle_url('/local/obu_application/login.php', array('testsession' => $USER->id)));
-		
+
     } else {
         if (empty($errormsg)) {
             if ($errorcode == AUTH_LOGIN_UNAUTHORISED) {

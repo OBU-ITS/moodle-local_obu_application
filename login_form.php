@@ -32,62 +32,52 @@ if (!empty($CFG->loginpasswordautocomplete)) {
     $autocomplete = '';
 }
 ?>
-
-<div class="loginbox clearfix twocolumns">
-	
-    <div class="signuppanel">
-		<?php echo get_config('local_obu_application', 'introduction'); ?>
-		<h2><?php print_string('registration', 'local_obu_application'); ?></h2>
-		<div class="subcontent">
-			<?php print_string('registrationsteps', 'local_obu_application', 'signup.php'); ?>
-			<div class="signupform">
-				<form action="signup.php" method="get" id="register">
-					<div><input type="submit" value="<?php print_string('register', 'local_obu_application'); ?>" /></div>
-				</form>
-			</div>
-		</div>
-		<?php echo get_config('local_obu_application', 'support'); ?>
-    </div>
-
+<div class="loginform">
 	<div class="loginpanel">
-		<h2><?php print_string("login"); ?></h2>
-		<div class="subcontent loginsub">
-			<?php
-				if (!empty($errormsg)) {
-					echo html_writer::start_tag('div', array('class' => 'loginerrors'));
-					echo html_writer::link('#', $errormsg, array('id' => 'loginerrormessage', 'class' => 'accesshide'));
-					echo $OUTPUT->error_text($errormsg);
-					echo html_writer::end_tag('div');
-				}
-			?>
-			<form action="<?php echo $CFG->httpswwwroot; ?>/local/obu_application/login.php" method="post" id="login" <?php echo $autocomplete; ?> >
-				<div class="loginform">
-					<div class="form-label"><label for="username"><?php print_string("email") ?></label></div>
-					<div class="form-input"><input type="text" name="username" id="username" size="50" maxlength="100" value="<?php p($frm->username) ?>" /></div>
-					<div class="clearer"><!-- --></div>
-					<div class="form-label"><label for="password"><?php print_string("password") ?></label></div>
-					<div class="form-input">
-						<input type="password" name="password" id="password" size="12" maxlength="32" value="" <?php echo $autocomplete; ?> />
-						<input type="submit" id="loginbtn" value="<?php print_string("login") ?>" />
-					</div>
-				</div>
-				<div class="clearer"><!-- --></div>
-				<?php if (isset($CFG->rememberusername) and $CFG->rememberusername == 2) { ?>
-					<div class="rememberpass">
-						<input type="checkbox" name="rememberusername" id="rememberusername" value="1" <?php if ($frm->username) {echo 'checked="checked"';} ?> />
-						<label for="rememberusername"><?php print_string('rememberemail', 'local_obu_application') ?></label>
-					</div>
-				<?php } ?>
-				<div class="clearer"><!-- --></div>
-				<div class="forgetpass"><a href="forgot_password.php"><?php print_string('forgotten', 'local_obu_application') ?></a></div>
-			</form>
-			<div class="desc">
-				<?php
-					echo get_string('cookiesenabled');
-					echo $OUTPUT->help_icon('cookiesenabled');
-				?>
-			</div>
-		</div>
+        <?php echo get_config('local_obu_application', 'introduction'); ?>
+		<h1 class="login-heading mb-4"><?php print_string('welcometitle', 'local_obu_application'); ?></h1>
+        <?php
+            if (!empty($errormsg)) {
+                echo html_writer::link('#', $errormsg, array('id' => 'loginerrormessage', 'class' => 'sr-only'));
+                echo html_writer::start_tag('div', array('class' => 'alert alert-danger', 'role' => 'alert'));
+                echo $OUTPUT->error_text($errormsg);
+                echo html_writer::end_tag('div');
+            }
+        ?>
+        <form class="login-form" action="<?php echo $CFG->httpswwwroot; ?>/local/obu_application/login.php" method="post" id="login" <?php echo $autocomplete; ?>>
+            <div class="loginform">
+                <div class="login-form-username form-group">
+                    <label for="username" class="sr-only">
+                        <?php print_string("email") ?>
+                    </label>
+                    <input type="text" name="username" id="username" class="form-control form-control-lg" value="<?php p($frm->username) ?>" placeholder="Username" autocomplete="username">
+                </div>
+                <div class="login-form-password form-group">
+                    <label for="password" class="sr-only"><?php print_string("password") ?></label>
+                    <input type="password" name="password" id="password" value="" class="form-control form-control-lg" placeholder="Password" <?php echo $autocomplete; ?>>
+                </div>
+                <div class="login-form-submit form-group">
+                    <button class="btn btn-primary btn-lg" type="submit" id="loginbtn"><?php print_string("login") ?></button>
+                </div>
+            </div>
+            <div class="login-form-forgotpassword form-group">
+                <a href="forgot_password.php"><?php print_string('forgotten', 'local_obu_application') ?></a>
+            </div>
+        </form>
+        <div class="login-divider"></div>
+        <h3>Don't have an account?</h3>
+        <div class="d-flex" style="gap:10px">
+            <a href="register_applicant.php" class="btn btn-primary" style="width:100%">Register as an applicant</a>
+            <br />
+            <a href="register_funder.php" class="btn btn-primary" style="width:100%">Register as a funder</a>
+        </div>
+        <div class="login-divider"></div>
+        <div class="d-flex">
+<!--            <button type="button" class="btn btn-secondary" data-modal="alert" data-modal-title-str='["cookiesenabled", "core"]'  data-modal-content-str='["cookiesenabled_help_html", "core"]'>--><?php //print_string('cookiesnotice', 'core') ?><!--</button>-->
+            <a href="#" data-modal="alert" data-modal-title-str='["cookiesenabled", "core"]'  data-modal-content-str='["cookiesenabled_help_html", "core"]'><?php print_string('cookiesnotice', 'core') ?></a>
+        </div>
+
+        <?php //echo get_config('local_obu_application', 'support'); ?>
 	</div>
-	
+
 </div>
