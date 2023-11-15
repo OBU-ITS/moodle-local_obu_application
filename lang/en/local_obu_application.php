@@ -172,7 +172,8 @@ $string['invalid_date'] = 'Invalid Date';
 
 $string['rememberemail'] = 'Remember email';
 $string['forgotten'] = 'Forgotten your password? ';
-$string['passwordforgotteninstructions'] = '<p>Only external users not using a Brookes login may use the form below. Please enter the email address you used to register. We will search for your account and send you further instructions on how to regain access to the site.</p>';
+$string['passwordforgotteninstructions'] = '<h2>Forgotten your password?</h2><br><p>Brookes email addresses will NOT work on the application portal.<br>Please enter the email address you used to register previously for the application portal.</p>';
+$string['emailpasswordconfirmmaybesent'] = 'If you supplied a correct username or unique email address you should receive an email shortly. Please also check your spam folders.<br><br>If your previous account has not been  accessed for one year or more, you may need to get your account reactivated to receive your password reset email.<br><br>If you do not receive your emails, or need to reactivate your account, please email <b><u>HLSCPDadmissions@brookes.ac.uk</u></b>';
 
 $string['update_course'] = 'Course Maintenance';
 $string['new_course'] = 'New Course';

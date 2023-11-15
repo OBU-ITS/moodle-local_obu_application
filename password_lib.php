@@ -98,7 +98,7 @@ function password_reset_request() {
         if (!empty($CFG->protectusernames)) {
             // Neither confirm, nor deny existance of any username or email address in database.
             // Print general (non-commital) message.
-            notice(get_string('emailpasswordconfirmmaybesent'), $CFG->wwwroot . '/local/obu_application/index.php');
+            notice(get_string('emailpasswordconfirmmaybesent', 'local_obu_application'), $CFG->wwwroot . '/local/obu_application/index.php');
             die; // Never reached.
         } else if (empty($user)) {
             // Protect usernames is off, and we couldn't find the user with details specified.
