@@ -38,6 +38,7 @@ if ($cancel) {
 }
 
 $PAGE->set_url($CFG->httpswwwroot . '/local/obu_application/login.php');
+$PAGE->set_title("HLS CPD Application Portal", false);
 $PAGE->set_pagelayout('login');
 $PAGE->add_body_class("hls-cpd");
 
@@ -86,7 +87,6 @@ if ($frm and isset($frm->username)) { // Login WITH cookies
 
     // Intercept 'restored' users to provide them with info & reset password
     if (!$user and $frm and is_restored_user($frm->username)) {
-		$PAGE->set_title($CFG->pageheading . ': ' . get_string('restoredaccount'));
         echo $OUTPUT->header();
         echo $OUTPUT->heading(get_string('restoredaccount'));
         echo $OUTPUT->box(get_string('restoredaccountinfo'), 'generalbox boxaligncenter');
@@ -104,7 +104,6 @@ if ($frm and isset($frm->username)) { // Login WITH cookies
 
     if ($user) {
         if (empty($user->confirmed)) { // This account was never confirmed
-			$PAGE->set_title($CFG->pageheading . ': ' . get_string('mustconfirm'));
             echo $OUTPUT->header();
             echo $OUTPUT->heading(get_string('mustconfirm'));
             echo $OUTPUT->box(get_string('emailconfirmsent', '', $user->email), 'generalbox boxaligncenter');
@@ -196,8 +195,6 @@ if (!empty($SESSION->loginerrormsg)) { // We had some errors before redirect, sh
     }
     redirect(new moodle_url('/local/obu_application/login.php'));
 }
-
-$PAGE->set_title($CFG->pageheading . ': ' . get_string('login'));
 
 echo $OUTPUT->header();
 

@@ -93,7 +93,7 @@ if ($mform->is_cancelled()) {
 	}
 }
 
-$PAGE->set_title($CFG->pageheading . ': ' . get_string('registration', 'local_obu_application'));
+$PAGE->set_title("HLS CPD Application Portal", false);
 
 echo $OUTPUT->header();
 

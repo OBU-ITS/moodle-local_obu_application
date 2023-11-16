@@ -36,7 +36,7 @@ require_obu_login();
 $home = new moodle_url('/local/obu_application/');
 $url = $home . 'contact.php';
 
-$PAGE->set_title($CFG->pageheading . ': ' . get_string('contactdetails', 'local_obu_application'));
+$PAGE->set_title("HLS CPD Application Portal", false);
 
 $PAGE->set_url($url);
 

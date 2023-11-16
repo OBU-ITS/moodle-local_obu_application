@@ -294,7 +294,7 @@ $url = new moodle_url('/local/obu_application/mdl_convert_codes.php');
 $heading = 'Convert Codes';
 $PAGE->set_url($url);
 $PAGE->set_pagelayout('standard');
-$PAGE->set_title($heading);
+$PAGE->set_title("HLS CPD Application Portal", false);
 $PAGE->set_heading($heading);
 
 // The page contents

@@ -46,9 +46,9 @@ require_logout();
 
 if ($login) {
     redirect($CFG->wwwroot . '/local/obu_application/login.php');
-}	
+}
 
-$PAGE->set_title($CFG->pageheading . ': Logout');
+$PAGE->set_title("HLS CPD Application Portal", false);
 $CFG->custommenuitems = ''; // Clear the menu
 echo $OUTPUT->header();
 echo get_string('logout_message', 'local_obu_application');

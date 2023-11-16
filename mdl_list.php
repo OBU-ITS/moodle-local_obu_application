@@ -47,7 +47,7 @@ $title = get_string('applications_management', 'local_obu_application');
 $heading = get_string('list_applications', 'local_obu_application');
 $PAGE->set_url($url);
 $PAGE->set_pagelayout('standard');
-$PAGE->set_title($title);
+$PAGE->set_title("HLS CPD Application Portal", false);
 $PAGE->set_heading($title);
 $PAGE->navbar->add($heading);
 

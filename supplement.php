@@ -37,7 +37,7 @@ $apply = $home . 'apply.php';
 
 $context = context_user::instance($USER->id);
 
-$PAGE->set_title($CFG->pageheading . ': ' . get_string('apply', 'local_obu_application'));
+$PAGE->set_title("HLS CPD Application Portal", false);
 
 $PAGE->set_url($url);
 
