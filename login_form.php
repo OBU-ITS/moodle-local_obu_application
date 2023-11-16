@@ -35,7 +35,7 @@ if (!empty($CFG->loginpasswordautocomplete)) {
 <div class="loginform">
 	<div class="loginpanel">
         <?php echo get_config('local_obu_application', 'introduction'); ?>
-		<h1 class="login-heading mb-4"><?php print_string('welcometitle', 'local_obu_application'); ?></h1>
+		<h1 class="mb-4"><?php print_string('welcometitle', 'local_obu_application'); ?></h1>
         <?php
             if (!empty($errormsg)) {
                 echo html_writer::link('#', $errormsg, array('id' => 'loginerrormessage', 'class' => 'sr-only'));

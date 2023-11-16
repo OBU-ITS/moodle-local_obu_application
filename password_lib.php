@@ -138,7 +138,8 @@ function password_reset_request() {
     // DISPLAY FORM.
 
     echo $OUTPUT->header();
-    echo $OUTPUT->box(get_string('passwordforgotteninstructions', 'local_obu_application'), 'generalbox boxwidthnormal boxaligncenter');
+    echo $OUTPUT->heading(get_string('forgotten', 'local_obu_application'), 1, 'mb-4');
+    echo html_writer::tag('p', get_string('passwordforgotteninstructions', 'local_obu_application'));
     $mform->display();
 
     echo $OUTPUT->footer();
