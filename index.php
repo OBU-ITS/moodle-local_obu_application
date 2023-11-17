@@ -41,7 +41,7 @@ require_obu_login();
 $process = new moodle_url('/local/obu_application/process.php');
 
 $PAGE->set_url($CFG->httpswwwroot . '/local/obu_application/index.php');
-$PAGE->set_title("HLS CPD Application Portal", false);
+$PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
 
 echo $OUTPUT->header();
 //echo '<audio autoplay><source src="https://brookes-apps.appspot.com/say.php?' . $USER->firstname . ', please select an option." type="audio/wav"></audio>';

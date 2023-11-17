@@ -99,7 +99,7 @@ if (!isset($_REQUEST['export'])) {
 	$heading = get_string('status_report', 'local_obu_application');
 	$PAGE->set_url($url);
 	$PAGE->set_pagelayout('standard');
-    $PAGE->set_title("HLS CPD Application Portal", false);
+    $PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
 	$PAGE->set_heading($title);
 	$PAGE->navbar->add($heading);
 

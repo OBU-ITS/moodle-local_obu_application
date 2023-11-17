@@ -92,7 +92,7 @@ function application_user_signup($user) { // Derived from email->user_signup
 		print_error('auth_emailnoemail', 'auth_email');
 	}
 
-	$PAGE->set_title("HLS CPD Application Portal", false);
+	$PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
 	echo $OUTPUT->header();
 	notice(get_string('emailconfirmsent', '', $user->email), $CFG->wwwroot . '/local/obu_application/login.php');
 }
@@ -332,7 +332,7 @@ function authenticate_application_user($username, $password, $ignorelockout = fa
 function display_message($header, $message) {
 	global $CFG, $PAGE, $OUTPUT;
 
-	$PAGE->set_title("HLS CPD Application Portal", false);
+	$PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
 	echo $OUTPUT->header();
 	echo $OUTPUT->box_start('generalbox centerpara boxwidthnormal boxaligncenter');
 	echo '<h3>' . $header . '</h3>';

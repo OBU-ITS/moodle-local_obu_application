@@ -64,7 +64,7 @@ $title = get_string('process', 'local_obu_application');
 $heading = get_string('application', 'local_obu_application', $application->id);
 $PAGE->set_url($url);
 $PAGE->set_pagelayout('standard');
-$PAGE->set_title("HLS CPD Application Portal", false);
+$PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
 $PAGE->set_heading($title);
 
 $message = '';

@@ -93,7 +93,7 @@ if ($mform->is_cancelled()) {
 	}
 }
 
-$PAGE->set_title("HLS CPD Application Portal", false);
+$PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
 
 echo $OUTPUT->header();
 
