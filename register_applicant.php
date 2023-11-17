@@ -101,7 +101,7 @@ if ($mform->is_cancelled()) {
 }
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading("Registration", 1, "mb-4");
+echo $OUTPUT->heading(get_string('registration_page_title', 'local_obu_application'), 1, "mb-4");
 
 
 if ($message) {
@@ -109,10 +109,9 @@ if ($message) {
 }
 else {
     echo html_writer::start_tag('ol');
-    echo html_writer::tag('li', "Fill out your details below");
-    echo html_writer::tag('li', "An email will be sent to the email address provided below. Please check spam if it does not appear.");
-    echo html_writer::tag('li', "Click on the web link contained in the email, and follow the instructions.");
-//    echo html_writer::tag('li', get_string('passwordforgotteninstructions', 'local_obu_application'));
+    echo html_writer::tag('li', get_string('registration_notice_1', 'local_obu_application'));
+    echo html_writer::tag('li', get_string('registration_notice_2', 'local_obu_application'));
+    echo html_writer::tag('li', get_string('registration_notice_3', 'local_obu_application'));
     echo html_writer::end_tag('ol');
     $mform->display();
 }
