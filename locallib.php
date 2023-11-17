@@ -23,7 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
- 
+
 require_once($CFG->dirroot . '/user/lib.php');
 require_once($CFG->dirroot . '/user/profile/lib.php');
 require_once($CFG->dirroot . '/local/obu_application/db_update.php');
@@ -31,22 +31,22 @@ require_once($CFG->dirroot . '/local/obu_application/db_update.php');
 // Check if the user is an applications manager
 function is_manager() {
 	global $USER;
-	
+
 	if (is_siteadmin()) {
 		return true;
 	}
-	
+
 	return has_applications_role($USER->id, 4, 5);
 }
 
 // Check if the user is an applications administrator
 function is_administrator() {
 	global $USER;
-	
+
 	if (is_siteadmin()) {
 		return true;
 	}
-	
+
 	return has_applications_role($USER->id, 4);
 }
 
@@ -60,7 +60,7 @@ function get_managers() {
  */
 function get_return_url() {
     global $CFG, $SESSION, $USER;
-	
+
 	if (isset($SESSION->wantsurl) and ((strpos($SESSION->wantsurl, $CFG->wwwroot) === 0) or (strpos($SESSION->wantsurl, str_replace('http://', 'https://', $CFG->wwwroot)) === 0))) {
         $urltogo = $SESSION->wantsurl;    // Because it's an address in this site.
         unset($SESSION->wantsurl);
@@ -81,13 +81,13 @@ function application_user_signup($user) { // Derived from email->user_signup
 		$user->calendartype = $CFG->calendartype;
 	}
 	$user->id = user_create_user($user, false);
-	
+
 	// Save any custom profile field information
 	profile_save_data($user);
-	
+
 	// Save contact information
 	write_contact_details($user->id, $user);
-	
+
 	if (!send_application_confirmation_email($user)) {
 		print_error('auth_emailnoemail', 'auth_email');
 	}
@@ -99,7 +99,7 @@ function application_user_signup($user) { // Derived from email->user_signup
 
 function application_user_confirm($username, $confirmsecret) { // Derived from email->user_confirm
 	global $DB;
-	
+
 	$user = get_complete_user_data('username', $username);
 
 	if (!empty($user)) {
@@ -118,9 +118,9 @@ function application_user_confirm($username, $confirmsecret) { // Derived from e
 }
 
 function application_user_delete($user) {
-	
+
 	delete_applicant($user->id); // Delete our own records first
-	
+
 	return user_delete_user($user);
 }
 
@@ -340,7 +340,7 @@ function display_message($header, $message) {
 	echo $OUTPUT->single_button($CFG->wwwroot . '/local/obu_application/', get_string('continue'));
 	echo $OUTPUT->box_end();
 	echo $OUTPUT->footer();
-	
+
 	exit;
 }
 
@@ -396,15 +396,16 @@ function require_obu_login() {
 
 function get_titles() {
 	$titles = array (
-		'Ms' => 'Ms',
-		'Miss' => 'Miss',
-		'Mrs' => 'Mrs',
+		'' => 'Please select',
 		'Mr' => 'Mr',
+		'Mrs' => 'Mrs',
+		'Miss' => 'Miss',
+		'Ms' => 'Ms',
 		'Dr' => 'Dr',
 		'Prof' => 'Prof'
 	);
-	
-	return $titles;	
+
+	return $titles;
 }
 
 function get_areas() {
@@ -660,8 +661,8 @@ function get_areas() {
 		'ZM' => 'Zambia',
 		'ZW' => 'Zimbabwe'
 	);
-	
-	return $areas;	
+
+	return $areas;
 }
 
 function get_nations() {
@@ -928,12 +929,12 @@ function get_nations() {
 		'ZW' => 'Zimbabwe',
 		'AA' => 'Stateless'
 	);
-	
-	return $nations;	
+
+	return $nations;
 }
 
 function get_course_names() {
-	
+
 	$courses = array();
 	$recs = get_course_records();
 	foreach ($recs as $rec) {
@@ -944,11 +945,11 @@ function get_course_names() {
 
 	asort($courses); // Sort by name
 
-	return $courses;	
+	return $courses;
 }
 
 function get_organisations() {
-	
+
 	$organisations = array();
 	$recs = get_organisation_records();
 	foreach ($recs as $rec) {
@@ -957,8 +958,8 @@ function get_organisations() {
 			$organisations[$rec->id] = $rec->name;
 		}
 	}
-	
-	return $organisations;	
+
+	return $organisations;
 }
 
 function get_dates() {
@@ -966,7 +967,7 @@ function get_dates() {
 	$month = date('m');
 	$year = date('y');
 	$dates = array();
-	
+
 	for ($i = 0; $i <= 12; $i++) {
 		$dates[$months[$month - 1] . $year] = $months[$month - 1] . $year;
 		if ($month < 12) {
@@ -976,7 +977,7 @@ function get_dates() {
 			$month = 1;
 		}
 	}
-	
+
 	return $dates;
 }
 
@@ -986,7 +987,7 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 	$button = '';
 	$manager = is_manager();
 	$administrator = is_administrator();
-	
+
 	// Prepare the submission/approval trail
 	$date = date_create();
 	$format = 'd-m-y H:i';
@@ -1095,7 +1096,7 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 		}
 	}
 
-	// If the state is zero, display the next action required.  Otherwise, the application has already been rejected or processed 
+	// If the state is zero, display the next action required.  Otherwise, the application has already been rejected or processed
 	if ($application->approval_state == 0) { // Awaiting submission/rejection/approval from someone
 		if ($application->approval_level == 0) { // Applicant hasn't submitted the application
 			if ($application->userid == $user_id) {
@@ -1152,7 +1153,7 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 function update_workflow(&$application, $approved = true, $data = null) {
 
 	$approver_email = '';
-	
+
 	// Update the application record
 	if (($application->approval_level == 0) && ($application->manager_email != '')) { // Submitter (with a programme administrator/manager)
 		$application->approval_level = 1;
@@ -1189,7 +1190,7 @@ function update_workflow(&$application, $approved = true, $data = null) {
 			$approver_email = $application->funder_email;
 		} else {
 			$application->approval_level = 3; // Brookes
-			
+
 			// Store the funding details
 			if ($application->funding_organisation != '') { // NHS trust (previously selected by the applicant)
 				$application->funding_method = $data->funding_method;
@@ -1269,7 +1270,7 @@ function update_workflow(&$application, $approved = true, $data = null) {
 		}
 	}
 	update_application($application);
-	
+
 	// Update the stored approval requests and send notification emails
 	update_approver($application, $approver_email);
 }
@@ -1285,7 +1286,7 @@ function update_approver($application, $approver_email) {
 		$approval->request_date = time();
 		write_approval($approval);
 	}
-	
+
 	// Determine the URL to use to link to the application
 	$process = new moodle_url('/local/obu_application/process.php') . '?id=' . $application->id;
 	$mdl_process = new moodle_url('/local/obu_application/mdl_process.php') . '?id=' . $application->id; // 'Mainstream' Moodle
@@ -1314,7 +1315,7 @@ function update_approver($application, $approver_email) {
 //		email_to_user($hls, $applicant, 'Status Update: ' . $application->course_code . ' ' . $application->course_name . ' (' . $applicant->firstname . ' ' . $applicant->lastname . ')',
 //			html_to_text($html), $html);
 	}
-	
+
 	// Notify the next approver (if there is one)
 	if ($approver_email != '') {
 		$approver = get_complete_user_data('email', strtolower($approver_email));
@@ -1331,7 +1332,7 @@ function update_approver($application, $approver_email) {
 			$approver->lastnamephonetic = '';
 			$approver->middlename = '';
 			$approver->alternatename = '';
-		}			
+		}
 		if ($approver->email == $hls->email) { // HLS require the course name and will use 'mainstream' Moodle for their approvals
 /*			$link = '<a href="' . $mdl_process . '">' . $application->course_code . ' ' . $application->course_name . ' (Application Ref HLS/'. $application->id . ')</a>';
 			$html = get_string('request_approval', 'local_obu_application', $link);
@@ -1356,13 +1357,13 @@ function decode_xml($string) {
 
 function get_select_elements($supplement) {
 	$selects = array();
-	
+
 	$fld_start = '<input ';
 	$fld_start_len = strlen($fld_start);
 	$fld_end = '>';
 	$fld_end_len = strlen($fld_end);
 	$offset = 0;
-	
+
 	do {
 		$pos = strpos($supplement, $fld_start, $offset);
 		if ($pos === false) {
@@ -1379,19 +1380,19 @@ function get_select_elements($supplement) {
 			$selects[$element['id']] = $element['name'];
 		}
 	} while(true);
-	
+
 	return $selects;
 }
 
 function get_file_elements($supplement) {
 	$files = array();
-	
+
 	$fld_start = '<input ';
 	$fld_start_len = strlen($fld_start);
 	$fld_end = '>';
 	$fld_end_len = strlen($fld_end);
 	$offset = 0;
-	
+
 	do {
 		$pos = strpos($supplement, $fld_start, $offset);
 		if ($pos === false) {
@@ -1408,7 +1409,7 @@ function get_file_elements($supplement) {
 			$files[] = $element['id'];
 		}
 	} while(true);
-	
+
 	return $files;
 }
 
@@ -1420,12 +1421,12 @@ function split_input_field($input_field) {
 	foreach ($parts as $part) {
 		$pos = strpos($part, '="');
 		$key = substr($part, 0, $pos);
-		
+
 		// We were forced to use 'maxlength' so map it
 		if (isset($params['type']) && ($params['type'] == 'select') && ($key == 'maxlength')) {
 			$key = 'selected';
 		}
-		
+
 		if (($key == 'size') || ($key == 'maxlength')) {
 			if ($options != '') {
 				$options .= ' ';
@@ -1435,7 +1436,7 @@ function split_input_field($input_field) {
 			$pos += 2;
 			$value = substr($part, $pos, (strlen($part) - 1 - $pos));
 			$value = str_replace('"', '', $value);
-			
+
 			// If the 'value' parameter is suffixed then the field (or one of the required group) must be completed
 			if ($key == 'value') {
 				$suffix = substr($value, (strlen($value) - 1));
@@ -1448,7 +1449,7 @@ function split_input_field($input_field) {
 					}
 				}
 			}
-			
+
 			$params[$key] = $value;
 		}
 	}
@@ -1460,7 +1461,7 @@ function split_input_field($input_field) {
 		}
 		$params['options'] = $options;
 	}
-	
+
 	return $params;
 }
 
@@ -1469,7 +1470,7 @@ function pack_supplement_data($fields) {
 	foreach ($fields as $key => $value) {
 		$xml->addChild($key, encode_xml($value));
 	}
-	
+
     return $xml->asXML();
 }
 
@@ -1482,7 +1483,7 @@ function unpack_supplement_data($data, &$fields) {
 			$fields[$key] = (string)$value;
 		}
 	}
-	
+
 	return true;
 }
 
@@ -1491,9 +1492,9 @@ function get_file_link($file_pathnamehash) {
 
 	$fs = get_file_storage();
 	$file = $fs->get_file_by_hash($file_pathnamehash);
-	
+
 	$url = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(), $file->get_itemid(), $file->get_filepath(), $file->get_filename());
-		
+
 	return '<a href="' . $url . '">' . $file->get_filename() . '</a>';
 }
 

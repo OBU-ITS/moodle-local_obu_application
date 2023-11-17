@@ -30,13 +30,16 @@ $SITE->shortname = get_string('plugintitle', 'local_obu_application');
 // Set our login cookie suffix (too late for the session cookie)
 $CFG->sessioncookie = 'email';
 
+$PAGE->add_body_class("hls-cpd");
+
 // Add our own CSS - mainly to hide the standard Moodle page elements
 $CFG->additionalhtmlhead .= '<style>';
 $CFG->additionalhtmlhead .= 'body.drawer-open-left { margin-left: 0; } #nav-drawer { left: -305px; }'; // Hide the standard navigation
 $CFG->additionalhtmlhead .= '#page-header, #page-footer, .btn.nav-link, .navbar .nav { display: none !important; }'; // Hide other unwanted elements
 $CFG->additionalhtmlhead .= 'a.navbar-brand { pointer-events: none; cursor: default; }'; // Disable the Moodle link
 $CFG->additionalhtmlhead .= '.nav-link { color: #d10373 !important; text-decoration: underline; } .nav-link:hover { color: #86024a !important; text-decoration: none; }'; // Links
-$CFG->additionalhtmlhead .= 'body.hls-cpd.pagelayout-login #page {background-image: url(' . $CFG->httpswwwroot . '/local/obu_application/moodle-hls-login-bg.jpg);}'; // BG
+$CFG->additionalhtmlhead .= 'body.hls-cpd.pagelayout-login #page {background: url(' . $CFG->httpswwwroot . '/local/obu_application/moodle-hls-login-bg.jpg) no-repeat center center fixed;background-size:cover;}'; // BG Links
+$CFG->additionalhtmlhead .= 'body.hls-cpd.pagelayout-login.privacy-notice .login-container {max-width:90%}'; // BG
 $CFG->additionalhtmlhead .= '</style>';
 
 // Add our own menu items for logged-in users

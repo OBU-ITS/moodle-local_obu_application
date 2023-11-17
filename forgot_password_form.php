@@ -36,15 +36,20 @@ class login_forgot_password_form extends moodleform {
      */
     function definition() {
         $mform = $this->_form;
+
+        // This 'dummy' element has two purposes:
+        // - To force open the Moodle Forms invisible fieldset outside of any table on the form (corrupts display otherwise)
+        // - To let us inform the user that there are validation errors without them having to scroll down further
+        $mform->addElement('static', 'form_errors');
+
         $mform->setDisableShortforms(true);
 
-        $mform->addElement('header', 'searchbyemail', get_string('searchbyemail'), '');
+        //$mform->addElement('header', 'searchbyemail', get_string('searchbyemail'), '');
 
-        $mform->addElement('text', 'email', get_string('email'));
+        $mform->addElement('text', 'email', get_string('email'), 'size="30" maxlength="100"');
         $mform->setType('email', PARAM_RAW);
 
-        $submitlabel = get_string('search');
-        $mform->addElement('submit', 'submitbuttonemail', $submitlabel);
+        $this->add_action_buttons(true, get_string('search'));
     }
 
     /**
