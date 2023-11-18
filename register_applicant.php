@@ -109,11 +109,14 @@ if ($message) {
 }
 else {
     echo html_writer::start_tag('ol');
-    echo html_writer::tag('li', get_string('registration_notice_1', 'local_obu_application'));
-    echo html_writer::tag('li', get_string('registration_notice_2', 'local_obu_application'));
-    echo html_writer::tag('li', get_string('registration_notice_3', 'local_obu_application'));
+    echo html_writer::tag('li', get_string('registration_head_notice_li_1', 'local_obu_application'));
+    echo html_writer::tag('li', get_string('registration_head_notice_li_2', 'local_obu_application'));
+    echo html_writer::tag('li', get_string('registration_head_notice_li_3', 'local_obu_application'));
     echo html_writer::end_tag('ol');
     $mform->display();
+    echo html_writer::tag('p', get_string('registration_foot_notice_1', 'local_obu_application'));
+    echo html_writer::tag('p', get_string('registration_foot_notice_2', 'local_obu_application'));
+    echo html_writer::tag('p', get_string('registration_foot_notice_3', 'local_obu_application'));
 }
 
 echo $OUTPUT->footer();

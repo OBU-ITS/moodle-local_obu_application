@@ -109,12 +109,14 @@ if ($message) {
 }
 else {
     echo html_writer::start_tag('ol');
-    echo html_writer::tag('li', "Fill out your details below");
-    echo html_writer::tag('li', "An email will be sent to the email address provided below. Please check spam if it does not appear.");
-    echo html_writer::tag('li', "Click on the web link contained in the email, and follow the instructions.");
-//    echo html_writer::tag('li', get_string('passwordforgotteninstructions', 'local_obu_application'));
+    echo html_writer::tag('li', get_string('registration_head_notice_li_1', 'local_obu_application'));
+    echo html_writer::tag('li', get_string('registration_head_notice_li_2', 'local_obu_application'));
+    echo html_writer::tag('li', get_string('registration_head_notice_li_3', 'local_obu_application'));
     echo html_writer::end_tag('ol');
     $mform->display();
+    echo html_writer::tag('p', get_string('registration_foot_notice_1', 'local_obu_application'));
+    echo html_writer::tag('p', get_string('registration_foot_notice_2', 'local_obu_application'));
+    echo html_writer::tag('p', get_string('registration_foot_notice_3', 'local_obu_application'));
 }
 
 echo $OUTPUT->footer();
