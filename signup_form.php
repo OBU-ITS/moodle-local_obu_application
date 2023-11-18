@@ -49,26 +49,26 @@ class registration_form extends moodleform {
 
         $mform->addElement('select', 'title', get_string('title', 'local_obu_application'), $data->titles);
 
-        $mform->addElement('text', 'firstname', get_string('firstnames', 'local_obu_application'), 'size="30" maxlength="100"');
+        $mform->addElement('text', 'firstname', get_string('firstnames', 'local_obu_application'), 'size="40" maxlength="100"');
         $mform->setType('firstname', PARAM_TEXT);
 
-        $mform->addElement('text', 'lastname', get_string('lastname'), 'size="30" maxlength="100"');
+        $mform->addElement('text', 'lastname', get_string('lastname'), 'size="40" maxlength="100"');
         $mform->setType('lastname', PARAM_TEXT);
 
         if($data->show_email_notification) {
             $mform->addElement('html', get_string('emailnotification', 'local_obu_application'));
         }
 
-		$mform->addElement('text', 'email', $data->email_label, 'size="30" maxlength="100"');
+		$mform->addElement('text', 'email', $data->email_label, 'size="40" maxlength="100"');
 		$mform->setType('email', PARAM_RAW_TRIMMED);
         $mform->addRule('email', get_string('invalid_email', 'local_obu_application'), 'email', null, 'client');
 
-		$mform->addElement('text', 'username', get_string('confirm_email', 'local_obu_application'), 'size="30" maxlength="100"');
+		$mform->addElement('text', 'username', get_string('confirm_email', 'local_obu_application'), 'size="40" maxlength="100"');
 		$mform->setType('username', PARAM_RAW_TRIMMED);
         $mform->addRule('username', get_string('invalid_email', 'local_obu_application'), 'email', null, 'client');
 		$mform->addRule(array('username','email'), get_string('invalid_email_compare', 'local_obu_application'), 'compare', 'eq', 'client');
 
-        $mform->addElement('passwordunmask', 'password', get_string('password'), 'size="30" maxlength="32"');
+        $mform->addElement('passwordunmask', 'password', get_string('password'), 'size="40" maxlength="32"');
         $mform->setType('password', PARAM_RAW);
 
         // Use reCAPTCHA if it's setup
