@@ -171,6 +171,14 @@ $string['logout_message'] = '<h1>Thank you.</h1>This application has been passed
 $string['invalid_data'] = 'Invalid Data';
 $string['invalid_date'] = 'Invalid Date';
 
+$string['title_required'] = 'Title required';
+$string['firstname_required'] = 'First name(s) required';
+$string['lastname_required'] = 'Last name required';
+$string['email_required'] = 'Email required';
+$string['username_required'] = 'Confirmation email required';
+$string['password_required'] = 'Password required';
+
+
 $string['rememberemail'] = 'Remember email';
 $string['forgotten'] = 'Forgotten your password?';
 $string['passwordforgotteninstructions'] = 'Brookes email addresses will NOT work on the application portal.<br>Please enter the email address you used to register previously for the application portal.';
