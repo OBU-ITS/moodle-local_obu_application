@@ -38,7 +38,7 @@ $CFG->additionalhtmlhead .= 'body.drawer-open-left { margin-left: 0; } #nav-draw
 $CFG->additionalhtmlhead .= '#page-header, .btn.nav-link, .navbar .nav { display: none !important; }'; // Hide other unwanted elements
 $CFG->additionalhtmlhead .= 'a.navbar-brand { pointer-events: none; cursor: default; }'; // Disable the Moodle link
 $CFG->additionalhtmlhead .= '.nav-link { color: #d10373 !important; text-decoration: underline; } .nav-link:hover { color: #86024a !important; text-decoration: none; }'; // Links
-$CFG->additionalhtmlhead .= 'body.hls-cpd.pagelayout-login #page {background: url(' . $CFG->httpswwwroot . '/local/obu_application/moodle-hls-login-bg.jpg) no-repeat center center fixed;background-size:cover;}'; // BG Links
+$CFG->additionalhtmlhead .= 'body.hls-cpd.pagelayout-login #page {background: none;} body.hls-cpd.pagelayout-login #page:before  { content: ""; position: fixed; width: 100%; height: 100%; top: 0; left: 0; background: url(' . $CFG->httpswwwroot . '/local/obu_application/moodle-hls-login-bg.jpg) no-repeat center center; background-size: cover; will-change: transform; z-index: -1; }'; // BG Links
 $CFG->additionalhtmlhead .= 'body.hls-cpd.pagelayout-login.privacy-notice .login-container {max-width:90%}'; // BG
 $CFG->additionalhtmlhead .= '</style>';
 
