@@ -116,7 +116,6 @@ else {
     $mform->display();
     echo html_writer::tag('p', get_string('registration_foot_notice_1', 'local_obu_application'));
     echo html_writer::tag('p', get_string('registration_foot_notice_2', 'local_obu_application'));
-    echo html_writer::tag('p', get_string('registration_foot_notice_3', 'local_obu_application'));
 }
 
 echo $OUTPUT->footer();
