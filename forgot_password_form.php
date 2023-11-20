@@ -43,7 +43,7 @@ class login_forgot_password_form extends moodleform {
         $mform->setType('email', PARAM_RAW);
         $mform->addRule('email', get_string('invalid_email', 'local_obu_application'), 'email', null, 'client');
 
-        $this->add_action_buttons(true, get_string('search'));
+        $this->add_action_buttons(true, get_string('submit'));
     }
 
     /**
