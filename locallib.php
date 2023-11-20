@@ -137,7 +137,7 @@ function send_application_confirmation_email($user) {
 	$username = str_replace('.', '%2E', $username); // Prevent problems with trailing dots
 	$link = $CFG->wwwroot . '/local/obu_application/confirm.php?data=' . $user->secret . '/' . $username;
 	$data->link = '<a href="' . $link . '">' . $link . '</a>';
-	$message = get_string('emailconfirmation', '', $data);
+	$message = get_string('emailconfirmation', 'local_obu_application', $data);
 	$messagehtml = text_to_html($message, false, false, true);
 
 	$user->mailformat = 1;  // Always send HTML version as well.

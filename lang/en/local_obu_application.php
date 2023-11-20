@@ -122,6 +122,16 @@ $string['privacy_text'] = 'Privacy statement';
 $string['registration'] = 'Registration';
 $string['registrationsteps'] = 'To access this site you will firstly need to take a minute to register yourself. Here are the steps: <ol> <li>Fill out the <a href="{$a}">Registration</a> form with your details.</li> <li>An email will be immediately sent to your email address.</li> <li>Read your email, and click on the web link it contains.</li> <li>Your account will be confirmed and you will be logged in.</li> <li>You can now access the site. From now on you will only need to enter your personal email and password to log in to your account.</li> </ol> Please note, do not use an NHS or previous Brookes email address for registering. The NHS firewall may filter out our replies, which will mean you cannot access the portal to apply. Once you have registered, you can enter your NHS email address in the Contact Details section, and this will become your primary contact email until you have completed enrolment.';
 
+$string['emailconfirmation'] = 'Hi,
+
+A new account has been requested on the Oxford Brookes University HLS CPD Application Portal.
+
+To confirm your new account, please go to this web address:
+
+{$a->link}
+
+Please contact {$a->admin} if you have any issues with this link.';
+
 $string['page_content'] = '<h2>How to Apply</h2>
 Using the links above, please:
 <ul>
