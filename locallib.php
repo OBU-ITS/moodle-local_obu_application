@@ -128,15 +128,15 @@ function send_application_confirmation_email($user) {
 	global $CFG;
 
 	$data = new stdClass();
-	$data->firstname = fullname($user);
+	$data->fullname = fullname($user);
 	$data->sitename = format_string($CFG->pageheading);
 	$data->admin = generate_email_signoff();
 
-	$subject = get_string('emailconfirmationsubject', '', $data->sitename);
+	$subject = get_string('emailconfirmationsubject', 'local_obu_application');
 	$username = urlencode($user->username);
 	$username = str_replace('.', '%2E', $username); // Prevent problems with trailing dots
 	$link = $CFG->wwwroot . '/local/obu_application/confirm.php?data=' . $user->secret . '/' . $username;
-	$data->link = '<a href="' . $link . '">' . $link . '</a>';
+	$data->link = '<a href="' . $link . '">Confirm your account</a>';
 	$message = get_string('emailconfirmation', 'local_obu_application', $data);
 	$messagehtml = text_to_html($message, false, false, true);
 
@@ -334,10 +334,11 @@ function display_message($header, $message) {
 
 	$PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
 	echo $OUTPUT->header();
-	echo $OUTPUT->box_start('generalbox centerpara boxwidthnormal boxaligncenter');
-	echo '<h3>' . $header . '</h3>';
+	echo $OUTPUT->box_start('generalbox boxwidthnormal');
+	echo '<h1 class="mb-4">' . $header . '</h1>';
 	echo '<p>' . $message . '</p>';
-	echo $OUTPUT->single_button($CFG->wwwroot . '/local/obu_application/', get_string('continue'));
+	echo '<div class="login-divider"></div>';
+	echo html_writer::link($CFG->wwwroot . '/local/obu_application/', get_string('continue'), array('class'=>'btn btn-primary'));
 	echo $OUTPUT->box_end();
 	echo $OUTPUT->footer();
 
