@@ -263,16 +263,15 @@ function email_password_change_confirmation($user, $resetrecord) {
     $pwresetmins = isset($CFG->pwresettime) ? floor($CFG->pwresettime / MINSECS) : 30;
 
     $data = new stdClass();
-    $data->firstname = $user->firstname;
-    $data->lastname = $user->lastname;
+    $data->fullname = $user->firstname . " " . $user->lastname;
     $data->username = $user->username;
     $data->sitename = format_string(get_string('plugintitle', 'local_obu_application'));
     $data->link = $CFG->httpswwwroot . '/local/obu_application/forgot_password.php?token=' . $resetrecord->token;
     $data->admin = generate_email_signoff();
     $data->resetminutes = $pwresetmins;
 
-    $message = get_string('emailresetconfirmation', '', $data);
-    $subject = get_string('emailresetconfirmationsubject', '', $data->sitename);
+    $message = get_string('emailresetconfirmation', 'local_obu_application', $data);
+    $subject = get_string('emailresetconfirmationsubject', 'local_obu_application', $data->sitename);
 
     // Directly email rather than using the messaging system to ensure its not routed to a popup or jabber.
     return email_to_user($user, $supportuser, $subject, $message);
