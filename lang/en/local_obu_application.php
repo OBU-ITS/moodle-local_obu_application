@@ -203,8 +203,7 @@ A password reset was requested for your account on the HLS CPD Applications Port
 To reset your password please click the link below:
 <a href="{$a->link}">Reset your password</a>
 
-This link is valid for {$a->resetminutes} minutes from the time this reset was first requested.
-If this password reset was not requested by you, no action is needed.
+This link is valid for {$a->resetminutes} minutes from the time this reset was first requested. If this password reset was not requested by you, no action is needed.
 
 Please contact <a href="mailto:hlscpdadmissions@brookes.ac.uk">hlscpdadmissions@brookes.ac.uk</a> if you have any issues with this link.';
 $string['emailresetconfirmationsubject'] = 'HLS CPD Applications Portal: Password reset request';
