@@ -401,6 +401,7 @@ $string['visa_supplement'] = 'Visa Supplement';
 $string['attachments_head'] = 'File attachments';
 $string['attachments'] = 'Attachments';
 $string['apply'] = 'Apply';
+$string['application'] = 'Application';
 $string['complete_course'] = 'Please complete your course first';
 $string['self_funding'] = 'Are you a self-funding applicant?';
 $string['declaration'] = 'Declaration';

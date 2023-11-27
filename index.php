@@ -52,6 +52,16 @@ $PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
 
 echo $OUTPUT->header();
 
+?>
+    <h1 class="mb-4">Apply for a new module or course</h1>
+    <p>
+        Detailed guidance can be <a href="application_guidance.php" target="_blank">found here</a>.
+    </p>
+    <p>
+        If you have any queries, please contact <a href="mailto:hlscpdadmissions@brookes.ac.uk">hlscpdadmissions@brookes.ac.uk</a>
+    </p>
+    <div id="accordion" class="clearfix collapsible">
+<?php
 
 $nations = get_nations();
 $parameters = [
@@ -68,36 +78,20 @@ $parameters = [
 ];
 
 $contactDetailsForm = new profile_contact_details_form(null, $parameters);
-$contactDetailsForm->display();
 $personalDetailsForm = new profile_personal_details_form(null, $parameters);
-$personalDetailsForm->display();
 $educationalEstablishmentsForm = new profile_educational_establishments_form(null, $parameters);
-$educationalEstablishmentsForm->display();
 $professionalQualificationForm = new profile_professional_qualification_form(null, $parameters);
-$professionalQualificationForm->display();
 $currentEmploymentForm = new profile_current_employment_form(null, $parameters);
-$currentEmploymentForm->display();
 $professionalRegistrationForm = new profile_professional_registration_form(null, $parameters);
-$professionalRegistrationForm->display();
 $criminalRecordForm = new profile_criminal_record_form(null, $parameters);
-$criminalRecordForm->display();
-
-?>
-    <h1 class="mb-4">Apply for a new module or course</h1>
-    <p>
-        Detailed guidance can be <a href="application_guidance.php" target="_blank">found here</a>.
-    </p>
-    <p>
-        If you have any queries, please contact <a href="mailto:hlscpdadmissions@brookes.ac.uk">hlscpdadmissions@brookes.ac.uk</a>
-    </p>
-    <div id="accordion" class="clearfix collapsible">
-<?php
-
-$mform_contact = "Test";
-$mform_general = "Test 2";
 $accordion_items = array(
-    ["title" => "Contact details", "data" => $mform_contact],
-    ["title" => "Personal details", "data" => $mform_general]);
+    ["title" => "Contact details", "data" => $contactDetailsForm],
+    ["title" => "Personal details", "data" => $personalDetailsForm],
+    ["title" => "Education Establishment Attended", "data" => $educationalEstablishmentsForm],
+    ["title" => "Highest Professional Qualification", "data" => $professionalQualificationForm],
+    ["title" => "Current Employment", "data" => $currentEmploymentForm],
+    ["title" => "Professional Registration", "data" => $professionalRegistrationForm],
+    ["title" => "Criminal Record", "data" => $criminalRecordForm]);
 
 $counter = 0;
 foreach ($accordion_items as $accordion_item) {
@@ -120,7 +114,7 @@ foreach ($accordion_items as $accordion_item) {
             </div>
         </div>
         <div id="id_<?php echo $counter ?>_headcontainer" class="fcontainer collapseable collapse" style=""  aria-labelledby="heading<?php echo $counter ?>" data-parent="#accordion">
-            <?php echo $accordion_item["data"] ?>
+            <?php $accordion_item["data"]->display(); ?>
         </div>
 <?php
     $counter++;
