@@ -47,6 +47,7 @@ require_obu_login();
 
 $process = new moodle_url('/local/obu_application/process.php');
 
+$PAGE->add_body_class('limitedwidth');
 $PAGE->set_url($CFG->httpswwwroot . '/local/obu_application/index.php');
 $PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
 
