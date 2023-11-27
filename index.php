@@ -63,7 +63,15 @@ echo $OUTPUT->header();
     <div id="accordion" class="clearfix collapsible">
 <?php
 
+$record = read_applicant($USER->id, false); // May not exist yet
+if (($record === false) || ($record->domicile_code == '') || ($record->domicile_code == 'ZZ')) { // Must complete the contact details first
+    $message = get_string('complete_contact_details', 'local_obu_application');
+} else {
+    $message = '';
+}
+
 $nations = get_nations();
+$areas = get_areas();
 $parameters = [
     'user' => read_user($USER->id),
     'applicant' => read_applicant($USER->id, false),
