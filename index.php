@@ -59,12 +59,20 @@ echo $OUTPUT->header();
         Detailed guidance can be <a href="application_guidance.php" target="_blank">found here</a>.
     </p>
     <p>
-        If you have any queries, please contact <a href="mailto:hlscpdadmissions@brookes.ac.uk">hlscpdadmissions@brookes.ac.uk</a>
+        If you have any queries, please contact <a href="mailto:hlscpdadmissions@brookes.ac.uk">hlscpdadmissions@brookes.ac.uk</a>.
     </p>
     <div id="accordion" class="clearfix collapsible">
 <?php
 
+$record = read_applicant($USER->id, false); // May not exist yet
+if (($record === false) || ($record->domicile_code == '') || ($record->domicile_code == 'ZZ')) { // Must complete the contact details first
+    $message = get_string('complete_contact_details', 'local_obu_application');
+} else {
+    $message = '';
+}
+
 $nations = get_nations();
+$areas = get_areas();
 $parameters = [
     'user' => read_user($USER->id),
     'applicant' => read_applicant($USER->id, false),
