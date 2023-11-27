@@ -25,7 +25,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
- 
+
 require('../../config.php');
 require_once('./hide_moodle.php');
 require_once('./locallib.php');
@@ -44,40 +44,43 @@ $PAGE->set_url($CFG->httpswwwroot . '/local/obu_application/index.php');
 $PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
 
 echo $OUTPUT->header();
-//echo '<audio autoplay><source src="https://brookes-apps.appspot.com/say.php?' . $USER->firstname . ', please select an option." type="audio/wav"></audio>';
 
-// Display any outstanding approvals
-$approvals = get_approvals($USER->email); // get outstanding approval requests
-if ($approvals) {
-	echo '<h2>' . get_string('your_approvals', 'local_obu_application') . '</h2>';
-	foreach ($approvals as $approval) {
-		$application = read_application($approval->application_id);
-		$application_title = $application->firstname . ' ' . $application->lastname . ' (Application Ref HLS/' . $application->id . ')';
-		echo '<h4><a href="' . $process . '?id=' . $application->id . '">' . $application_title . '</a></h4>';
-		get_application_status($USER->id, $application, $text, $button); // get the approval trail and the next action (from the user's perspective)
-		echo $text;
-	}
-} else {
-	echo get_string('page_content', 'local_obu_application');
-}
 
-// Display applications submitted
-$applications = get_applications($USER->id); // get all applications for the user
-if ($applications) {
-	echo '<h2>' . get_string('your_applications', 'local_obu_application') . '</h2>';
-	foreach ($applications as $application) {
-		get_application_status($USER->id, $application, $text, $button); // get the approval trail and the next action (from this user's perspective)
-		$application_title = $application->course_code . ' ' . $application->course_name . ' (Application Ref HLS/' . $application->id . ')';
-		if (($button != 'submit') || $currentuser || $manager) {
-			echo '<h4><a href="' . $process . '?id=' . $application->id . '">' . $application_title . '</a></h4>';
-		} else {
-			echo '<h4>' . $application_title . '</h4>';
-		}
-		echo $text;
-	}
-	echo '<h4>' . get_string('amend_application', 'local_obu_application') . '</h4>';
-} else {
-	echo '<h4>' . get_config('local_obu_application', 'support') . '</h4>';
-}
+
+// TODO : Plan on what to do with this
+//// Display any outstanding approvals
+//$approvals = get_approvals($USER->email); // get outstanding approval requests
+//if ($approvals) {
+//	echo '<h2>' . get_string('your_approvals', 'local_obu_application') . '</h2>';
+//	foreach ($approvals as $approval) {
+//		$application = read_application($approval->application_id);
+//		$application_title = $application->firstname . ' ' . $application->lastname . ' (Application Ref HLS/' . $application->id . ')';
+//		echo '<h4><a href="' . $process . '?id=' . $application->id . '">' . $application_title . '</a></h4>';
+//		get_application_status($USER->id, $application, $text, $button); // get the approval trail and the next action (from the user's perspective)
+//		echo $text;
+//	}
+//} else {
+//	echo get_string('page_content', 'local_obu_application');
+//}
+
+// TODO : Plan on what to do with this
+//// Display applications submitted
+//$applications = get_applications($USER->id); // get all applications for the user
+//if ($applications) {
+//	echo '<h2>' . get_string('your_applications', 'local_obu_application') . '</h2>';
+//	foreach ($applications as $application) {
+//		get_application_status($USER->id, $application, $text, $button); // get the approval trail and the next action (from this user's perspective)
+//		$application_title = $application->course_code . ' ' . $application->course_name . ' (Application Ref HLS/' . $application->id . ')';
+//		if (($button != 'submit') || $currentuser || $manager) {
+//			echo '<h4><a href="' . $process . '?id=' . $application->id . '">' . $application_title . '</a></h4>';
+//		} else {
+//			echo '<h4>' . $application_title . '</h4>';
+//		}
+//		echo $text;
+//	}
+//	echo '<h4>' . get_string('amend_application', 'local_obu_application') . '</h4>';
+//} else {
+//	echo '<h4>' . get_config('local_obu_application', 'support') . '</h4>';
+//}
 
 echo $OUTPUT->footer();
