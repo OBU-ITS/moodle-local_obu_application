@@ -198,16 +198,15 @@ $string['emailpasswordconfirmmaybesent'] = 'If you supplied a correct username o
 
 $string['emailresetconfirmation'] = 'Hi {$a->fullname},
 
-A password reset was requested for your account \'{$a->username}\' on the HLS CPD Applications Portal.
+A password reset was requested for your account on the HLS CPD Applications Portal.
 
-To confirm this request, and set a new password for your account, please go to the following web address:
-<a href="{$a->link}">Change your password</a>
+To reset your password please click the link below:
+<a href="{$a->link}">Reset your password</a>
 
-(This link is valid for {$a->resetminutes} minutes from the time this reset was first requested.)
-
+This link is valid for {$a->resetminutes} minutes from the time this reset was first requested.
 If this password reset was not requested by you, no action is needed.
 
-If you need help, please contact <a href="mailto:hlscpdadmissions@brookes.ac.uk">hlscpdadmissions@brookes.ac.uk</a>';
+Please contact <a href="mailto:hlscpdadmissions@brookes.ac.uk">HLSCPDadmissions@brookes.ac.uk</a> if you have any issues with this link.';
 $string['emailresetconfirmationsubject'] = 'HLS CPD Applications Portal: Password reset request';
 
 $string['update_course'] = 'Course Maintenance';
