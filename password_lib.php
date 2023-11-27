@@ -27,7 +27,7 @@
 
 function password_reset_request() {
     global $DB, $OUTPUT, $CFG, $PAGE;
-	
+
     $systemcontext = context_system::instance();
     $mform = new login_forgot_password_form();
 
@@ -153,7 +153,7 @@ function password_reset_request() {
  */
 function password_set($token) {
     global $DB, $CFG, $OUTPUT, $PAGE, $SESSION;
-	
+
     $pwresettime = isset($CFG->pwresettime) ? $CFG->pwresettime : 1800;
     $sql = "SELECT u.*, upr.token, upr.timerequested, upr.id as tokenid
 		FROM {user} u
@@ -202,10 +202,13 @@ function password_set($token) {
         $setdata->username2 = $user->username;
         $setdata->token = $user->token;
         $mform->set_data($setdata);
+
         echo $OUTPUT->header();
-        echo $OUTPUT->box(get_string('setpasswordinstructions'), 'generalbox boxwidthnormal boxaligncenter');
+        echo $OUTPUT->heading(get_string('setpassword'), 1, 'mb-4');
+        echo html_writer::tag('p', print_password_policy());
         $mform->display();
         echo $OUTPUT->footer();
+
         return;
     } else {
         // User has submitted form.
@@ -239,13 +242,13 @@ function password_set($token) {
  */
 function generate_password_reset ($user) {
     global $DB;
-	
+
     $resetrecord = new stdClass();
     $resetrecord->timerequested = time();
     $resetrecord->userid = $user->id;
     $resetrecord->token = random_string(32);
     $resetrecord->id = $DB->insert_record('user_password_resets', $resetrecord);
-	
+
     return $resetrecord;
 }
 

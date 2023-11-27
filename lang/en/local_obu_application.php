@@ -189,6 +189,7 @@ $string['lastname_required'] = 'Last name required';
 $string['email_required'] = 'Email required';
 $string['username_required'] = 'Confirmation email required';
 $string['password_required'] = 'Password required';
+$string['confirm_password_required'] = 'Confirmation password required';
 
 
 $string['rememberemail'] = 'Remember email';
@@ -286,6 +287,9 @@ $string['publish'] = 'Publish';
 $string['publish_note'] = ' (Note - a published supplement version can no longer be amended)';
 $string['draft'] = 'Draft';
 $string['published'] = 'Published';
+
+$string['newpassword'] = 'New password';
+$string['confirmnewpassword'] = 'Confirm password';
 
 $string['application_unavailable'] = 'Sorry, this application is unavailable to you.';
 $string['form_errors'] = 'Sorry, your form has errors (please see below).';
