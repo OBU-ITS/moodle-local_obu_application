@@ -58,7 +58,7 @@ echo $OUTPUT->header();
         Detailed guidance can be <a href="application_guidance.php" target="_blank">found here</a>.
     </p>
     <p>
-        If you have any queries, please contact <a href="mailto:hlscpdadmissions@brookes.ac.uk">hlscpdadmissions@brookes.ac.uk</a>
+        If you have any queries, please contact <a href="mailto:hlscpdadmissions@brookes.ac.uk">hlscpdadmissions@brookes.ac.uk</a>.
     </p>
     <div id="accordion" class="clearfix collapsible">
 <?php
