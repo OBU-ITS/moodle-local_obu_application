@@ -29,6 +29,13 @@
 require('../../config.php');
 require_once('./hide_moodle.php');
 require_once('./locallib.php');
+require_once ('./profile_contact_details_form.php');
+require_once ('./profile_personal_details_form.php');
+require_once ('./profile_educational_establishments_form.php');
+require_once ('./profile_professional_qualification_form.php');
+require_once ('./profile_current_employment_form.php');
+require_once ('./profile_professional_registration_form.php');
+require_once ('./profile_criminal_record_form.php');
 
 // Try to prevent searching for sites that allow sign-up.
 if (!isset($CFG->additionalhtmlhead)) {
@@ -45,7 +52,34 @@ $PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
 
 echo $OUTPUT->header();
 
+$nations = get_nations();
+$parameters = [
+    'user' => read_user($USER->id),
+    'applicant' => read_applicant($USER->id, false),
+    'titles' => get_titles(),
+    'nations' => $nations,
+    'default_domicile_code' => 'GB',
+    'record' => $record,
+    'areas' => $areas,
+    'default_birth_code' => 'GB',
+    'default_nationality_code' => 'GB',
+    'default_residence_code' => 'XF'
+];
 
+$contactDetailsForm = new profile_contact_details_form(null, $parameters);
+$contactDetailsForm->display();
+$personalDetailsForm = new profile_personal_details_form(null, $parameters);
+$personalDetailsForm->display();
+$educationalEstablishmentsForm = new profile_educational_establishments_form(null, $parameters);
+$educationalEstablishmentsForm->display();
+$professionalQualificationForm = new profile_professional_qualification_form(null, $parameters);
+$professionalQualificationForm->display();
+$currentEmploymentForm = new profile_current_employment_form(null, $parameters);
+$currentEmploymentForm->display();
+$professionalRegistrationForm = new profile_professional_registration_form(null, $parameters);
+$professionalRegistrationForm->display();
+$criminalRecordForm = new profile_criminal_record_form(null, $parameters);
+$criminalRecordForm->display();
 
 // TODO : Plan on what to do with this
 //// Display any outstanding approvals
