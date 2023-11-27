@@ -45,7 +45,52 @@ $PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
 
 echo $OUTPUT->header();
 
+?>
+    <h1 class="mb-4">Apply for a new module or course</h1>
+    <p>
+        Detailed guidance can be <a href="application_guidance.php" target="_blank">found here</a>.
+    </p>
+    <p>
+        If you have any queries, please contact <a href="mailto:hlscpdadmissions@brookes.ac.uk">hlscpdadmissions@brookes.ac.uk</a>
+    </p>
+    <div id="accordion" class="clearfix collapsible">
+<?php
 
+$mform_contact = "Test";
+$mform_general = "Test 2";
+$accordion_items = array(
+    ["title" => "Contact details", "data" => $mform_contact],
+    ["title" => "Personal details", "data" => $mform_general]);
+
+$counter = 0;
+foreach ($accordion_items as $accordion_item) {
+?>
+        <div class="d-flex align-items-center mb-2" id="heading<?php echo $counter ?>">
+            <div class="position-relative d-flex ftoggler align-items-center position-relative mr-1">
+                <a data-toggle="collapse" href="#id_<?php echo $counter ?>_headcontainer" role="button" aria-expanded="true" aria-controls="id_<?php echo $counter ?>_headcontainer" class="btn btn-icon mr-1 icons-collapse-expand stretched-link fheader" id="collapseElement-0">
+                    <span class="expanded-icon icon-no-margin p-2" title="Collapse">
+                        <i class="icon fa fa-chevron-down fa-fw " aria-hidden="true"></i>
+                    </span>
+                    <span class="collapsed-icon icon-no-margin p-2" title="Expand">
+                        <span class="dir-rtl-hide"><i class="icon fa fa-chevron-right fa-fw " aria-hidden="true"></i></span>
+                        <span class="dir-ltr-hide"><i class="icon fa fa-chevron-left fa-fw " aria-hidden="true"></i></span>
+                    </span>
+                    <span class="sr-only"><?php echo $accordion_item["title"] ?></span>
+                </a>
+                <h3 class="d-flex align-self-stretch align-items-center mb-0" aria-hidden="true">
+                    <?php echo $accordion_item["title"] ?>
+                </h3>
+            </div>
+        </div>
+        <div id="id_<?php echo $counter ?>_headcontainer" class="fcontainer collapseable collapse" style=""  aria-labelledby="heading<?php echo $counter ?>" data-parent="#accordion">
+            <?php echo $accordion_item["data"] ?>
+        </div>
+<?php
+    $counter++;
+}
+?>
+    </div>
+<?php
 
 // TODO : Plan on what to do with this
 //// Display any outstanding approvals
