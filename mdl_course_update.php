@@ -42,7 +42,7 @@ $heading = get_string('course_update', 'local_obu_application');
 $PAGE->set_pagelayout('standard');
 $PAGE->set_url($url);
 $PAGE->set_heading($heading);
-$PAGE->set_title($heading);
+$PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
 
 $mform = new mdl_course_update_form();
 

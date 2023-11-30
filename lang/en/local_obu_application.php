@@ -99,6 +99,9 @@ $string['privacy:application'] = 'Application HLS_{$a}';
 
 $string['pluginname'] = 'obu_application';
 $string['plugintitle'] = 'HLS Application';
+$string['browsertitle'] = 'HLS CPD Application Portal';
+
+$string['welcometitle'] = 'Welcome to the Oxford&nbsp;Brookes&nbsp;University HLS&nbsp;CPD&nbsp;Application&nbsp;Portal';
 $string['applications_administration'] = 'Applications administration';
 $string['administration_menu'] = 'Administration menu';
 $string['applications_management'] = 'Applications Management';
@@ -118,6 +121,18 @@ $string['privacy_text'] = 'Privacy statement';
 
 $string['registration'] = 'Registration';
 $string['registrationsteps'] = 'To access this site you will firstly need to take a minute to register yourself. Here are the steps: <ol> <li>Fill out the <a href="{$a}">Registration</a> form with your details.</li> <li>An email will be immediately sent to your email address.</li> <li>Read your email, and click on the web link it contains.</li> <li>Your account will be confirmed and you will be logged in.</li> <li>You can now access the site. From now on you will only need to enter your personal email and password to log in to your account.</li> </ol> Please note, do not use an NHS or previous Brookes email address for registering. The NHS firewall may filter out our replies, which will mean you cannot access the portal to apply. Once you have registered, you can enter your NHS email address in the Contact Details section, and this will become your primary contact email until you have completed enrolment.';
+
+$string['emailconfirmationsubject'] = 'HLS CPD Application Portal account confirmation';
+
+$string['emailconfirmation'] = 'Hi {$a->fullname},
+
+A new account has been requested on the Oxford Brookes University HLS CPD Application Portal.
+
+To confirm your new account please click the link below:
+
+{$a->link}
+
+Please contact <a href="mailto:hlscpdadmissions@brookes.ac.uk">hlscpdadmissions@brookes.ac.uk</a> if you have any issues with this link.';
 
 $string['page_content'] = '<h2>How to Apply</h2>
 Using the links above, please:
@@ -168,9 +183,31 @@ $string['logout_message'] = '<h1>Thank you.</h1>This application has been passed
 $string['invalid_data'] = 'Invalid Data';
 $string['invalid_date'] = 'Invalid Date';
 
+$string['title_required'] = 'Title required';
+$string['firstname_required'] = 'First name(s) required';
+$string['lastname_required'] = 'Last name required';
+$string['email_required'] = 'Email required';
+$string['username_required'] = 'Confirmation email required';
+$string['password_required'] = 'Password required';
+$string['confirm_password_required'] = 'Confirmation password required';
+
+
 $string['rememberemail'] = 'Remember email';
-$string['forgotten'] = 'Forgotten your password? ';
-$string['passwordforgotteninstructions'] = '<p>Only external users not using a Brookes login may use the form below. Please enter the email address you used to register. We will search for your account and send you further instructions on how to regain access to the site.</p>';
+$string['forgotten'] = 'Forgotten your password?';
+$string['passwordforgotteninstructions'] = 'Brookes email addresses will NOT work on the application portal.<br>Please enter the email address you used to register previously for the application portal.';
+$string['emailpasswordconfirmmaybesent'] = 'If you supplied a correct username or unique email address you should receive an email shortly. Please also check your spam folders.<br><br>If your previous account has not been  accessed for one year or more, you may need to get your account reactivated to receive your password reset email.<br><br>If you do not receive your emails, or need to reactivate your account, please email <a href="mailto:hlscpdadmissions@brookes.ac.uk">hlscpdadmissions@brookes.ac.uk</a>';
+
+$string['emailresetconfirmation'] = 'Hi {$a->fullname},
+
+A password reset was requested for your account on the HLS CPD Applications Portal.
+
+To reset your password please click the link below:
+<a href="{$a->link}">Reset your password</a>
+
+This link is valid for {$a->resetminutes} minutes from the time this reset was first requested. If this password reset was not requested by you, no action is needed.
+
+Please contact <a href="mailto:hlscpdadmissions@brookes.ac.uk">hlscpdadmissions@brookes.ac.uk</a> if you have any issues with this link.';
+$string['emailresetconfirmationsubject'] = 'HLS CPD Applications Portal: Password reset request';
 
 $string['update_course'] = 'Course Maintenance';
 $string['new_course'] = 'New Course';
@@ -249,6 +286,9 @@ $string['publish_note'] = ' (Note - a published supplement version can no longer
 $string['draft'] = 'Draft';
 $string['published'] = 'Published';
 
+$string['newpassword'] = 'New password';
+$string['confirmnewpassword'] = 'Confirm password';
+
 $string['application_unavailable'] = 'Sorry, this application is unavailable to you.';
 $string['form_errors'] = 'Sorry, your form has errors (please see below).';
 $string['form_error_second_date'] = 'Application date range invalid.';
@@ -262,10 +302,16 @@ $string['status_not_submitted'] = 'Has not been submitted.';
 $string['status_rejected'] = 'Cannot be processed.';
 $string['status_processed'] = 'Has been processed.';
 $string['status_withdrawn'] = 'Has been withdrawn.';
-
+$string['registration_page_title'] = 'Registration';
+$string['registration_head_notice_li_1'] = 'Fill out your details below.';
+$string['registration_head_notice_li_2'] = 'An email will be sent to the email address provided below. Please check spam if it does not appear.';
+$string['registration_head_notice_li_3'] = 'Click on the web link contained in the email, and follow the instructions.';
+$string['registration_foot_notice_1'] = 'If you have any queries or problems please contact <a href="mailto:hlscpdadmissions@brookes.ac.uk">hlscpdadmissions@brookes.ac.uk</a>.';
+$string['registration_foot_notice_2'] = 'Click here to read our <a href="privacy_notice.php" target="_blank">Privacy Notice for Health and Life Science Online Portal Oxford Brookes University</a>.';
 $string['preregistered'] = '<strong>NOTE:</strong> If you have a \'brookes.ac.uk\' email address you are pre-registered.  Click <a href="/local/obu_application/mdl_login.php">here</a> to login.';
 $string['emailandpassword'] = 'Please enter a contact email address (not NHS or previous Brookes addresses due to firewall restrictions) and choose a password';
-$string['personalemail'] = 'Personal email (not NHS or Brookes)';
+$string['personalemail'] = 'Personal email';
+$string['professionalemail'] = 'Professional email';
 $string['newemail'] = 'Email (Note - you would need to use any new address to log in)';
 $string['confirm_email'] = 'Confirm email';
 $string['contactdetails'] = 'Contact details';
@@ -278,6 +324,9 @@ $string['phone'] = 'Phone no';
 $string['home_phone'] = 'Home phone';
 $string['mobile_phone'] = 'Mobile phone';
 $string['no_phone'] = 'You must enter at least one phone number';
+$string['emailnotification'] = '<p><strong>Please enter a contact email address (not NHS or previous Brookes addresses due to firewall restrictions)</strong></p>';
+$string['invalid_email'] = 'Invalid email address';
+$string['invalid_email_compare'] = 'Email addresses do not match';
 $string['profile'] = 'Personal details';
 $string['address_1'] = 'Home address 1';
 $string['address_2'] = 'Home address 2';

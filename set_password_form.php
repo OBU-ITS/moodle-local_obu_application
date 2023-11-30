@@ -35,41 +35,25 @@ class login_set_password_form extends moodleform {
      * Define the set password form
      */
     public function definition() {
-        global $USER, $CFG;
-        // Prepare a string showing whether the site wants login password autocompletion to be available to user.
-        if (empty($CFG->loginpasswordautocomplete)) {
-            $autocomplete = 'autocomplete="on"';
-        } else {
-            $autocomplete = '';
-        }
-
         $mform = $this->_form;
-        $mform->setDisableShortforms(true);
-        $mform->addElement('header', 'setpassword', get_string('setpassword'), '');
 
         // Include the username in the form so browsers will recognise that a password is being set.
-        $mform->addElement('text', 'username', '', 'style="display: none;" ' . $autocomplete);
+        $mform->addElement('text', 'username', '', 'style="display: none;"');
         $mform->setType('username', PARAM_RAW);
         // Token gives authority to change password.
         $mform->addElement('hidden', 'token', '');
         $mform->setType('token', PARAM_ALPHANUM);
 
         // Visible elements.
-        $mform->addElement('static', 'username2', get_string('username'));
+        $mform->addElement('text', 'username2', get_string('email'), 'disabled size="40" maxlength="100"');
 
-        if (!empty($CFG->passwordpolicy)) {
-            $mform->addElement('static', 'passwordpolicyinfo', '', print_password_policy());
-        }
-        $mform->addElement('password', 'password', get_string('newpassword'), $autocomplete);
-        $mform->addRule('password', get_string('required'), 'required', null, 'client');
+        $mform->addElement('passwordunmask', 'password', get_string('newpassword', 'local_obu_application'), 'size="40" maxlength="32"');
         $mform->setType('password', PARAM_RAW);
 
-        $strpasswordagain = get_string('newpassword') . ' (' . get_string('again') . ')';
-        $mform->addElement('password', 'password2', $strpasswordagain, $autocomplete);
-        $mform->addRule('password2', get_string('required'), 'required', null, 'client');
+        $mform->addElement('passwordunmask', 'password2', get_string('confirmnewpassword', 'local_obu_application'), 'size="40" maxlength="32"');
         $mform->setType('password2', PARAM_RAW);
 
-        $this->add_action_buttons(true);
+        $this->add_action_buttons(true, get_string('setpassword'));
     }
 
     /**
@@ -82,17 +66,20 @@ class login_set_password_form extends moodleform {
         global $USER;
         $errors = parent::validation($data, $files);
 
-        // Ignore submitted username.
+        if (empty($data['password']))
+            $errors['password'] = get_string('password_required', 'local_obu_application');
+
+        if (empty($data['password2']))
+            $errors['password2'] = get_string('confirm_password_required', 'local_obu_application');
+
         if ($data['password'] !== $data['password2']) {
-            $errors['password'] = get_string('passwordsdiffer');
             $errors['password2'] = get_string('passwordsdiffer');
             return $errors;
         }
 
-        $errmsg = ''; // Prevents eclipse warnings.
-        if (!check_password_policy($data['password'], $errmsg)) {
-            $errors['password'] = $errmsg;
-            $errors['password2'] = $errmsg;
+        $error_message = '';
+        if (!check_password_policy($data['password'], $error_message)) {
+            $errors['password'] = $error_message;
             return $errors;
         }
 

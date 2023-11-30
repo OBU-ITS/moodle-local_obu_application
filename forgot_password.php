@@ -35,7 +35,9 @@ require_once('./set_password_form.php');
 $token = optional_param('token', false, PARAM_ALPHANUM);
 
 $PAGE->set_url('/local/obu_application/forgot_password.php');
-$PAGE->set_title($CFG->pageheading . ': ' . get_string('passwordforgotten'));
+$PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
+$PAGE->set_pagelayout('login');
+$PAGE->add_body_class("hls-cpd");
 
 // If you're logged in then you shouldn't be here!
 if (isloggedin() and !isguestuser()) {

@@ -38,7 +38,7 @@ $apply = $home . 'apply.php';
 
 $context = context_user::instance($USER->id);
 
-$PAGE->set_title($CFG->pageheading . ': ' . get_string('apply', 'local_obu_application'));
+$PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
 
 $PAGE->set_url($url);
 

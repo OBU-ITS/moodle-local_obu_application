@@ -27,7 +27,7 @@
 
 function password_reset_request() {
     global $DB, $OUTPUT, $CFG, $PAGE;
-	
+
     $systemcontext = context_system::instance();
     $mform = new login_forgot_password_form();
 
@@ -98,7 +98,7 @@ function password_reset_request() {
         if (!empty($CFG->protectusernames)) {
             // Neither confirm, nor deny existance of any username or email address in database.
             // Print general (non-commital) message.
-            notice(get_string('emailpasswordconfirmmaybesent'), $CFG->wwwroot . '/local/obu_application/index.php');
+            notice(get_string('emailpasswordconfirmmaybesent', 'local_obu_application'), $CFG->wwwroot . '/local/obu_application/index.php');
             die; // Never reached.
         } else if (empty($user)) {
             // Protect usernames is off, and we couldn't find the user with details specified.
@@ -138,7 +138,8 @@ function password_reset_request() {
     // DISPLAY FORM.
 
     echo $OUTPUT->header();
-    echo $OUTPUT->box(get_string('passwordforgotteninstructions', 'local_obu_application'), 'generalbox boxwidthnormal boxaligncenter');
+    echo $OUTPUT->heading(get_string('forgotten', 'local_obu_application'), 1, 'mb-4');
+    echo html_writer::tag('p', get_string('passwordforgotteninstructions', 'local_obu_application'));
     $mform->display();
 
     echo $OUTPUT->footer();
@@ -152,7 +153,7 @@ function password_reset_request() {
  */
 function password_set($token) {
     global $DB, $CFG, $OUTPUT, $PAGE, $SESSION;
-	
+
     $pwresettime = isset($CFG->pwresettime) ? $CFG->pwresettime : 1800;
     $sql = "SELECT u.*, upr.token, upr.timerequested, upr.id as tokenid
 		FROM {user} u
@@ -201,10 +202,13 @@ function password_set($token) {
         $setdata->username2 = $user->username;
         $setdata->token = $user->token;
         $mform->set_data($setdata);
+
         echo $OUTPUT->header();
-        echo $OUTPUT->box(get_string('setpasswordinstructions'), 'generalbox boxwidthnormal boxaligncenter');
+        echo $OUTPUT->heading(get_string('setpassword'), 1, 'mb-4');
+        echo html_writer::tag('p', print_password_policy());
         $mform->display();
         echo $OUTPUT->footer();
+
         return;
     } else {
         // User has submitted form.
@@ -238,13 +242,13 @@ function password_set($token) {
  */
 function generate_password_reset ($user) {
     global $DB;
-	
+
     $resetrecord = new stdClass();
     $resetrecord->timerequested = time();
     $resetrecord->userid = $user->id;
     $resetrecord->token = random_string(32);
     $resetrecord->id = $DB->insert_record('user_password_resets', $resetrecord);
-	
+
     return $resetrecord;
 }
 
@@ -262,16 +266,15 @@ function email_password_change_confirmation($user, $resetrecord) {
     $pwresetmins = isset($CFG->pwresettime) ? floor($CFG->pwresettime / MINSECS) : 30;
 
     $data = new stdClass();
-    $data->firstname = $user->firstname;
-    $data->lastname = $user->lastname;
+    $data->fullname = $user->firstname . " " . $user->lastname;
     $data->username = $user->username;
     $data->sitename = format_string(get_string('plugintitle', 'local_obu_application'));
     $data->link = $CFG->httpswwwroot . '/local/obu_application/forgot_password.php?token=' . $resetrecord->token;
     $data->admin = generate_email_signoff();
     $data->resetminutes = $pwresetmins;
 
-    $message = get_string('emailresetconfirmation', '', $data);
-    $subject = get_string('emailresetconfirmationsubject', '', $data->sitename);
+    $message = get_string('emailresetconfirmation', 'local_obu_application', $data);
+    $subject = get_string('emailresetconfirmationsubject', 'local_obu_application', $data->sitename);
 
     // Directly email rather than using the messaging system to ensure its not routed to a popup or jabber.
     return email_to_user($user, $supportuser, $subject, $message);

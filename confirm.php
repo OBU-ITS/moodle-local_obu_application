@@ -33,6 +33,7 @@ require_once('./locallib.php');
 $data = optional_param('data', '', PARAM_RAW);  // Formatted as secret/username
 
 $PAGE->set_url('/local/obu_application/confirm.php');
+$PAGE->set_pagelayout('login');
 
 if (!isset($data) || empty($data)) {
 	display_message(get_string('error'), get_string('errorwhenconfirming'));

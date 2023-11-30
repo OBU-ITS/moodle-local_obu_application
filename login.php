@@ -25,7 +25,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
- 
+
 require('../../config.php');
 require_once('./hide_moodle.php');
 require_once('./locallib.php');
@@ -38,7 +38,9 @@ if ($cancel) {
 }
 
 $PAGE->set_url($CFG->httpswwwroot . '/local/obu_application/login.php');
+$PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
 $PAGE->set_pagelayout('login');
+$PAGE->add_body_class("hls-cpd");
 
 // Initialize variables
 $errormsg = '';
@@ -85,7 +87,6 @@ if ($frm and isset($frm->username)) { // Login WITH cookies
 
     // Intercept 'restored' users to provide them with info & reset password
     if (!$user and $frm and is_restored_user($frm->username)) {
-		$PAGE->set_title($CFG->pageheading . ': ' . get_string('restoredaccount'));
         echo $OUTPUT->header();
         echo $OUTPUT->heading(get_string('restoredaccount'));
         echo $OUTPUT->box(get_string('restoredaccountinfo'), 'generalbox boxaligncenter');
@@ -95,7 +96,7 @@ if ($frm and isset($frm->username)) { // Login WITH cookies
         echo $OUTPUT->footer();
         die;
     }
-	
+
 	// Language setup
 	if (!empty($user->lang)) { // Unset previous session language - use user preference instead
 		unset($SESSION->lang);
@@ -103,7 +104,6 @@ if ($frm and isset($frm->username)) { // Login WITH cookies
 
     if ($user) {
         if (empty($user->confirmed)) { // This account was never confirmed
-			$PAGE->set_title($CFG->pageheading . ': ' . get_string('mustconfirm'));
             echo $OUTPUT->header();
             echo $OUTPUT->heading(get_string('mustconfirm'));
             echo $OUTPUT->box(get_string('emailconfirmsent', '', $user->email), 'generalbox boxaligncenter');
@@ -127,11 +127,11 @@ if ($frm and isset($frm->username)) { // Login WITH cookies
 
         // Discard any errors before the last redirect.
         unset($SESSION->loginerrormsg);
-		
+
         // test the session actually works by redirecting to self
         $SESSION->wantsurl = $urltogo;
         redirect(new moodle_url('/local/obu_application/login.php', array('testsession' => $USER->id)));
-		
+
     } else {
         if (empty($errormsg)) {
             if ($errorcode == AUTH_LOGIN_UNAUTHORISED) {
@@ -195,8 +195,6 @@ if (!empty($SESSION->loginerrormsg)) { // We had some errors before redirect, sh
     }
     redirect(new moodle_url('/local/obu_application/login.php'));
 }
-
-$PAGE->set_title($CFG->pageheading . ': ' . get_string('login'));
 
 echo $OUTPUT->header();
 

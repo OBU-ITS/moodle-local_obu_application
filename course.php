@@ -39,7 +39,7 @@ $visa = $home . 'visa.php';
 $supplement = $home . 'supplement.php';
 $apply = $home . 'apply.php';
 
-$PAGE->set_title($CFG->pageheading . ': ' . get_string('apply', 'local_obu_application'));
+$PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
 
 $PAGE->set_url($url);
 

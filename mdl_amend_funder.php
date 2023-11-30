@@ -66,7 +66,7 @@ if (($application->approval_level != 1) || ($application->approval_state != 0)) 
 $title = get_string('applications_management', 'local_obu_application');
 $heading = get_string('application', 'local_obu_application', $application->id);
 $PAGE->set_pagelayout('standard');
-$PAGE->set_title($title);
+$PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
 $PAGE->set_heading($title);
 $PAGE->set_url($url);
 $PAGE->navbar->add($heading);

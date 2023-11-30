@@ -53,7 +53,7 @@ if (($user_id == 0) || ($user_id == $USER->id)) {
 	$PAGE->navbar->add($heading);
 }
 
-$PAGE->set_title($title);
+$PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
 $PAGE->set_heading($title);
 
 // The page contents

@@ -37,7 +37,7 @@ $home = new moodle_url('/local/obu_application/');
 $url = $home . 'apply.php';
 $process_url = $home . 'process.php';
 
-$PAGE->set_title($CFG->pageheading . ': ' . get_string('apply', 'local_obu_application'));
+$PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
 
 $PAGE->set_url($url);
 

@@ -94,7 +94,7 @@ if (!isset($_REQUEST['export'])) {
 	$heading = get_string('course_list', 'local_obu_application');
 	$PAGE->set_url($url);
 	$PAGE->set_pagelayout('standard');
-	$PAGE->set_title($title);
+    $PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
 	$PAGE->set_heading($title);
 	$PAGE->navbar->add($heading);
 

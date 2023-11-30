@@ -54,7 +54,7 @@ $title = get_string('applications_administration', 'local_obu_application');
 $heading = get_string('delete_applicant', 'local_obu_application');
 $PAGE->set_pagelayout('standard');
 $PAGE->set_url($url);
-$PAGE->set_title($title);
+$PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
 $PAGE->set_heading($title);
 $PAGE->navbar->add($heading);
 

@@ -89,7 +89,7 @@ if ($applications != null) {
 		} else {
 			$status = 'HLS to approve';
 		}
-			
+
 		$table->data[] = array($ref, $name, $phone, $application->email, $course, $application->course_date, $application->emp_place, $status);
 	}
 }
@@ -99,7 +99,7 @@ if (!isset($_REQUEST['export'])) {
 	$heading = get_string('status_report', 'local_obu_application');
 	$PAGE->set_url($url);
 	$PAGE->set_pagelayout('standard');
-	$PAGE->set_title($title);
+    $PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
 	$PAGE->set_heading($title);
 	$PAGE->navbar->add($heading);
 
@@ -118,6 +118,7 @@ if (!isset($_REQUEST['export'])) {
 	$fp = fopen('php://output', 'w');
 	fputcsv($fp, $table->head, ',');
 	foreach ($table->data as $row) {
+        $row[2] = "=\"" .$row[2]. "\"";
 		fputcsv($fp, $row, ',');
 	}
 	fclose($fp);
