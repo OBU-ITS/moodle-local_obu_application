@@ -101,7 +101,7 @@ $string['pluginname'] = 'obu_application';
 $string['plugintitle'] = 'HLS Application';
 $string['browsertitle'] = 'HLS CPD Application Portal';
 
-$string['welcometitle'] = 'Welcome to the Oxford&nbsp;Brookes&nbsp;University HLS&nbsp;CPD&nbsp;Application&nbsp;Portal';
+$string['welcometitle'] = 'Welcome to the Oxford&nbsp;Brookes&nbsp;University Health &amp; Life Sciences CPD Application&nbsp;Portal';
 $string['applications_administration'] = 'Applications administration';
 $string['administration_menu'] = 'Administration menu';
 $string['applications_management'] = 'Applications Management';
