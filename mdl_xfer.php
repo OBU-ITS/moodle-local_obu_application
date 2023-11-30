@@ -155,10 +155,10 @@ else if ($mform_data = $mform->get_data()) {
 			$fields['Address_From'] = '';
 			if ($application->mobile_phone != '') {
 				$fields['Telephone_Type'] = 'MO';
-				$fields['Telephone'] = $application->mobile_phone;
+				$fields['Telephone'] = "=\"" .$application->mobile_phone. "\"";
 			} else {
 				$fields['Telephone_Type'] = 'HO';
-				$fields['Telephone'] = $application->home_phone;
+				$fields['Telephone'] = "=\"" .$application->home_phone. "\"";
 			}
 			if (strpos($application->email, '@brookes.ac.uk') !== false) {
 				$fields['Email_Type'] = 'BRKS';
@@ -271,7 +271,7 @@ else if ($mform_data = $mform->get_data()) {
 					$fields['PO_Number'] = $application->invoice_ref;
 					$fields['Address'] = $application->invoice_address;
 					$fields['Contact_Email'] = $application->invoice_email;
-					$fields['Phone_No'] = $application->invoice_phone;
+					$fields['Phone_No'] = "=\"" .$application->invoice_phone. "\"";
 					$fields['Contact_Name'] = $application->invoice_contact;
 				}
 				if (($application->self_funding == 1) || !is_programme($application->course_code)) {
