@@ -985,16 +985,12 @@ function get_dates() {
 function get_course_dates() {
 	$months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
-	// Set the current date to the first of November 2023 for testing purposes
-	$currentDate = strtotime('2024-08-01');
+	$month = date('m');
+	$year = date('y');
 
-	// Get the current month and year based on the modified date
-	$month = date('m', $currentDate);
-	$year = date('y', $currentDate);
+	$dates = array('' => 'Please select');
 
-	$dates = array();
-
-	while (count($dates) < 4) {
+	while (count($dates) < 5) {
 		if ($months[$month - 2] == 'SEP') {
 			$dates[$months[$month - 2] . $year] = $months[$month - 2] . $year . " (Sem 1)";
 		} elseif ($months[$month - 2] == 'JAN') {
