@@ -982,6 +982,38 @@ function get_dates() {
 	return $dates;
 }
 
+function get_course_dates() {
+	$months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+
+	// Set the current date to the first of November 2023 for testing purposes
+	$currentDate = strtotime('2024-08-01');
+
+	// Get the current month and year based on the modified date
+	$month = date('m', $currentDate);
+	$year = date('y', $currentDate);
+
+	$dates = array();
+
+	while (count($dates) < 4) {
+		if ($months[$month - 2] == 'SEP') {
+			$dates[$months[$month - 2] . $year] = $months[$month - 2] . $year . " (Sem 1)";
+		} elseif ($months[$month - 2] == 'JAN') {
+			$dates[$months[$month - 2] . $year] = $months[$month - 2] . $year . " (Sem 2)";
+		} elseif ($months[$month - 2] == 'JUN') {
+			$dates[$months[$month - 2] . $year] = $months[$month - 2] . $year . " (Sem 3)";
+		}
+
+		if ($month < 12) {
+			$month++;
+		} else {
+			$year++;
+			$month = 1;
+		}
+	}
+
+	return $dates;
+}
+
 function get_application_status($user_id, $application, &$text, &$button) { // Get the status from the given user's perspective
 
 	$text = '';
