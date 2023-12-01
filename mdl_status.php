@@ -118,7 +118,11 @@ if (!isset($_REQUEST['export'])) {
 	$fp = fopen('php://output', 'w');
 	fputcsv($fp, $table->head, ',');
 	foreach ($table->data as $row) {
-        $row[2] = "=\"" .$row[2]. "\"";
+        if (substr($row[2], 0, 3) == "+44"){
+            $row[2] = "=\"" . "0" . substr($row[2], 3) . "\"";
+        } else{
+            $row[2] = "=\"" .$row[2]. "\"";
+        }
 		fputcsv($fp, $row, ',');
 	}
 	fclose($fp);
