@@ -988,7 +988,7 @@ function get_course_dates() {
 	$month = date('m');
 	$year = date('y');
 
-	$dates = array('' => 'Please select');
+	$dates = array('' => get_string('select', 'local_obu_application'));
 
 	while (count($dates) < 5) {
 		if ($months[$month - 2] == 'SEP') {
