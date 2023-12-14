@@ -984,6 +984,7 @@ function get_dates() {
 
 function get_course_dates() {
 	$months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+	$coursedatesthreshold = 1;
 
 	$month = date('m');
 	$year = date('y');
@@ -991,12 +992,14 @@ function get_course_dates() {
 	$dates = array('' => get_string('select', 'local_obu_application'));
 
 	while (count($dates) < 5) {
-		if ($months[$month - 2] == 'SEP') {
-			$dates[$months[$month - 2] . $year] = $months[$month - 2] . $year . " (Sem 1)";
-		} elseif ($months[$month - 2] == 'JAN') {
-			$dates[$months[$month - 2] . $year] = $months[$month - 2] . $year . " (Sem 2)";
-		} elseif ($months[$month - 2] == 'JUN') {
-			$dates[$months[$month - 2] . $year] = $months[$month - 2] . $year . " (Sem 3)";
+		$tempmonthindex = ($month - 1) - $coursedatesthreshold;
+
+		if ($months[$tempmonthindex] == 'SEP') {
+			$dates[$months[$tempmonthindex] . $year] = $months[$tempmonthindex] . $year . " (Sem 1)";
+		} elseif ($months[$tempmonthindex] == 'JAN') {
+			$dates[$months[$tempmonthindex] . $year] = $months[$tempmonthindex] . $year . " (Sem 2)";
+		} elseif ($months[$tempmonthindex] == 'JUN') {
+			$dates[$months[$tempmonthindex] . $year] = $months[$tempmonthindex] . $year . " (Sem 3)";
 		}
 
 		if ($month < 12) {
