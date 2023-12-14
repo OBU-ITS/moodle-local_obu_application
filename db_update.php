@@ -752,17 +752,15 @@ function get_applications_for_funder_range($organisation_username, $application_
     global $DB;
 
     $sql = 'SELECT * FROM {local_obu_application} WHERE application_date >= ? AND application_date < ? AND ';
-    if ($funding_id == 0) {
-        $sql .= 'self_funding = 1';
-    } else {
-        $sql .= 'funding_id = ?';
-    }
+    $sql .= 'self_funding = 0 AND ';
+    $sql .= 'funding_id = ?';
+
     if ($sort_order != '') {
         $sql .= ' ORDER BY ' . $sort_order;
     }
     $sql .= ';';
 
-    return $DB->get_records_sql($sql, array($application_from_date, $application_to_date, $funding_id));
+    return $DB->get_records_sql($sql, array($application_from_date, $application_to_date, $organisation_username));
 }
 
 function count_applications_for_course($code) {

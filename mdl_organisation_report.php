@@ -69,7 +69,14 @@ if ($mform_data = $mform->get_data()) {
     if ($mform_data->application_date == $mform_data->application_second_date){
         $mform_data->application_second_date = strtotime('+1 day', $mform_data->application_second_date);
     }
-    $applications = get_applications_for_funder_range($mform_data->organisation, $mform_data->application_date, $mform_data->application_second_date); // Get the applications
+    $applications = get_applications_for_funder_range($mform_data->organisation1, $mform_data->application_date, $mform_data->application_second_date); // Get the applications
+    if ($mform_data->organisation2 != get_string('select', 'local_obu_application')){
+        $applications += get_applications_for_funder_range($mform_data->organisation2, $mform_data->application_date, $mform_data->application_second_date);
+    }
+    if ($mform_data->organisation3 != get_string('select', 'local_obu_application')){
+        $applications += get_applications_for_funder_range($mform_data->organisation3, $mform_data->application_date, $mform_data->application_second_date);
+    }
+
     if (empty($applications)) {
         $message = get_string('no_applications', 'local_obu_application');
     } else {
@@ -79,6 +86,9 @@ if ($mform_data = $mform->get_data()) {
         $fp = fopen('php://output', 'w');
         $first_record = true;
         foreach ($applications as $application) {
+            if ($application->self_funding == 1){
+                continue;
+            }
             $fields = array();
             $fields['Form_Id'] = 'HLS/' . $application->id;
             $fields['Title'] = $application->title;
@@ -86,12 +96,6 @@ if ($mform_data = $mform->get_data()) {
             $fields['Surname'] = $application->lastname;
             $fields['Course'] = $application->course_code . ': ' . $application->course_name;
             $fields['Course_Date'] = $application->course_date;
-            if ($application->self_funding == 1) {
-                $fields['Self_Funding'] = 'Yes';
-            }
-            else {
-                $fields['Self_Funding'] = 'No';
-            }
             $fields['Funding_Organisation'] = $application->funding_organisation;
             $fields['Funder_Email'] = $application->funder_email;
 

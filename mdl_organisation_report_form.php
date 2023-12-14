@@ -51,9 +51,15 @@ class mdl_organisation_report_form extends moodleform {
         // - To let us inform the user that there are validation errors without them having to scroll down further
         $mform->addElement('static', 'form_errors');
 
-        // Organisation
-        $mform->addElement('autocomplete', 'organisation', get_string('organisation', 'local_obu_application'), $organisationOptions, null);
-        $mform->addRule('organisation', get_string('required'), 'required');
+        // Organisation 1
+        $mform->addElement('autocomplete', 'organisation1', get_string('organisation1', 'local_obu_application'), $organisationOptions, null);
+        $mform->addRule('organisation1', get_string('required'), 'required');
+
+        // Organisation 2
+        $mform->addElement('autocomplete', 'organisation2', get_string('organisation2', 'local_obu_application'), $organisationOptions, null);
+
+        // Organisation 3
+        $mform->addElement('autocomplete', 'organisation3', get_string('organisation3', 'local_obu_application'), $organisationOptions, null);
 
         // Date
         $mform->addElement('date_selector', 'application_date', get_string('application_date', 'local_obu_application'));
