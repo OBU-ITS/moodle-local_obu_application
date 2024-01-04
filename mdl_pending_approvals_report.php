@@ -26,7 +26,7 @@
 
 require_once('../../config.php');
 require_once('./locallib.php');
-require_once('./mdl_pending_applications_report_form.php');
+require_once('./mdl_pending_approvals_report_form.php');
 
 require_login();
 
@@ -43,10 +43,10 @@ if (!is_manager()) {
 }
 
 $dir = $home . 'local/obu_application/';
-$url = $dir . 'mdl_pending_applications_report.php';
+$url = $dir . 'mdl_pending_approvals_report.php';
 
 $title = get_string('applications_management', 'local_obu_application');
-$heading = get_string('pending_applications_report', 'local_obu_application');
+$heading = get_string('pending_approval_report', 'local_obu_application');
 $PAGE->set_url($url);
 $PAGE->set_pagelayout('standard');
 $PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
@@ -55,18 +55,19 @@ $PAGE->navbar->add($heading);
 
 $message = '';
 
-$managers = array();
-$managers[0] = "";
+$admins = array();
+$admins[0] = "";
+$admins[1] = "All admins";
 $mgrs = get_managers();
 foreach ($mgrs as $mgr) {
-    $managers[$mgr->username] = $mgr->firstname . " " . $mgr->lastname . " (" . $mgr->username . ")";
+    $admins[$mgr->username] = $mgr->firstname . " " . $mgr->lastname . " (" . $mgr->username . ")";
 }
 
 $parameters = [
-    'managers' => $managers
+    'admins' => $admins
 ];
 
-$mform = new mdl_pending_applications_report_form(null, $parameters);
+$mform = new mdl_pending_approvals_report_form(null, $parameters);
 
 if ($mform->is_cancelled()) {
     redirect($back);
@@ -76,13 +77,20 @@ if ($mform_data = $mform->get_data()) {
     if ($mform_data->application_date == $mform_data->application_second_date){
         $mform_data->application_second_date = strtotime('+1 day', $mform_data->application_second_date);
     }
-    $applications = get_applications_for_manager($mform_data->manager, $mform_data->application_date, $mform_data->application_second_date); // Get the applications
+    if ($mform_data->admin == "All admins"){
+        foreach ($mgrs as $mgr) {
+            $applications += get_applications_for_manager($mgr->username, $mform_data->application_date, $mform_data->application_second_date); // Get the applications for all admins
+        }
+    } else{
+        $applications = get_applications_for_manager($mform_data->admin, $mform_data->application_date, $mform_data->application_second_date); // Get the applications for specific admin
+    }
+
     if (empty($applications)) {
         $message = get_string('no_applications', 'local_obu_application');
     } else {
         header('Content-Type: text/csv');
-        header('Content-Disposition: attachment;filename=HLS_' . get_string('managers_report', 'local_obu_application') . '_' .
-            $mform_data->manager . '_' . date("Ymd", $mform_data->application_date) . '-' . date("Ymd", $mform_data->application_second_date) . '.csv');
+        header('Content-Disposition: attachment;filename=HLS_' . get_string('pending_approvals_report', 'local_obu_application') . '_' .
+            $mform_data->admin . '_' . date("Ymd", $mform_data->application_date) . '-' . date("Ymd", $mform_data->application_second_date) . '.csv');
         $fp = fopen('php://output', 'w');
         $first_record = true;
         foreach ($applications as $application) {

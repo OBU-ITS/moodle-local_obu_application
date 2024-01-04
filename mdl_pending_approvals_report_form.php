@@ -30,7 +30,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/formslib.php');
 
-class mdl_pending_applications_report_form extends moodleform {
+class mdl_pending_approvals_report_form extends moodleform {
 
     function definition() {
         $mform =& $this->_form;
@@ -38,7 +38,7 @@ class mdl_pending_applications_report_form extends moodleform {
         $data = new stdClass();
         $data->admins = $this->_customdata['admins'];
 
-        $mform->addElement('html', '<h2>' . get_string('pending_applications_options', 'local_obu_application') . '</h2>');
+        $mform->addElement('html', '<h2>' . get_string('pending_approval_options', 'local_obu_application') . '</h2>');
 
         // This 'dummy' element has two purposes:
         // - To force open the Moodle Forms invisible fieldset outside of any table on the form (corrupts display otherwise)
@@ -46,8 +46,8 @@ class mdl_pending_applications_report_form extends moodleform {
         $mform->addElement('static', 'form_errors');
 
         // Manager
-        $mform->addElement('autocomplete', 'manager', get_string('manager', 'local_obu_application'), $data->managers, null);
-        $mform->addRule('manager', get_string('required'), 'required');
+        $mform->addElement('autocomplete', 'admin', get_string('admin', 'local_obu_application'), $data->admins, null);
+        $mform->addRule('admin', get_string('required'), 'required');
 
         // Date
         $mform->addElement('date_selector', 'application_date', get_string('application_date', 'local_obu_application'));
