@@ -75,7 +75,12 @@ if ($mform->is_cancelled()) {
     redirect($back);
 } 
 else if ($mform_data = $mform->get_data()) {
-	$applicants = get_applicants_by_name($mform_data->lastname);
+    $applicants = get_applicants_by_first_name($mform_data->name);
+    if (count($applicants) == 1) {
+        $url = $dir . 'mdl_' . $action . '.php?userid=' . array_values($applicants)[0]->userid;
+        redirect($url);
+    }
+	$applicants = get_applicants_by_last_name($mform_data->name);
 	if (count($applicants) == 1) {
 		$url = $dir . 'mdl_' . $action . '.php?userid=' . array_values($applicants)[0]->userid;
 		redirect($url);

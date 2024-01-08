@@ -40,7 +40,7 @@ class mdl_applicant_form extends moodleform {
 		$mform->addElement('hidden', 'action', $data->action);
 		$mform->setType('action', PARAM_RAW);
 
-		$mform->addElement('text', 'lastname', get_string('lastname'), 'size="30" maxlength="100"');
+		$mform->addElement('text', 'name', get_string('name'), 'size="30" maxlength="100"');
 
         $this->add_action_buttons(true, get_string('continue', 'local_obu_application'));
     }
@@ -48,12 +48,15 @@ class mdl_applicant_form extends moodleform {
 	function validation($data, $files) {
 		$errors = parent::validation($data, $files); // Ensure we don't miss errors from any higher-level validation
 		
-		if ($data['lastname'] == '') {
-			$errors['lastname'] = get_string('value_required', 'local_obu_application');
+		if ($data['name'] == '') {
+			$errors['name'] = get_string('value_required', 'local_obu_application');
 		} else {
-			$applicants = get_applicants_by_name($data['lastname']);
+			$applicants = get_applicants_by_first_name($data['name']);
 			if (count($applicants) == 0) {
-				$errors['lastname'] = get_string('user_not_found', 'local_obu_application');
+                $applicants = get_applicants_by_last_name($data['name']);
+                if (count($applicants) == 0) {
+                    $errors['name'] = get_string('user_not_found', 'local_obu_application');
+                }
 			}
 		}
 		

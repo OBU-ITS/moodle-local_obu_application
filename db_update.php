@@ -360,7 +360,19 @@ function write_user($user_id, $form_data) {
 	profile_save_data($user); // Save custom profile data
 }
 
-function get_applicants_by_name($lastname) {
+function get_applicants_by_first_name($firstname) {
+    global $DB;
+
+    $sql = 'SELECT a.userid, u.firstname, u.lastname '
+        . 'FROM {local_obu_applicant} a '
+        . 'JOIN {user} u ON u.id = a.userid '
+        . 'WHERE u.firstname LIKE "' . $firstname . '%" '
+        . 'ORDER BY u.firstname, u.lastname, a.userid';
+
+    return $DB->get_records_sql($sql, array());
+}
+
+function get_applicants_by_last_name($lastname) {
     global $DB;
 
 	$sql = 'SELECT a.userid, u.firstname, u.lastname '
