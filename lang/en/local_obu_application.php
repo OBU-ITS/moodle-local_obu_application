@@ -328,6 +328,7 @@ $string['title'] = 'Title';
 $string['firstnames'] = 'First name(s)';
 $string['name'] = 'Name';
 $string['nameref'] = 'Name/Reference Number';
+$string['namerefsearch'] = 'Search by name or reference number';
 $string['phone'] = 'Phone no';
 $string['home_phone'] = 'Home phone';
 $string['mobile_phone'] = 'Mobile phone';

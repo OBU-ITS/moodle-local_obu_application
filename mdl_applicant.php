@@ -55,7 +55,7 @@ if ($role == 'administration') {
 	$back = $home . 'course/view.php?id=' . $applications_course;
 }
 
-$heading = get_string('applicants', 'local_obu_application');
+$heading = get_string('namerefsearch', 'local_obu_application');
 $PAGE->set_url($url);
 $PAGE->set_pagelayout('standard');
 $PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
