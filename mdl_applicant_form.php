@@ -40,7 +40,7 @@ class mdl_applicant_form extends moodleform {
 		$mform->addElement('hidden', 'action', $data->action);
 		$mform->setType('action', PARAM_RAW);
 
-		$mform->addElement('text', 'nameref', get_string('nameref'), 'size="30" maxlength="100"');
+		$mform->addElement('text', 'nameref', get_string('nameref', 'local_obu_application'), 'size="30" maxlength="100"');
 
         $this->add_action_buttons(true, get_string('continue', 'local_obu_application'));
     }
