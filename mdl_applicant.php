@@ -76,19 +76,20 @@ if ($mform->is_cancelled()) {
 } 
 else if ($mform_data = $mform->get_data()) {
     if (preg_match('~[0-9]+~', $mform_data->nameref)) {
-        $url = $dir . 'mdl_process.php?source=mdl_applicant.php&id=' . $mform_data->id;
+        $url = $dir . 'mdl_process.php?source=mdl_applicant.php&id=' . $mform_data->nameref;
         redirect($url);
     }
-    $applicants = get_applicants_by_first_name($mform_data->nameref);
+    $applicants = get_applicants_by_last_name($mform_data->nameref);
     if (count($applicants) == 1) {
         $url = $dir . 'mdl_' . $action . '.php?userid=' . array_values($applicants)[0]->userid;
         redirect($url);
+    } else if (count($applicants) == 0){
+        $applicants = get_applicants_by_first_name($mform_data->nameref);
+        if (count($applicants) == 1) {
+            $url = $dir . 'mdl_' . $action . '.php?userid=' . array_values($applicants)[0]->userid;
+            redirect($url);
+        }
     }
-	$applicants = get_applicants_by_last_name($mform_data->nameref);
-	if (count($applicants) == 1) {
-		$url = $dir . 'mdl_' . $action . '.php?userid=' . array_values($applicants)[0]->userid;
-		redirect($url);
-	}
 }	
 
 echo $OUTPUT->header();
