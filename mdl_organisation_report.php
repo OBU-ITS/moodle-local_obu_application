@@ -66,16 +66,18 @@ if ($mform->is_cancelled()) {
 }
 
 if ($mform_data = $mform->get_data()) {
+    $applications = [];
+
     if ($mform_data->application_date == $mform_data->application_second_date){
         $mform_data->application_second_date = strtotime('+1 day', $mform_data->application_second_date);
     }
-    $applications = get_applications_for_funder_range($mform_data->organisation1, $mform_data->application_date, $mform_data->application_second_date); // Get the applications
-    if ($mform_data->organisation2 != get_string('select', 'local_obu_application')){
-        $applications += get_applications_for_funder_range($mform_data->organisation2, $mform_data->application_date, $mform_data->application_second_date);
-    }
-    if ($mform_data->organisation3 != get_string('select', 'local_obu_application')){
-        $applications += get_applications_for_funder_range($mform_data->organisation3, $mform_data->application_date, $mform_data->application_second_date);
-    }
+    $applications = get_applications_for_organisation_range($mform_data->organisation1, $mform_data->application_date, $mform_data->application_second_date);
+    //if ($mform_data->organisation2 != get_string('select', 'local_obu_application') && $mform_data->organisation2 != "No selection"){
+        $applications = get_applications_for_organisation_range($mform_data->organisation2, $mform_data->application_date, $mform_data->application_second_date);
+    //}
+    //if ($mform_data->organisation3 != get_string('select', 'local_obu_application') && $mform_data->organisation3 != "No selection"){
+        $applications = get_applications_for_organisation_range($mform_data->organisation3, $mform_data->application_date, $mform_data->application_second_date);
+    //}
 
     if (empty($applications)) {
         $message = get_string('no_applications', 'local_obu_application');
