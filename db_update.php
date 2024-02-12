@@ -763,14 +763,13 @@ function get_applications_for_manager($manager_username, $application_from_date 
 function get_applications_for_organisation_range($organisation, $application_from_date = 0, $application_to_date = 0, $sort_order = '') {
     global $DB;
 
-    $sql = 'SELECT * FROM {local_obu_application} WHERE application_date >= ? AND application_date < ? AND funding_organisation LIKE ?';
+    $sql = 'SELECT * FROM {local_obu_application} WHERE application_date >= ? AND application_date < ? AND funding_organisation = ?';
 
     if ($sort_order != '') {
         $sql .= ' ORDER BY ' . $sort_order;
     }
     $sql .= ';';
-
-    return $DB->get_records_sql($sql, array($application_from_date, $application_to_date, $organisation->organisation_name . "%"));
+    return $DB->get_records_sql($sql, array($application_from_date, $application_to_date, $organisation));
 }
 
 function count_applications_for_course($code) {
