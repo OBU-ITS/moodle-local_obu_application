@@ -68,6 +68,7 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading($heading);
 
 $process = new moodle_url('/local/obu_application/mdl_process.php');
+$redirect = new moodle_url('/local/obu_application/mdl_redirect.php');
 
 $applications = get_applications($user->id); // get all applications for the given user
 foreach ($applications as $application) {
@@ -79,6 +80,9 @@ foreach ($applications as $application) {
 		echo '<h4>' . $application_title . '</h4>';
 	}
 	echo $text;
+    if (has_capability('local/obu_application:update', context_system::instance()) && ($application->approval_level < 3)) { // Can't redirect away from final HLS approval/processing
+        echo '<p><a href="' . $redirect . '?id=' . $application->id . '">' . get_string('redirect_application', 'local_obu_application') . '</a></p>';
+    }
 }
 
 echo $OUTPUT->footer();

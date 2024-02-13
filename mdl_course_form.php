@@ -42,7 +42,7 @@ class mdl_course_form extends moodleform {
 		$data->record = $this->_customdata['record'];
 		$data->administrator = $this->_customdata['administrator'];
 		$data->applications = $this->_customdata['applications'];
-		
+
 		if ($data->record != null) {
 			$fields = [
 				'code' => $data->record->code,
@@ -61,25 +61,25 @@ class mdl_course_form extends moodleform {
 			];
 			$this->set_data($fields);
 		}
-		
+
 		$mform->addElement('html', '<h2>' . get_string('update_course', 'local_obu_application') . '</h2>');
 
 		// If we don't have a course yet, let them select one
 		if ($data->id == '') {
-			$select = $mform->addElement('select', 'id', get_string('course', 'local_obu_application'), $data->courses, null);
+			$select = $mform->addElement('autocomplete', 'id', get_string('course', 'local_obu_application'), $data->courses, null);
 			$select->setSelected(0);
 			$this->add_action_buttons(true, get_string('continue', 'local_obu_application'));
 			return;
 		}
-		
+
 		$mform->addElement('hidden', 'id', $data->id);
 		$mform->setType('id', PARAM_RAW);
-		
+
 		// This 'dummy' element has two purposes:
 		// - To force open the Moodle Forms invisible fieldset outside of any table on the form (corrupts display otherwise)
 		// - To let us inform the user that there are validation errors without them having to scroll down further
 		$mform->addElement('static', 'form_errors');
-		
+
 		if ($data->delete) {
 			$mform->addElement('static', 'code', get_string('code', 'local_obu_application'));
 			$mform->addElement('static', 'name', get_string('name', 'local_obu_application'));
@@ -165,7 +165,7 @@ class mdl_course_form extends moodleform {
 				}
 			}
 		}
-		
+
 		if (!empty($errors)) {
 			$errors['form_errors'] = get_string('form_errors', 'local_obu_application');
 		}
