@@ -80,11 +80,11 @@ if (($application->approval_state == 0) && ($application->approval_level == 0)) 
 		$message = get_string('application_unavailable', 'local_obu_application');
 	}
 	$status_text = get_string('status_not_submitted', 'local_obu_application');
-	
+
 	// We currently auto-submit the application to avoid a two-stage process for the applicant
 	update_workflow($application);
 	$status_text = '';
-	
+
 } else if ($application->approval_state == 1) { // Application rejected
 	$status_text = get_string('status_rejected', 'local_obu_application');
 } else if ($application->approval_state == 2) { // Application processed
@@ -101,6 +101,11 @@ if ($status_text) {
 get_application_status($USER->id, $application, $text, $button_text); // get the approval trail and the next action (from user's perspective)
 $status_text .= $text;
 
+$redirect = new moodle_url('/local/obu_application/mdl_redirect.php');
+if (has_capability('local/obu_application:update', context_system::instance()) && ($application->approval_level < 3)) { // Can't redirect away from final HLS approval/processing
+    $status_text .= '<p><a href="' . $redirect . '?id=' . $application->id . '">' . get_string('redirect_application', 'local_obu_application') . '</a></p>';
+}
+
 $parameters = [
 	'source' => $source,
 	'organisations' => get_organisations(),
@@ -108,7 +113,7 @@ $parameters = [
 	'status_text' => $status_text,
 	'button_text' => $button_text
 ];
-	
+
 $mform = new process_form(null, $parameters);
 
 if ($mform->is_cancelled()) {
@@ -143,7 +148,7 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading($heading);
 
 if ($message) {
-    notice($message, $back);    
+    notice($message, $back);
 }
 else {
     $mform->display();
