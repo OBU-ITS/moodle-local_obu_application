@@ -56,7 +56,7 @@ $PAGE->navbar->add($heading);
 $message = '';
 
 $admins = array();
-$admins[0] = "";
+$admins[0] = get_string('select', 'local_obu_application');
 $admins[1] = "All admins";
 $mgrs = get_managers();
 foreach ($mgrs as $mgr) {
@@ -74,14 +74,20 @@ if ($mform->is_cancelled()) {
 }
 
 if ($mform_data = $mform->get_data()) {
+    $applications = [];
+
     if ($mform_data->application_date == $mform_data->application_second_date){
         $mform_data->application_second_date = strtotime('+1 day', $mform_data->application_second_date);
     }
-    if ($mform_data->admin == "All admins"){
-        foreach ($mgrs as $mgr) {
-            $applications += get_applications_for_manager($mgr->username, $mform_data->application_date, $mform_data->application_second_date); // Get the applications for all admins
+
+    if ($mform_data->admin == "1"){
+        foreach ($admins as $username => $display_name) {
+            if ($username == "0" || $username == "1"){
+                continue;
+            }
+            $applications += get_applications_for_manager($username, $mform_data->application_date, $mform_data->application_second_date); // Get the applications for all admins
         }
-    } else{
+    } else if($mform_data->admin != "0"){
         $applications = get_applications_for_manager($mform_data->admin, $mform_data->application_date, $mform_data->application_second_date); // Get the applications for specific admin
     }
 
