@@ -73,7 +73,7 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		if (!$dbman->table_exists($table)) {
 			$dbman->create_table($table);
 		}
-		
+
 		// Define table local_obu_supplement
 		$table = new xmldb_table('local_obu_supplement');
 
@@ -96,7 +96,7 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		if (!$dbman->table_exists($table)) {
 			$dbman->create_table($table);
 		}
-		
+
 		// Define table local_obu_organisation
 		$table = new xmldb_table('local_obu_organisation');
 
@@ -244,7 +244,7 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		if (!$dbman->table_exists($table)) {
 			$dbman->create_table($table);
 		}
-		
+
 		// Define table local_obu_approval
 		$table = new xmldb_table('local_obu_approval');
 
@@ -282,7 +282,7 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		// obu_application savepoint reached
 		upgrade_plugin_savepoint(true, 2016110100, 'local', 'obu_application');
     }
-	
+
 	if ($oldversion < 2017072800) {
 
 		// Update local_obu_applicant
@@ -367,7 +367,7 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		// obu_application savepoint reached
 		upgrade_plugin_savepoint(true, 2017112000, 'local', 'obu_application');
     }
-    
+
 	if ($oldversion < 2018040400) {
 
 		// Update local_obu_organisation
@@ -380,7 +380,7 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		// obu_application savepoint reached
 		upgrade_plugin_savepoint(true, 2018040400, 'local', 'obu_application');
     }
-    
+
 	if ($oldversion < 2019112800) {
 
 		// Update local_obu_course
@@ -397,7 +397,7 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		// obu_application savepoint reached
 		upgrade_plugin_savepoint(true, 2019112800, 'local', 'obu_application');
     }
-    
+
 	if ($oldversion < 2020022000) {
 
 		// Update local_obu_applicant
@@ -481,7 +481,7 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		// obu_application savepoint reached
 		upgrade_plugin_savepoint(true, 2020022000, 'local', 'obu_application');
     }
-    
+
 	if ($oldversion < 2020022100) {
 
 		// Update local_obu_applicant
@@ -509,7 +509,7 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		// obu_application savepoint reached
 		upgrade_plugin_savepoint(true, 2020022100, 'local', 'obu_application');
     }
-    
+
 	if ($oldversion < 2020022200) {
 
 		// Update local_obu_course
@@ -546,7 +546,7 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		// obu_application savepoint reached
 		upgrade_plugin_savepoint(true, 2020022200, 'local', 'obu_application');
     }
-	
+
 	if ($oldversion < 2020022300) {
 
 		// Update local_obu_applicant
@@ -566,7 +566,7 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		// obu_application savepoint reached
 		upgrade_plugin_savepoint(true, 2020022300, 'local', 'obu_application');
     }
-	
+
 	if ($oldversion < 2020040900) {
 
 		// Update local_obu_applicant
@@ -586,7 +586,7 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		// obu_application savepoint reached
 		upgrade_plugin_savepoint(true, 2020040900, 'local', 'obu_application');
     }
-	
+
 	if ($oldversion < 2020042800) {
 
 		// Update local_obu_applicant
@@ -614,7 +614,7 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		// obu_application savepoint reached
 		upgrade_plugin_savepoint(true, 2020042800, 'local', 'obu_application');
     }
-	
+
 	if ($oldversion < 2020080200) {
 
 		// Update local_obu_course
@@ -627,7 +627,7 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		// obu_application savepoint reached
 		upgrade_plugin_savepoint(true, 2020080200, 'local', 'obu_application');
     }
-	
+
 	if ($oldversion < 2020100100) {
 
 		// Update local_obu_course
@@ -640,7 +640,7 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		// obu_application savepoint reached
 		upgrade_plugin_savepoint(true, 2020100100, 'local', 'obu_application');
     }
-	
+
 	if ($oldversion < 2021030300) {
 
 		// Update local_obu_applicant
@@ -659,6 +659,24 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 
 		// obu_application savepoint reached
 		upgrade_plugin_savepoint(true, 2021030300, 'local', 'obu_application');
+    }
+
+    if($oldversion < 2023021300) {
+        $table = new xmldb_table('local_obu_course');
+        $field = new xmldb_field('course_start_sep', XMLDB_TYPE_INTEGER, '1', null, null, null, '0','cohort_code');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        $field = new xmldb_field('course_start_jan', XMLDB_TYPE_INTEGER, '1', null, null, null, '0', 'course_start_Sep');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        $field = new xmldb_field('course_start_jun', XMLDB_TYPE_INTEGER, '1', null, null, null, '0', 'course_start_Jan');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        upgrade_plugin_savepoint(true, 2023021300, 'local', 'obu_application');
     }
 
     return $result;

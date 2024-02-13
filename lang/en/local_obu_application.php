@@ -468,5 +468,9 @@ $string['amend_application'] = 'If you need to amend any details of an applicati
 
 $string['logout'] = 'Log out';
 
+$string['course_start_sep'] = 'September (S1)';
+$string['course_start_jan'] = 'January (S2)';
+$string['course_start_jun'] = 'June (S3)';
+
 $string[''] = '';
 

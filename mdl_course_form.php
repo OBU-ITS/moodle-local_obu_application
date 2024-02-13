@@ -57,7 +57,10 @@ class mdl_course_form extends moodleform {
 				'programme_code' => $data->record->programme_code,
 				'major_code' => $data->record->major_code,
 				'level' => $data->record->level,
-				'cohort_code' => $data->record->cohort_code
+                'cohort_code' => $data->record->cohort_code,
+                'course_start_sep' => $data->record->course_start_sep,
+                'course_start_jan' => $data->record->course_start_jan,
+                'course_start_jun' => $data->record->course_start_jun
 			];
 			$this->set_data($fields);
 		}
@@ -128,6 +131,9 @@ class mdl_course_form extends moodleform {
 			$mform->setType('level', PARAM_TEXT);
 			$mform->addElement('text', 'cohort_code', get_string('cohort_code', 'local_obu_application'), 'size="25" maxlength="25"');
 			$mform->setType('cohort_code', PARAM_TEXT);
+            $mform->addElement('advcheckbox', 'course_start_sep', get_string('course_start_sep', 'local_obu_application'), null, null, array(0, 1));
+            $mform->addElement('advcheckbox', 'course_start_jan', get_string('course_start_jan', 'local_obu_application'), null, null, array(0, 1));
+            $mform->addElement('advcheckbox', 'course_start_jun', get_string('course_start_jun', 'local_obu_application'), null, null, array(0, 1));
 			$mform->addElement('static', 'applications', get_string('applications', 'local_obu_application'), $data->applications);
 		}
 
