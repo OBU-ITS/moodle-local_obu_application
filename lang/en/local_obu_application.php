@@ -162,6 +162,8 @@ $string['funding_report'] = 'Funding report';
 $string['funding_options'] = 'Funding report options';
 $string['manager_report'] = 'Manager report';
 $string['manager_options'] = 'Manager report options';
+$string['course_run_report'] = 'Course run report';
+$string['course_run_options'] = 'Course run report options';
 $string['organisation_report'] = 'Organisation report';
 $string['organisation_options'] = 'Organisation report options';
 $string['pending_approval_report'] = 'Pending approvals report';
@@ -245,6 +247,7 @@ $string['finance'] = 'Finance';
 $string['xfer_id'] = 'If re-transferring, enter the Transfer ID';
 $string['no_xfer'] = 'No data to transfer';
 $string['no_applications'] = 'No relevant applications';
+$string['no_courses'] = 'No relevant courses';
 
 $string['add'] = 'Add';
 $string['amend'] = 'Amend';
@@ -471,6 +474,7 @@ $string['logout'] = 'Log out';
 $string['course_start_sep'] = 'September (S1)';
 $string['course_start_jan'] = 'January (S2)';
 $string['course_start_jun'] = 'June (S3)';
+$string['semester'] = 'Semester';
 
 $string[''] = '';
 

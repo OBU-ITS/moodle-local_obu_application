@@ -36,9 +36,9 @@
         <FIELD NAME="major_code" TYPE="char" LENGTH="4" NOTNULL="false" SEQUENCE="false" COMMENT="Major Code"/>
         <FIELD NAME="level" TYPE="char" LENGTH="2" NOTNULL="false" SEQUENCE="false" COMMENT="Level"/>
         <FIELD NAME="cohort_code" TYPE="char" LENGTH="25" NOTNULL="false" SEQUENCE="false" COMMENT="Cohort Code"/>
-        <FIELD NAME="course_start_sep" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Sep (S1)"/>
-        <FIELD NAME="course_start_jan" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Jan (S2)"/>
-        <FIELD NAME="course_start_jun" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Jun (S3)"/>
+        <FIELD NAME="course_start_sep" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Sep (S1)"/>
+        <FIELD NAME="course_start_jan" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Jan (S2)"/>
+        <FIELD NAME="course_start_jun" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Jun (S3)"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

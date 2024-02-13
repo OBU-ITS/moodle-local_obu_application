@@ -661,22 +661,22 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 		upgrade_plugin_savepoint(true, 2021030300, 'local', 'obu_application');
     }
 
-    if($oldversion < 2023021300) {
+    if($oldversion < 2024021301) {
         $table = new xmldb_table('local_obu_course');
-        $field = new xmldb_field('course_start_sep', XMLDB_TYPE_INTEGER, '1', null, null, null, '0','cohort_code');
+        $field = new xmldb_field('course_start_sep', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0','cohort_code');
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
-        $field = new xmldb_field('course_start_jan', XMLDB_TYPE_INTEGER, '1', null, null, null, '0', 'course_start_Sep');
+        $field = new xmldb_field('course_start_jan', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0', 'course_start_Sep');
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
-        $field = new xmldb_field('course_start_jun', XMLDB_TYPE_INTEGER, '1', null, null, null, '0', 'course_start_Jan');
+        $field = new xmldb_field('course_start_jun', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0', 'course_start_Jan');
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
 
-        upgrade_plugin_savepoint(true, 2023021300, 'local', 'obu_application');
+        upgrade_plugin_savepoint(true, 2024021301, 'local', 'obu_application');
     }
 
     return $result;
