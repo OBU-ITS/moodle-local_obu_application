@@ -117,17 +117,34 @@ if ($mform_data = $mform->get_data()) {
             $fields['Funder_Email'] = $application->funder_email;
 
             if ($application->approval_state == 1) {
-                $fields['Status'] = get_string('rejected', 'local_obu_application');
+                continue;
             } else if ($application->approval_state == 2) {
-                $fields['Status'] = get_string('approved', 'local_obu_application');
+                continue;
             } else if ($application->approval_state == 3) {
-                $fields['Status'] = get_string('withdrawn', 'local_obu_application');
+                continue;
             } else if ($application->approval_level == 1) {
                 $fields['Status'] = 'Administrator pre-check';
             } else if ($application->approval_level == 2) {
                 $fields['Status'] = 'Funder to approve';
             } else {
                 $fields['Status'] = 'HLS to approve';
+            }
+
+            $fields['Submitted'] = date("d.m.y", $application->application_date);
+            if ($application->approval_1_date == "0"){
+                $fields['Admin'] = "N";
+            } else{
+                $fields['Admin'] = date("d.m.y", $application->approval_1_date);
+            }
+            if ($application->approval_2_date == "0"){
+                $fields['Funder'] = "N";
+            } else{
+                $fields['Funder'] = date("d.m.y", $application->approval_2_date);
+            }
+            if ($application->approval_3_date == "0"){
+                $fields['HLS'] = "N";
+            } else{
+                $fields['HLS'] = date("d.m.y", $application->approval_3_date);
             }
 
             if ($first_record) { // Write headings
