@@ -252,7 +252,10 @@ function write_course_record($course) {
 	$record->programme_code = $course->programme_code;
 	$record->major_code = $course->major_code;
 	$record->level = $course->level;
-    $record->cohort_code = $course->cohort_code;
+	$record->cohort_code = $course->cohort_code;
+    $record->course_start_sep = $course->course_start_sep;
+    $record->course_start_jan = $course->course_start_jan;
+    $record->course_start_jun = $course->course_start_jun;
 
 	if ($id == '0') {
 		$id = $DB->insert_record('local_obu_course', $record);

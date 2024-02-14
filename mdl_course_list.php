@@ -45,7 +45,7 @@ $dir = $home . 'local/obu_application/';
 $url = $dir . 'mdl_course_list.php';
 
 $table = new html_table();
-$table->head = array('Name', 'Code', 'Supplement', 'Programme', 'Suspended', 'Administrator', 'Module Subject', 'Module Number', 'Campus', 'Program Code', 'Major Code', 'Level', 'Cohort Code');
+$table->head = array('Name', 'Code', 'Supplement', 'Programme', 'Suspended', 'Administrator', 'Module Subject', 'Module Number', 'Campus', 'Program Code', 'Major Code', 'Level', 'Cohort Code', 'Sep', 'Jan', 'Jun');
 
 $courses = get_course_records();
 $admins = get_course_admins();
@@ -56,16 +56,6 @@ foreach($admins as $admin) {
 
 if ($courses != null) {
 	foreach ($courses as $course) {
-		if ($course->programme == 1) {
-			$programme = 'Yes';
-		} else {
-			$programme = '';
-		}
-		if ($course->suspended == 1) {
-			$suspended = 'Yes';
-		} else {
-			$suspended = '';
-		}
 		if ($course->administrator == '') {
 			$administrator = '';
 		} else {
@@ -80,8 +70,8 @@ if ($courses != null) {
 			$course->name,
 			$course->code,
 			$course->supplement,
-			$programme,
-			$suspended,
+            $course->programme ? 'Yes' : '',
+            $course->suspended ? 'Yes' : '',
 			$administrator,
 			$course->module_subject,
 			$course->module_number,
@@ -89,7 +79,10 @@ if ($courses != null) {
 			$course->programme_code,
 			$course->major_code,
 			$course->level,
-			$course->cohort_code
+			$course->cohort_code,
+            $course->course_start_sep ? 'Y' : 'N',
+            $course->course_start_jan ? 'Y' : 'N',
+            $course->course_start_jun ? 'Y' : 'N'
 		);
 	}
 }
