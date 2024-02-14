@@ -45,7 +45,7 @@ $dir = $home . 'local/obu_application/';
 $url = $dir . 'mdl_course_list.php';
 
 $table = new html_table();
-$table->head = array('Name', 'Code', 'Supplement', 'Programme', 'Suspended', 'Administrator', 'Module Subject', 'Module Number', 'Campus', 'Program Code', 'Major Code', 'Level', 'Cohort Code');
+$table->head = array('Name', 'Code', 'Supplement', 'Programme', 'Suspended', 'Administrator', 'Module Subject', 'Module Number', 'Campus', 'Program Code', 'Major Code', 'Level', 'Cohort Code', 'Sep', 'Jan', 'Jun');
 
 $courses = get_course_records();
 if ($courses != null) {
@@ -70,6 +70,21 @@ if ($courses != null) {
 				$administrator = $user->username . ' (' . $user->firstname . ' ' . $user->lastname . ')';
 			}
 		}
+        if ($course->course_start_sep == 1) {
+            $course_start_sep = "Y";
+        } else {
+            $course_start_sep = "N";
+        }
+        if ($course->course_start_jan == 1) {
+            $course_start_jan = "Y";
+        } else {
+            $course_start_jan = "N";
+        }
+        if ($course->course_start_jun == 1) {
+            $course_start_jun = "Y";
+        } else {
+            $course_start_jun = "N";
+        }
 			
 		$table->data[] = array(
 			$course->name,
@@ -84,7 +99,10 @@ if ($courses != null) {
 			$course->programme_code,
 			$course->major_code,
 			$course->level,
-			$course->cohort_code
+			$course->cohort_code,
+            $course_start_sep,
+            $course_start_jan,
+            $course_start_jun
 		);
 	}
 }
