@@ -168,6 +168,7 @@ $string['organisation_report'] = 'Organisation report';
 $string['organisation_options'] = 'Organisation report options';
 $string['pending_approval_report'] = 'Pending approvals report';
 $string['pending_approval_options'] = 'Pending approvals options';
+$string['combo_code_report'] = 'Combo codes report';
 $string['courses'] = 'Courses';
 $string['course_list'] = 'Course list';
 $string['all_courses'] = 'All courses';
