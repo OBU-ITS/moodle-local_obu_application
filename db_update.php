@@ -285,8 +285,7 @@ function get_course_admins() {
     $sql = "SELECT DISTINCT 
         u.username, 
         u.firstname, 
-        u.lastname, 
-        u.email 
+        u.lastname
     FROM {local_obu_course} c 
     INNER JOIN {user} u ON u.username = c.administrator";
 
