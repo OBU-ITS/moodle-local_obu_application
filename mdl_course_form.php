@@ -43,6 +43,8 @@ class mdl_course_form extends moodleform {
 		$data->administrator = $this->_customdata['administrator'];
 		$data->applications = $this->_customdata['applications'];
 
+        $combo_code = $data->record->programme_code . $data->record->major_code . $data->record->campus;
+
 		if ($data->record != null) {
 			$fields = [
 				'code' => $data->record->code,
@@ -135,6 +137,7 @@ class mdl_course_form extends moodleform {
             $mform->addElement('advcheckbox', 'course_start_jan', get_string('course_start_jan', 'local_obu_application'), null, null, array(0, 1));
             $mform->addElement('advcheckbox', 'course_start_jun', get_string('course_start_jun', 'local_obu_application'), null, null, array(0, 1));
 			$mform->addElement('static', 'applications', get_string('applications', 'local_obu_application'), $data->applications);
+            $mform->addElement('static', 'combo_code', get_string('combo_code', 'local_obu_application'), $combo_code);
 		}
 
 		// Options
