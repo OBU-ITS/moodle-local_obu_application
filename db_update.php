@@ -252,7 +252,7 @@ function write_course_record($course) {
 	$record->programme_code = $course->programme_code;
 	$record->major_code = $course->major_code;
 	$record->level = $course->level;
-	$record->cohort_code = $course->cohort_code;
+    $record->cohort_code = $course->cohort_code;
 
 	if ($id == '0') {
 		$id = $DB->insert_record('local_obu_course', $record);
@@ -271,9 +271,23 @@ function delete_course_record($course_id) {
 }
 
 function get_course_records() {
-	global $DB;
+    global $DB;
 
-	return $DB->get_records('local_obu_course', null, 'name');
+    return $DB->get_records('local_obu_course', null, 'name');
+}
+
+function get_course_admins() {
+    global $DB;
+
+    $sql = "SELECT DISTINCT 
+        u.username, 
+        u.firstname, 
+        u.lastname, 
+        u.email 
+    FROM {local_obu_course} c 
+    INNER JOIN {user} u ON u.username = c.administrator";
+
+    return $DB->get_records_sql($sql);
 }
 
 function is_programme($course_code) {

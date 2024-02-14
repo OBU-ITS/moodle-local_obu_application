@@ -48,6 +48,12 @@ $table = new html_table();
 $table->head = array('Name', 'Code', 'Supplement', 'Programme', 'Suspended', 'Administrator', 'Module Subject', 'Module Number', 'Campus', 'Program Code', 'Major Code', 'Level', 'Cohort Code');
 
 $courses = get_course_records();
+$admins = get_course_admins();
+$course_admins = [];
+foreach($admins as $admin) {
+    $course_admins[$admin->username] = $admin->username . ' (' . $admin->firstname . ' ' . $admin->lastname . ')';
+}
+
 if ($courses != null) {
 	foreach ($courses as $course) {
 		if ($course->programme == 1) {
@@ -63,14 +69,13 @@ if ($courses != null) {
 		if ($course->administrator == '') {
 			$administrator = '';
 		} else {
-			$user = read_user_by_username($course->administrator);
-			if ($user == null) {
-				$administrator = get_string('user_not_found', 'local_obu_application');
+			if (array_key_exists($course->administrator, $course_admins)) {
+                $administrator = $course_admins[$course->administrator];
 			} else {
-				$administrator = $user->username . ' (' . $user->firstname . ' ' . $user->lastname . ')';
+                $administrator = get_string('user_not_found', 'local_obu_application');
 			}
 		}
-			
+
 		$table->data[] = array(
 			$course->name,
 			$course->code,
