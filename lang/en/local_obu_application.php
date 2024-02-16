@@ -286,7 +286,9 @@ $string['reject'] = 'Reject';
 $string['revoke'] = 'Revoke';
 $string['withdraw'] = 'Withdraw';
 $string['reinstate'] = 'Reinstate';
-$string['comment'] = 'Comment or Reason for Rejection (for Applicant)';
+$string['manager_comment'] = 'Optional comment on administration/ notes (visible to applicant)';
+$string['funder_comment'] = 'Optional comment on funding details/ notes (visible to applicant)';
+$string['admin_comment'] = 'Optional comment on academic details/ notes (visible to applicant)';
 
 $string['supplement'] = 'Supplement';
 $string['suppref'] = 'Supplement Ref';
