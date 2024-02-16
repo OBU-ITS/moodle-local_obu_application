@@ -509,10 +509,22 @@ class process_form extends moodleform {
 			if ($data->button_text == 'approve') {
 				$mform->addElement('static', 'approval', '');
 				$mform->closeHeaderBefore('approval');
-				$mform->addElement('html', '<h1>' . get_string('approval_head', 'local_obu_application') . '</h1>');
-				$mform->addElement('html', '<p><strong>' . get_string('comment', 'local_obu_application') . '</strong></p>');
-				$mform->addElement('text', 'comment', '', 'size="40" maxlength="100"');
-				$mform->setType('comment', PARAM_TEXT);
+                if ($approval_sought == 1){
+                    $mform->addElement('html', '<h1>' . get_string('approval_head', 'local_obu_application') . '</h1>');
+                    $mform->addElement('html', '<p><strong>' . get_string('manager_comment', 'local_obu_application') . '</strong></p>');
+                    $mform->addElement('text', 'comment', '', 'size="40" maxlength="100"');
+                    $mform->setType('comment', PARAM_TEXT);
+                } else if ($approval_sought == 2){
+                    $mform->addElement('html', '<h1>' . get_string('approval_head', 'local_obu_application') . '</h1>');
+                    $mform->addElement('html', '<p><strong>' . get_string('funder_comment', 'local_obu_application') . '</strong></p>');
+                    $mform->addElement('text', 'comment', '', 'size="40" maxlength="100"');
+                    $mform->setType('comment', PARAM_TEXT);
+                } else {
+                    $mform->addElement('html', '<h1>' . get_string('approval_head', 'local_obu_application') . '</h1>');
+                    $mform->addElement('html', '<p><strong>' . get_string('admin_comment', 'local_obu_application') . '</strong></p>');
+                    $mform->addElement('text', 'comment', '', 'size="40" maxlength="100"');
+                    $mform->setType('comment', PARAM_TEXT);
+                }
 				$buttonarray[] = &$mform->createElement('submit', 'rejectbutton', get_string('reject', 'local_obu_application'));
 				if (is_manager() && (($approval_sought == 1) || ($approval_sought == 3))) { // HLS
                     if ($data->record->supplement_data){
