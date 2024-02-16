@@ -87,6 +87,7 @@ class profile_personal_details_form extends moodleform {
         $mform->addRule('nationality_code', null, 'required', null, 'server');
         $mform->addElement('static', 'nationality_note', null, get_string('nationality_note', 'local_obu_application'));
         $genders = [];
+        $genders[''] = get_string('select', 'local_obu_application');
         $genders['N'] = get_string('gender_not_available', 'local_obu_application');
         $genders['F'] = get_string('gender_female', 'local_obu_application');
         $genders['M'] = get_string('gender_male', 'local_obu_application');

@@ -56,7 +56,7 @@ echo $OUTPUT->header();
 ?>
     <h1 class="mb-4">Apply for a new module or course</h1>
     <p>
-        Detailed guidance can be <a href="application_guidance.php" target="_blank">found here</a>.
+        Please complete the mandatory fields below. Detailed guidance can be <a href="application_guidance.php" target="_blank">found here</a>.
     </p>
     <p>
         If you have any queries, please contact <a href="mailto:hlscpdadmissions@brookes.ac.uk">hlscpdadmissions@brookes.ac.uk</a>.
@@ -121,6 +121,7 @@ foreach ($accordion_items as $accordion_item) {
                     <?php echo $accordion_item["title"] ?>
                 </h3>
             </div>
+            <div class="position-relative d-flex ftoggler align-items-center position-relative ml-auto">(Last updated: dd/mm/yyyy)</div>
         </div>
         <div id="id_<?php echo $counter ?>_headcontainer" class="fcontainer collapseable collapse" style=""  aria-labelledby="heading<?php echo $counter ?>" data-parent="#accordion">
             <?php $accordion_item["data"]->display(); ?>

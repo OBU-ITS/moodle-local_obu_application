@@ -397,7 +397,7 @@ function require_obu_login() {
 
 function get_titles() {
 	$titles = array (
-		'' => 'Please select',
+		'' => get_string('select', 'local_obu_application'),
 		'Mr' => 'Mr',
 		'Mrs' => 'Mrs',
 		'Miss' => 'Miss',
@@ -411,6 +411,7 @@ function get_titles() {
 
 function get_areas() {
 	$areas = array (
+		'' => get_string('select', 'local_obu_application'),
 		'AF' => 'Afghanistan',
 		'AX' => 'Åland Islands',
 		'AL' => 'Albania',
@@ -668,6 +669,7 @@ function get_areas() {
 
 function get_nations() {
 	$nations = array (
+		'' => get_string('select', 'local_obu_application'),
 		'AF' => 'Afghanistan',
 		'AX' => 'Åland Islands (Ahvenamaa)',
 		'AL' => 'Albania',
