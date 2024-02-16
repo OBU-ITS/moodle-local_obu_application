@@ -63,12 +63,15 @@ $id = '';
 $delete = false;
 $codes = array();
 $courses = array();
+$courses_with_suspended = array();
 $record = null;
 $administrator = null;
 $applications = 0;
 
-if (isset($_REQUEST['id'])) {
-	$id = $_REQUEST['id'];
+if (isset($_REQUEST['show_suspended'])) {
+    $show_suspended = $_REQUEST['show_suspended'];
+    $id = $show_suspended ? $_REQUEST['id'] :  $_REQUEST['id_not_suspended'];
+    
 	if ($id != '0') {
 		$record = read_course_record_by_id($id);
 		if (isset($_REQUEST['delete'])) {
@@ -92,7 +95,9 @@ if (isset($_REQUEST['id'])) {
 } else {
 	$recs = get_course_records();
 	if ($recs) { // Do they have a choice?
-		$courses[0] = get_string('new_course', 'local_obu_application'); // The 'New Course' option
+        $courses[0] = get_string('new_course', 'local_obu_application'); // The 'New Course' option
+        $courses_with_suspended[0] = get_string('new_course', 'local_obu_application'); // The 'New Course' option
+
 		foreach ($recs as $rec) {
 			$name = $rec->name . ' [' . $rec->code . ']';
 			if ($rec->supplement) {
@@ -101,10 +106,16 @@ if (isset($_REQUEST['id'])) {
 			if ($rec->programme) {
 				$name .= ' (Programme)';
 			}
+
 			if ($rec->suspended) {
 				$name .= ' - SUSPENDED';
+
+                $courses_with_suspended[$rec->id] = $name;
 			}
-			$courses[$rec->id] = $name;
+            else{
+                $courses[$rec->id] = $name;
+                $courses_with_suspended[$rec->id] = $name;
+            }
 		}
 	} else { // No, they don't...
 		$id = '0'; // ...so it's gottabee a new one
@@ -114,7 +125,8 @@ if (isset($_REQUEST['id'])) {
 $parameters = [
 	'id' => $id,
 	'delete' => $delete,
-	'courses' => $courses,
+    'courses' => $courses,
+    'courses_with_suspended' => $courses_with_suspended,
 	'record' => $record,
 	'administrator' => $administrator,
 	'applications' => $applications

@@ -261,6 +261,7 @@ $string['no'] = 'No';
 $string['confirm_delete'] = 'Confirm Deletion';
 $string['save'] = 'Save';
 $string['save_continue'] = 'Save & Continue';
+$string['show_suspended'] = 'Show suspended courses';
 
 $string['applicant'] = 'Applicant';
 $string['application'] = 'Application (Ref HLS/{$a})';

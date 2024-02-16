@@ -38,7 +38,8 @@ class mdl_course_form extends moodleform {
         $data = new stdClass();
 		$data->id = $this->_customdata['id'];
 		$data->delete = $this->_customdata['delete'];
-		$data->courses = $this->_customdata['courses'];
+        $data->courses = $this->_customdata['courses'];
+        $data->courses_with_suspended = $this->_customdata['courses_with_suspended'];
 		$data->record = $this->_customdata['record'];
 		$data->administrator = $this->_customdata['administrator'];
 		$data->applications = $this->_customdata['applications'];
@@ -71,8 +72,13 @@ class mdl_course_form extends moodleform {
 
 		// If we don't have a course yet, let them select one
 		if ($data->id == '') {
-			$select = $mform->addElement('autocomplete', 'id', get_string('course', 'local_obu_application'), $data->courses, null);
+            $mform->addElement('advcheckbox', 'show_suspended', get_string('show_suspended', 'local_obu_application'), null, null, array(0, 1));
+			$select = $mform->addElement('autocomplete', 'id', get_string('course', 'local_obu_application'), $data->courses_with_suspended, null);
 			$select->setSelected(0);
+            $mform->hideIf('id', 'show_suspended', 'eq', '0');
+            $select = $mform->addElement('autocomplete', 'id_not_suspended', get_string('course', 'local_obu_application'), $data->courses, null);
+            $select->setSelected(0);
+            $mform->hideIf('id_not_suspended', 'show_suspended', 'eq', '1');
 			$this->add_action_buttons(true, get_string('continue', 'local_obu_application'));
 			return;
 		}
