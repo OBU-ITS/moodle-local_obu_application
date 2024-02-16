@@ -107,7 +107,7 @@ foreach ($accordion_items as $accordion_item) {
 ?>
         <div class="d-flex align-items-center mb-2" id="heading<?php echo $counter ?>">
             <div class="position-relative d-flex ftoggler align-items-center position-relative mr-1">
-                <a data-toggle="collapse" href="#id_<?php echo $counter ?>_headcontainer" role="button" aria-expanded="true" aria-controls="id_<?php echo $counter ?>_headcontainer" class="btn btn-icon mr-1 icons-collapse-expand stretched-link fheader" id="collapseElement-0">
+                <a data-toggle="collapse" href="#id_<?php echo $counter ?>_headcontainer" role="button" aria-expanded="true" aria-controls="id_<?php echo $counter ?>_headcontainer" class="btn btn-icon mr-1 icons-collapse-expand stretched-link fheader collapsed" id="collapseElement-0">
                     <span class="expanded-icon icon-no-margin p-2" title="Collapse">
                         <i class="icon fa fa-chevron-down fa-fw " aria-hidden="true"></i>
                     </span>
