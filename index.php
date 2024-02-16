@@ -122,7 +122,7 @@ foreach ($accordion_items as $accordion_item) {
                 </h3>
             </div>
             <div class="position-relative  ftoggler align-items-center position-relative ml-auto">
-                <strong class="text-primary">Last updated: dd/mm/yyyy</strong>
+                <strong class="text-primary">Last updated: dd.mm.yyyy</strong>
             </div>
         </div>
         <div id="id_<?php echo $counter ?>_headcontainer" class="fcontainer collapseable collapse" style=""  aria-labelledby="heading<?php echo $counter ?>" data-parent="#accordion">
