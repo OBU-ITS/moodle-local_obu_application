@@ -121,7 +121,9 @@ foreach ($accordion_items as $accordion_item) {
                     <?php echo $accordion_item["title"] ?>
                 </h3>
             </div>
-            <div class="position-relative d-flex ftoggler align-items-center position-relative ml-auto">(Last updated: dd/mm/yyyy)</div>
+            <div class="position-relative  ftoggler align-items-center position-relative ml-auto">
+                <strong class="text-primary">Last updated: dd/mm/yyyy</strong>
+            </div>
         </div>
         <div id="id_<?php echo $counter ?>_headcontainer" class="fcontainer collapseable collapse" style=""  aria-labelledby="heading<?php echo $counter ?>" data-parent="#accordion">
             <?php $accordion_item["data"]->display(); ?>
@@ -151,22 +153,22 @@ foreach ($accordion_items as $accordion_item) {
 
 // TODO : Plan on what to do with this
 //// Display applications submitted
-//$applications = get_applications($USER->id); // get all applications for the user
-//if ($applications) {
-//	echo '<h2>' . get_string('your_applications', 'local_obu_application') . '</h2>';
-//	foreach ($applications as $application) {
-//		get_application_status($USER->id, $application, $text, $button); // get the approval trail and the next action (from this user's perspective)
-//		$application_title = $application->course_code . ' ' . $application->course_name . ' (Application Ref HLS/' . $application->id . ')';
-//		if (($button != 'submit') || $currentuser || $manager) {
-//			echo '<h4><a href="' . $process . '?id=' . $application->id . '">' . $application_title . '</a></h4>';
-//		} else {
-//			echo '<h4>' . $application_title . '</h4>';
-//		}
-//		echo $text;
-//	}
-//	echo '<h4>' . get_string('amend_application', 'local_obu_application') . '</h4>';
-//} else {
-//	echo '<h4>' . get_config('local_obu_application', 'support') . '</h4>';
-//}
+$applications = get_applications($USER->id); // get all applications for the user
+if ($applications) {
+	echo '<h2>' . get_string('your_applications', 'local_obu_application') . '</h2>';
+	foreach ($applications as $application) {
+		get_application_status($USER->id, $application, $text, $button); // get the approval trail and the next action (from this user's perspective)
+		$application_title = $application->course_code . ' ' . $application->course_name . ' (Application Ref HLS/' . $application->id . ')';
+		if (($button != 'submit') || $currentuser || $manager) {
+			echo '<h4><a href="' . $process . '?id=' . $application->id . '">' . $application_title . '</a></h4>';
+		} else {
+			echo '<h4>' . $application_title . '</h4>';
+		}
+		echo $text;
+	}
+	echo '<h4>' . get_string('amend_application', 'local_obu_application') . '</h4>';
+} else {
+	echo '<h4>' . get_config('local_obu_application', 'support') . '</h4>';
+}
 
 echo $OUTPUT->footer();
