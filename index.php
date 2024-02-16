@@ -94,8 +94,8 @@ $currentEmploymentForm = new profile_current_employment_form(null, $parameters);
 $professionalRegistrationForm = new profile_professional_registration_form(null, $parameters);
 $criminalRecordForm = new profile_criminal_record_form(null, $parameters);
 $accordion_items = array(
-    ["title" => "Contact details", "data" => $contactDetailsForm],
-    ["title" => "Personal details", "data" => $personalDetailsForm],
+    ["title" => "Contact Details", "data" => $contactDetailsForm],
+    ["title" => "Personal Details", "data" => $personalDetailsForm],
     ["title" => "Education Establishment Attended", "data" => $educationalEstablishmentsForm],
     ["title" => "Highest Professional Qualification", "data" => $professionalQualificationForm],
     ["title" => "Current Employment", "data" => $currentEmploymentForm],
