@@ -123,13 +123,10 @@ if ($frm and isset($frm->username)) { // Login WITH cookies
 			}
         }
 
-        $urltogo = get_return_url();
-
         // Discard any errors before the last redirect.
         unset($SESSION->loginerrormsg);
+        unset($SESSION->wantsurl);
 
-        // test the session actually works by redirecting to self
-        $SESSION->wantsurl = $urltogo;
         redirect(new moodle_url('/local/obu_application/login.php', array('testsession' => $USER->id)));
 
     } else {
