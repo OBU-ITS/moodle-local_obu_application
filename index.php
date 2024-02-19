@@ -20,8 +20,8 @@
  *
  * @package    obu_application
  * @category   local
- * @author     Peter Welham
- * @copyright  2016, Oxford Brookes University
+ * @author     Joe Souch
+ * @copyright  2024, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
@@ -29,13 +29,6 @@
 require('../../config.php');
 require_once('./hide_moodle.php');
 require_once('./locallib.php');
-require_once ('./profile_contact_details_form.php');
-require_once ('./profile_personal_details_form.php');
-require_once ('./profile_educational_establishments_form.php');
-require_once ('./profile_professional_qualification_form.php');
-require_once ('./profile_current_employment_form.php');
-require_once ('./profile_professional_registration_form.php');
-require_once ('./profile_criminal_record_form.php');
 
 // Try to prevent searching for sites that allow sign-up.
 if (!isset($CFG->additionalhtmlhead)) {
@@ -54,86 +47,16 @@ $PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
 echo $OUTPUT->header();
 
 ?>
-    <h1 class="mb-4">Apply for a new module or course</h1>
+    <h1 class="mb-4">Welcome to your application portal account <?php echo $USER->firstname ?></h1>
     <p>
-        Please complete the mandatory fields below. Detailed guidance can be <a href="application_guidance.php" target="_blank">found here</a>.
+        You can apply for our HLS CPD courses <a href="application.php">here</a>.
     </p>
     <p>
-        If you have any queries, please contact <a href="mailto:hlscpdadmissions@brookes.ac.uk">hlscpdadmissions@brookes.ac.uk</a>.
+        <?php echo get_config('local_obu_application', 'support') ?>
     </p>
-    <div id="accordion" class="clearfix collapsible">
 <?php
 
-$record = read_applicant($USER->id, false); // May not exist yet
-if (($record === false) || ($record->domicile_code == '') || ($record->domicile_code == 'ZZ')) { // Must complete the contact details first
-    $message = get_string('complete_contact_details', 'local_obu_application');
-} else {
-    $message = '';
-}
-
-$nations = get_nations();
-$areas = get_areas();
-$parameters = [
-    'user' => read_user($USER->id),
-    'applicant' => read_applicant($USER->id, false),
-    'titles' => get_titles(),
-    'nations' => $nations,
-    'default_domicile_code' => 'GB',
-    'record' => $record,
-    'areas' => $areas,
-    'default_birth_code' => 'GB',
-    'default_nationality_code' => 'GB',
-    'default_residence_code' => 'XF'
-];
-
-$contactDetailsForm = new profile_contact_details_form(null, $parameters);
-$personalDetailsForm = new profile_personal_details_form(null, $parameters);
-$educationalEstablishmentsForm = new profile_educational_establishments_form(null, $parameters);
-$professionalQualificationForm = new profile_professional_qualification_form(null, $parameters);
-$currentEmploymentForm = new profile_current_employment_form(null, $parameters);
-$professionalRegistrationForm = new profile_professional_registration_form(null, $parameters);
-$criminalRecordForm = new profile_criminal_record_form(null, $parameters);
-$accordion_items = array(
-    ["title" => "Contact Details", "data" => $contactDetailsForm],
-    ["title" => "Personal Details", "data" => $personalDetailsForm],
-    ["title" => "Education Establishment Attended", "data" => $educationalEstablishmentsForm],
-    ["title" => "Highest Professional Qualification", "data" => $professionalQualificationForm],
-    ["title" => "Current Employment", "data" => $currentEmploymentForm],
-    ["title" => "Professional Registration", "data" => $professionalRegistrationForm],
-    ["title" => "Criminal Record", "data" => $criminalRecordForm]);
-
-$counter = 0;
-foreach ($accordion_items as $accordion_item) {
-?>
-        <div class="d-flex align-items-center mb-2" id="heading<?php echo $counter ?>">
-            <div class="position-relative d-flex ftoggler align-items-center position-relative mr-1">
-                <a data-toggle="collapse" href="#id_<?php echo $counter ?>_headcontainer" role="button" aria-expanded="true" aria-controls="id_<?php echo $counter ?>_headcontainer" class="btn btn-icon mr-1 icons-collapse-expand stretched-link fheader collapsed" id="collapseElement-0">
-                    <span class="expanded-icon icon-no-margin p-2" title="Collapse">
-                        <i class="icon fa fa-chevron-down fa-fw " aria-hidden="true"></i>
-                    </span>
-                    <span class="collapsed-icon icon-no-margin p-2" title="Expand">
-                        <span class="dir-rtl-hide"><i class="icon fa fa-chevron-right fa-fw " aria-hidden="true"></i></span>
-                        <span class="dir-ltr-hide"><i class="icon fa fa-chevron-left fa-fw " aria-hidden="true"></i></span>
-                    </span>
-                    <span class="sr-only"><?php echo $accordion_item["title"] ?></span>
-                </a>
-                <h3 class="d-flex align-self-stretch align-items-center mb-0" aria-hidden="true">
-                    <?php echo $accordion_item["title"] ?>
-                </h3>
-            </div>
-            <div class="position-relative  ftoggler align-items-center position-relative ml-auto">
-                <strong class="text-primary">Last updated: dd.mm.yyyy</strong>
-            </div>
-        </div>
-        <div id="id_<?php echo $counter ?>_headcontainer" class="fcontainer collapseable collapse" style=""  aria-labelledby="heading<?php echo $counter ?>" data-parent="#accordion">
-            <?php $accordion_item["data"]->display(); ?>
-        </div>
-<?php
-    $counter++;
-}
-?>
-    </div>
-<?php
+$process = new moodle_url('/local/obu_application/process.php');
 
 // TODO : Plan on what to do with this
 //// Display any outstanding approvals
@@ -151,24 +74,24 @@ foreach ($accordion_items as $accordion_item) {
 //	echo get_string('page_content', 'local_obu_application');
 //}
 
-// TODO : Plan on what to do with this
-//// Display applications submitted
+// Display applications submitted
 $applications = get_applications($USER->id); // get all applications for the user
+echo '<h2>Application History</h2>';
 if ($applications) {
-	echo '<h2>' . get_string('your_applications', 'local_obu_application') . '</h2>';
-	foreach ($applications as $application) {
-		get_application_status($USER->id, $application, $text, $button); // get the approval trail and the next action (from this user's perspective)
-		$application_title = $application->course_code . ' ' . $application->course_name . ' (Application Ref HLS/' . $application->id . ')';
-		if (($button != 'submit') || $currentuser || $manager) {
-			echo '<h4><a href="' . $process . '?id=' . $application->id . '">' . $application_title . '</a></h4>';
-		} else {
-			echo '<h4>' . $application_title . '</h4>';
-		}
-		echo $text;
-	}
-	echo '<h4>' . get_string('amend_application', 'local_obu_application') . '</h4>';
-} else {
-	echo '<h4>' . get_config('local_obu_application', 'support') . '</h4>';
+    foreach ($applications as $application) {
+        get_application_status($USER->id, $application, $text, $button); // get the approval trail and the next action (from this user's perspective)
+        $application_title = $application->course_code . ' ' . $application->course_name . ' (Application Ref HLS/' . $application->id . ')';
+        if (($button != 'submit') || $currentuser || $manager) {
+            echo '<h4><a href="' . $process . '?id=' . $application->id . '">' . $application_title . '</a></h4>';
+        } else {
+            echo '<h4>' . $application_title . '</h4>';
+        }
+        echo $text;
+    }
+    echo '<h4>' . get_string('amend_application', 'local_obu_application') . '</h4>';
+}
+else {
+    echo 'You currently do not have any applications in the portal';
 }
 
 echo $OUTPUT->footer();

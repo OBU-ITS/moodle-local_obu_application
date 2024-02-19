@@ -49,7 +49,7 @@ if (!isloggedin()) {
 } else {
 	$PAGE->set_context(context_user::instance($USER->id));
 	$CFG->custommenuitems = get_string('index_page', 'local_obu_application') . '|/local/obu_application/index.php
-	' . get_string('application', 'local_obu_application') . '|/local/obu_application/course.php
+	' . get_string('application', 'local_obu_application') . '|/local/obu_application/application.php
 	' . get_string('logout', 'local_obu_application') . '|/local/obu_application/logout.php?loginpage=1';
 
 	if (strpos($USER->email, '@brookes.ac.uk') !== false) {
