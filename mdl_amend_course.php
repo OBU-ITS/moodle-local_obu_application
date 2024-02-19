@@ -75,7 +75,7 @@ $message = '';
 
 $parameters = [
 	'courses' => get_course_names(),
-	'dates' => get_dates(),
+	'dates' => get_course_dates(),
 	'application' => $application
 ];
 	
