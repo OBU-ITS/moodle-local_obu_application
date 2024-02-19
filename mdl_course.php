@@ -71,7 +71,7 @@ $applications = 0;
 if (isset($_REQUEST['show_suspended'])) {
     $show_suspended = $_REQUEST['show_suspended'];
     $id = $show_suspended ? $_REQUEST['id'] :  $_REQUEST['id_not_suspended'];
-    
+
 	if ($id != '0') {
 		$record = read_course_record_by_id($id);
 		if (isset($_REQUEST['delete'])) {
