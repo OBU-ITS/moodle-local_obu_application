@@ -1,5 +1,7 @@
 <?php
 
+// This file is part of Moodle - http://moodle.org/
+//
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
@@ -14,7 +16,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * OBU Application - View for application processing
+ * OBU Application - Reject form [Moodle]
  *
  * @package    obu_application
  * @category   local
@@ -28,22 +30,32 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/formslib.php');
 
-class reject_form extends moodleform {
+class mdl_reject_form extends moodleform {
     function definition() {
         $mform =& $this->_form;
+
+        $data = new stdClass();
+        $data->source = $this->_customdata['source'];
+        $data->record = $this->_customdata['record'];
+
+        // Start with the required hidden fields
+        $mform->addElement('hidden', 'source', $data->source);
+        $mform->setType('source', PARAM_RAW);
+        $mform->addElement('hidden', 'id', $data->record->id);
+        $mform->setType('id', PARAM_RAW);
 
         // This 'dummy' element has two purposes:
         // - To force open the Moodle Forms invisible fieldset outside of any table on the form (corrupts display otherwise)
         // - To let us inform the user that there are validation errors without them having to scroll down further
         $mform->addElement('static', 'form_errors');
 
-        $mform->addElement('html', '<h1>' . get_string('approval_head', 'local_obu_application') . '</h1>');
-        $mform->addElement('html', '<p><strong>' . get_string('manager_comment', 'local_obu_application') . '</strong></p>');
+        $mform->addElement('html', '<h1>' . get_string('rejection_head', 'local_obu_application') . '</h1>');
+        $mform->addElement('html', '<p><strong>' . get_string('reject_comment', 'local_obu_application') . '</strong></p>');
         $mform->addElement('text', 'comment', '', 'size="40" maxlength="100"');
         $mform->setType('comment', PARAM_TEXT);
 
         $buttonarray = array();
-        $buttonarray[] = &$mform->createElement('submit', 'submitbutton', get_string('submit', 'local_obu_application'));
+        $buttonarray[] = &$mform->createElement('submit', 'submitbutton', get_string('reject', 'local_obu_application'));
         $buttonarray[] = &$mform->createElement('cancel');
         $mform->addGroup($buttonarray, 'buttonarray', '', array(' '), false);
         $mform->closeHeaderBefore('buttonarray');
@@ -53,7 +65,7 @@ class reject_form extends moodleform {
         $errors = parent::validation($data, $files);
 
         // Check that we have been given sufficient information for an approval
-        if ($data['submitbutton'] == get_string('submit', 'local_obu_application')) {
+        if ($data['submitbutton'] == get_string('reject', 'local_obu_application')) {
             if ($data['comment'] == '') {
                 $errors['comment'] = get_string('value_required', 'local_obu_application');
             }

@@ -27,7 +27,6 @@
 require_once('../../config.php');
 require_once('./locallib.php');
 require_once('./process_form.php');
-require_once('./reject_form.php');
 require_once($CFG->libdir . '/moodlelib.php');
 
 require_login();
@@ -116,24 +115,16 @@ $parameters = [
 ];
 
 $mform = new process_form(null, $parameters);
-$rform = new reject_form();
 
 if ($mform->is_cancelled()) {
     redirect($back);
-}
-
-if ($rform->is_cancelled()) {
-    redirect($url);
 }
 
 if ($mform_data = $mform->get_data()) {
 	if (isset($mform_data->submitbutton) && ($mform_data->submitbutton != get_string('continue', 'local_obu_application'))) {
 		update_workflow($application, true, $mform_data); // Approved / Revoked / Reinstated
 	} else if (isset($mform_data->rejectbutton) && ($mform_data->rejectbutton == get_string('reject', 'local_obu_application'))) {
-        $rform->display();
-        if (isset($rform_data->rejectbutton) && ($rform_data->rejectbutton == get_string('reject', 'local_obu_application'))){
-            update_workflow($application, false, $mform_data); // Rejected
-        }
+        redirect($home . 'local/obu_application/mdl_reject.php?source=' . urlencode($url) . "&id=" . $application->id);
 	} else if (isset($mform_data->withdrawbutton) && ($mform_data->withdrawbutton == get_string('withdraw', 'local_obu_application'))) {
 		update_workflow($application, false, $mform_data); // Withdrawn
 	} else if (isset($mform_data->amenddetailsbutton) && ($mform_data->amenddetailsbutton == get_string('amend_details', 'local_obu_application'))) {
