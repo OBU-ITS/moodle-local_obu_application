@@ -253,6 +253,9 @@ function write_course_record($course) {
 	$record->major_code = $course->major_code;
 	$record->level = $course->level;
 	$record->cohort_code = $course->cohort_code;
+    $record->course_start_sep = $course->course_start_sep;
+    $record->course_start_jan = $course->course_start_jan;
+    $record->course_start_jun = $course->course_start_jun;
 
 	if ($id == '0') {
 		$id = $DB->insert_record('local_obu_course', $record);
@@ -271,9 +274,22 @@ function delete_course_record($course_id) {
 }
 
 function get_course_records() {
-	global $DB;
+    global $DB;
 
-	return $DB->get_records('local_obu_course', null, 'name');
+    return $DB->get_records('local_obu_course', null, 'name');
+}
+
+function get_course_admins() {
+    global $DB;
+
+    $sql = "SELECT DISTINCT 
+        u.username, 
+        u.firstname, 
+        u.lastname
+    FROM {local_obu_course} c 
+    INNER JOIN {user} u ON u.username = c.administrator";
+
+    return $DB->get_records_sql($sql);
 }
 
 function is_programme($course_code) {
@@ -360,7 +376,19 @@ function write_user($user_id, $form_data) {
 	profile_save_data($user); // Save custom profile data
 }
 
-function get_applicants_by_name($lastname) {
+function get_applicants_by_first_name($firstname) {
+    global $DB;
+
+    $sql = 'SELECT a.userid, u.firstname, u.lastname '
+        . 'FROM {local_obu_applicant} a '
+        . 'JOIN {user} u ON u.id = a.userid '
+        . 'WHERE u.firstname LIKE "' . $firstname . '%" '
+        . 'ORDER BY u.firstname, u.lastname, a.userid';
+
+    return $DB->get_records_sql($sql, array());
+}
+
+function get_applicants_by_last_name($lastname) {
     global $DB;
 
 	$sql = 'SELECT a.userid, u.firstname, u.lastname '
@@ -736,7 +764,7 @@ function get_applications_for_funder($funding_id = 0, $application_date = 0, $so
 
 function get_applications_for_manager($manager_username, $application_from_date = 0, $application_to_date = 0, $sort_order = '') {
     if ($manager_username == '') {
-        return null;
+        return [];
     }
     global $DB;
     $sql = 'SELECT * FROM {local_obu_application} WHERE application_date >= ? AND application_date < ? AND manager_email LIKE ?';
@@ -746,6 +774,18 @@ function get_applications_for_manager($manager_username, $application_from_date 
     $sql .= ';';
 
     return $DB->get_records_sql($sql, array($application_from_date, $application_to_date, $manager_username . "%"));
+}
+
+function get_applications_for_organisation_range($organisation, $application_from_date = 0, $application_to_date = 0, $sort_order = '') {
+    global $DB;
+
+    $sql = 'SELECT * FROM {local_obu_application} WHERE application_date >= ? AND application_date < ? AND funding_organisation = ?';
+
+    if ($sort_order != '') {
+        $sql .= ' ORDER BY ' . $sort_order;
+    }
+    $sql .= ';';
+    return $DB->get_records_sql($sql, array($application_from_date, $application_to_date, $organisation));
 }
 
 function count_applications_for_course($code) {

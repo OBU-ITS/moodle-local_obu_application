@@ -23,7 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
- 
+
 require_once('../../config.php');
 require_once('./locallib.php');
 require_once('./db_update.php');
@@ -74,7 +74,7 @@ if (isset($_REQUEST['id'])) {
 		if (isset($_REQUEST['delete'])) {
 			$delete = true;
 		}
-		if ($record->administrator != '') {		
+		if ($record->administrator != '') {
 			$user = read_user_by_username($record->administrator);
 			if ($user == null) {
 				$administrator = get_string('user_not_found', 'local_obu_application');
@@ -128,7 +128,7 @@ if ($mform->is_cancelled()) {
 	} else {
 		redirect($url);
 	}
-} 
+}
 else if ($mform_data = $mform->get_data()) {
 	if (isset($mform_data->submitbutton)) { // 'Save' or 'Confirm Deletion'
 		if ($mform_data->submitbutton == get_string('save', 'local_obu_application')) {
@@ -145,12 +145,12 @@ else if ($mform_data = $mform->get_data()) {
     } else if (isset($mform_data->deletebutton) && ($mform_data->deletebutton == get_string('delete', 'local_obu_application'))) { // Delete
 		redirect($url . '?id=' . $id . '&delete=1'); // Come back and ask for confirmation
 	}
-}	
+}
 
 echo $OUTPUT->header();
 
 if ($message) {
-    notice($message, $url);    
+    notice($message, $url);
 }
 else {
     $mform->display();

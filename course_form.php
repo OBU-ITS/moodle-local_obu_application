@@ -34,14 +34,14 @@ require_once($CFG->libdir . '/formslib.php');
 class course_form extends moodleform {
 
     function definition() {
-		
+
         $mform =& $this->_form;
 
         $data = new stdClass();
 		$data->courses = $this->_customdata['courses'];
 		$data->dates = $this->_customdata['dates'];
 		$data->record = $this->_customdata['record'];
-		
+
 		if ($data->record !== false) {
 			$fields = [
 				'course_code' => $data->record->course_code,
@@ -52,7 +52,7 @@ class course_form extends moodleform {
 			];
 			$this->set_data($fields);
 		}
-		
+
 		// This 'dummy' element has two purposes:
 		// - To force open the Moodle Forms invisible fieldset outside of any table on the form (corrupts display otherwise)
 		// - To let us inform the user that there are validation errors without them having to scroll down further
@@ -60,8 +60,9 @@ class course_form extends moodleform {
 
         $mform->addElement('header', 'course_head', get_string('course_head', 'local_obu_application'), '');
 		$mform->setExpanded('course_head');
-		$mform->addElement('select', 'course_code', get_string('course', 'local_obu_application'), $data->courses, null);
+		$mform->addElement('autocomplete', 'course_code', get_string('course', 'local_obu_application'), $data->courses, null);
 		$mform->addElement('select', 'course_date', get_string('course_date', 'local_obu_application'), $data->dates, null);
+        $mform->addRule('course_date', null, 'required', null, 'server');
 		$mform->addElement('html', '<p><strong>' . get_string('studying_preamble', 'local_obu_application') . '</strong></p>');
 		$options = [];
 		if ($data->record->studying == 0) { // A mandatory field so must be the first time thru
@@ -92,7 +93,7 @@ class course_form extends moodleform {
 				$errors['student_number'] = get_string('value_required', 'local_obu_application');
 			} else if (read_user_by_username($data['student_number']) == null) {
 				$errors['student_number'] = get_string('user_not_found', 'local_obu_application');
-			}			
+			}
 		}
 
 		if (!empty($errors)) {

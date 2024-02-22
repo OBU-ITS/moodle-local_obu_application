@@ -42,7 +42,9 @@ class mdl_course_form extends moodleform {
 		$data->record = $this->_customdata['record'];
 		$data->administrator = $this->_customdata['administrator'];
 		$data->applications = $this->_customdata['applications'];
-		
+
+        $combo_code = $data->record->programme_code . $data->record->major_code . $data->record->campus;
+
 		if ($data->record != null) {
 			$fields = [
 				'code' => $data->record->code,
@@ -57,29 +59,32 @@ class mdl_course_form extends moodleform {
 				'programme_code' => $data->record->programme_code,
 				'major_code' => $data->record->major_code,
 				'level' => $data->record->level,
-				'cohort_code' => $data->record->cohort_code
+                'cohort_code' => $data->record->cohort_code,
+                'course_start_sep' => $data->record->course_start_sep,
+                'course_start_jan' => $data->record->course_start_jan,
+                'course_start_jun' => $data->record->course_start_jun
 			];
 			$this->set_data($fields);
 		}
-		
+
 		$mform->addElement('html', '<h2>' . get_string('update_course', 'local_obu_application') . '</h2>');
 
 		// If we don't have a course yet, let them select one
 		if ($data->id == '') {
-			$select = $mform->addElement('select', 'id', get_string('course', 'local_obu_application'), $data->courses, null);
+			$select = $mform->addElement('autocomplete', 'id', get_string('course', 'local_obu_application'), $data->courses, null);
 			$select->setSelected(0);
 			$this->add_action_buttons(true, get_string('continue', 'local_obu_application'));
 			return;
 		}
-		
+
 		$mform->addElement('hidden', 'id', $data->id);
 		$mform->setType('id', PARAM_RAW);
-		
+
 		// This 'dummy' element has two purposes:
 		// - To force open the Moodle Forms invisible fieldset outside of any table on the form (corrupts display otherwise)
 		// - To let us inform the user that there are validation errors without them having to scroll down further
 		$mform->addElement('static', 'form_errors');
-		
+
 		if ($data->delete) {
 			$mform->addElement('static', 'code', get_string('code', 'local_obu_application'));
 			$mform->addElement('static', 'name', get_string('name', 'local_obu_application'));
@@ -128,7 +133,11 @@ class mdl_course_form extends moodleform {
 			$mform->setType('level', PARAM_TEXT);
 			$mform->addElement('text', 'cohort_code', get_string('cohort_code', 'local_obu_application'), 'size="25" maxlength="25"');
 			$mform->setType('cohort_code', PARAM_TEXT);
+            $mform->addElement('advcheckbox', 'course_start_sep', get_string('course_start_sep', 'local_obu_application'), null, null, array(0, 1));
+            $mform->addElement('advcheckbox', 'course_start_jan', get_string('course_start_jan', 'local_obu_application'), null, null, array(0, 1));
+            $mform->addElement('advcheckbox', 'course_start_jun', get_string('course_start_jun', 'local_obu_application'), null, null, array(0, 1));
 			$mform->addElement('static', 'applications', get_string('applications', 'local_obu_application'), $data->applications);
+            $mform->addElement('static', 'combo_code', get_string('combo_code', 'local_obu_application'), $combo_code);
 		}
 
 		// Options
@@ -165,7 +174,7 @@ class mdl_course_form extends moodleform {
 				}
 			}
 		}
-		
+
 		if (!empty($errors)) {
 			$errors['form_errors'] = get_string('form_errors', 'local_obu_application');
 		}

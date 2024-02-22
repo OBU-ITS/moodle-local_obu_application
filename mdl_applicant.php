@@ -55,7 +55,7 @@ if ($role == 'administration') {
 	$back = $home . 'course/view.php?id=' . $applications_course;
 }
 
-$heading = get_string('applicants', 'local_obu_application');
+$heading = get_string('namerefsearch', 'local_obu_application');
 $PAGE->set_url($url);
 $PAGE->set_pagelayout('standard');
 $PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
@@ -75,11 +75,21 @@ if ($mform->is_cancelled()) {
     redirect($back);
 } 
 else if ($mform_data = $mform->get_data()) {
-	$applicants = get_applicants_by_name($mform_data->lastname);
-	if (count($applicants) == 1) {
-		$url = $dir . 'mdl_' . $action . '.php?userid=' . array_values($applicants)[0]->userid;
-		redirect($url);
-	}
+    if (preg_match('~[0-9]+~', $mform_data->nameref)) {
+        $url = $dir . 'mdl_process.php?source=mdl_applicant.php&id=' . $mform_data->nameref;
+        redirect($url);
+    }
+    $applicants = get_applicants_by_last_name($mform_data->nameref);
+    if (count($applicants) == 1) {
+        $url = $dir . 'mdl_' . $action . '.php?userid=' . array_values($applicants)[0]->userid;
+        redirect($url);
+    } else if (count($applicants) == 0){
+        $applicants = get_applicants_by_first_name($mform_data->nameref);
+        if (count($applicants) == 1) {
+            $url = $dir . 'mdl_' . $action . '.php?userid=' . array_values($applicants)[0]->userid;
+            redirect($url);
+        }
+    }
 }	
 
 echo $OUTPUT->header();

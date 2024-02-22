@@ -982,6 +982,37 @@ function get_dates() {
 	return $dates;
 }
 
+function get_course_dates() {
+	$months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+	$coursedatesthreshold = 1;
+
+	$month = date('m');
+	$year = date('y');
+
+	$dates = array('' => get_string('select', 'local_obu_application'));
+
+	while (count($dates) < 5) {
+		$tempmonthindex = ($month - 1) - $coursedatesthreshold;
+
+		if ($months[$tempmonthindex] == 'SEP') {
+			$dates[$months[$tempmonthindex] . $year] = $months[$tempmonthindex] . $year . " (Sem 1)";
+		} elseif ($months[$tempmonthindex] == 'JAN') {
+			$dates[$months[$tempmonthindex] . $year] = $months[$tempmonthindex] . $year . " (Sem 2)";
+		} elseif ($months[$tempmonthindex] == 'JUN') {
+			$dates[$months[$tempmonthindex] . $year] = $months[$tempmonthindex] . $year . " (Sem 3)";
+		}
+
+		if ($month < 12) {
+			$month++;
+		} else {
+			$year++;
+			$month = 1;
+		}
+	}
+
+	return $dates;
+}
+
 function get_application_status($user_id, $application, &$text, &$button) { // Get the status from the given user's perspective
 
 	$text = '';

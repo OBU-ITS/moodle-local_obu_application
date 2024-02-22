@@ -45,38 +45,33 @@ $dir = $home . 'local/obu_application/';
 $url = $dir . 'mdl_course_list.php';
 
 $table = new html_table();
-$table->head = array('Name', 'Code', 'Supplement', 'Programme', 'Suspended', 'Administrator', 'Module Subject', 'Module Number', 'Campus', 'Program Code', 'Major Code', 'Level', 'Cohort Code');
+$table->head = array('Name', 'Code', 'Supplement', 'Programme', 'Suspended', 'Administrator', 'Module Subject', 'Module Number', 'Campus', 'Program Code', 'Major Code', 'Level', 'Cohort Code', 'Sep', 'Jan', 'Jun');
 
 $courses = get_course_records();
+$admins = get_course_admins();
+$course_admins = [];
+foreach($admins as $admin) {
+    $course_admins[$admin->username] = $admin->username . ' (' . $admin->firstname . ' ' . $admin->lastname . ')';
+}
+
 if ($courses != null) {
 	foreach ($courses as $course) {
-		if ($course->programme == 1) {
-			$programme = 'Yes';
-		} else {
-			$programme = '';
-		}
-		if ($course->suspended == 1) {
-			$suspended = 'Yes';
-		} else {
-			$suspended = '';
-		}
 		if ($course->administrator == '') {
 			$administrator = '';
 		} else {
-			$user = read_user_by_username($course->administrator);
-			if ($user == null) {
-				$administrator = get_string('user_not_found', 'local_obu_application');
+			if (array_key_exists($course->administrator, $course_admins)) {
+                $administrator = $course_admins[$course->administrator];
 			} else {
-				$administrator = $user->username . ' (' . $user->firstname . ' ' . $user->lastname . ')';
+                $administrator = get_string('user_not_found', 'local_obu_application');
 			}
 		}
-			
+
 		$table->data[] = array(
 			$course->name,
 			$course->code,
 			$course->supplement,
-			$programme,
-			$suspended,
+            $course->programme ? 'Yes' : '',
+            $course->suspended ? 'Yes' : '',
 			$administrator,
 			$course->module_subject,
 			$course->module_number,
@@ -84,7 +79,10 @@ if ($courses != null) {
 			$course->programme_code,
 			$course->major_code,
 			$course->level,
-			$course->cohort_code
+			$course->cohort_code,
+            $course->course_start_sep ? 'Y' : 'N',
+            $course->course_start_jan ? 'Y' : 'N',
+            $course->course_start_jun ? 'Y' : 'N'
 		);
 	}
 }
