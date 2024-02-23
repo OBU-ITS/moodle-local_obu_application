@@ -78,7 +78,8 @@ $PAGE->navbar->add($heading);
 
 $application = read_application($application_id);
 $application_title = $application->course_code . ' ' . $application->course_name . ' (Application Ref HLS/' . $application->id . ')';
-get_application_status($USER->id, $application, $text, $button, true); // get the approval trail and the next action (from the user's perspective)
+
+$text = get_application_status($USER->id, $application);
 $application_status = '<h4>' . $application_title . '</h4>' . $text;
 
 $parameters = [

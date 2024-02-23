@@ -460,14 +460,14 @@ $string['invoice_text'] = 'If \'Invoice\' enter details here:';
 $string['invoice_ref'] = 'PO number';
 $string['invoice_contact'] = 'Staff member to receive invoice';
 
-$string['actioned_by'] = '{$a->action} by {$a->by}.';
+$string['actioned_by'] = '{$a->action} by {$a->by}';
 $string['submitted'] = 'Submitted';
 $string['approved'] = 'Approved';
 $string['rejected'] = 'Rejected';
 $string['withdrawn'] = 'Withdrawn';
 $string['processed'] = 'Processed';
 
-$string['awaiting_action'] = 'Awaiting {$a->action} by {$a->by}.';
+$string['awaiting_action'] = 'Awaiting {$a->action} by {$a->by}';
 $string['amendment'] = 'amendment/resubmission';
 $string['submission'] = 'submission';
 $string['approval'] = 'approval';

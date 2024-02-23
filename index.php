@@ -81,7 +81,8 @@ $applications = get_applications($USER->id); // get all applications for the use
 echo '<h2>Application History</h2>';
 if ($applications) {
     foreach ($applications as $application) {
-        get_application_status($USER->id, $application, $text, $button, $manager); // get the approval trail and the next action (from this user's perspective)
+        $text = get_application_status($USER->id, $application, $manager);
+        $button = get_application_button_text($USER->id, $application, $manager);
         $application_title = $application->course_code . ' ' . $application->course_name . ' (Application Ref HLS/' . $application->id . ')';
         if (($button != 'submit') || $manager) {
             echo '<h4><a href="' . $process . '?id=' . $application->id . '">' . $application_title . '</a></h4>';
