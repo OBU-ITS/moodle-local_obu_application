@@ -75,7 +75,7 @@ if (($application->approval_state == 0) && ($application->approval_level == 0)) 
 		$message = get_string('application_unavailable', 'local_obu_application');
 	}
 	$status_text = get_string('status_not_submitted', 'local_obu_application');
-	
+
 	// We currently auto-submit the application to avoid a two-stage process for the applicant
 	update_workflow($application);
 	$status_text = '';
@@ -91,7 +91,7 @@ if ($status_text) {
 	$status_text = '<h3>' . $status_text . '</h3>';
 }
 
-get_application_status($USER->id, $application, $text, $button_text); // get the approval trail and the next action (from user's perspective)
+get_application_status($USER->id, $application, $text, $button_text, false); // get the approval trail and the next action (from user's perspective)
 $status_text .= $text;
 
 if ($button_text != 'approve') { // If not the next approver, check that this user is the applicant
@@ -112,7 +112,7 @@ $mform = new process_form(null, $parameters);
 
 if ($mform->is_cancelled()) {
     redirect($back);
-} 
+}
 else if ($mform_data = $mform->get_data()) {
 	if (($button_text == 'approve') && ($mform_data->submitbutton != get_string('continue', 'local_obu_application')) // They can do something (and they want to)
 		&& ($mform_data->approval_state == $application->approval_state) && ($mform_data->approval_level == $application->approval_level)) { // Check nothing happened while we were away (or they clicked twice)

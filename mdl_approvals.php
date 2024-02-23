@@ -85,7 +85,7 @@ foreach ($approvals as $approval) {
 		if (($approver_username == '') || ($approver_username == 'hls')
 			|| (($approver_username == 'administrator') && ($application->approval_level == 1))
 			|| (($approver_username == 'funder') && ($application->approval_level == 2))) {
-			get_application_status($USER->id, $application, $text, $button); // get the approval trail and the next action (from the user's perspective)
+			get_application_status($USER->id, $application, $text, $button, true); // get the approval trail and the next action (from the user's perspective)
 			echo '<h4><a href="' . $process . '?source=' . urlencode('mdl_approvals.php?approver=' . $approver_username) . '&id=' . $application->id . '">' . $application->course_code . ' ' . $application->course_name . ' (' . $application->lastname . ' - HLS/' . $application->id . ') (' . $application->course_date . ')' . '</a></h4>';
 			echo $text;
 			if (has_capability('local/obu_application:update', context_system::instance()) && ($application->approval_level < 3)) { // Can't redirect away from final HLS approval/processing

@@ -36,7 +36,8 @@ class mdl_course_form extends moodleform {
         $mform =& $this->_form;
 
         $data = new stdClass();
-		$data->id = $this->_customdata['id'];
+        $data->id = $this->_customdata['id'];
+        $data->show_suspended = $this->_customdata['show_suspended'];
 		$data->delete = $this->_customdata['delete'];
         $data->courses = $this->_customdata['courses'];
         $data->courses_with_suspended = $this->_customdata['courses_with_suspended'];
@@ -85,6 +86,9 @@ class mdl_course_form extends moodleform {
 
 		$mform->addElement('hidden', 'id', $data->id);
 		$mform->setType('id', PARAM_RAW);
+
+//        $mform->addElement('hidden', 'show_suspended', $data->show_suspended);
+//        $mform->setType('show_suspended', PARAM_RAW);
 
 		// This 'dummy' element has two purposes:
 		// - To force open the Moodle Forms invisible fieldset outside of any table on the form (corrupts display otherwise)
