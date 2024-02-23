@@ -65,7 +65,7 @@ if ($application === false) {
 $url = $home . 'local/obu_application/mdl_process.php?source=' . $source . '&id=' . $application->id;
 
 $title = get_string('applications_management', 'local_obu_application');
-$heading = get_string('application', 'local_obu_application', $application->id);
+$heading = get_string('application_ref', 'local_obu_application', $application->id);
 $PAGE->set_url($url);
 $PAGE->set_pagelayout('standard');
 $PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
@@ -125,7 +125,9 @@ if ($mform_data = $mform->get_data()) {
 		update_workflow($application, true, $mform_data); // Approved / Revoked / Reinstated
 	} else if (isset($mform_data->rejectbutton) && ($mform_data->rejectbutton == get_string('reject', 'local_obu_application'))) {
         redirect($home . 'local/obu_application/mdl_reject.php?source=' . urlencode($url) . "&id=" . $application->id);
-	} else if (isset($mform_data->withdrawbutton) && ($mform_data->withdrawbutton == get_string('withdraw', 'local_obu_application'))) {
+	} else if (isset($mform_data->revokebutton) && ($mform_data->revokebutton == get_string('revoke', 'local_obu_application'))) {
+        redirect($home . 'local/obu_application/mdl_revoke.php?source=' . urlencode($url) . "&id=" . $application->id);
+    } else if (isset($mform_data->withdrawbutton) && ($mform_data->withdrawbutton == get_string('withdraw', 'local_obu_application'))) {
 		update_workflow($application, false, $mform_data); // Withdrawn
 	} else if (isset($mform_data->amenddetailsbutton) && ($mform_data->amenddetailsbutton == get_string('amend_details', 'local_obu_application'))) {
 		redirect($home . 'local/obu_application/mdl_amend_details.php?id=' . $application->id); // Amend the personal details

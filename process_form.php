@@ -502,7 +502,7 @@ class process_form extends moodleform {
 
 		// Options
 		$buttonarray = array();
-		if ($data->button_text != 'cancel') {
+		if ($data->button_text != 'cancel' && $data->button_text != 'revoke') {
 			$buttonarray[] = &$mform->createElement('submit', 'submitbutton', get_string($data->button_text, 'local_obu_application'));
 		}
 		if ($data->button_text != 'continue') {
@@ -545,6 +545,7 @@ class process_form extends moodleform {
 					}
 				}
 			} else if ($data->button_text == 'revoke') { // A manager can revoke or withdraw an HLS-approved application
+                $buttonarray[] = &$mform->createElement('submit', 'revokebutton', get_string('revoke', 'local_obu_application'));
 				$buttonarray[] = &$mform->createElement('submit', 'withdrawbutton', get_string('withdraw', 'local_obu_application'));
 			}
 			$buttonarray[] = &$mform->createElement('cancel');
