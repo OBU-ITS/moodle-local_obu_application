@@ -320,7 +320,11 @@ class process_form extends moodleform {
 			$mform->setExpanded('statement_head');
 		}
 		$mform->addElement('static', 'statement', get_string('statement', 'local_obu_application'));
-		
+
+		if ($data->record->statement != ""){
+            $mform->addElement('submit', 'statementbutton', get_string('export_statement', 'local_obu_application'));
+        }
+
 		if ($approval_sought != 2) { // All bar the funder
 
 			if ($data->record->nationality != 'GB') {

@@ -141,7 +141,18 @@ if ($mform_data = $mform->get_data()) {
 		redirect($home . 'local/obu_application/mdl_amend_funder.php?id=' . $application->id); // Amend the funder
 	} else if (isset($mform_data->amendfundingbutton) && ($mform_data->amendfundingbutton == get_string('amend_funding', 'local_obu_application'))) {
 		redirect($home . 'local/obu_application/mdl_amend_funding.php?id=' . $application->id); // Amend the funding
-	}
+	} else if (isset($mform_data->statementbutton) && ($mform_data->statementbutton == get_string('export_statement', 'local_obu_application'))) {
+        //TODO:: Import PhpWord
+        $templateProcessor = new TemplateProcessor($application->id . 'statement.docx');
+
+        $templateProcessor->setValue('date', date("d-m-Y"));
+        $templateProcessor->setValue('name', 'John Doe');
+        $templateProcessor->setValue(
+            ['city', 'street'],
+            ['Sunnydale, 54321 Wisconsin', '123 International Lane']);
+
+        $templateProcessor->saveAs('MyWordFile.docx');
+    }
 
 	redirect($back);
 }
