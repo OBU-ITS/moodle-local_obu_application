@@ -1015,12 +1015,38 @@ function get_course_dates() {
 	return $dates;
 }
 
-function get_application_status($user_id, $application, &$text, &$button) { // Get the status from the given user's perspective
+function get_application_status_new($user_id, $application, &$text, &$button, $manager=null) {
+	$text = '';
+	$button = '';
+	if(!isset($manager)) {
+		$manager = is_manager();
+	}
+
+	// Prepare the submission/approval trail
+	$date = date_create();
+	$format = 'd-m-y H:i';
+
+	if ($application->approval_level > 0) {
+		date_timestamp_set($date, $application->application_date);
+		$text .= date_format($date, $format) . ' ';
+		if ($application->userid == $user_id) {
+			$name = 'you';
+		} else {
+			$approver = get_complete_user_data('id', $application->userid);
+			$name = $approver->firstname . ' ' . $approver->lastname . ' (' . $approver->email . ')';
+		}
+		$text .= get_string('actioned_by', 'local_obu_application', array('action' => get_string('submitted', 'local_obu_application'), 'by' => $name));
+		$text .= '<br />';
+	}
+}
+
+function get_application_status($user_id, $application, &$text, &$button, $manager=null) {
 
 	$text = '';
 	$button = '';
-	$manager = is_manager();
-	$administrator = is_administrator();
+	if(!isset($manager)) {
+		$manager = is_manager();
+	}
 
 	// Prepare the submission/approval trail
 	$date = date_create();
@@ -1029,7 +1055,7 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 		date_timestamp_set($date, $application->application_date);
 		$text .= date_format($date, $format) . ' ';
 		if ($application->userid == $user_id) {
-			$name = 'you';
+				$name = 'you';
 		} else {
 			$approver = get_complete_user_data('id', $application->userid);
 			$name = $approver->firstname . ' ' . $approver->lastname . ' (' . $approver->email . ')';
@@ -1053,7 +1079,8 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 				$text .= get_string('actioned_by', 'local_obu_application', array('action' => get_string('approved', 'local_obu_application'), 'by' => $name));
 			}
 			$text .= ' ' . $application->approval_1_comment . '<br />';
-		} else if ($application->approval_level > 1) {
+		}
+		else if ($application->approval_level > 1) {
 			if ($application->manager_email != '') {
 				date_timestamp_set($date, $application->approval_1_date);
 				$text .= date_format($date, $format) . ' ';
@@ -1085,7 +1112,8 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 					$text .= get_string('actioned_by', 'local_obu_application', array('action' => get_string('approved', 'local_obu_application'), 'by' => $name));
 				}
 				$text .= ' ' . $application->approval_2_comment . '<br />';
-			} else if ($application->approval_level > 2) { // HLS
+			}
+			else if ($application->approval_level > 2) { // HLS
 				if ($application->self_funding == '0') { // This step would have been skipped
 					date_timestamp_set($date, $application->approval_2_date);
 					$text .= date_format($date, $format) . ' ';
@@ -1144,7 +1172,8 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 			$action = html_writer::span(get_string('awaiting_action', 'local_obu_application', array('action' => get_string('submission', 'local_obu_application'), 'by' => $name)), '',
 				array('style' => 'color:red'));
 			$text .= '<p />' . $action;
-		} else {
+		}
+		else {
 			if ($application->approval_level == 1) { // Programme administrator/manager
 				$approver = get_complete_user_data('email', strtolower($application->manager_email));
 				if ($approver === false) {
@@ -1152,17 +1181,20 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 				} else {
 					$name = $approver->firstname . ' ' . $approver->lastname . ' (' . $approver->email . ')';
 				}
-			} else if ($application->approval_level == 2) { // Funder
+			}
+			else if ($application->approval_level == 2) { // Funder
 				$approver = get_complete_user_data('email', strtolower($application->funder_email));
 				if ($approver === false) {
 					$name = $application->funder_email;
 				} else {
 					$name = $approver->firstname . ' ' . $approver->lastname . ' (' . $approver->email . ')';
 				}
-			} else { // HLS
+			}
+			else { // HLS
 				$approver = get_complete_user_data('username', 'hls');
 				$name = $approver->firstname . ' ' . $approver->lastname;
 			}
+
 			if (($approver !== false) && ($approver->id == $user_id)) {
 				$name = 'you';
 				$button = 'approve';
@@ -1175,13 +1207,21 @@ function get_application_status($user_id, $application, &$text, &$button) { // G
 				array('style' => 'color:red'));
 			$text .= '<p />' . $action;
 		}
-	} else if ($manager && ($application->approval_level == 3) && ($application->approval_state == 2)) { // A manager can revoke or withdraw an HLS-approved application
-		$button = 'revoke';
-	} else if ($administrator && ($application->approval_state == 1 || $application->approval_state == 3)) { // An administrator can reinstate a rejected application
-		$button = 'reinstate';
-	} else { // Application processed - nothing more to say...
-		$button = 'continue';
+
+		return;
 	}
+
+	if ($manager && ($application->approval_level == 3) && ($application->approval_state == 2)) { // A manager can revoke or withdraw an HLS-approved application
+		$button = 'revoke';
+		return;
+	}
+
+	if (($application->approval_state == 1 || $application->approval_state == 3) && is_administrator()) { // An administrator can reinstate a rejected application
+		$button = 'reinstate';
+		return;
+	}
+
+	$button = 'continue';
 }
 
 function update_workflow(&$application, $approved = true, $data = null) {

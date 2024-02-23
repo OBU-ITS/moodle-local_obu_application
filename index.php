@@ -57,6 +57,7 @@ echo $OUTPUT->header();
 <?php
 
 $process = new moodle_url('/local/obu_application/process.php');
+$manager = is_manager();
 
 // TODO : Plan on what to do with this
 //// Display any outstanding approvals
@@ -74,21 +75,21 @@ $process = new moodle_url('/local/obu_application/process.php');
 //	echo get_string('page_content', 'local_obu_application');
 //}
 
+
 // Display applications submitted
 $applications = get_applications($USER->id); // get all applications for the user
 echo '<h2>Application History</h2>';
 if ($applications) {
     foreach ($applications as $application) {
-        get_application_status($USER->id, $application, $text, $button); // get the approval trail and the next action (from this user's perspective)
+        get_application_status($USER->id, $application, $text, $button, $manager); // get the approval trail and the next action (from this user's perspective)
         $application_title = $application->course_code . ' ' . $application->course_name . ' (Application Ref HLS/' . $application->id . ')';
-        if (($button != 'submit') || $currentuser || $manager) {
+        if (($button != 'submit') || $manager) {
             echo '<h4><a href="' . $process . '?id=' . $application->id . '">' . $application_title . '</a></h4>';
         } else {
             echo '<h4>' . $application_title . '</h4>';
         }
         echo $text;
     }
-    echo '<h4>' . get_string('amend_application', 'local_obu_application') . '</h4>';
 }
 else {
     echo 'You currently do not have any applications in the portal';

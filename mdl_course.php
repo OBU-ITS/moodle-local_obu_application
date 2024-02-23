@@ -68,12 +68,15 @@ $record = null;
 $administrator = null;
 $applications = 0;
 
-if (isset($_REQUEST['show_suspended'])) {
-    $show_suspended = $_REQUEST['show_suspended'];
-    $id = $show_suspended ? $_REQUEST['id'] :  $_REQUEST['id_not_suspended'];
+if (isset($_REQUEST['id']) ||isset($_REQUEST['id_not_suspended'])) {
+
+    $show_suspended = $_REQUEST['show_suspended'] ?? true;
+    $id =  $show_suspended ? $_REQUEST['id'] : $_REQUEST['id_not_suspended'];
 
 	if ($id != '0') {
+
 		$record = read_course_record_by_id($id);
+
 		if (isset($_REQUEST['delete'])) {
 			$delete = true;
 		}
@@ -124,6 +127,7 @@ if (isset($_REQUEST['show_suspended'])) {
 
 $parameters = [
 	'id' => $id,
+    'show_suspended' => $show_suspended,
 	'delete' => $delete,
     'courses' => $courses,
     'courses_with_suspended' => $courses_with_suspended,
@@ -144,7 +148,8 @@ if ($mform->is_cancelled()) {
 else if ($mform_data = $mform->get_data()) {
 	if (isset($mform_data->submitbutton)) { // 'Save' or 'Confirm Deletion'
 		if ($mform_data->submitbutton == get_string('save', 'local_obu_application')) {
-			if (($mform_data->id == '0') && in_array(strtoupper($mform_data->code), $codes)) { // 'New' course already exists
+
+            if (($mform_data->id == '0') && in_array(strtoupper($mform_data->code), $codes)) { // 'New' course already exists
 				$message = get_string('existing_course', 'local_obu_application');
 			} else {
 				write_course_record($mform_data);

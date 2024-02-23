@@ -64,7 +64,7 @@ $process = new moodle_url('/local/obu_application/process.php');
 
 $applications = get_applications($user->id); // get all applications for the given user
 foreach ($applications as $application) {
-	get_application_status($USER->id, $application, $text, $button); // get the approval trail and the next action (from this user's perspective)
+	get_application_status($USER->id, $application, $text, $button, $manager); // get the approval trail and the next action (from this user's perspective)
 	if (($button != 'submit') || $currentuser || $manager) {
 		echo '<h4><a href="' . $process . '?source=' . urlencode('applications.php?userid=' . $user_id) . '&id=' . $application->id . '">Ref No ' . $application->id . '</a></h4>';
 	} else {

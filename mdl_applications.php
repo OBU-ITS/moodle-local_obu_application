@@ -72,9 +72,9 @@ $redirect = new moodle_url('/local/obu_application/mdl_redirect.php');
 
 $applications = get_applications($user->id); // get all applications for the given user
 foreach ($applications as $application) {
-	get_application_status($USER->id, $application, $text, $button); // get the approval trail and the next action (from this user's perspective)
+	get_application_status($USER->id, $application, $text, $button, true); // get the approval trail and the next action (from this user's perspective)
 	$application_title = $application->course_code . ' ' . $application->course_name . ' (Application Ref HLS/' . $application->id . ')';
-	if (($button != 'submit') || $currentuser || $manager) {
+	if (($button != 'submit') || $currentuser) {
 		echo '<h4><a href="' . $process . '?source=' . urlencode('mdl_applications.php?userid=' . $user_id) . '&id=' . $application->id . '">' . $application_title . '</a></h4>';
 	} else {
 		echo '<h4>' . $application_title . '</h4>';
