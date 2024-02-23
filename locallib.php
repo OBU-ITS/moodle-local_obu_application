@@ -1015,32 +1015,224 @@ function get_course_dates() {
 	return $dates;
 }
 
-function get_application_status_new($user_id, $application, &$text, &$button, $manager=null) {
-	$text = '';
-	$button = '';
+function get_application_status($user_id, $application, $manager=null) {
+	$text = "<div class='mb-4'>";
+	$date = date_create();
+	$format = 'd-m-y H:i';
+	$state = '';
+
 	if(!isset($manager)) {
 		$manager = is_manager();
 	}
 
-	// Prepare the submission/approval trail
-	$date = date_create();
-	$format = 'd-m-y H:i';
-
-	if ($application->approval_level > 0) {
+	// Submitted
+	$name = get_name_and_email($user_id, $application->userid);
+	$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('submitted', 'local_obu_application'), 'by' => $name));
+	$type = get_application_approval_type($application->approval_level, 0);
+	if($type == 'past') {
 		date_timestamp_set($date, $application->application_date);
-		$text .= date_format($date, $format) . ' ';
-		if ($application->userid == $user_id) {
-			$name = 'you';
-		} else {
-			$approver = get_complete_user_data('id', $application->userid);
-			$name = $approver->firstname . ' ' . $approver->lastname . ' (' . $approver->email . ')';
-		}
-		$text .= get_string('actioned_by', 'local_obu_application', array('action' => get_string('submitted', 'local_obu_application'), 'by' => $name));
-		$text .= '<br />';
+		$state = "Completed " . date_format($date, $format);
 	}
+
+	$text .= get_application_status_row_html($label, $type, $state);
+
+	// Administrator Approval
+	if($application->manager_email != '') {
+		$type = get_application_approval_type($application->approval_level, 1);
+		if($type == 'past') {
+			$name = '('. $application->manager_email . ')';
+			$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('approved', 'local_obu_application'), 'by' => $name));
+			date_timestamp_set($date, $application->approval_1_date);
+			$state = "Completed " . date_format($date, $format);
+		}
+		else if($type == 'current') {
+			$name = '('. $application->manager_email . ')';
+			if($application->approval_state > 0) {
+				if ($application->approval_state == 1) {
+					$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('rejected', 'local_obu_application'), 'by' => $name));
+				} else {
+					$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('approved', 'local_obu_application'), 'by' => $name));
+				}
+				$label .= $application->approval_1_comment;
+			}
+			else{
+				$label = "Awaiting administrative approval by " . $name;
+			}
+		}
+		else {
+			$label = "Administrative approval";
+		}
+
+		$text .= get_application_status_row_html($label, $type, $state);
+	}
+
+	// Funding Approval
+	if($application->self_funding == '0') {
+		$type = get_application_approval_type($application->approval_level, 2);
+		if($type == 'past') {
+			$name = '('. $application->funder_email . ')';
+			$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('approved', 'local_obu_application'), 'by' => $name));
+			date_timestamp_set($date, $application->approval_2_date);
+			$state = "Completed " . date_format($date, $format);
+		}
+		else if($type == 'current') {
+			$name = '('. $application->funder_email . ')';
+			if($application->approval_state > 0) {
+				if ($application->approval_state == 1) {
+					$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('rejected', 'local_obu_application'), 'by' => $name));
+				} else {
+					$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('approved', 'local_obu_application'), 'by' => $name));
+				}
+				$label .= $application->approval_2_comment;
+			}
+			else{
+				$label = "Awaiting funding approval by " . $name;
+			}
+		}
+		else {
+			$label = "Funding approval";
+		}
+
+		$text .= get_application_status_row_html($label, $type, $state);
+	}
+
+	// Academic Approval
+	$type = get_application_approval_type($application->approval_level, 3);
+	if($type == 'past') {
+		$name = '(HLS approvals)';
+		$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('approved', 'local_obu_application'), 'by' => $name));
+		date_timestamp_set($date, $application->approval_2_date);
+		$state = "Completed " . date_format($date, $format);
+	}
+	else if($type == 'current') {
+		$name = '(HLS approvals)';
+		if($application->approval_state > 0) {
+			if ($application->approval_state == 1) {
+				$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('rejected', 'local_obu_application'), 'by' => $name));
+			}
+			else if ($application->approval_state == 2) {
+				$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('approved', 'local_obu_application'), 'by' => $name));
+			}
+			else {
+				$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('withdrawn', 'local_obu_application'), 'by' => $name));
+			}
+			$label .= $application->approval_3_comment;
+		}
+		else{
+			$label = "Awaiting academic approval by " . $name;
+		}
+	}
+	else {
+		$label = "Academic approval";
+	}
+
+	$text .= get_application_status_row_html($label, $type, $state);
+
+	if ($manager) {
+		if ($application->admissions_xfer > 0) {
+			$text .= get_string('admissions', 'local_obu_application') . ' ' . get_string('data_xfer', 'local_obu_application') . ': ' .$application->admissions_xfer . '<br />';
+		}
+		if ($application->finance_xfer > 0) {
+			$text .= get_string('finance', 'local_obu_application') . ' ' . get_string('data_xfer', 'local_obu_application') . ': ' . $application->finance_xfer . '<br />';
+		}
+	}
+
+	$text .= "</div>";
+
+	return $text;
 }
 
-function get_application_status($user_id, $application, &$text, &$button, $manager=null) {
+function get_application_approval_type($current_level, $level) {
+	return $current_level == $level
+		? 'current'
+		: ($current_level < $level
+			? 'future'
+			: 'past');
+}
+
+function get_application_status_row_html($label, $type, $state) {
+	$text = '';
+
+	if ($type == 'past') {
+		$text .= "<div class='row text-primary'>";
+	}
+	else if ($type == 'current') {
+		$text .= "<div  class='row'>";
+	}
+	else {
+		$text .= "<div class='row text-muted'>";
+	}
+
+	$text .= "<div class='col-8'>";
+	if($type == 'future') {
+		$text .= $label;
+	}
+	else {
+		$text .= "<strong>" . $label . "</strong>";
+	}
+	$text .= "</div>";
+
+	$text .= "<div class='col-4'>";
+	if($type == 'future') {
+		$text .= "Not started";
+	}
+	else if($type == 'current') {
+		$text .= "<strong>" . "Pending" . "</strong>";
+	}
+	else {
+		$text .= "<strong>" . $state . "</strong>";
+	}
+	$text .= "</div>";
+
+	$text .= "</div>";
+
+	return $text;
+}
+
+function get_application_button_text($user_id, $application, $manager=null) {
+	if ($application->approval_state == 0) { // Awaiting submission/rejection/approval from someone
+		if ($application->approval_level == 0) { // Applicant hasn't submitted the application
+			if ($application->userid == $user_id) {
+				$button = 'submit';
+			} else {
+				$button = 'continue';
+			}
+		}
+		else {
+			if ($application->approval_level == 1) { // Programme administrator/manager
+				$approver = get_complete_user_data('email', strtolower($application->manager_email));
+			}
+			else if ($application->approval_level == 2) { // Funder
+				$approver = get_complete_user_data('email', strtolower($application->funder_email));
+			}
+			else { // HLS
+				$approver = get_complete_user_data('username', 'hls');
+			}
+
+			if (($approver !== false) && ($approver->id == $user_id)) {
+				$button = 'approve';
+			} else if (($approver !== false) && ($approver->username == 'hls') && $manager) {
+				$button = 'approve';
+			} else {
+				$button = 'continue';
+			}
+		}
+
+		return $button;
+	}
+
+	if ($manager && ($application->approval_level == 3) && ($application->approval_state == 2)) { // A manager can revoke or withdraw an HLS-approved application
+		return 'revoke';
+	}
+
+	if (($application->approval_state == 1 || $application->approval_state == 3) && is_administrator()) { // An administrator can reinstate a rejected application
+		return 'reinstate';
+	}
+
+	return 'continue';
+}
+
+function get_application_status_old($user_id, $application, &$text, &$button, $manager=null) {
 
 	$text = '';
 	$button = '';
@@ -1380,15 +1572,9 @@ function update_approver($application, $approver_email) {
 		'X-Auto-Response-Suppress: All',
 		'Auto-Submitted: auto-generated'
 	);
-	get_application_status($applicant->id, $application, $text, $button_text); // Get the status from the applicant's perspective
+	$text = get_application_status($applicant->id, $application); // Get the status from the applicant's perspective
 	$html = '<h4><a href="' . $process . '">HLS Application (Ref HLS/' . $application->id . ')</a></h4>' . $text;
 	email_to_user($applicant, $hls, 'The Status of Your HLS Application (Ref HLS/' . $application->id . ')', html_to_text($html), $html);
-	if ($approver_email != $hls->email) { // Update HLS unless they are the next approver
-		get_application_status($hls->id, $application, $text, $button_text); // get the status from the HLS's perspective
-		$html = '<h4><a href="' . $mdl_process . '">' . $application->course_code . ' ' . $application->course_name . ' (Application Ref HLS/' . $application->id . ')</a></h4>' . $text;
-//		email_to_user($hls, $applicant, 'Status Update: ' . $application->course_code . ' ' . $application->course_name . ' (' . $applicant->firstname . ' ' . $applicant->lastname . ')',
-//			html_to_text($html), $html);
-	}
 
 	// Notify the next approver (if there is one)
 	if ($approver_email != '') {
@@ -1407,12 +1593,8 @@ function update_approver($application, $approver_email) {
 			$approver->middlename = '';
 			$approver->alternatename = '';
 		}
-		if ($approver->email == $hls->email) { // HLS require the course name and will use 'mainstream' Moodle for their approvals
-/*			$link = '<a href="' . $mdl_process . '">' . $application->course_code . ' ' . $application->course_name . ' (Application Ref HLS/'. $application->id . ')</a>';
-			$html = get_string('request_approval', 'local_obu_application', $link);
-			email_to_user($approver, $applicant, 'Approval Required: ' . $application->course_code . ' ' . $application->course_name
-				. ' (' . $applicant->firstname . ' ' . $applicant->lastname . ')', html_to_text($html), $html);
-*/		} else {
+
+		if ($approver->email != $hls->email) {
 			$link = '<a href="' . $process . '">HLS Application (Application Ref HLS/' . $application->id . ')</a>';
 			$html = get_string('request_approval', 'local_obu_application', $link);
 			email_to_user($approver, $applicant, 'Request for HLS Application Approval ('

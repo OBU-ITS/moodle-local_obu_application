@@ -712,6 +712,19 @@ function write_application($user_id, $form_data) {
 	return $DB->insert_record('local_obu_application', $record); // The remaining fields will have default values
 }
 
+function get_name_and_email($current_user_id, $id) {
+    global $DB;
+
+    try {
+        $user = $DB->get_record('user', array("id" => $id), "firstname, lastname, email", MUST_EXIST);
+    }
+    catch (dml_exception $exception) {
+        return "Unknown User";
+    }
+
+    return $user->firstname . ' ' . $user->lastname . ' (' . $user->email . ')';
+}
+
 function update_application($application) {
     global $DB;
 

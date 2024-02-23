@@ -78,6 +78,7 @@ echo $OUTPUT->heading($heading);
 $process = new moodle_url('/local/obu_application/mdl_process.php');
 $redirect = new moodle_url('/local/obu_application/mdl_redirect.php');
 $approvals = get_approvals($approver_email); // get outstanding approval requests
+$manager = is_manager();
 
 foreach ($approvals as $approval) {
 	if (($approver_email != '') || ($approval->approver != $approver->email)) {
@@ -85,7 +86,8 @@ foreach ($approvals as $approval) {
 		if (($approver_username == '') || ($approver_username == 'hls')
 			|| (($approver_username == 'administrator') && ($application->approval_level == 1))
 			|| (($approver_username == 'funder') && ($application->approval_level == 2))) {
-			get_application_status($USER->id, $application, $text, $button, true); // get the approval trail and the next action (from the user's perspective)
+            $text = get_application_status($USER->id, $application, $manager);
+            $button = get_application_button_text($USER->id, $application, $manager);
 			echo '<h4><a href="' . $process . '?source=' . urlencode('mdl_approvals.php?approver=' . $approver_username) . '&id=' . $application->id . '">' . $application->course_code . ' ' . $application->course_name . ' (' . $application->lastname . ' - HLS/' . $application->id . ') (' . $application->course_date . ')' . '</a></h4>';
 			echo $text;
 			if (has_capability('local/obu_application:update', context_system::instance()) && ($application->approval_level < 3)) { // Can't redirect away from final HLS approval/processing

@@ -98,8 +98,9 @@ if ($status_text) {
 	$status_text = '<h3>' . $status_text . '</h3>';
 }
 
-get_application_status($USER->id, $application, $text, $button_text, true); // get the approval trail and the next action (from user's perspective)
-$status_text .= $text;
+$manager = is_manager();
+$status_text .= get_application_status($USER->id, $application, $manager);
+$button_text = get_application_button_text($USER->id, $application, $manager);
 
 $redirect = new moodle_url('/local/obu_application/mdl_redirect.php');
 if (has_capability('local/obu_application:update', context_system::instance()) && ($application->approval_level < 3)) { // Can't redirect away from final HLS approval/processing

@@ -91,8 +91,9 @@ if ($status_text) {
 	$status_text = '<h3>' . $status_text . '</h3>';
 }
 
-get_application_status($USER->id, $application, $text, $button_text, false); // get the approval trail and the next action (from user's perspective)
-$status_text .= $text;
+$manager = is_manager();
+$status_text .= get_application_status($USER->id, $application, $manager);
+$button_text = get_application_button_text($USER->id, $application, $manager);
 
 if ($button_text != 'approve') { // If not the next approver, check that this user is the applicant
 	if ($USER->id != $application->userid) {
