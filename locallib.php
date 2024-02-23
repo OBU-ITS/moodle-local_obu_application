@@ -1525,10 +1525,13 @@ function update_workflow(&$application, $approved = true, $data = null) {
 				$approver_email = $hls->email;
 			}
 			else if ($approved) { // Revoked
+				$application->approval_3_comment = $data->comment;
 				$application->approval_state = 0;
 				$application->approval_3_date = 0;
 				$application->admissions_xfer = 0;
 				$application->finance_xfer = 0;
+				$hls = get_complete_user_data('username', 'hls');
+				$approver_email = $hls->email;
 			} else { // Withdrawn
 				$application->approval_state = 3;
 				$application->approval_3_date = time();
