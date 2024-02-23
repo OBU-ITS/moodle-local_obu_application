@@ -124,7 +124,7 @@ if ($mform_data = $mform->get_data()) {
 	if (isset($mform_data->submitbutton) && ($mform_data->submitbutton != get_string('continue', 'local_obu_application'))) {
 		update_workflow($application, true, $mform_data); // Approved / Revoked / Reinstated
 	} else if (isset($mform_data->rejectbutton) && ($mform_data->rejectbutton == get_string('reject', 'local_obu_application'))) {
-		update_workflow($application, false, $mform_data); // Rejected
+        redirect($home . 'local/obu_application/mdl_reject.php?source=' . urlencode($url) . "&id=" . $application->id);
 	} else if (isset($mform_data->withdrawbutton) && ($mform_data->withdrawbutton == get_string('withdraw', 'local_obu_application'))) {
 		update_workflow($application, false, $mform_data); // Withdrawn
 	} else if (isset($mform_data->amenddetailsbutton) && ($mform_data->amenddetailsbutton == get_string('amend_details', 'local_obu_application'))) {

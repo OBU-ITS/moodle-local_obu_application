@@ -62,7 +62,6 @@ class course_form extends moodleform {
 		$mform->setExpanded('course_head');
 		$mform->addElement('autocomplete', 'course_code', get_string('course', 'local_obu_application'), $data->courses, null);
 		$mform->addElement('select', 'course_date', get_string('course_date', 'local_obu_application'), $data->dates, null);
-        $mform->setDefault('course_date', '');
         $mform->addRule('course_date', null, 'required', null, 'server');
 		$mform->addElement('html', '<p><strong>' . get_string('studying_preamble', 'local_obu_application') . '</strong></p>');
 		$options = [];
