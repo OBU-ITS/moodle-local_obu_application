@@ -143,16 +143,7 @@ if ($mform_data = $mform->get_data()) {
 	} else if (isset($mform_data->amendfundingbutton) && ($mform_data->amendfundingbutton == get_string('amend_funding', 'local_obu_application'))) {
 		redirect($home . 'local/obu_application/mdl_amend_funding.php?id=' . $application->id); // Amend the funding
 	} else if (isset($mform_data->statementbutton) && ($mform_data->statementbutton == get_string('export_statement', 'local_obu_application'))) {
-        //Uses the PHPWord library, will need to be installed in the environment
-        $templateProcessor = new TemplateProcessor($application->id . 'statement.docx');
-
-        $templateProcessor->setValue('date', date("d-m-Y"));
-        $templateProcessor->setValue('name', $application->title . " " .  $application->firstname . " " . $application->lastname);
-        $templateProcessor->setValue(
-            ['city', 'street'],
-            ['Sunnydale, 54321 Wisconsin', '123 International Lane']);
-
-        $templateProcessor->saveAs($application->id . "-" . get_string('statement_file', 'local_obu_application') . '.docx');
+        //TODO
     }
 
 	redirect($back);
