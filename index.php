@@ -46,54 +46,47 @@ $PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
 
 echo $OUTPUT->header();
 
-?>
-    <h1 class="mb-4">Welcome to your application portal account <?php echo $USER->firstname ?></h1>
-    <p>
-        You can apply for our HLS CPD courses <a href="application.php">here</a>.
-    </p>
-    <p>
-        <?php echo get_config('local_obu_application', 'support') ?>
-    </p>
-<?php
+$funder = is_funder();
+$lang_ext = $funder ? '_funder' : '';
 
-$process = new moodle_url('/local/obu_application/process.php');
+echo get_string('index_welcome_heading' . $lang_ext, 'local_obu_application', array('name' => $USER->firstname));
+echo get_string('index_welcome_text' . $lang_ext, 'local_obu_application');
+echo get_string('index_welcome_support' . $lang_ext, 'local_obu_application');
+
 $manager = is_manager();
+$process = new moodle_url('/local/obu_application/process.php');
 
-// TODO : Plan on what to do with this
-//// Display any outstanding approvals
-//$approvals = get_approvals($USER->email); // get outstanding approval requests
-//if ($approvals) {
-//	echo '<h2>' . get_string('your_approvals', 'local_obu_application') . '</h2>';
-//	foreach ($approvals as $approval) {
-//		$application = read_application($approval->application_id);
-//		$application_title = $application->firstname . ' ' . $application->lastname . ' (Application Ref HLS/' . $application->id . ')';
-//		echo '<h4><a href="' . $process . '?id=' . $application->id . '">' . $application_title . '</a></h4>';
-//		get_application_status($USER->id, $application, $text, $button); // get the approval trail and the next action (from the user's perspective)
-//		echo $text;
-//	}
-//} else {
-//	echo get_string('page_content', 'local_obu_application');
-//}
-
-
-// Display applications submitted
-$applications = get_applications($USER->id); // get all applications for the user
-echo '<h2>Application History</h2>';
-if ($applications) {
-    foreach ($applications as $application) {
-        $text = get_application_status($USER->id, $application, $manager);
-        $button = get_application_button_text($USER->id, $application, $manager);
-        $application_title = $application->course_code . ' ' . $application->course_name . ' (Application Ref HLS/' . $application->id . ')';
-        if (($button != 'submit') || $manager) {
+echo get_string('index_overview_heading' . $lang_ext, 'local_obu_application');
+if($funder) {
+    $approvals = get_approvals($USER->email); // get outstanding approval requests
+    if ($approvals) {
+        foreach ($approvals as $approval) {
+            $application = read_application($approval->application_id);
+            $application_title = $application->firstname . ' ' . $application->lastname . ' (Application Ref HLS/' . $application->id . ')';
             echo '<h4><a href="' . $process . '?id=' . $application->id . '">' . $application_title . '</a></h4>';
-        } else {
-            echo '<h4>' . $application_title . '</h4>';
+            echo get_application_status($USER->id, $application, $manager);
         }
-        echo $text;
+    } else {
+        echo get_string('index_overview_empty_funder', 'local_obu_application');
     }
 }
 else {
-    echo 'You currently do not have any applications in the portal';
+    $applications = get_applications($USER->id); // get all applications for the user
+    if ($applications) {
+        foreach ($applications as $application) {
+            $text = get_application_status($USER->id, $application, $manager);
+            $button = get_application_button_text($USER->id, $application, $manager);
+            $application_title = $application->course_code . ' ' . $application->course_name . ' (Application Ref HLS/' . $application->id . ')';
+            if (($button != 'submit') || $manager) {
+                echo '<h4><a href="' . $process . '?id=' . $application->id . '">' . $application_title . '</a></h4>';
+            } else {
+                echo '<h4>' . $application_title . '</h4>';
+            }
+            echo $text;
+        }
+    } else {
+        echo get_string('index_overview_empty', 'local_obu_application');
+    }
 }
 
 echo $OUTPUT->footer();

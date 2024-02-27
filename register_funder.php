@@ -88,6 +88,7 @@ if ($mform->is_cancelled()) {
         $user->mnethostid = $CFG->mnet_localhost_id;
         $user->secret = random_string(15);
         $user->auth = 'email';
+        $user->institution = 'funder';
 
         // Initialize alternate name fields to empty strings.
         $namefields = array_diff(\core_user\fields::get_name_fields(), useredit_get_required_name_fields());

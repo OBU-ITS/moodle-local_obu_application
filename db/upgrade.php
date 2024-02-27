@@ -679,5 +679,66 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
         upgrade_plugin_savepoint(true, 2024021301, 'local', 'obu_application');
     }
 
+    if($oldversion < 2024022601) {
+        // Identify funder users
+        $sql = "UPDATE mdl_user
+                INNER JOIN mdl_local_obu_application ON mdl_local_obu_application.funder_email = mdl_user.email
+                SET mdl_user.institution = 'funder'
+                WHERE mdl_local_obu_application.funder_email IS NOT NULL 
+                    AND mdl_local_obu_application.funder_email <> ''";
+
+        $DB->execute($sql);
+
+        // Add new columns for last updated
+        $table = new xmldb_table('local_obu_applicant');
+        $field = new xmldb_field('contact_details_update', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'profile_update');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        $field = new xmldb_field('criminal_record_update', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'contact_details_update');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        $field = new xmldb_field('current_employment_update', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'criminal_record_update');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        $field = new xmldb_field('edu_establishments_update', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'current_employment_update');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        $field = new xmldb_field('personal_details_update', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'edu_establishments_update');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        $field = new xmldb_field('pro_qualification_update', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'personal_details_update');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        $field = new xmldb_field('pro_registration_update', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'pro_qualification_update');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        $field = new xmldb_field('profile_update', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+
+        if($dbman->field_exists($table, $field)) {
+            $sql = "UPDATE mdl_local_obu_applicant
+                SET contact_details_update = profile_update
+                    AND criminal_record_update = profile_update
+                    AND current_employment_update = profile_update
+                    AND edu_establishments_update = profile_update
+                    AND personal_details_update = profile_update
+                    AND pro_qualification_update = profile_update
+                    AND pro_registration_update = profile_update";
+
+            $DB->execute($sql);
+
+            $dbman->drop_field($table, $field);
+        }
+
+        upgrade_plugin_savepoint(true, 2024022601, 'local', 'obu_application');
+    }
+
     return $result;
 }

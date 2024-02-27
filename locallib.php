@@ -29,7 +29,7 @@ require_once($CFG->dirroot . '/user/profile/lib.php');
 require_once($CFG->dirroot . '/local/obu_application/db_update.php');
 
 // Check if the user is an applications manager
-function is_manager() {
+function is_manager() : bool {
 	global $USER;
 
 	if (is_siteadmin()) {
@@ -40,7 +40,7 @@ function is_manager() {
 }
 
 // Check if the user is an applications administrator
-function is_administrator() {
+function is_administrator() : bool {
 	global $USER;
 
 	if (is_siteadmin()) {
@@ -48,6 +48,16 @@ function is_administrator() {
 	}
 
 	return has_applications_role($USER->id, 4);
+}
+
+function is_funder() : bool {
+	global $USER;
+
+	if (is_siteadmin() && isset($_REQUEST['funder'])) {
+		return true;
+	}
+
+	return $USER->institution == 'funder';
 }
 
 // Get all applications managers/administrators
