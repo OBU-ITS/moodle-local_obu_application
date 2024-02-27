@@ -288,6 +288,7 @@ $string['revoke'] = 'Revoke';
 $string['withdraw'] = 'Withdraw';
 $string['reinstate'] = 'Reinstate';
 $string['export_statement'] = 'Export Statement';
+$string['statement_file'] = 'Statement';
 $string['reject_comment'] = 'Comment or Reason for Rejection (for Applicant)';
 $string['revoke_comment'] = 'Comment or Reason for Revocation (for Applicant)';
 $string['manager_comment'] = 'Optional comment on administration/ notes (visible to applicant)';
