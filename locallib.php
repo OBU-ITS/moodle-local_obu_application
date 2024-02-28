@@ -1107,11 +1107,11 @@ function get_application_status($user_id, $application, $manager=null) {
 	}
 
 	// Academic Approval
-	$type = get_application_approval_type($application->approval_level, 3);
+	$type = get_application_approval_type($application->approval_level, 3, $application->approval_state);
 	if($type == 'past') {
 		$name = '(HLS approvals)';
 		$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('approved', 'local_obu_application'), 'by' => $name));
-		date_timestamp_set($date, $application->approval_2_date);
+		date_timestamp_set($date, $application->approval_3_date);
 		$state = "Completed " . date_format($date, $format);
 	}
 	else if($type == 'current') {
@@ -1152,7 +1152,11 @@ function get_application_status($user_id, $application, $manager=null) {
 	return $text;
 }
 
-function get_application_approval_type($current_level, $level) {
+function get_application_approval_type($current_level, $level, $state = 0) {
+
+	if ($state == 2) {
+		return 'past';
+	}
 	return $current_level == $level
 		? 'current'
 		: ($current_level < $level
