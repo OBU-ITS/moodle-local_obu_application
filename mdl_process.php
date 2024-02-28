@@ -143,7 +143,8 @@ if ($mform_data = $mform->get_data()) {
 	} else if (isset($mform_data->amendfundingbutton) && ($mform_data->amendfundingbutton == get_string('amend_funding', 'local_obu_application'))) {
 		redirect($home . 'local/obu_application/mdl_amend_funding.php?id=' . $application->id); // Amend the funding
 	} else if (isset($mform_data->statementbutton) && ($mform_data->statementbutton == get_string('export_statement', 'local_obu_application'))) {
-        //TODO
+        redirect($home . 'local/obu_application/mdl_statement.php?source=' . urlencode($url) . "&id=" . $application->id);
+
     }
 
 	redirect($back);
