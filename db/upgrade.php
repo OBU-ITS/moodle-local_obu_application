@@ -720,24 +720,30 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
             $dbman->add_field($table, $field);
         }
 
+        upgrade_plugin_savepoint(true, 2024022601, 'local', 'obu_application');
+    }
+
+    if($oldversion < 2024022602) {
+
+        $table = new xmldb_table('local_obu_applicant');
         $field = new xmldb_field('profile_update', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
 
         if($dbman->field_exists($table, $field)) {
             $sql = "UPDATE mdl_local_obu_applicant
-                SET contact_details_update = profile_update
-                    AND criminal_record_update = profile_update
-                    AND current_employment_update = profile_update
-                    AND edu_establishments_update = profile_update
-                    AND personal_details_update = profile_update
-                    AND pro_qualification_update = profile_update
-                    AND pro_registration_update = profile_update";
+                SET contact_details_update = profile_update,
+                    criminal_record_update = profile_update,
+                    current_employment_update = profile_update,
+                    edu_establishments_update = profile_update,
+                    personal_details_update = profile_update,
+                    pro_qualification_update = profile_update,
+                    pro_registration_update = profile_update";
 
             $DB->execute($sql);
 
             $dbman->drop_field($table, $field);
         }
 
-        upgrade_plugin_savepoint(true, 2024022601, 'local', 'obu_application');
+        upgrade_plugin_savepoint(true, 2024022602, 'local', 'obu_application');
     }
 
     return $result;
