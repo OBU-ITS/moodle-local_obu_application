@@ -1028,7 +1028,7 @@ function get_course_dates() {
 function get_application_status($user_id, $application, $manager=null) {
 	$text = "<div class='mb-4'>";
 	$date = date_create();
-	$format = 'd-m-y H:i';
+	$format = 'd/m/y H:i';
 	$state = '';
 
 	if(!isset($manager)) {
