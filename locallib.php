@@ -1025,7 +1025,7 @@ function get_course_dates() {
 	return $dates;
 }
 
-function get_application_status($user_id, $application, $manager=null) {
+function get_application_status($user_id, $application, $manager=null, $revoked = null) {
 	$text = "<div class='mb-4'>";
 	$date = date_create();
 	$format = 'd-m-y H:i';
@@ -1129,7 +1129,13 @@ function get_application_status($user_id, $application, $manager=null) {
 			$label .= $application->approval_3_comment;
 		}
 		else{
-			$label = "Awaiting academic approval by " . $name;
+			if ($revoked){
+				$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('revoked', 'local_obu_application'), 'by' => $name)) . ' ';
+				$label .= $application->approval_3_comment . '<br />';
+				$label .= "Awaiting academic approval by " . $name;
+			} else {
+				$label = "Awaiting academic approval by " . $name;
+			}
 		}
 	}
 	else {
@@ -1539,6 +1545,7 @@ function update_workflow(&$application, $approved = true, $data = null) {
 				$approver_email = $hls->email;
 			}
 			else if ($approved) { // Revoked
+				$revoked = true;
 				$application->approval_3_comment = $data->comment;
 				$application->approval_state = 0;
 				$application->approval_3_date = 0;
@@ -1555,10 +1562,10 @@ function update_workflow(&$application, $approved = true, $data = null) {
 	update_application($application);
 
 	// Update the stored approval requests and send notification emails
-	update_approver($application, $approver_email);
+	update_approver($application, $approver_email, $revoked);
 }
 
-function update_approver($application, $approver_email) {
+function update_approver($application, $approver_email, $revoked = null) {
 
 	// Update the stored approval requests
 	read_approval($application->id, $approval);
@@ -1589,7 +1596,7 @@ function update_approver($application, $approver_email) {
 		'X-Auto-Response-Suppress: All',
 		'Auto-Submitted: auto-generated'
 	);
-	$text = get_application_status($applicant->id, $application); // Get the status from the applicant's perspective
+	$text = get_application_status($applicant->id, $application, null, $revoked); // Get the status from the applicant's perspective
 	$html = '<h4><a href="' . $process . '">HLS Application (Ref HLS/' . $application->id . ')</a></h4>' . $text;
 	email_to_user($applicant, $hls, 'The Status of Your HLS Application (Ref HLS/' . $application->id . ')', html_to_text($html), $html);
 

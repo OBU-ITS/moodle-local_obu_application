@@ -466,6 +466,7 @@ $string['submitted'] = 'Submitted';
 $string['approved'] = 'Approved';
 $string['rejected'] = 'Rejected';
 $string['withdrawn'] = 'Withdrawn';
+$string['revoked'] = 'Revoked';
 $string['processed'] = 'Processed';
 
 $string['awaiting_action'] = 'Awaiting {$a->action} by {$a->by}';
