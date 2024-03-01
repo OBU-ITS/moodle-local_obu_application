@@ -127,11 +127,19 @@ class profile_contact_details_form extends moodleform {
         if ($data->user->email != $data->user->username) {
             $mform->addElement('text', 'email', get_string('email'), 'size="25" maxlength="100"');
             $mform->disabledIf('email', 'firstname', 'neq', '?****?');
+
+            $mform->addElement('text', 'personalemail', get_string('personalemail'), 'size="25" maxlength="100"');
+            $mform->setType('personalemail', PARAM_RAW_TRIMMED);
+            $mform->addRule('personalemail', get_string('missingemail'), 'required', null, 'server');
         } else {
             $mform->addElement('header', 'newemail', get_string('newemail', 'local_obu_application'), '');
             $mform->addElement('text', 'email', get_string('email'), 'size="25" maxlength="100"');
             $mform->setType('email', PARAM_RAW_TRIMMED);
             $mform->addRule('email', get_string('missingemail'), 'required', null, 'server');
+
+            $mform->addElement('text', 'personal_email', get_string('personalemail'), 'size="25" maxlength="100"');
+            $mform->setType('personal_email', PARAM_RAW_TRIMMED);
+            $mform->addRule('personal_email', get_string('missingemail'), 'required', null, 'server');
 
             $mform->addElement('text', 'username', get_string('confirm_email', 'local_obu_application'), 'size="25" maxlength="100"');
             $mform->setType('username', PARAM_RAW_TRIMMED);
@@ -163,6 +171,9 @@ class profile_contact_details_form extends moodleform {
             } else if ($data['username'] != $data['email']) {
                 $errors['username'] = get_string('invalidemail');
             }
+        }
+        if (!validate_email($data['personal_email']) || ($data['personal_email'] != strtolower($data['personal_email']))) {
+            $errors['personal_email'] = get_string('invalidemail');
         }
 
         if (!empty($errors)) {
