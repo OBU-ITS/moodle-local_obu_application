@@ -747,7 +747,7 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 
     if($oldversion < 2024030100) {
         $table = new xmldb_table('local_obu_applicant');
-        $field = new xmldb_field('personal_email', XMLDB_TYPE_CHAR, '100', null, null, null, null, 'email');
+        $field = new xmldb_field('personal_email', XMLDB_TYPE_CHAR, '100', null, null, null, null, 'postcode');
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
