@@ -90,16 +90,21 @@ echo $OUTPUT->header();
     <div class="hero-content">
         <h1>Apply for a new module or course</h1>
     </div>
+    <section class="block_html block card mb-3" >
+    <div class="card-body p-3">
             <p>
                 Please complete the mandatory fields below. Detailed guidance can be <a href="application_guidance.php" target="_blank">found here</a>.
             </p>
-            <p>
+            <hr class="divider">
+            <p style="margin-bottom:0">
                 If you have any queries, please contact <a href="mailto:hlscpdadmissions@brookes.ac.uk">hlscpdadmissions@brookes.ac.uk</a>.
             </p>
+    </div>
+    </section>
     <section class="block_html block card mb-3" >
     <div class="card-body p-3">
-    <div id="accordion" class="clearfix collapsible">
-        <?php
+        <div id="accordion" class="clearfix collapsible">
+<?php
 
         $record = read_applicant($USER->id, false); // May not exist yet
         if (($record === false) || ($record->domicile_code == '') || ($record->domicile_code == 'ZZ')) { // Must complete the contact details first
@@ -172,8 +177,13 @@ echo $OUTPUT->header();
             $counter++;
         }
         ?>
+        </div>
     </div>
-    </div>
+    </section>
+    <section class="block_html block card mb-3" >
+        <div class="card-body p-3">
+            <a class="btn btn-primary" style="float:right" href="course.php">Start Application</a>
+        </div>
     </section>
 <?php
 
