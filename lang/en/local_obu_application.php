@@ -331,6 +331,7 @@ $string['registration_foot_notice_1'] = 'If you have any queries or problems ple
 $string['registration_foot_notice_2'] = 'Click here to read our <a href="privacy_notice.php" target="_blank">Privacy Notice for Health and Life Science Online Portal Oxford Brookes University</a>.';
 $string['preregistered'] = '<strong>NOTE:</strong> If you have a \'brookes.ac.uk\' email address you are pre-registered.  Click <a href="/local/obu_application/mdl_login.php">here</a> to login.';
 $string['emailandpassword'] = 'Please enter a contact email address (not NHS or previous Brookes addresses due to firewall restrictions) and choose a password';
+$string['personalemail_preamble'] = 'If you have registered with a Brookes or NHS email, please provide a personal address we can contact you on due to firewall restrictions:';
 $string['personalemail'] = 'Personal email';
 $string['professionalemail'] = 'Professional email';
 $string['newemail'] = 'Email (Note - you would need to use any new address to log in)';
