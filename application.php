@@ -52,13 +52,52 @@ $PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
 echo $OUTPUT->header();
 
 ?>
-    <h1 class="mb-4">Apply for a new module or course</h1>
-    <p>
-        Please complete the mandatory fields below. Detailed guidance can be <a href="application_guidance.php" target="_blank">found here</a>.
-    </p>
-    <p>
-        If you have any queries, please contact <a href="mailto:hlscpdadmissions@brookes.ac.uk">hlscpdadmissions@brookes.ac.uk</a>.
-    </p>
+    <div class="hero"></div>
+    <style>
+        .hero {
+            position:absolute;
+            top:0;
+            left:0;
+            height: 15vh;
+            width:100%;
+        }
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url(/local/obu_application/moodle-hls-login-bg.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center 25%;
+            filter: brightness(95%);
+        }
+        .hero-content {
+            width: 100%;
+            padding: 0.5rem 1.5rem;
+            background-color: rgba(255,255,255,.8);
+            backdrop-filter: saturate(180%) blur(20px);
+            margin-bottom: 3rem;
+        }
+        .hero-content h1 {
+            z-index: 100;
+            position: relative;
+            color: black;
+        }
+    </style>
+    <div class="hero-content">
+        <h1>Apply for a new module or course</h1>
+    </div>
+            <p>
+                Please complete the mandatory fields below. Detailed guidance can be <a href="application_guidance.php" target="_blank">found here</a>.
+            </p>
+            <p>
+                If you have any queries, please contact <a href="mailto:hlscpdadmissions@brookes.ac.uk">hlscpdadmissions@brookes.ac.uk</a>.
+            </p>
+    <section class="block_html block card mb-3" >
+    <div class="card-body p-3">
     <div id="accordion" class="clearfix collapsible">
         <?php
 
@@ -134,6 +173,8 @@ echo $OUTPUT->header();
         }
         ?>
     </div>
+    </div>
+    </section>
 <?php
 
 echo $OUTPUT->footer();

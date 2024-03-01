@@ -77,6 +77,7 @@ $lang_ext = $funder ? '_funder' : '';
         padding: 3rem 3rem 1rem;
         background-color: rgba(255,255,255,.8);
         backdrop-filter: saturate(180%) blur(20px);
+        margin-bottom: 3rem;
     }
     .hero-content .intro {
         font-size: 22px;
@@ -88,9 +89,6 @@ $lang_ext = $funder ? '_funder' : '';
     .hero-content .cta a{
         padding: 0.5rem 1.5rem;
         font-size: 20px;
-    }
-    .hls-history {
-        margin-top: 3rem;
     }
     .hero-content h1 {
         z-index: 100;
@@ -113,7 +111,7 @@ $lang_ext = $funder ? '_funder' : '';
             <?php echo get_string('index_welcome_support' . $lang_ext, 'local_obu_application');?>
         </p>
     </div>
-    <section class="hls-history block_html block card mb-3" >
+    <section class="block_html block card mb-3" >
         <div class="card-body p-3">
             <h2 class="card-title d-inline"><?php echo get_string('index_overview_heading' . $lang_ext, 'local_obu_application'); ?></h2>
             <div class="card-text content mt-3">
