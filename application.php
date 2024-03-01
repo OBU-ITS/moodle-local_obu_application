@@ -91,7 +91,7 @@ echo $OUTPUT->header();
         <h1>Apply for a new module or course</h1>
     </div>
     <section class="block_html block card mb-3" >
-    <div class="card-body p-3">
+        <div class="card-body p-3">
             <p>
                 Please complete the mandatory fields below. Detailed guidance can be <a href="application_guidance.php" target="_blank">found here</a>.
             </p>
@@ -99,11 +99,11 @@ echo $OUTPUT->header();
             <p style="margin-bottom:0">
                 If you have any queries, please contact <a href="mailto:hlscpdadmissions@brookes.ac.uk">hlscpdadmissions@brookes.ac.uk</a>.
             </p>
-    </div>
+        </div>
     </section>
     <section class="block_html block card mb-3" >
-    <div class="card-body p-3">
-        <div id="accordion" class="clearfix collapsible">
+        <div class="card-body p-3">
+            <div id="accordion" class="clearfix collapsible">
 <?php
 
         $record = read_applicant($USER->id, false); // May not exist yet
