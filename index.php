@@ -66,7 +66,7 @@ $lang_ext = $funder ? '_funder' : '';
         left: 0;
         width: 100%;
         height: 100%;
-        background: url(https://moodle.brookes.ac.uk/local/obu_application/moodle-hls-login-bg.jpg);
+        background: url(/local/obu_application/moodle-hls-login-bg.jpg);
         background-repeat: no-repeat;
         background-size: cover;
         background-position: center 70%;
