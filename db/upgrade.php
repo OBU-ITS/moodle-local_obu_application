@@ -724,7 +724,6 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
     }
 
     if($oldversion < 2024022602) {
-
         $table = new xmldb_table('local_obu_applicant');
         $field = new xmldb_field('profile_update', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
 
@@ -744,6 +743,16 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
         }
 
         upgrade_plugin_savepoint(true, 2024022602, 'local', 'obu_application');
+    }
+
+    if($oldversion < 2024030100) {
+        $table = new xmldb_table('local_obu_applicant');
+        $field = new xmldb_field('personal_email', XMLDB_TYPE_CHAR, '100', null, null, null, null, 'email');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        upgrade_plugin_savepoint(true, 2024030100, 'local', 'obu_application');
     }
 
     return $result;

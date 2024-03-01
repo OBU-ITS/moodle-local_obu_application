@@ -492,15 +492,15 @@ $string['course_start_jan'] = 'January (S2)';
 $string['course_start_jun'] = 'June (S3)';
 $string['semester'] = 'Semester';
 
-$string['index_welcome_heading'] = '<h1 class="mb-4">Welcome to your application portal account {$a->name}</h1>';
-$string['index_welcome_heading_funder'] = '<h1 class="mb-4">Welcome to your funder portal account {$a->name}</h1>';
-$string['index_welcome_text'] = '<p>You can apply for our HLS CPD courses <a href="application.php">here</a>.</p>';
-$string['index_welcome_text_funder'] = '<p>You can find a <a href="funder_written_guide.php">written</a> and <a href="funder_video_guide.php">video</a> guide on approving here</p>';
-$string['index_welcome_support'] = '<p>If you have any issues with applying, please contact <a href="mailto:hlscpdadmissions@brookes.ac.uk">hlscpdadmissions@brookes.ac.uk</a></p>';
-$string['index_welcome_support_funder'] = '<p>If you have any issues with approving your applicants, please contact <a href="mailto:hlscpdadmissions@brookes.ac.uk">hlscpdadmissions@brookes.ac.uk</a></p>';
+$string['index_welcome_heading'] = 'Welcome to your Application Portal account {$a->name}';
+$string['index_welcome_heading_funder'] = 'Welcome to your Funder Portal account {$a->name}';
+$string['index_welcome_text'] = 'You can apply for our HLS CPD courses using our Application Portal';
+$string['index_welcome_text_funder'] = 'You can find a <a href="funder_written_guide.php">written</a> and <a href="funder_video_guide.php">video</a> guide on approving here';
+$string['index_welcome_support'] = 'If you have any issues with applying, please contact <a href="mailto:hlscpdadmissions@brookes.ac.uk">hlscpdadmissions@brookes.ac.uk</a>';
+$string['index_welcome_support_funder'] = 'If you have any issues with approving your applicants, please contact <a href="mailto:hlscpdadmissions@brookes.ac.uk">hlscpdadmissions@brookes.ac.uk</a>';
 
-$string['index_overview_heading'] = '<h2>Application History</h2>';
-$string['index_overview_heading_funder'] = '<h2>Applications to Approve</h2>';
+$string['index_overview_heading'] = 'Application History';
+$string['index_overview_heading_funder'] = 'Applications to Approve';
 $string['index_overview_empty'] = '<p>You currently do not have any applications in the portal</p>';
 $string['index_overview_empty_funder'] = '<p>You currently do not have any applications to approve</p>';
 
