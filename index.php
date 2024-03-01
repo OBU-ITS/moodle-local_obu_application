@@ -101,7 +101,7 @@ $lang_ext = $funder ? '_funder' : '';
     }
 </style>
     <div class="hero-content">
-        <h1 class="h2"><?php echo get_string('index_welcome_heading' . $lang_ext, 'local_obu_application', array('name' => $USER->firstname)); ?></h1>
+        <h1><?php echo get_string('index_welcome_heading' . $lang_ext, 'local_obu_application', array('name' => $USER->firstname)); ?></h1>
         <p class="intro">
             <?php echo get_string('index_welcome_text' . $lang_ext, 'local_obu_application');?>
         </p>
@@ -115,7 +115,7 @@ $lang_ext = $funder ? '_funder' : '';
     </div>
     <section class="hls-history block_html block card mb-3" >
         <div class="card-body p-3">
-            <h4 class="card-title d-inline"><?php echo get_string('index_overview_heading' . $lang_ext, 'local_obu_application'); ?></h4>
+            <h2 class="card-title d-inline"><?php echo get_string('index_overview_heading' . $lang_ext, 'local_obu_application'); ?></h2>
             <div class="card-text content mt-3">
 <?php
 
@@ -131,7 +131,7 @@ if($funder) {
 
                 echo '<hr class="divider">';
 
-            echo '<h5><a href="' . $process . '?id=' . $application->id . '">' . $application_title . '</a></h5>';
+            echo '<h4><a href="' . $process . '?id=' . $application->id . '">' . $application_title . '</a></h4>';
             echo get_application_status($USER->id, $application, $manager);
             $first = false;
         }
@@ -151,7 +151,7 @@ else {
             echo '<hr class="divider">';
 
             if (($button != 'submit') || $manager) {
-                echo '<h5><a href="' . $process . '?id=' . $application->id . '">' . $application_title . '</a></h5>';
+                echo '<h4><a href="' . $process . '?id=' . $application->id . '">' . $application_title . '</a></h4>';
             }
             else {
                 echo '<h5>' . $application_title . '</h5>';
