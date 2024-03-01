@@ -128,7 +128,7 @@ class profile_contact_details_form extends moodleform {
             $mform->addElement('text', 'email', get_string('email'), 'size="25" maxlength="100"');
             $mform->disabledIf('email', 'firstname', 'neq', '?****?');
 
-            $mform->addElement('text', 'personalemail', get_string('personalemail'), 'size="25" maxlength="100"');
+            $mform->addElement('text', 'personalemail', get_string('personalemail', 'local_obu_applications'), 'size="25" maxlength="100"');
             $mform->setType('personalemail', PARAM_RAW_TRIMMED);
             $mform->addRule('personalemail', get_string('missingemail'), 'required', null, 'server');
         } else {
@@ -137,7 +137,7 @@ class profile_contact_details_form extends moodleform {
             $mform->setType('email', PARAM_RAW_TRIMMED);
             $mform->addRule('email', get_string('missingemail'), 'required', null, 'server');
 
-            $mform->addElement('text', 'personal_email', get_string('personalemail'), 'size="25" maxlength="100"');
+            $mform->addElement('text', 'personal_email', get_string('personalemail', 'local_obu_applications'), 'size="25" maxlength="100"');
             $mform->setType('personal_email', PARAM_RAW_TRIMMED);
             $mform->addRule('personal_email', get_string('missingemail'), 'required', null, 'server');
 
