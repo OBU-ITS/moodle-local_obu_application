@@ -134,6 +134,10 @@ echo $OUTPUT->header();
         }
         ?>
     </div>
+
+    <div>
+        <a class="btn btn-primary" href="course.php">Start Application</a>
+    </div>
 <?php
 
 echo $OUTPUT->footer();
