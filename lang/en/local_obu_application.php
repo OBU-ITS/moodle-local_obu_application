@@ -158,6 +158,8 @@ $string['application_by_ref'] = 'Application by reference';
 $string['redirect_application'] = 'Redirect application';
 $string['status_report'] = 'Status report';
 $string['sr_options'] = 'Status report options';
+$string['advanced_status_report'] = 'Advanced status report';
+$string['advanced_status_report_options'] = 'Advanced status report options';
 $string['funding_report'] = 'Funding report';
 $string['funding_options'] = 'Funding report options';
 $string['manager_report'] = 'Manager report';
@@ -466,6 +468,7 @@ $string['submitted'] = 'Submitted';
 $string['approved'] = 'Approved';
 $string['rejected'] = 'Rejected';
 $string['withdrawn'] = 'Withdrawn';
+$string['revoked'] = 'Revoked';
 $string['processed'] = 'Processed';
 
 $string['awaiting_action'] = 'Awaiting {$a->action} by {$a->by}';
