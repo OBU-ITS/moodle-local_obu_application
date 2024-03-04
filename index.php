@@ -51,53 +51,53 @@ $lang_ext = $funder ? '_funder' : '';
 
 ?>
     <div class="hero"></div>
-<style>
-    .hero {
-        position:absolute;
-        top:0;
-        left:0;
-        height: 70vh;
-        width:100%;
-    }
-    .hero::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: url(/local/obu_application/moodle-hls-login-bg.jpg);
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-position: center 70%;
-        filter: brightness(95%);
-    }
-    .hero-content {
-        width: 100%;
-        padding: 3rem 3rem 1rem;
-        background-color: rgba(255,255,255,.8);
-        backdrop-filter: saturate(180%) blur(20px);
-        margin-bottom: 3rem;
-    }
-    .hero-content .intro {
-        font-size: 22px;
-        margin-bottom: 1rem;
-    }
-    .hero-content .cta {
-        margin-bottom: 2rem;
-    }
-    .hero-content .cta a{
-        padding: 0.5rem 1.5rem;
-        font-size: 20px;
-    }
-    .hero-content h1 {
-        z-index: 100;
-        position: relative;
-        color: black;
-        font-size: 50px;
-        margin-bottom: 2rem;
-    }
-</style>
+    <style>
+        .hero {
+            position:absolute;
+            top:0;
+            left:0;
+            height: 70vh;
+            width:100%;
+        }
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url(/local/obu_application/moodle-hls-login-bg.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center 70%;
+            filter: brightness(95%);
+        }
+        .hero-content {
+            width: 100%;
+            padding: 3rem 3rem 1rem;
+            background-color: rgba(255,255,255,.8);
+            backdrop-filter: saturate(180%) blur(20px);
+            margin-bottom: 3rem;
+        }
+        .hero-content .intro {
+            font-size: 22px;
+            margin-bottom: 1rem;
+        }
+        .hero-content .cta {
+            margin-bottom: 2rem;
+        }
+        .hero-content .cta a{
+            padding: 0.5rem 1.5rem;
+            font-size: 20px;
+        }
+        .hero-content h1 {
+            z-index: 100;
+            position: relative;
+            color: black;
+            font-size: 50px;
+            margin-bottom: 2rem;
+        }
+    </style>
     <div class="hero-content">
         <h1><?php echo get_string('index_welcome_heading' . $lang_ext, 'local_obu_application', array('name' => $USER->firstname)); ?></h1>
         <p class="intro">

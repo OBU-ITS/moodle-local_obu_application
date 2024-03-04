@@ -388,8 +388,8 @@ function write_user($user_id, $form_data) {
 	$user->phone2 = $form_data->phone2;
 	$user->city = $form_data->city;
 
-	user_update_user($user, false, true);
-	profile_save_data($user); // Save custom profile data
+    user_update_user($user, false, true);
+    profile_save_data($user); // Save custom profile data
 }
 
 function get_applicants_by_first_name($firstname) {
@@ -468,6 +468,7 @@ function write_contact_details($user_id, $form_data) {
 		$record->postcode = $form_data->postcode;
 		$record->domicile_code = $form_data->domicile_code;
 		$record->domicile_country = $form_data->domicile_country;
+        $record->contact_details_update = time();
 	}
 
 	if ($record->id == 0) { // New record
@@ -479,6 +480,170 @@ function write_contact_details($user_id, $form_data) {
 
 	return $id;
 }
+
+function write_personal_details($user_id, $form_data) {
+    global $DB;
+
+    $record = read_applicant($user_id, false); // May not exist yet
+    if ($record === false) {
+        $record = new stdClass();
+        $record->id = 0;
+        $record->userid = $user_id;
+    }
+
+    $record->birth_code = $form_data->birth_code;
+    $record->birth_country = $form_data->birth_country;
+    $record->birthdate = $form_data->birthdate;
+    $record->nationality_code = $form_data->nationality_code;
+    $record->nationality = $form_data->nationality;
+    $record->gender = $form_data->gender;
+    $record->residence_code = $form_data->residence_code;
+    $record->residence_area = $form_data->residence_area;
+    $record->personal_details_update = time();
+
+    if ($record->id == 0) { // New record
+        $id = $DB->insert_record('local_obu_applicant', $record);
+    } else {
+        $id = $record->id;
+        $DB->update_record('local_obu_applicant', $record);
+    }
+
+    return $id;
+}
+
+function write_educational_establishments($user_id, $form_data) {
+    global $DB;
+
+    $record = read_applicant($user_id, false); // May not exist yet
+    if ($record === false) {
+        $record = new stdClass();
+        $record->id = 0;
+        $record->userid = $user_id;
+    }
+
+    $record->p16school = $form_data->p16school;
+    $record->p16schoolperiod = $form_data->p16schoolperiod;
+    $record->p16fe = $form_data->p16fe;
+    $record->p16feperiod = $form_data->p16feperiod;
+    $record->training = $form_data->training;
+    $record->trainingperiod = $form_data->trainingperiod;
+    $record->edu_establishments_update = time();
+
+    if ($record->id == 0) { // New record
+        $id = $DB->insert_record('local_obu_applicant', $record);
+    } else {
+        $id = $record->id;
+        $DB->update_record('local_obu_applicant', $record);
+    }
+
+    return $id;
+}
+
+function write_professional_qualification($user_id, $form_data) {
+    global $DB;
+
+    $record = read_applicant($user_id, false); // May not exist yet
+    if ($record === false) {
+        $record = new stdClass();
+        $record->id = 0;
+        $record->userid = $user_id;
+    }
+
+    $record->prof_level = $form_data->prof_level;
+    $record->prof_award = $form_data->prof_award;
+    $record->prof_date = $form_data->prof_date;
+    $record->credit = $form_data->credit;
+    if ($record->credit == '0') {
+        $record->credit_name = '';
+        $record->credit_organisation = '';
+    } else {
+        $record->credit_name = $form_data->credit_name;
+        $record->credit_organisation = $form_data->credit_organisation;
+    }
+    $record->pro_qualification_update = time();
+
+    if ($record->id == 0) { // New record
+        $id = $DB->insert_record('local_obu_applicant', $record);
+    } else {
+        $id = $record->id;
+        $DB->update_record('local_obu_applicant', $record);
+    }
+
+    return $id;
+}
+
+function write_current_employment($user_id, $form_data) {
+    global $DB;
+
+    $record = read_applicant($user_id, false); // May not exist yet
+    if ($record === false) {
+        $record = new stdClass();
+        $record->id = 0;
+        $record->userid = $user_id;
+    }
+
+    $record->emp_place = $form_data->emp_place;
+    $record->emp_area = $form_data->emp_area;
+    $record->emp_title = $form_data->emp_title;
+    $record->emp_prof = $form_data->emp_prof;
+    $record->current_employment_update = time();
+
+    if ($record->id == 0) { // New record
+        $id = $DB->insert_record('local_obu_applicant', $record);
+    } else {
+        $id = $record->id;
+        $DB->update_record('local_obu_applicant', $record);
+    }
+
+    return $id;
+}
+
+function write_professional_registration($user_id, $form_data) {
+    global $DB;
+
+    $record = read_applicant($user_id, false); // May not exist yet
+    if ($record === false) {
+        $record = new stdClass();
+        $record->id = 0;
+        $record->userid = $user_id;
+    }
+
+    $record->prof_reg_no = $form_data->prof_reg_no;
+    $record->pro_registration_update = time();
+
+    if ($record->id == 0) { // New record
+        $id = $DB->insert_record('local_obu_applicant', $record);
+    } else {
+        $id = $record->id;
+        $DB->update_record('local_obu_applicant', $record);
+    }
+
+    return $id;
+}
+
+function write_criminal_record($user_id, $form_data) {
+    global $DB;
+
+    $record = read_applicant($user_id, false); // May not exist yet
+    if ($record === false) {
+        $record = new stdClass();
+        $record->id = 0;
+        $record->userid = $user_id;
+    }
+
+    $record->criminal_record = $form_data->criminal_record;
+    $record->criminal_record_update = time();
+
+    if ($record->id == 0) { // New record
+        $id = $DB->insert_record('local_obu_applicant', $record);
+    } else {
+        $id = $record->id;
+        $DB->update_record('local_obu_applicant', $record);
+    }
+
+    return $id;
+}
+
 
 function write_profile($user_id, $form_data) {
 	global $DB;
