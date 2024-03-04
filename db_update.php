@@ -694,9 +694,9 @@ function write_course($user_id, $form_data) {
     $record->course_date = $form_data->course_date;
     $record->studying = $form_data->studying;
     if ($record->studying == 1) {
-		$record->student_number = $form_data->student_number;
+		$record->student_number = $form_data->previous_student_number;
 	} else {
-		$record->student_number = '';
+		$record->current_student_number = '';
 	}
     $record->studying = $form_data->studying;
     $record->statement = $form_data->statement;

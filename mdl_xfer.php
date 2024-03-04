@@ -100,7 +100,7 @@ else if ($mform_data = $mform->get_data()) {
 	foreach ($applications as $application) {
 		if ((($application->approval_level == 3) && ($application->approval_state == 2)) // Approved by HLS so is/was OK to go...
 				&& (((($mform_data->xfer_type == 1) || ($mform_data->xfer_type == 3))
-					&& ($application->studying <> 1) && ($application->admissions_xfer == $xfer_id)) // Admissions or Process (Admissions data processing)
+					&& ($application->studying == 1) && ($application->admissions_xfer == $xfer_id)) // Admissions or Process (Admissions data processing)
 				|| (($mform_data->xfer_type == 2) && ($application->finance_xfer == $xfer_id)))) { // Finance
 			// OK - check the date if necessary
 			if (($start_date == 0) || !isset($months[substr($application->course_date, 0, 3)])) { // No check (or we can't)
@@ -229,7 +229,7 @@ else if ($mform_data = $mform->get_data()) {
 			if ($mform_data->xfer_type == 2) {
 				$fields['Module_Subject'] = $course->module_subject;
 				$fields['Module_Number'] = $course->module_number;
-				if ($application->studying == '1') {
+				if ($application->studying != '1') {
 					$studying_formatted = get_string('yes', 'local_obu_application');
 				} else {
 					$studying_formatted = get_string('no', 'local_obu_application');
