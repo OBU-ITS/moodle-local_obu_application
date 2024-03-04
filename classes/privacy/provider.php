@@ -261,10 +261,10 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 			$data->course_code = $rec->course_code;
 			$data->course_name = $rec->course_name;
 			$data->course_date = $rec->course_date;
-			if ($rec->studying == 1) {
-				$data->studying = 'Y';
+			if ($rec->studying == '2') {
+                $data->studying = 'N';
 			} else {
-				$data->studying = 'N';
+                $data->studying = 'Y';
 			}
 			$data->student_number = $rec->student_number;
 			$data->statement = $rec->statement;
@@ -348,10 +348,10 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 				$data->course_code = $rec->course_code;
 				$data->course_name = $rec->course_name;
 				$data->course_date = $rec->course_date;
-				if ($rec->studying == 1) {
-					$data->studying = 'Y';
+				if ($rec->studying == '2') {
+                    $data->studying = 'N';
 				} else {
-					$data->studying = 'N';
+                    $data->studying = 'Y';
 				}
 				$data->student_number = $rec->student_number;
 				$data->statement = $rec->statement;

@@ -93,7 +93,7 @@ if ($mform_data = $mform->get_data()) {
 	$application->course_name = $course->name;
 	$application->course_date = $mform_data->course_date;
 	$application->studying = $mform_data->studying;
-    if ($application->studying == 1) {
+    if ($application->studying == 2) {
 		$application->student_number = $mform_data->previous_student_number;
 	} else {
 		$application->student_number = $mform_data->current_student_number;

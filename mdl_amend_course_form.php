@@ -74,20 +74,20 @@ class mdl_amend_course_form extends moodleform {
 
 		// Already studying
         $options = [];
-        $options['1'] = get_string('no', 'local_obu_application');
-        $options['2'] = get_string('pgcert', 'local_obu_application');
-        $options['3'] = get_string('pgdip', 'local_obu_application');
-        $options['4'] = get_string('bsc', 'local_obu_application');
-        $options['5'] = get_string('msc', 'local_obu_application');
-        $options['6'] = get_string('standalone_module', 'local_obu_application');
+        $options['2'] = get_string('no', 'local_obu_application');
+        $options['3'] = get_string('pgcert', 'local_obu_application');
+        $options['4'] = get_string('pgdip', 'local_obu_application');
+        $options['5'] = get_string('bsc', 'local_obu_application');
+        $options['6'] = get_string('msc', 'local_obu_application');
+        $options['7'] = get_string('standalone_module', 'local_obu_application');
         $mform->addElement('select', 'studying', get_string('currently_enrolled', 'local_obu_application'), $options);
         $mform->addRule('studying', null, 'required', null, 'server');
         $mform->addElement('text', 'current_student_number', get_string('current_student_number', 'local_obu_application'), 'size="10" maxlength="10"');
         $mform->setType('current_student_number', PARAM_TEXT);
-        $mform->hideif('current_student_number', 'studying', 'eq', '1');
+        $mform->hideif('current_student_number', 'studying', 'eq', '2');
         $mform->addElement('text', 'previous_student_number', get_string('previous_student_number', 'local_obu_application'), 'size="10" maxlength="10"');
         $mform->setType('previous_student_number', PARAM_TEXT);
-        $mform->hideif('previous_student_number', 'studying', 'neq', '1');
+        $mform->hideif('previous_student_number', 'studying', 'neq', '2');
 		
 		$this->add_action_buttons(true, get_string('save', 'local_obu_application'));
     }
@@ -97,13 +97,13 @@ class mdl_amend_course_form extends moodleform {
 
         $errors = parent::validation($data, $files);
 
-        if ($data['studying'] != '1') {
+        if ($data['studying'] != '2') {
             if ($data['current_student_number'] == '') {
                 $errors['current_student_number'] = get_string('value_required', 'local_obu_application');
             } else if (read_user_by_username($data['current_student_number']) == null) {
                 $errors['current_student_number'] = get_string('user_not_found', 'local_obu_application');
             }
-        } else if ($data['studying'] == '1') {
+        } else if ($data['studying'] == '2') {
             if ($data['previous_student_number'] != '' && read_user_by_username($data['previous_student_number']) == null) {
                 $errors['previous_student_number'] = get_string('user_not_found', 'local_obu_application');
             }

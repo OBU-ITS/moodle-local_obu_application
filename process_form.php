@@ -74,10 +74,10 @@ class process_form extends moodleform {
 			} else {
 				$criminal_record_formatted = get_string('no', 'local_obu_application');
 			}
-			if ($data->record->studying == '1') {
-				$studying_formatted = 'Yes';
+			if ($data->record->studying == '2') {
+                $studying_formatted = 'No';
 			} else {
-				$studying_formatted = 'No';
+                $studying_formatted = 'Yes';
 			}
 			if ($data->record->visa_requirement == '') {
 				$visa_requirement = 'NONE';

@@ -528,7 +528,7 @@ function write_course($user_id, $form_data) {
     $record->course_name = $form_data->course_name;
     $record->course_date = $form_data->course_date;
     $record->studying = $form_data->studying;
-    if ($record->studying == 1) {
+    if ($record->studying == 2) {
 		$record->student_number = $form_data->previous_student_number;
 	} else {
 		$record->current_student_number = '';
