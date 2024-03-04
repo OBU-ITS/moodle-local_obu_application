@@ -92,6 +92,10 @@ class mdl_supplement_form extends moodleform {
 			$mform->disabledIf('published', 'published', 'checked');
 		}
 
-        $this->add_action_buttons(true, get_string('save', 'local_obu_application'));
+        if ($already_published) {
+            $this->add_action_buttons(true, get_string('reinstate', 'local_obu_application'));
+        } else {
+            $this->add_action_buttons(true, get_string('save', 'local_obu_application'));
+        }
     }
 }

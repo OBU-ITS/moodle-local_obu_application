@@ -106,6 +106,11 @@ else if ($msupplement_data = $msupplement->get_data()) {
 			write_supplement_form($USER->id, $msupplement_data);
 		}
 		redirect($url);
+    } else if ($msupplement_data->submitbutton == get_string('reinstate', 'local_obu_application')) {
+        if ($msupplement_data->already_published || is_siteadmin()) {
+            reinstate_supplement_form($USER->id, $msupplement_data);
+        }
+        redirect($url);
     }
 }	
 
