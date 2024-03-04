@@ -135,6 +135,61 @@ echo $OUTPUT->header();
         $currentEmploymentForm = new profile_current_employment_form(null, $parameters);
         $professionalRegistrationForm = new profile_professional_registration_form(null, $parameters);
         $criminalRecordForm = new profile_criminal_record_form(null, $parameters);
+
+        if ($contactDetailsForm_data = $contactDetailsForm->get_data()) {
+            if ($contactDetailsForm_data->submitbutton == get_string('save', 'local_obu_application')) {
+                $contactDetailsForm_data->domicile_country = $nations[$contactDetailsForm_data->domicile_code];
+                write_user($USER->id, $contactDetailsForm_data);
+                write_contact_details($USER->id, $contactDetailsForm_data);
+                $record->contact_details_update = time();
+            }
+        }
+
+        if ($personalDetailsForm_data = $personalDetailsForm->get_data()) {
+            if ($personalDetailsForm_data->submitbutton == get_string('save', 'local_obu_application')) {
+                $personalDetailsForm_data->birth_country = $nations[$personalDetailsForm_data->birth_code];
+                $personalDetailsForm_data->nationality = $nations[$personalDetailsForm_data->nationality_code];
+                $personalDetailsForm_data->residence_area = $areas[$personalDetailsForm_data->residence_code];
+                write_personal_details($USER->id, $personalDetailsForm_data);
+                $record->personal_details_update = time();
+            }
+        }
+
+        if ($educationalEstablishmentsForm_data = $educationalEstablishmentsForm->get_data()) {
+            if ($educationalEstablishmentsForm_data->submitbutton == get_string('save', 'local_obu_application')) {
+                write_educational_establishments($USER->id, $educationalEstablishmentsForm_data);
+                $record->edu_establishments_update = time();
+            }
+        }
+
+        if ($professionalQualificationForm_data = $professionalQualificationForm->get_data()) {
+            if ($professionalQualificationForm_data->submitbutton == get_string('save', 'local_obu_application')) {
+                write_professional_qualification($USER->id, $professionalQualificationForm_data);
+                $record->pro_qualification_update = time();
+            }
+        }
+
+        if ($currentEmploymentForm_data = $currentEmploymentForm->get_data()) {
+            if ($currentEmploymentForm_data->submitbutton == get_string('save', 'local_obu_application')) {
+                write_current_employment($USER->id, $currentEmploymentForm_data);
+                $record->current_employment_update = time();
+            }
+        }
+
+        if ($professionalRegistrationForm_data = $professionalRegistrationForm->get_data()) {
+            if ($professionalRegistrationForm_data->submitbutton == get_string('save', 'local_obu_application')) {
+                write_professional_registration($USER->id, $professionalRegistrationForm_data);
+                $record->pro_registration_update = time();
+            }
+        }
+
+        if ($criminalRecordForm_data = $criminalRecordForm->get_data()) {
+            if ($criminalRecordForm_data->submitbutton == get_string('save', 'local_obu_application')) {
+                write_criminal_record($USER->id, $criminalRecordForm_data);
+                $record->criminal_record_update = time();
+            }
+        }
+
         $accordion_items = array(
             ["title" => "Contact Details", "data" => $contactDetailsForm, "last_updated" => $record->contact_details_update],
             ["title" => "Personal Details", "data" => $personalDetailsForm, "last_updated" => $record->personal_details_update],
