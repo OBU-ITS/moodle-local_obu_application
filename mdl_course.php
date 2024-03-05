@@ -68,10 +68,13 @@ $record = null;
 $administrator = null;
 $applications = 0;
 
-if (isset($_REQUEST['id']) ||isset($_REQUEST['id_not_suspended'])) {
+if (isset($_REQUEST['id']) || isset($_REQUEST['id_not_suspended'])) {
 
     $show_suspended = $_REQUEST['show_suspended'] ?? true;
     $id =  $show_suspended ? $_REQUEST['id'] : $_REQUEST['id_not_suspended'];
+    if($id == '') {
+        $id = '0';
+    }
 
 	if ($id != '0') {
 
@@ -139,7 +142,7 @@ $parameters = [
 $mform = new mdl_course_form(null, $parameters);
 
 if ($mform->is_cancelled()) {
-	if ($id == '0') {
+	if (isset($_REQUEST['show_suspended'])) {
 		redirect($back);
 	} else {
 		redirect($url);
