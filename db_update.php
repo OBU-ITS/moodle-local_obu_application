@@ -193,6 +193,22 @@ function write_supplement_form($author, $supplement) {
 	return $id;
 }
 
+function reinstate_supplement_form($author, $supplement) {
+    global $DB;
+
+    $latest_version = get_supplement_form($supplement->ref)->version;
+
+    $record = new stdClass();
+    $record->ref = $supplement->ref;
+    $record->version = ++$latest_version;
+    $record->author = $author;
+    $record->date = time();
+    $record->published = 0;
+    $record->template = $supplement->template['text'];
+
+    return $DB->insert_record('local_obu_supplement', $record);
+}
+
 function get_supplement_form($ref, $include_unpublished = false) { // Return the latest version of the supplement form
     global $DB;
 
