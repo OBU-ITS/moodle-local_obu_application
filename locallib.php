@@ -1184,11 +1184,11 @@ function get_application_status_row_html($label, $type, $state) {
 	}
 
 	$text .= "<div class='col-8'>";
-	if($type == 'future') {
-		$text .= $label;
+	if($type == 'current') {
+		$text .= "<strong>" . $label . "</strong>";
 	}
 	else {
-		$text .= "<strong>" . $label . "</strong>";
+		$text .= $label;
 	}
 	$text .= "</div>";
 
@@ -1200,7 +1200,7 @@ function get_application_status_row_html($label, $type, $state) {
 		$text .= "<strong>" . "Pending" . "</strong>";
 	}
 	else {
-		$text .= "<strong>" . $state . "</strong>";
+		$text .=  $state;
 	}
 	$text .= "</div>";
 
