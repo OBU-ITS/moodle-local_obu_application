@@ -516,17 +516,17 @@ class process_form extends moodleform {
                 if ($approval_sought == 1){
                     $mform->addElement('html', '<h3>' . get_string('approval_head', 'local_obu_application') . '</h3>');
                     $mform->addElement('html', '<p><strong>' . get_string('manager_comment', 'local_obu_application') . '</strong></p>');
-                    $mform->addElement('text', 'comment', 'Comment:', 'size="40" maxlength="100"');
+                    $mform->addElement('text', 'comment', get_string('comment', 'local_obu_application'), 'size="40" maxlength="100"');
                     $mform->setType('comment', PARAM_TEXT);
                 } else if ($approval_sought == 2){
                     $mform->addElement('html', '<h3>' . get_string('approval_head', 'local_obu_application') . '</h3>');
                     $mform->addElement('html', '<p><strong>' . get_string('funder_comment', 'local_obu_application') . '</strong></p>');
-                    $mform->addElement('text', 'comment', 'Comment:', 'size="40" maxlength="100"');
+                    $mform->addElement('text', 'comment', get_string('comment', 'local_obu_application'), 'size="40" maxlength="100"');
                     $mform->setType('comment', PARAM_TEXT);
                 } else {
                     $mform->addElement('html', '<h3>' . get_string('approval_head', 'local_obu_application') . '</h3>');
                     $mform->addElement('html', '<p><strong>' . get_string('admin_comment', 'local_obu_application') . '</strong></p>');
-                    $mform->addElement('text', 'comment', 'Comment:', 'size="40" maxlength="100"');
+                    $mform->addElement('text', 'comment', get_string('comment', 'local_obu_application'), 'size="40" maxlength="100"');
                     $mform->setType('comment', PARAM_TEXT);
                 }
 				$buttonarray[] = &$mform->createElement('submit', 'rejectbutton', get_string('reject', 'local_obu_application'));

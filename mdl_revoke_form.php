@@ -49,9 +49,9 @@ class mdl_revoke_form extends moodleform {
         // - To let us inform the user that there are validation errors without them having to scroll down further
         $mform->addElement('static', 'form_errors');
 
-        $mform->addElement('html', '<h1>' . get_string('revocation_head', 'local_obu_application') . '</h1>');
+        $mform->addElement('html', '<h3>' . get_string('revocation_head', 'local_obu_application') . '</h3>');
         $mform->addElement('html', '<p><strong>' . get_string('revoke_comment', 'local_obu_application') . '</strong></p>');
-        $mform->addElement('text', 'comment', '', 'size="40" maxlength="100"');
+        $mform->addElement('text', 'comment', get_string('comment', 'local_obu_application'), 'size="40" maxlength="100"');
         $mform->setType('comment', PARAM_TEXT);
 
         $buttonarray = array();
