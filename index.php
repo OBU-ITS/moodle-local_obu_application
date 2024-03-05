@@ -103,9 +103,15 @@ $lang_ext = $funder ? '_funder' : '';
         <p class="intro">
             <?php echo get_string('index_welcome_text' . $lang_ext, 'local_obu_application');?>
         </p>
+        <?php
+            if (!$funder) {
+        ?>
         <p class="cta">
             <a class="btn btn-primary" href="application.php">Start your application</a>
         </p>
+        <?php
+            }
+        ?>
         <hr class="divider">
         <p class="footer">
             <?php echo get_string('index_welcome_support' . $lang_ext, 'local_obu_application');?>
