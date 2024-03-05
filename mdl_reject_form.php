@@ -49,9 +49,10 @@ class mdl_reject_form extends moodleform {
         // - To let us inform the user that there are validation errors without them having to scroll down further
         $mform->addElement('static', 'form_errors');
 
-        $mform->addElement('html', '<h1>' . get_string('rejection_head', 'local_obu_application') . '</h1>');
+        $mform->addElement('html', '<h3>' . get_string('rejection_head', 'local_obu_application') . '</h3>');
         $mform->addElement('html', '<p><strong>' . get_string('reject_comment', 'local_obu_application') . '</strong></p>');
-        $mform->addElement('text', 'comment', '', 'size="40" maxlength="100"');
+        $mform->addElement('text', 'comment', get_string('comment', 'local_obu_application'), 'size="40" maxlength="100"');
+        $mform->addRule('comment', get_string('required'), 'required');
         $mform->setType('comment', PARAM_TEXT);
 
         $buttonarray = array();
@@ -59,22 +60,5 @@ class mdl_reject_form extends moodleform {
         $buttonarray[] = &$mform->createElement('cancel');
         $mform->addGroup($buttonarray, 'buttonarray', '', array(' '), false);
         $mform->closeHeaderBefore('buttonarray');
-    }
-
-    function validation($data, $files) {
-        $errors = parent::validation($data, $files);
-
-        // Check that we have been given sufficient information for an approval
-        if ($data['submitbutton'] == get_string('reject', 'local_obu_application')) {
-            if ($data['comment'] == '') {
-                $errors['comment'] = get_string('value_required', 'local_obu_application');
-            }
-        }
-
-        if (!empty($errors)) {
-            $errors['form_errors'] = get_string('form_errors', 'local_obu_application');
-        }
-
-        return $errors;
     }
 }

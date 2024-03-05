@@ -195,18 +195,28 @@ function write_supplement_form($author, $supplement) {
 
 function reinstate_supplement_form($author, $supplement) {
     global $DB;
+    $home = new moodle_url('/');
 
-    $latest_version = get_supplement_form($supplement->ref)->version;
+    $latest_version = get_supplement_form($supplement->ref, true)->version;
+    $current_date_version = date('Ymd');
+
+    if ($current_date_version <= $latest_version) {
+        $new_version = ++$latest_version;
+    } else {
+        $new_version = $current_date_version;
+    }
 
     $record = new stdClass();
     $record->ref = $supplement->ref;
-    $record->version = ++$latest_version;
+    $record->version = $new_version;
     $record->author = $author;
     $record->date = time();
     $record->published = 0;
     $record->template = $supplement->template['text'];
 
-    return $DB->insert_record('local_obu_supplement', $record);
+    $DB->insert_record('local_obu_supplement', $record);
+
+    return $url = $home . 'local/obu_application/mdl_supplement.php?ref=' . strtoupper($record->ref) . '&version=' . strtoupper($record->version);
 }
 
 function get_supplement_form($ref, $include_unpublished = false) { // Return the latest version of the supplement form

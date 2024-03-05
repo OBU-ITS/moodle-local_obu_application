@@ -131,7 +131,51 @@ else if ($mform_data = $mform->get_data()) {
 }
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading($heading);
+
+?>
+    <div class="hero"></div>
+    <style>
+        .hero {
+            position:absolute;
+            top:0;
+            left:0;
+            height: 15vh;
+            width:100%;
+        }
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url(/local/obu_application/moodle-hls-login-bg.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center 25%;
+            filter: brightness(95%);
+        }
+        .hero-content {
+            width: 100%;
+            padding: 0.5rem 1.5rem;
+            background-color: rgba(255,255,255,.8);
+            backdrop-filter: saturate(180%) blur(20px);
+            margin-bottom: 3rem;
+        }
+        .hero-content h1 {
+            z-index: 100;
+            position: relative;
+            color: black;
+        }
+    </style>
+    <div class="hero-content">
+        <h1>Application</h1>
+    </div>
+    <section class="block_html block card mb-3" >
+        <div class="card-body p-3">
+
+<?php
+
 
 if ($message) {
     notice($message, $back);
@@ -139,5 +183,12 @@ if ($message) {
 else {
     $mform->display();
 }
+
+
+?>
+        </div>
+    </section>
+
+<?php
 
 echo $OUTPUT->footer();
