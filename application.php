@@ -203,7 +203,6 @@ echo $OUTPUT->header();
         $date = date_create();
         $format = 'd/m/y';
         foreach ($accordion_items as $accordion_item) {
-            date_timestamp_set($date, $accordion_item["last_updated"]);
             ?>
             <div class="d-flex align-items-center mb-2" id="heading<?php echo $counter ?>">
                 <div class="position-relative d-flex ftoggler align-items-center position-relative mr-1">
@@ -221,9 +220,16 @@ echo $OUTPUT->header();
                         <?php echo $accordion_item["title"] ?>
                     </h3>
                 </div>
+                <?php
+                    if($accordion_item["last_updated"]) {
+                        date_timestamp_set($date, $accordion_item["last_updated"]);
+                ?>
                 <div class="position-relative  ftoggler align-items-center position-relative ml-auto">
                     <strong class="text-primary">Last updated: <?php echo date_format($date, $format) ?></strong>
                 </div>
+                <?php
+                    }
+                ?>
             </div>
             <div id="id_<?php echo $counter ?>_headcontainer" class="fcontainer collapseable collapse" style=""  aria-labelledby="heading<?php echo $counter ?>" data-parent="#accordion">
                 <?php $accordion_item["data"]->display(); ?>
@@ -235,11 +241,21 @@ echo $OUTPUT->header();
         </div>
     </div>
     </section>
+    <?php
+        if($record->contact_details_update
+            && $record->personal_details_update
+            && $record->edu_establishments_update
+            && $record->pro_qualification_update
+            && $record->current_employment_update
+            && $record->pro_registration_update
+            && $record->criminal_record_update) {
+    ?>
     <section class="block_html block card mb-3" >
         <div class="card-body p-3">
             <a class="btn btn-primary" style="float:right" href="course.php">Start Application</a>
         </div>
     </section>
 <?php
+    }
 
 echo $OUTPUT->footer();
