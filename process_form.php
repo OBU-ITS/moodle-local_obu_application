@@ -164,7 +164,7 @@ class process_form extends moodleform {
 				'course_date' => $data->record->course_date,
 				'studying_formatted' => $studying_formatted,
 				'student_number' => $data->record->student_number,
-				'statement' => $data->record->statement,
+				'statement' => nl2br($data->record->statement),
 				'visa_requirement' => $visa_requirement,
 				'self_funding_formatted' => $self_funding_formatted,
 				'manager_email' => $data->record->manager_email,
