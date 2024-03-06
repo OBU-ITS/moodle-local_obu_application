@@ -39,6 +39,7 @@ class course_form extends moodleform {
 
         $data = new stdClass();
 		$data->courses = $this->_customdata['courses'];
+        array_unshift($data->courses, get_string('select', 'local_obu_application'));
 		$data->dates = $this->_customdata['dates'];
 		$data->record = $this->_customdata['record'];
 
@@ -61,13 +62,13 @@ class course_form extends moodleform {
         $mform->addElement('header', 'course_head', get_string('course_head', 'local_obu_application'), '');
 		$mform->setExpanded('course_head');
 		$mform->addElement('autocomplete', 'course_code', get_string('course', 'local_obu_application'), $data->courses, null);
+        $mform->setDefault('course_code', '0');
+        $mform->addRule('course_code', null, 'required', null, 'server');
 		$mform->addElement('select', 'course_date', get_string('course_date', 'local_obu_application'), $data->dates, null);
         $mform->addRule('course_date', null, 'required', null, 'server');
 		$mform->addElement('html', '<p><strong>' . get_string('studying_preamble', 'local_obu_application') . '</strong></p>');
 		$options = [];
-		if ($data->record->studying == 0) { // A mandatory field so must be the first time thru
-			$options['0'] = ''; // No choice made yet
-		}
+        $options['0'] = get_string('select', 'local_obu_application');
 		$options['2'] = get_string('no', 'local_obu_application');
 		$options['3'] = get_string('pgcert', 'local_obu_application');
         $options['4'] = get_string('pgdip', 'local_obu_application');
@@ -75,13 +76,16 @@ class course_form extends moodleform {
         $options['6'] = get_string('msc', 'local_obu_application');
         $options['7'] = get_string('standalone_module', 'local_obu_application');
 		$mform->addElement('select', 'studying', get_string('currently_enrolled', 'local_obu_application'), $options);
+        $mform->setDefault('studying', '0');
 		$mform->addRule('studying', null, 'required', null, 'server');
 		$mform->addElement('text', 'current_student_number', get_string('current_student_number', 'local_obu_application'), 'size="10" maxlength="10"');
 		$mform->setType('current_student_number', PARAM_TEXT);
         $mform->hideif('current_student_number', 'studying', 'eq', '2');
+        $mform->hideif('current_student_number', 'studying', 'eq', '0');
         $mform->addElement('text', 'previous_student_number', get_string('previous_student_number', 'local_obu_application'), 'size="10" maxlength="10"');
         $mform->setType('previous_student_number', PARAM_TEXT);
         $mform->hideif('previous_student_number', 'studying', 'neq', '2');
+        $mform->hideif('previous_student_number', 'studying', 'eq', '0');
         $mform->addElement('header', 'statement_head', get_string('statement_head', 'local_obu_application'), '');
 		$mform->setExpanded('statement_head');
 		$mform->addElement('textarea', 'statement', get_string('statement', 'local_obu_application'), 'cols="60" rows="10"');
@@ -93,6 +97,10 @@ class course_form extends moodleform {
     function validation($data, $files) {
         global $CFG, $DB;
         $errors = parent::validation($data, $files);
+
+        if ($data['course_code'] == '0'|| $data['course_code'] == '') {
+            $errors['course_code'] = get_string('value_required', 'local_obu_application');
+        }
 
 		if ($data['studying'] == '0') {
 			$errors['studying'] = get_string('value_required', 'local_obu_application');
@@ -107,10 +115,6 @@ class course_form extends moodleform {
                 $errors['previous_student_number'] = get_string('user_not_found', 'local_obu_application');
             }
         }
-
-		if (!empty($errors)) {
-			$errors['form_errors'] = get_string('form_errors', 'local_obu_application');
-		}
 
         return $errors;
     }
