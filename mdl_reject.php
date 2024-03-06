@@ -43,20 +43,15 @@ if (!is_manager()) {
 
 $url = $home . 'local/obu_application/mdl_reject.php?id=' . $applications_course->id;
 
-$source = '';
-if (isset($_REQUEST['source'])) {
-    $source = $_REQUEST['source'];
-}
+$source = $_REQUEST['source'] ?? null;
 if ($source) {
     $back = urldecode($source);
 }
 
-$id = '';
-if (isset($_REQUEST['id'])) {
-    $id = $_REQUEST['id'];
-}
-if ($id){
-    $application = read_application($_REQUEST['id']);
+$id = $_REQUEST['id'] ?? null;
+$application = $id ? read_application($_REQUEST['id']) : null;
+if(!$application) {
+    redirect($back);
 }
 
 $title = get_string('applications_management', 'local_obu_application');
