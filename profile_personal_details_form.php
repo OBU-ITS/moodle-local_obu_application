@@ -78,12 +78,12 @@ class profile_personal_details_form extends moodleform {
 
         // General - birth country, date, nationality, gender and residence
         $birth_code = $mform->addElement('select', 'birth_code', get_string('birth_country', 'local_obu_application'), $data->nations, null);
-        $birth_code->setSelected($data->birth_code);
+        $mform->setDefault('birth_code', '');
         $mform->addRule('birth_code', null, 'required', null, 'server');
         $mform->addElement('date_selector', 'birthdate', get_string('birthdate', 'local_obu_application'), $date_options);
         $mform->addRule('birthdate', null, 'required', null, 'server');
         $nationality_code = $mform->addElement('select', 'nationality_code', get_string('nationality', 'local_obu_application'), $data->nations, null);
-        $nationality_code->setSelected($data->nationality_code);
+        $mform->setDefault('nationality_code', '');
         $mform->addRule('nationality_code', null, 'required', null, 'server');
         $mform->addElement('static', 'nationality_note', null, get_string('nationality_note', 'local_obu_application'));
         $genders = [];
@@ -92,10 +92,11 @@ class profile_personal_details_form extends moodleform {
         $genders['F'] = get_string('gender_female', 'local_obu_application');
         $genders['M'] = get_string('gender_male', 'local_obu_application');
         $mform->addElement('select', 'gender', get_string('gender', 'local_obu_application'), $genders);
+        $mform->setDefault('gender', '');
         $mform->addRule('gender', null, 'required', null, 'server');
         $mform->addElement('html', '<p><strong>' . get_string('residence_preamble', 'local_obu_application') . '</strong></p>');
         $residence_code = $mform->addElement('select', 'residence_code', get_string('residence_area', 'local_obu_application'), $data->areas);
-        $residence_code->setSelected($data->residence_code);
+        $mform->setDefault('residence_code', '');
         $mform->addRule('residence_code', null, 'required', null, 'server');
 
         $this->add_action_buttons(true, get_string('save', 'local_obu_application'));
@@ -119,10 +120,6 @@ class profile_personal_details_form extends moodleform {
 
         if ($data['residence_code'] == '') {
             $errors['residence_code'] = get_string('value_required', 'local_obu_application');
-        }
-
-        if (!empty($errors)) {
-            $errors['form_errors'] = get_string('form_errors', 'local_obu_application');
         }
 
         return $errors;

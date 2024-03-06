@@ -115,7 +115,8 @@ class profile_contact_details_form extends moodleform {
 
         $mform->addElement('html', '<p><strong>' . get_string('domicile_preamble', 'local_obu_application') . '</strong></p>');
         $domicile_code = $mform->addElement('select', 'domicile_code', get_string('domicile_country', 'local_obu_application'), $data->nations);
-        $domicile_code->setSelected($data->domicile_code);
+//        $domicile_code->setSelected($data->domicile_code);
+        $mform->setDefault('domicile_code', '');
         $mform->addRule('domicile_code', null, 'required', null, 'server');
 
         $mform->addElement('text', 'phone1', get_string('home_phone', 'local_obu_application'), 'size="20" maxlength="20"');
@@ -185,10 +186,6 @@ class profile_contact_details_form extends moodleform {
             } else if ($data['personal_confirm'] != $data['personal_email']) {
                 $errors['personal_confirm'] = get_string('invalidemail');
             }
-        }
-
-        if (!empty($errors)) {
-            $errors['form_errors'] = get_string('form_errors', 'local_obu_application');
         }
 
         return $errors;

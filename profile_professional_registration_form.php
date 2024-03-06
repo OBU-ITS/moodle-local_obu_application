@@ -59,6 +59,7 @@ class profile_professional_registration_form extends moodleform {
         $options['1'] = get_string('yes', 'local_obu_application');
         $options['2'] = get_string('no', 'local_obu_application');
         $mform->addElement('select', 'professional_registration', get_string('professional_registration', 'local_obu_application'), $options);
+        $mform->setDefault('professional_registration', '');
         $mform->addRule('professional_registration', null, 'required', null, 'server');
 
         $mform->addElement('text', 'prof_reg_no', get_string('prof_reg_no', 'local_obu_application'), 'size="40" maxlength="100"');
@@ -74,10 +75,6 @@ class profile_professional_registration_form extends moodleform {
 
         if ($data['professional_registration'] == '') {
             $errors['professional_registration'] = get_string('value_required', 'local_obu_application');
-        }
-
-        if (!empty($errors)) {
-            $errors['form_errors'] = get_string('form_errors', 'local_obu_application');
         }
 
         return $errors;

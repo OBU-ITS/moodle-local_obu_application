@@ -52,12 +52,11 @@ class profile_criminal_record_form extends moodleform {
 
         // Criminal record
         $options = [];
-        if ($data->record->criminal_record == 0) { // A mandatory field so must be the first time thru
-            $options[''] = 'Please select'; // No choice made yet
-        }
+        $options[''] = 'Please select'; // No choice made yet
         $options['1'] = get_string('yes', 'local_obu_application');
         $options['2'] = get_string('no', 'local_obu_application');
         $mform->addElement('select', 'criminal_record', get_string('criminal_record', 'local_obu_application'), $options);
+        $mform->setDefault('criminal_record', '');
         $mform->addRule('criminal_record', null, 'required', null, 'server');
 
         $this->add_action_buttons(true, get_string('save', 'local_obu_application'));
@@ -69,10 +68,6 @@ class profile_criminal_record_form extends moodleform {
 
         if ($data['criminal_record'] == '') {
             $errors['criminal_record'] = get_string('value_required', 'local_obu_application');
-        }
-
-        if (!empty($errors)) {
-            $errors['form_errors'] = get_string('form_errors', 'local_obu_application');
         }
 
         return $errors;
