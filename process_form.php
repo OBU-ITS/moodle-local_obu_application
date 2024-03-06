@@ -321,7 +321,7 @@ class process_form extends moodleform {
 		}
 		$mform->addElement('static', 'statement', get_string('statement', 'local_obu_application'));
 
-		if ($data->record->statement != ""){
+		if ($data->record->statement != "" && !is_funder()){
             $mform->addElement('submit', 'statementbutton', get_string('export_statement', 'local_obu_application'));
         }
 
