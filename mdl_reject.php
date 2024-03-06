@@ -30,8 +30,18 @@ require_once('./mdl_reject_form.php');
 require_once($CFG->libdir . '/moodlelib.php');
 
 $home = new moodle_url('/');
+if (!is_manager()) {
+    redirect($home);
+}
 
-$url = $home . 'local/obu_application/mdl_reject.php?id=' . $application->id;
+$applications_course = get_applications_course();
+require_login($applications_course);
+$back = $home . 'course/view.php?id=' . $applications_course;
+if (!is_manager()) {
+    redirect($back);
+}
+
+$url = $home . 'local/obu_application/mdl_reject.php?id=' . $applications_course->id;
 
 $source = '';
 if (isset($_REQUEST['source'])) {
@@ -51,10 +61,10 @@ if ($id){
 
 $title = get_string('applications_management', 'local_obu_application');
 $heading = get_string('application_ref', 'local_obu_application', $application->id);
+$PAGE->set_url($url);
 $PAGE->set_pagelayout('standard');
 $PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
 $PAGE->set_heading($title);
-$PAGE->set_url($url);
 $PAGE->navbar->add($heading);
 $message = '';
 

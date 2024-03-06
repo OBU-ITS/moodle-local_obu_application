@@ -30,8 +30,18 @@ require_once('./mdl_revoke_form.php');
 require_once($CFG->libdir . '/moodlelib.php');
 
 $home = new moodle_url('/');
+if (!is_manager()) {
+    redirect($home);
+}
 
-$url = $home . 'local/obu_application/mdl_revoke.php?id=' . $application->id;
+$applications_course = get_applications_course();
+require_login($applications_course);
+$back = $home . 'course/view.php?id=' . $applications_course;
+if (!is_manager()) {
+    redirect($back);
+}
+
+$url = $home . 'local/obu_application/mdl_revoke.php?id=' . $applications_course->id;
 
 $source = '';
 if (isset($_REQUEST['source'])) {
