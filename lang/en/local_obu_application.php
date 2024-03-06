@@ -337,6 +337,7 @@ $string['personalemail'] = 'Personal email';
 $string['professionalemail'] = 'Professional email';
 $string['newemail'] = 'Email (Note - you would need to use any new address to log in)';
 $string['confirm_email'] = 'Confirm email';
+$string['confirm_personal_email'] = 'Confirm personal email';
 $string['contactdetails'] = 'Contact details';
 $string['applicantdetails'] = 'Applicant contact details';
 $string['fullname'] = '<strong>NOTE:</strong> Please ensure that you register with your full name (as it appears on your Birth Certificate or Passport, for example).';

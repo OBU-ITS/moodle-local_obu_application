@@ -137,13 +137,16 @@ class profile_contact_details_form extends moodleform {
             $mform->setType('email', PARAM_RAW_TRIMMED);
             $mform->addRule('email', get_string('missingemail'), 'required', null, 'server');
 
+            $mform->addElement('text', 'username', get_string('confirm_email', 'local_obu_application'), 'size="25" maxlength="100"');
+            $mform->setType('username', PARAM_RAW_TRIMMED);
+            $mform->addRule('username', get_string('missingemail'), 'required', null, 'server');
+
             $mform->addElement('html', '<p><strong>' . get_string('personalemail_preamble', 'local_obu_application') . '</strong></p>');
             $mform->addElement('text', 'personal_email', get_string('personalemail', 'local_obu_application'), 'size="25" maxlength="100"');
             $mform->setType('personal_email', PARAM_RAW_TRIMMED);
 
-            $mform->addElement('text', 'username', get_string('confirm_email', 'local_obu_application'), 'size="25" maxlength="100"');
-            $mform->setType('username', PARAM_RAW_TRIMMED);
-            $mform->addRule('username', get_string('missingemail'), 'required', null, 'server');
+            $mform->addElement('text', 'personal_confirm', get_string('confirm_personal_email', 'local_obu_application'), 'size="25" maxlength="100"');
+            $mform->setType('personal_confirm', PARAM_RAW_TRIMMED);
         }
 
         // buttons
@@ -170,6 +173,17 @@ class profile_contact_details_form extends moodleform {
                 $errors['username'] = get_string('missingemail');
             } else if ($data['username'] != $data['email']) {
                 $errors['username'] = get_string('invalidemail');
+            }
+        }
+
+        if ($data['personal_email']) {
+            if (!validate_email($data['personal_email']) || ($data['personal_email'] != strtolower($data['personal_email']))) {
+                $errors['personal_email'] = get_string('invalidemail');
+            }
+            if (empty($data['personal_confirm'])) {
+                $errors['personal_confirm'] = get_string('missingemail');
+            } else if ($data['personal_confirm'] != $data['personal_email']) {
+                $errors['personal_confirm'] = get_string('invalidemail');
             }
         }
 
