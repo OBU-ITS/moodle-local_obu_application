@@ -118,7 +118,7 @@ else if ($mform_data = $mform->get_data()) {
 	if (($button_text == 'approve') && ($mform_data->submitbutton != get_string('continue', 'local_obu_application')) // They can do something (and they want to)
 		&& ($mform_data->approval_state == $application->approval_state) && ($mform_data->approval_level == $application->approval_level)) { // Check nothing happened while we were away (or they clicked twice)
 		if (isset($mform_data->rejectbutton) && ($mform_data->rejectbutton == get_string('reject', 'local_obu_application'))) { // Application rejected
-			update_workflow($application, false, $mform_data);
+            redirect($home . 'reject.php?source=' . urlencode($url) . "&id=" . $application->id);
 		} else {
 			update_workflow($application, true, $mform_data);
 		}
