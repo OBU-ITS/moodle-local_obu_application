@@ -81,7 +81,11 @@ if ($mform_data = $mform->get_data()) {
         $message = get_string('no_applications', 'local_obu_application');
     } else {
         header('Content-Type: text/csv');
-        header('Content-Disposition: attachment;filename=status_report.csv');
+        if (count($mform_data->selected_courses) == 1) {
+            header('Content-Disposition: attachment;filename=adv_status_report' . $selected_courses . date('Ymd', $mform_data->application_date) . '.csv');
+        } else {
+            header('Content-Disposition: attachment;filename=adv_status_report_' . 'multiple_' . date('Ymd', $mform_data->application_date) . '.csv');
+        }
 
         $fp = fopen('php://output', 'w');
         $first_record = true;
