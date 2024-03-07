@@ -49,6 +49,10 @@ $CFG->additionalhtmlhead .= '.hls-cpd.path-local-obu_application .primary-naviga
 $CFG->additionalhtmlhead .= '.hls-cpd.path-local-obu_application .drawer-primary .list-group a:nth-child(-n + ' . $nav_offset . ') { display: none !important; }';
 $CFG->additionalhtmlhead .= '</style>';
 
+$CFG->additionalhtmltopofbody = '';
+$CFG->additionalhtmlbottomofbody = '';
+$CFG->additionalhtmlfooter = '';
+
 // Add our own menu items for logged-in users
 if (!isloggedin()) {
 	$PAGE->set_context(context_system::instance());
