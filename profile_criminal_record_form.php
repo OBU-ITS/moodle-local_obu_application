@@ -56,7 +56,6 @@ class profile_criminal_record_form extends moodleform {
         $options['1'] = get_string('yes', 'local_obu_application');
         $options['2'] = get_string('no', 'local_obu_application');
         $mform->addElement('select', 'criminal_record', get_string('criminal_record', 'local_obu_application'), $options);
-        $mform->setDefault('criminal_record', '');
         $mform->addRule('criminal_record', null, 'required', null, 'server');
 
         $this->add_action_buttons(true, get_string('save', 'local_obu_application'));

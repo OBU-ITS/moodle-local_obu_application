@@ -476,6 +476,7 @@ function write_contact_details($user_id, $form_data) {
 		$record->address_3 = $form_data->address_3;
 		$record->city = $form_data->city;
 		$record->postcode = $form_data->postcode;
+        $record->personal_email = $form_data->personal_email;
 		$record->domicile_code = $form_data->domicile_code;
 		$record->domicile_country = $form_data->domicile_country;
         $record->contact_details_update = time();
@@ -617,8 +618,11 @@ function write_professional_registration($user_id, $form_data) {
         $record->id = 0;
         $record->userid = $user_id;
     }
-
-    $record->prof_reg_no = $form_data->prof_reg_no;
+    if ($form_data->professional_registration == '2') {
+        $record->prof_reg_no = '';
+    } else {
+        $record->prof_reg_no = $form_data->prof_reg_no;
+    }
     $record->pro_registration_update = time();
 
     if ($record->id == 0) { // New record
@@ -822,6 +826,7 @@ function write_application($user_id, $form_data) {
 	$record->domicile_code = $applicant->domicile_code;
 	$record->domicile_country = $applicant->domicile_country;
 	$record->postcode = $applicant->postcode;
+    $record->personal_email = $applicant->personal_email;
 	$record->home_phone = $user->phone1;
 	$record->mobile_phone = $user->phone2;
 	$record->email = $user->email;

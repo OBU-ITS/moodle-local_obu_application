@@ -44,20 +44,14 @@ class profile_personal_details_form extends moodleform {
 
         if (($data->record->birth_code != '') && ($data->record->birth_code != 'ZZ')) {
             $data->birth_code = $data->record->birth_code;
-        } else {
-            $data->birth_code = $this->_customdata['default_birth_code'];
         }
 
         if (($data->record->nationality_code != '') && ($data->record->nationality_code != 'ZZ')) {
             $data->nationality_code = $data->record->nationality_code;
-        } else {
-            $data->nationality_code = $this->_customdata['default_nationality_code'];
         }
 
         if (($data->record->residence_code != '') && ($data->record->residence_code != 'ZZ')) {
             $data->residence_code = $data->record->residence_code;
-        } else {
-            $data->residence_code = $this->_customdata['default_residence_code'];
         }
 
         $fields = [
@@ -77,13 +71,11 @@ class profile_personal_details_form extends moodleform {
         $mform->addElement('static', 'form_errors');
 
         // General - birth country, date, nationality, gender and residence
-        $birth_code = $mform->addElement('select', 'birth_code', get_string('birth_country', 'local_obu_application'), $data->nations, null);
-        $mform->setDefault('birth_code', '');
+        $mform->addElement('select', 'birth_code', get_string('birth_country', 'local_obu_application'), $data->nations, null);
         $mform->addRule('birth_code', null, 'required', null, 'server');
         $mform->addElement('date_selector', 'birthdate', get_string('birthdate', 'local_obu_application'), $date_options);
         $mform->addRule('birthdate', null, 'required', null, 'server');
-        $nationality_code = $mform->addElement('select', 'nationality_code', get_string('nationality', 'local_obu_application'), $data->nations, null);
-        $mform->setDefault('nationality_code', '');
+        $mform->addElement('select', 'nationality_code', get_string('nationality', 'local_obu_application'), $data->nations, null);
         $mform->addRule('nationality_code', null, 'required', null, 'server');
         $mform->addElement('static', 'nationality_note', null, get_string('nationality_note', 'local_obu_application'));
         $genders = [];
@@ -92,11 +84,9 @@ class profile_personal_details_form extends moodleform {
         $genders['F'] = get_string('gender_female', 'local_obu_application');
         $genders['M'] = get_string('gender_male', 'local_obu_application');
         $mform->addElement('select', 'gender', get_string('gender', 'local_obu_application'), $genders);
-        $mform->setDefault('gender', '');
         $mform->addRule('gender', null, 'required', null, 'server');
         $mform->addElement('html', '<p><strong>' . get_string('residence_preamble', 'local_obu_application') . '</strong></p>');
-        $residence_code = $mform->addElement('select', 'residence_code', get_string('residence_area', 'local_obu_application'), $data->areas);
-        $mform->setDefault('residence_code', '');
+        $mform->addElement('select', 'residence_code', get_string('residence_area', 'local_obu_application'), $data->areas);
         $mform->addRule('residence_code', null, 'required', null, 'server');
 
         $this->add_action_buttons(true, get_string('save', 'local_obu_application'));

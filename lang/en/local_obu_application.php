@@ -349,6 +349,7 @@ $string['firstnames'] = 'First name(s)';
 $string['name'] = 'Name';
 $string['nameref'] = 'Name/Reference Number';
 $string['namerefsearch'] = 'Search by name or reference number';
+$string['phone_preamble'] = 'Please provide at least one phone number we can contact you on:';
 $string['phone'] = 'Phone no';
 $string['home_phone'] = 'Home phone';
 $string['mobile_phone'] = 'Mobile phone';

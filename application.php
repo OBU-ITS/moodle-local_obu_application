@@ -120,12 +120,8 @@ echo $OUTPUT->header();
             'applicant' => $record,
             'titles' => get_titles(),
             'nations' => $nations,
-            'default_domicile_code' => 'GB',
             'record' => $record,
-            'areas' => $areas,
-            'default_birth_code' => 'GB',
-            'default_nationality_code' => 'GB',
-            'default_residence_code' => 'XF'
+            'areas' => $areas
         ];
 
         $contactDetailsForm = new profile_contact_details_form(null, $parameters);

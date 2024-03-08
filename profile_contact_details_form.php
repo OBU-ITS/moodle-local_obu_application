@@ -39,7 +39,6 @@ class profile_contact_details_form extends moodleform {
         $data->applicant = $this->_customdata['applicant'];
         $data->titles = $this->_customdata['titles'];
         $data->nations = $this->_customdata['nations'];
-        $data->domicile_code = $this->_customdata['default_domicile_code'];
 
         if ($data->user !== false) {
             $fields = [
@@ -62,7 +61,9 @@ class profile_contact_details_form extends moodleform {
                     'address_3' => $data->applicant->address_3,
                     'city' => $data->applicant->city,
                     'domicile_code' => $data->domicile_code,
-                    'postcode' => $data->applicant->postcode
+                    'postcode' => $data->applicant->postcode,
+                    'personal_email' => $data->applicant->personal_email,
+                    'personal_confirm' => $data->applicant->personal_email
                 ];
                 $fields = array_merge($fields, $applicant_fields);
             }
@@ -114,11 +115,10 @@ class profile_contact_details_form extends moodleform {
         $mform->addRule('postcode', null, 'required', null, 'server');
 
         $mform->addElement('html', '<p><strong>' . get_string('domicile_preamble', 'local_obu_application') . '</strong></p>');
-        $domicile_code = $mform->addElement('select', 'domicile_code', get_string('domicile_country', 'local_obu_application'), $data->nations);
-//        $domicile_code->setSelected($data->domicile_code);
-        $mform->setDefault('domicile_code', '');
+        $mform->addElement('select', 'domicile_code', get_string('domicile_country', 'local_obu_application'), $data->nations);
         $mform->addRule('domicile_code', null, 'required', null, 'server');
 
+        $mform->addElement('html', '<p><strong>' . get_string('phone_preamble', 'local_obu_application') . '</strong></p>');
         $mform->addElement('text', 'phone1', get_string('home_phone', 'local_obu_application'), 'size="20" maxlength="20"');
         $mform->setType('phone1', PARAM_TEXT);
 
@@ -128,12 +128,7 @@ class profile_contact_details_form extends moodleform {
         if ($data->user->email != $data->user->username) {
             $mform->addElement('text', 'email', get_string('email'), 'size="25" maxlength="100"');
             $mform->disabledIf('email', 'firstname', 'neq', '?****?');
-
-            $mform->addElement('html', '<p><strong>' . get_string('personalemail_preamble', 'local_obu_application') . '</strong></p>');
-            $mform->addElement('text', 'personalemail', get_string('personalemail', 'local_obu_application'), 'size="25" maxlength="100"');
-            $mform->setType('personalemail', PARAM_RAW_TRIMMED);
         } else {
-            $mform->addElement('header', 'newemail', get_string('newemail', 'local_obu_application'), '');
             $mform->addElement('text', 'email', get_string('email'), 'size="25" maxlength="100"');
             $mform->setType('email', PARAM_RAW_TRIMMED);
             $mform->addRule('email', get_string('missingemail'), 'required', null, 'server');
@@ -141,14 +136,14 @@ class profile_contact_details_form extends moodleform {
             $mform->addElement('text', 'username', get_string('confirm_email', 'local_obu_application'), 'size="25" maxlength="100"');
             $mform->setType('username', PARAM_RAW_TRIMMED);
             $mform->addRule('username', get_string('missingemail'), 'required', null, 'server');
-
-            $mform->addElement('html', '<p><strong>' . get_string('personalemail_preamble', 'local_obu_application') . '</strong></p>');
-            $mform->addElement('text', 'personal_email', get_string('personalemail', 'local_obu_application'), 'size="25" maxlength="100"');
-            $mform->setType('personal_email', PARAM_RAW_TRIMMED);
-
-            $mform->addElement('text', 'personal_confirm', get_string('confirm_personal_email', 'local_obu_application'), 'size="25" maxlength="100"');
-            $mform->setType('personal_confirm', PARAM_RAW_TRIMMED);
         }
+
+        $mform->addElement('html', '<p><strong>' . get_string('personalemail_preamble', 'local_obu_application') . '</strong></p>');
+        $mform->addElement('text', 'personal_email', get_string('personalemail', 'local_obu_application'), 'size="25" maxlength="100"');
+        $mform->setType('personal_email', PARAM_RAW_TRIMMED);
+
+        $mform->addElement('text', 'personal_confirm', get_string('confirm_personal_email', 'local_obu_application'), 'size="25" maxlength="100"');
+        $mform->setType('personal_confirm', PARAM_RAW_TRIMMED);
 
         // buttons
         $this->add_action_buttons(true, get_string('save', 'local_obu_application'));
