@@ -34,7 +34,7 @@ class mdl_applicant_form extends moodleform {
         $data = new stdClass();
 		$data->role = $this->_customdata['role'];
 		$data->action = $this->_customdata['action'];
-		
+
 		$mform->addElement('hidden', 'role', $data->role);
 		$mform->setType('role', PARAM_RAW);
 		$mform->addElement('hidden', 'action', $data->action);
@@ -44,16 +44,24 @@ class mdl_applicant_form extends moodleform {
 
         $this->add_action_buttons(true, get_string('continue', 'local_obu_application'));
     }
-	
+
 	function validation($data, $files) {
 		$errors = parent::validation($data, $files); // Ensure we don't miss errors from any higher-level validation
-		
+
 		if ($data['nameref'] == '') {
 			$errors['nameref'] = get_string('value_required', 'local_obu_application');
-		} elseif(preg_match('~[0-9]+~', $data['nameref'])) {
+		}
+        elseif(preg_match('~^[0-9]+~', $data['nameref'])) {
             $application = read_application($data['nameref'], false);
             if ($application == null) {
                 $errors['nameref'] = get_string('application_not_found', 'local_obu_application');
+            }
+        }
+        elseif(substr($data['nameref'], 0, 4) == 'HLS/') {
+            $ref = substr($data['nameref'], 4);
+            $application = read_application($ref, false);
+            if ($application == null) {
+                $errors['nameref'] = $ref . get_string('application_not_found', 'local_obu_application');
             }
         } else {
 			$applicants = get_applicants_by_first_name($data['nameref']);
@@ -64,7 +72,7 @@ class mdl_applicant_form extends moodleform {
                 }
 			}
 		}
-		
+
 		return $errors;
 	}
 }
