@@ -38,25 +38,29 @@ if (!is_manager()) {
 
 $applications_course = get_applications_course();
 require_login($applications_course);
+
+$back = $home . 'course/view.php?id=' . $applications_course;
+
+if (!isset($_REQUEST['id'])) {
+    redirect($back);
+}
+
 $source = '';
 if (isset($_REQUEST['source'])) {
 	$source = $_REQUEST['source'];
 }
 if ($source) {
+    if (urldecode($source) == 'mdl_reference.php') {
+        redirect($home . 'local/obu_application/mdl_process.php?source=mdl_applicant.php&id=' . $_REQUEST['id']);
+    }
 	$back = $home . 'local/obu_application/' . urldecode($source);
-} else {
-	$back = $home . 'course/view.php?id=' . $applications_course;
-}
+} 
 
 if (!has_capability('local/obu_application:update', context_system::instance())) {
 	redirect($back);
 }
 
 // We only handle an existing application (id given)
-if (!isset($_REQUEST['id'])) {
-	redirect($back);
-}
-
 $application = read_application($_REQUEST['id']);
 if ($application === false) {
 	redirect($back);
