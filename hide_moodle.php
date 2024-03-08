@@ -52,7 +52,8 @@ $CFG->additionalhtmlhead .= '</style>';
 $googleAnalytics = get_config('local_obu_application', 'google_analytics');
 $hasGoogleAnalytics = $googleAnalytics != ''
     && $googleAnalytics != 'G-XXXXXXXXXX'
-    && ( substr( $googleAnalytics, 0, 2 ) === "G-" || substr( $googleAnalytics, 0, 2 ) === "g-");
+    && (substr($googleAnalytics, 0, 2 ) === "G-"
+        || substr($googleAnalytics, 0, 2 ) === "g-");
 if($hasGoogleAnalytics) {
     $CFG->additionalhtmltopofbody = '<script async src="https://www.googletagmanager.com/gtag/js?id=' . $googleAnalytics . '"></script>
 ';
