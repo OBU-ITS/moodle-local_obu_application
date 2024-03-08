@@ -49,7 +49,26 @@ $CFG->additionalhtmlhead .= '.hls-cpd.path-local-obu_application .primary-naviga
 $CFG->additionalhtmlhead .= '.hls-cpd.path-local-obu_application .drawer-primary .list-group a:nth-child(-n + ' . $nav_offset . ') { display: none !important; }';
 $CFG->additionalhtmlhead .= '</style>';
 
-$CFG->additionalhtmltopofbody = '';
+$googleAnalytics = get_config('local_obu_application', 'google_analytics');
+$hasGoogleAnalytics = $googleAnalytics != ''
+    && $googleAnalytics != 'G-XXXXXXXXXX'
+    && ( substr( $googleAnalytics, 0, 2 ) === "G-" || substr( $googleAnalytics, 0, 2 ) === "g-");
+if($hasGoogleAnalytics) {
+    $CFG->additionalhtmltopofbody = '<script async src="https://www.googletagmanager.com/gtag/js?id=' . $googleAnalytics . '"></script>
+';
+    $CFG->additionalhtmltopofbody .= "<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    
+    gtag('config', '" . $googleAnalytics . "')
+</script>";
+
+}
+else {
+    $CFG->additionalhtmltopofbody = '';
+}
+
 $CFG->additionalhtmlbottomofbody = '';
 $CFG->additionalhtmlfooter = '';
 
