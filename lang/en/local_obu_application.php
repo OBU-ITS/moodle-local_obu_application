@@ -428,8 +428,8 @@ $string['previous_student_number'] = 'If you have studied with Brookes before, e
 $string['statement_head'] = 'Supporting statement';
 $string['statement'] = 'How will your studies enhance your professional practice?';
 $string['visa_requirement'] = 'Visa Requirement';
-$string['visa_note'] = 'Please note that if your Nationality is other than United Kingdom, the University is required to see evidence of your current immigration status,
-this is usually your passport.  This is required even if you are currently working in the UK.  You will need to supply an Immigration Status document (e.g. passport) to meet the conditions
+$string['visa_note'] = 'If your Nationality is other than United Kingdom the University is required to see evidence of your current immigration status,
+this is usually your passport. This is required even if you are currently working in the UK. You will need to supply an Immigration Status document (e.g. passport) to meet the conditions
 of entry to this course.';
 $string['visa_not_required'] = 'Visa not required';
 $string['student_visa'] = 'International Student Visa required';
@@ -510,7 +510,7 @@ $string['semester'] = 'Semester';
 $string['index_welcome_heading'] = 'Welcome to your Application Portal account {$a->name}';
 $string['index_welcome_heading_funder'] = 'Welcome to your Funder Portal account {$a->name}';
 $string['index_welcome_text'] = 'You can apply for our HLS CPD courses using our Application Portal';
-$string['index_welcome_text_funder'] = 'You can find a <a href="funder_written_guide.php">written</a> and <a href="funder_video_guide.php">video</a> guide on approving here';
+$string['index_welcome_text_funder'] = 'You can find a written guide on approving <a href="https://docs.google.com/document/d/1Nxzv7o-ILuDYP6QaIl6-apgFTcNcuq7MyRk9zi8UESA" target="_blank">here</a>';
 $string['index_welcome_support'] = 'If you have any issues with applying, please contact <a href="mailto:hlscpdadmissions@brookes.ac.uk">hlscpdadmissions@brookes.ac.uk</a>';
 $string['index_welcome_support_funder'] = 'If you have any issues with approving your applicants, please contact <a href="mailto:hlscpdadmissions@brookes.ac.uk">hlscpdadmissions@brookes.ac.uk</a>';
 

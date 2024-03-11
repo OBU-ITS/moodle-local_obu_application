@@ -36,6 +36,7 @@ require_obu_login();
 $home = new moodle_url('/local/obu_application/');
 $url = $home . 'course.php';
 $visa = $home . 'visa.php';
+$application_url = $home . 'application.php';
 $supplement = $home . 'supplement.php';
 $apply = $home . 'apply.php';
 
@@ -63,7 +64,7 @@ $parameters = [
 $mform = new course_form(null, $parameters);
 
 if ($mform->is_cancelled()) {
-    redirect($home);
+    redirect($application_url);
 }
 
 if ($mform_data = $mform->get_data()) {
