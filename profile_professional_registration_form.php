@@ -53,9 +53,7 @@ class profile_professional_registration_form extends moodleform {
 
         // Professional registration
         $options = [];
-        if ($data->record->professional_registration == 0) { // A mandatory field so must be the first time thru
-            $options[''] = 'Please select'; // No choice made yet
-        }
+        $options[''] = get_string('select', 'local_obu_application');
         $options['1'] = get_string('yes', 'local_obu_application');
         $options['2'] = get_string('no', 'local_obu_application');
         $mform->addElement('select', 'professional_registration', get_string('professional_registration', 'local_obu_application'), $options);
@@ -63,7 +61,6 @@ class profile_professional_registration_form extends moodleform {
 
         $mform->addElement('text', 'prof_reg_no', get_string('prof_reg_no', 'local_obu_application'), 'size="40" maxlength="100"');
         $mform->setType('prof_reg_no', PARAM_TEXT);
-        $mform->addRule('prof_reg_no', null, 'required', null, 'server');
         $mform->hideIf('prof_reg_no', 'professional_registration', 'neq', '1');
 
         $this->add_action_buttons(true, get_string('save', 'local_obu_application'));
@@ -77,7 +74,7 @@ class profile_professional_registration_form extends moodleform {
             $errors['professional_registration'] = get_string('value_required', 'local_obu_application');
         }
 
-        if ($data['professional_registration' == '1'] && $data['prof_reg_no'] == ''){
+        if ($data['professional_registration'] == '1' && $data['prof_reg_no'] == ''){
             $errors['prof_reg_no'] = get_string('value_required', 'local_obu_application');
         }
 

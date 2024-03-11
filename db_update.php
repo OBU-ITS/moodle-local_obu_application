@@ -619,8 +619,10 @@ function write_professional_registration($user_id, $form_data) {
         $record->userid = $user_id;
     }
     if ($form_data->professional_registration == '2') {
+        $record->professional_registration = '0';
         $record->prof_reg_no = '';
     } else {
+        $record->professional_registration = '1';
         $record->prof_reg_no = $form_data->prof_reg_no;
     }
     $record->pro_registration_update = time();
