@@ -755,5 +755,15 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
         upgrade_plugin_savepoint(true, 2024030100, 'local', 'obu_application');
     }
 
+    if($oldversion < 2024030804) {
+        $table = new xmldb_table('local_obu_applicant');
+        $field = new xmldb_field('professional_registration', XMLDB_TYPE_INTEGER, '1', null, null, null, '0', 'emp_prof');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        upgrade_plugin_savepoint(true, 2024030804, 'local', 'obu_application');
+    }
+
     return $result;
 }
