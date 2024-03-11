@@ -98,8 +98,6 @@ if ($mform_data = (array)$mform->get_data()) {
 	}
 }
 
-
-
 echo $OUTPUT->header();
 ?>
 

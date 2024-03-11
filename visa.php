@@ -139,7 +139,7 @@ echo $OUTPUT->header();
         }
     </style>
     <div class="hero-content">
-        <h1>Visa Requirement</h1>
+        <h1><?php echo get_string('visa_requirement', 'local_obu_application') ?></h1>
     </div>
     <section class="block_html block card mb-3" >
         <div class="card-body p-3">
