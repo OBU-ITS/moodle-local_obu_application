@@ -63,38 +63,42 @@ $mform = new mdl_xfer_form(null, $parameters);
 
 if ($mform->is_cancelled()) {
     redirect($back);
-} 
+}
 else if ($mform_data = $mform->get_data()) {
-		
-	$months = [ 'JAN' => '01', 'FEB' => '02', 'MAR' => '03', 'APR' => '04', 'MAY' => '05', 'JUN' => '06', 'JUL' => '07', 'AUG' => '08', 'SEP' => '09', 'OCT' => '10', 'NOV' => '11', 'DEC' => '12' ];
+
+	$months = ['JAN' => '01',
+        'FEB' => '02',
+        'MAR' => '03',
+        'APR' => '04',
+        'MAY' => '05',
+        'JUN' => '06',
+        'JUL' => '07',
+        'AUG' => '08',
+        'SEP' => '09',
+        'OCT' => '10',
+        'NOV' => '11',
+        'DEC' => '12' ];
 
 	if (($mform_data->xfer_type == 1) || ($mform_data->xfer_type == 3)) {
 		$param_name = 'ADM'; // Admissions
 	} else {
 		$param_name = 'FIN'; // Finance
 	}
-	
+
 	if ($mform_data->xfer_id != '') { // A re-run
 		$xfer_id = $mform_data->xfer_id; // Re-run batch ID
 		$batch_number = 0; // No new batch number
 		$start_date = 0;
 	} else {
 		$param = read_parameter_by_name($param_name, true);
-		if ($mform_data->xfer_type == 3) {
-			$xfer_id = $param->number; // Default to last Admissions batch ID
-			$batch_number = 0; // No new batch number
-		} else {
-			$xfer_id = 0; // No existing batch number
-			$batch_number = $param->number + 1;
-		}
+
+        $xfer_id = 0; // No existing batch number
+        $batch_number = $param->number + 1;
 		$start_date = (substr($mform_data->course_date, 3) * 100) + $months[substr($mform_data->course_date, 0, 3)];
 	}
-	if ($xfer_id != 0) {
-		$file_id = $xfer_id;
-	} else {
-		$file_id = $batch_number;
-	}
-	
+
+    $file_id = $xfer_id != 0 ? $xfer_id : $batch_number;
+
 	$applications = get_applications(); // Get all applications
 	$xfers = array();
 	foreach ($applications as $application) {
@@ -113,6 +117,8 @@ else if ($mform_data = $mform->get_data()) {
 			}
 		}
 	}
+
+
 	if (empty($xfers)) {
 		$message = get_string('no_xfer', 'local_obu_application');
 	} else {
@@ -123,11 +129,23 @@ else if ($mform_data = $mform->get_data()) {
 			$delimiter = '|';
 			$extension = 'txt';
 		}
+
+        if($xfer_id != 0) {
+            $previous_xfer = read_xfer_record($xfer_id);
+            write_xfer_record($file_id, $previous_xfer->id);
+        }
+        else {
+            write_xfer_record($file_id);
+        }
+
 		header('Content-Type: text/csv');
 		header('Content-Disposition: attachment;filename=HLS_' . $param_name . sprintf('_%05d.', $file_id) . $extension);
 		$fp = fopen('php://output', 'w');
 		foreach ($xfers as $index => $xfer) {
 			$application = read_application($xfer);
+
+
+
 			$fields = array();
 
 			if ($mform_data->xfer_type == 2) {
@@ -188,6 +206,8 @@ else if ($mform_data = $mform->get_data()) {
 			} else {
 				$fields['Student_Type'] = 'P';
 			}
+
+
 			$course_date = $application->course_date;
 			$month = substr($course_date, 0, 3);
 			if (!isset($months[$month])) {
@@ -203,7 +223,7 @@ else if ($mform_data = $mform->get_data()) {
 						$course_date .= '06';
 					} else {
 						$course_date .= '09';
-					}					
+					}
 				}
 			}
 			$fields['Admit_Term'] = $course_date;
@@ -217,7 +237,8 @@ else if ($mform_data = $mform->get_data()) {
                 $residencyType = 'H';
             }
             $fields['Residency_Type'] = $residencyType;
-            
+
+
 			$fields['Programme_Stage'] = 'S1';
 			$fields['Decision'] = 'UT';
 			if ($course->cohort_code == '') {
@@ -237,12 +258,16 @@ else if ($mform_data = $mform->get_data()) {
 				$fields['Currently_Studying'] = $studying_formatted;
 				$fields['Student_Number'] = $application->student_number;
 				$fields['Residence'] = $application->residence_code;
+
 				if ($application->self_funding == 1) {
 					$fields['Funding_Method'] = 'Self-funding';
 					$fields['Organisation'] = '';
 /*					$fields['Contract'] = '';
 */					$fields['Funder_Name'] = '';
 				} else {
+
+
+
 					$cohort_code = strtoupper(str_replace(' ', '', $course->cohort_code));
 					if (strpos($cohort_code, 'FFAC,ZF') !== false) {
 						$fields['Funding_Method'] = 'Contract';
@@ -280,13 +305,17 @@ else if ($mform_data = $mform->get_data()) {
 					$fields['PO_Number'] = $application->invoice_ref;
 					$fields['Address'] = $application->invoice_address;
 					$fields['Contact_Email'] = $application->invoice_email;
+                    $fields['Phone_No'] = '';
+
                     if (substr($application->invoice_phone, 0, 3) == "+44"){
                         $fields['Phone_No'] = "=\"" . "0" . substr($application->invoice_phone, 3) . "\"";
                     } else{
-                        $fields['Phone_No'] = "=\"" .$$application->invoice_phone. "\"";
+                        $fields['Phone_No'] = "=\"" . $application->invoice_phone. "\"";
                     }
+
 					$fields['Contact_Name'] = $application->invoice_contact;
 				}
+
 				if (($application->self_funding == 1) || !is_programme($application->course_code)) {
 					$fields['Fund_Programme'] = '';
 					$fields['Fund_Module_1'] = '';
@@ -320,7 +349,7 @@ else if ($mform_data = $mform->get_data()) {
 				fputcsv($fp, array_keys($fields), $delimiter);
 			}
 			fputcsv($fp, $fields, $delimiter);
-			
+
 			// If a new batch, flag the application as processed
 			if ($batch_number > 0) {
 				if ($mform_data->xfer_type == 1) {
@@ -330,24 +359,25 @@ else if ($mform_data = $mform->get_data()) {
 				}
 				update_application($application);
 			}
+
 		}
 		fclose($fp);
-		
+
 		// If a new batch, update the parameter record
 		if ($batch_number > 0) {
 			$param->number = $batch_number;
 			write_parameter($param);
 		}
-		
+
 		exit();
 	}
-}	
+}
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading($heading);
 
 if ($message) {
-    notice($message, $url);    
+    notice($message, $url);
 }
 else {
     $mform->display();

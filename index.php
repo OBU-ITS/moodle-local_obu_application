@@ -133,11 +133,9 @@ if($funder) {
             $application = read_application($approval->application_id);
             $application_title = $application->firstname . ' ' . $application->lastname . ' (Application Ref HLS/' . $application->id . ')';
 
-                echo '<hr class="divider">';
-
+            echo '<hr class="divider">';
             echo '<h4><a href="' . $process . '?id=' . $application->id . '">' . $application_title . '</a></h4>';
             echo get_application_status($USER->id, $application, $manager);
-            $first = false;
         }
     } else {
         echo get_string('index_overview_empty_funder', 'local_obu_application');
@@ -147,21 +145,18 @@ else {
     $applications = get_applications($USER->id); // get all applications for the user
     $show_history_link = false;
     if ($applications) {
-        $first = true;
         foreach ($applications as $application) {
-            $text = get_application_status($USER->id, $application, $manager);
             $button = get_application_button_text($USER->id, $application, $manager);
             $application_title = $application->course_code . ' ' . $application->course_name . ' (Application Ref HLS/' . $application->id . ')';
-            echo '<hr class="divider">';
 
+            echo '<hr class="divider">';
             if (($button != 'submit') || $manager) {
                 echo '<h4><a href="' . $process . '?id=' . $application->id . '">' . $application_title . '</a></h4>';
             }
             else {
-                echo '<h5>' . $application_title . '</h5>';
+                echo '<h4>' . $application_title . '</h4>';
             }
-            echo $text;
-            $first = false;
+            echo get_application_status($USER->id, $application, $manager);
         }
     } else {
         echo get_string('index_overview_empty', 'local_obu_application');
@@ -180,11 +175,8 @@ else {
 
 ?>
 
-
             </div>
-
         </div>
-
     </section>
 <?php
 

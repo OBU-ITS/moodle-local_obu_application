@@ -259,5 +259,15 @@
       </INDEXES>
     </TABLE>
 
+    <TABLE NAME="local_obu_xfer" COMMENT="OBU HLS transfers">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="xfer_number" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Numeric transfer value"/>
+        <FIELD NAME="xfer_date" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Textual parameter value"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
 	</TABLES>
 </XMLDB>

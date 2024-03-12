@@ -25,7 +25,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
- 
+
 require('../../config.php');
 require_once('./hide_moodle.php');
 require_once('./locallib.php');
@@ -37,8 +37,8 @@ $home = new moodle_url('/local/obu_application/');
 $url = $home . 'apply.php';
 $process_url = $home . 'process.php';
 
+$PAGE->add_body_class('limitedwidth');
 $PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
-
 $PAGE->set_url($url);
 
 $message = '';
@@ -90,22 +90,82 @@ $mform = new apply_form(null, $parameters);
 
 if ($mform->is_cancelled()) {
     redirect($home);
-} 
+}
 else if ($mform_data = $mform->get_data()) {
 	if ($mform_data->submitbutton == get_string('apply', 'local_obu_application')) {
 		$application_id = write_application($USER->id, $mform_data);
 		redirect($process_url . '?id=' . $application_id); // Kick-off the processing
     }
-}	
+}
+
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading(get_string('apply', 'local_obu_application'));
+?>
+
+    <div class="hero"></div>
+    <style>
+        .hero {
+            position:absolute;
+            top:0;
+            left:0;
+            height: 15vh;
+            width:100%;
+        }
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url(/local/obu_application/moodle-hls-login-bg.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center 25%;
+            filter: brightness(95%);
+        }
+        .hero-content {
+            width: 100%;
+            padding: 0.5rem 1.5rem;
+            background-color: rgba(255,255,255,.8);
+            backdrop-filter: saturate(180%) blur(20px);
+            margin-bottom: 3rem;
+        }
+        .hero-content h1 {
+            z-index: 100;
+            position: relative;
+            color: black;
+        }
+    </style>
+    <div class="hero-content">
+        <h1><?php echo get_string('apply', 'local_obu_application') ?></h1>
+    </div>
+    <section class="block_html block card mb-3" >
+        <div class="card-body p-3">
+            <p>
+                Please complete the mandatory fields below. Detailed guidance can be <a href="application_guidance.php" target="_blank">found here</a>.
+            </p>
+            <hr class="divider">
+            <p style="margin-bottom:0">
+                If you have any queries, please contact <a href="mailto:hlscpdadmissions@brookes.ac.uk">hlscpdadmissions@brookes.ac.uk</a>.
+            </p>
+        </div>
+    </section>
+    <section class="block_html block card mb-3" >
+        <div class="card-body p-3">
+
+<?php
 
 if ($message) {
-    notice($message, $home);    
+    notice($message, $home);
 }
 else {
     $mform->display();
 }
+?>
+        </div>
+    </section>
+
+<?php
 
 echo $OUTPUT->footer();

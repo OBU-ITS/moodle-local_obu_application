@@ -138,6 +138,31 @@ function get_parameter_records() {
 	return $DB->get_records('local_obu_param', null, 'name');
 }
 
+function read_xfer_record($xfer_number) {
+    global $DB;
+
+    $record = $DB->get_record('local_obu_xfer', array('xfer_number' => $xfer_number));
+
+    return $record;
+}
+
+function write_xfer_record($batch_number, $id = 0) {
+    global $DB;
+
+    $record = new stdClass();
+    $record->xfer_number = $batch_number;
+    $record->xfer_date = time();
+
+    if ($id == 0) {
+        $id = $DB->insert_record('local_obu_xfer', $record);
+    } else {
+        $record->id = $id;
+        $DB->update_record('local_obu_xfer', $record);
+    }
+
+    return $id;
+}
+
 function read_supplement_forms($ref) {
     global $DB;
 
