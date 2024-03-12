@@ -1145,8 +1145,11 @@ function get_application_status($user_id, $application, $manager=null, $revoked 
 	$text .= get_application_status_row_html($label, $type, $state);
 
 	if ($manager) {
+		$first = true;
 		if ($application->admissions_xfer > 0) {
-			$text .= get_string('admissions', 'local_obu_application') . ' ' . get_string('data_xfer', 'local_obu_application') . ': ' .$application->admissions_xfer . '<br />';
+			$first = false;
+			$label = get_string('admissions', 'local_obu_application') . ' ' . get_string('data_xfer', 'local_obu_application') . ': ' .$application->admissions_xfer;
+			$text .= get_application_status_row_html($label, "xfer_first", "");
 		}
 		if ($application->finance_xfer > 0) {
 			$label = get_string('finance', 'local_obu_application') . ' ' . get_string('data_xfer', 'local_obu_application') . ': ' . $application->finance_xfer;
@@ -1159,7 +1162,9 @@ function get_application_status($user_id, $application, $manager=null, $revoked 
 			else {
 				$state = "";
 			}
-			$text .= get_application_status_row_html($label, "xfer", $state);
+
+			$type = $first ? "xfer_first" : "xfer";
+			$text .= get_application_status_row_html($label, $type, $state);
 		}
 	}
 
@@ -1189,8 +1194,11 @@ function get_application_status_row_html($label, $type, $state) {
 	else if ($type == 'future') {
 		$text .= "<div class='row text-muted'>";
 	}
-	else if($type == "xfer") {
+	else if($type == "xfer_first") {
 		$text .= "<div  class='row text-muted mt-2'>";
+	}
+	else if($type == "xfer") {
+		$text .= "<div  class='row text-muted'>";
 	}
 	else {
 		$text .= "<div  class='row'>";
