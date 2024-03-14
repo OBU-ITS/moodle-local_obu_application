@@ -685,7 +685,8 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
                 INNER JOIN mdl_local_obu_application ON mdl_local_obu_application.funder_email = mdl_user.email
                 SET mdl_user.institution = 'funder'
                 WHERE mdl_local_obu_application.funder_email IS NOT NULL 
-                    AND mdl_local_obu_application.funder_email <> ''";
+                    AND mdl_local_obu_application.funder_email <> ''
+                    AND mdl_user.username <> mdl_user.email";
 
         $DB->execute($sql);
 
@@ -780,6 +781,18 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
         }
 
         upgrade_plugin_savepoint(true, 2024030807, 'local', 'obu_application');
+    }
+
+
+    if($oldversion < 2024030808) {
+        $sql = "UPDATE mdl_user
+                SET institution = ''
+                WHERE institution = 'funder' 
+                    AND username <> email";
+
+        $DB->execute($sql);
+
+        upgrade_plugin_savepoint(true, 2024030808, 'local', 'obu_application');
     }
 
     return $result;
