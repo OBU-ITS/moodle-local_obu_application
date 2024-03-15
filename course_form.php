@@ -62,7 +62,6 @@ class course_form extends moodleform {
         $mform->addElement('header', 'course_head', get_string('course_head', 'local_obu_application'), '');
 		$mform->setExpanded('course_head');
 		$mform->addElement('autocomplete', 'course_code', get_string('course', 'local_obu_application'), $data->courses, null);
-        $mform->setDefault('course_code', '0');
         $mform->addRule('course_code', null, 'required', null, 'server');
 		$mform->addElement('select', 'course_date', get_string('course_date', 'local_obu_application'), $data->dates, null);
         $mform->addRule('course_date', null, 'required', null, 'server');
@@ -76,7 +75,6 @@ class course_form extends moodleform {
         $options['6'] = get_string('msc', 'local_obu_application');
         $options['7'] = get_string('standalone_module', 'local_obu_application');
 		$mform->addElement('select', 'studying', get_string('currently_enrolled', 'local_obu_application'), $options);
-        $mform->setDefault('studying', '0');
 		$mform->addRule('studying', null, 'required', null, 'server');
 		$mform->addElement('text', 'current_student_number', get_string('current_student_number', 'local_obu_application'), 'size="10" maxlength="10"');
 		$mform->setType('current_student_number', PARAM_TEXT);
