@@ -65,6 +65,7 @@ class profile_current_employment_form extends moodleform {
         $mform->setType('emp_prof', PARAM_TEXT);
 
         $this->add_action_buttons(true, get_string('save', 'local_obu_application'));
+        $mform->addElement('static', 'submitinfo', '', get_string('submit_info', 'local_obu_application'));
     }
 
     function validation($data, $files) {

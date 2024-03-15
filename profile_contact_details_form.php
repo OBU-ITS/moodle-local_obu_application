@@ -147,6 +147,7 @@ class profile_contact_details_form extends moodleform {
 
         // buttons
         $this->add_action_buttons(true, get_string('save', 'local_obu_application'));
+        $mform->addElement('static', 'submitinfo', '', get_string('submit_info', 'local_obu_application'));
     }
 
     function validation($data, $files) {

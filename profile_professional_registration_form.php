@@ -64,6 +64,7 @@ class profile_professional_registration_form extends moodleform {
         $mform->hideIf('prof_reg_no', 'professional_registration', 'neq', '1');
 
         $this->add_action_buttons(true, get_string('save', 'local_obu_application'));
+        $mform->addElement('static', 'submitinfo', '', get_string('submit_info', 'local_obu_application'));
     }
 
     function validation($data, $files) {

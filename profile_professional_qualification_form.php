@@ -82,6 +82,7 @@ class profile_professional_qualification_form extends moodleform {
         $mform->addRule('trainingperiod', null, 'required', null, 'server');
 
         $this->add_action_buttons(true, get_string('save', 'local_obu_application'));
+        $mform->addElement('static', 'submitinfo', '', get_string('submit_info', 'local_obu_application'));
     }
 
     function validation($data, $files) {

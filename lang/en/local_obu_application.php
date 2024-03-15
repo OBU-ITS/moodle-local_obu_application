@@ -519,6 +519,7 @@ $string['index_overview_heading_funder'] = 'Applications to Approve';
 $string['index_overview_empty'] = '<p>You currently do not have any applications in the portal</p>';
 $string['index_overview_empty_funder'] = '<p>You currently do not have any applications to approve</p>';
 
+$string['submit_info'] = '<i><strong>Please note:</strong> This section will not autosave, you must click save.<br/>You can re-enter this section once saved and edit or add further details.</i>';
 
 $string[''] = '';
 
