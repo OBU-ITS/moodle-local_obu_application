@@ -1035,11 +1035,6 @@ function get_application_status($user_id, $application, $manager=null, $revoked 
 		$manager = is_manager();
 	}
 
-	if(is_administrator()) {
-		$text .= get_application_status_row_html('Level' . $application->approval_level . '. State' . $application->approval_state, 'admin', '');
-	}
-
-
 	// Submitted
 	$name = get_name_and_email($user_id, $application->userid);
 	$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('submitted', 'local_obu_application'), 'by' => $name));
