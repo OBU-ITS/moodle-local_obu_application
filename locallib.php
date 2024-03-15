@@ -1174,6 +1174,10 @@ function get_application_approval_type($current_level, $level, $state = 0) {
 }
 
 function get_application_status_comment_html(string $comment) : string {
+	if (!$comment) {
+		return '';
+	}
+
 	return "<br /><span class='text-muted'>Comment: " . $comment . "</span>";
 }
 
