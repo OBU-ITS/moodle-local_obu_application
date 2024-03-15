@@ -47,9 +47,13 @@ $PAGE->set_url($url);
 
 $record = read_applicant($USER->id, false);
 if (($record === false)
-	|| ($record->birth_code == '') || ($record->birth_code == 'ZZ')
-	|| ($record->nationality_code == '') || ($record->nationality_code == 'ZZ')
-	|| ($record->residence_code == '') || ($record->residence_code == 'ZZ')) {
+    || $record->contact_details_update == 0
+    || $record->criminal_record_update == 0
+    || $record->current_employment_update == 0
+    || $record->edu_establishments_update == 0
+    || $record->personal_details_update == 0
+    || $record->pro_qualification_update == 0
+    || $record->pro_registration_update == 0) {
 		$message = get_string('complete_profile', 'local_obu_application');
 } else {
 	$message = '';
