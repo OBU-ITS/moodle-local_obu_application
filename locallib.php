@@ -1055,7 +1055,7 @@ function get_application_status($user_id, $application, $manager=null, $revoked 
 	if($application->manager_email != ''
 		&& ($application->approval_state == 0
 			|| ($application->approval_state > 0 && $application->approval_level >= 1))) {
-		$type = get_application_approval_type($application->approval_level, 1);
+		$type = get_application_approval_type($application->approval_level, 1, $application->approval_state);
 		if($type == 'past') {
 			$name = '('. $application->manager_email . ')';
 			if ($application->approval_level == 1 && $application->approval_state == 1) {
@@ -1082,7 +1082,7 @@ function get_application_status($user_id, $application, $manager=null, $revoked 
 	if($application->self_funding == '0'
 		&& ($application->approval_state == 0
 			|| ($application->approval_state > 0 && $application->approval_level >= 2))) {
-		$type = get_application_approval_type($application->approval_level, 2);
+		$type = get_application_approval_type($application->approval_level, 2, $application->approval_state);
 		if($type == 'past') {
 			$name = '('. $application->funder_email . ')';
 			if ($application->approval_level == 2 && $application->approval_state == 1) {
