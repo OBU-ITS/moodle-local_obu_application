@@ -99,6 +99,7 @@ if ($mform_data = $mform->get_data()) {
 	$application->nationality_code = $mform_data->nationality_code;
 	$application->nationality = $nations[$mform_data->nationality_code];
 	$application->gender = $mform_data->gender;
+    $application->personal_email = $mform_data->personal_email;
 	$application->residence_code = $mform_data->residence_code;
 	$application->residence_area = $areas[$mform_data->residence_code];
 	update_application($application);

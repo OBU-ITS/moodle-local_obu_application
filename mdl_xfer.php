@@ -192,6 +192,7 @@ else if ($mform_data = $mform->get_data()) {
 				$fields['Email_Type'] = 'PERS';
 			}
 			$fields['Email'] = $application->email;
+            $fields['Personal_Email'] = $application->personal_email;
 			$fields['Date_of_Birth'] = strtoupper(date('d-M-Y', $application->birthdate));
 			$fields['Gender'] = $application->gender;
 			$fields['Country_of_Birth'] = $application->birth_code;

@@ -64,6 +64,7 @@ class mdl_amend_details_form extends moodleform {
 			'birthdate' => $data->record->birthdate,
 			'nationality_code' => $data->nationality_code,
 			'gender' => $data->record->gender,
+            'personal_email' => $data->record->personal_email,
 			'residence_code' => $data->residence_code
 		];
 		$this->set_data($fields);
@@ -93,7 +94,7 @@ class mdl_amend_details_form extends moodleform {
 		$genders['M'] = get_string('gender_male', 'local_obu_application');
 		$mform->addElement('select', 'gender', get_string('gender', 'local_obu_application'), $genders);
 		$mform->addRule('gender', null, 'required', null, 'server');
-		$mform->addElement('html', '<p><strong>' . get_string('residence_preamble', 'local_obu_application') . '</strong></p>');
+        $mform->addElement('text', 'personal_email', get_string('personalemail', 'local_obu_application'), 'size="40" maxlength="100"');
 		$residence_code = $mform->addElement('select', 'residence_code', get_string('residence_area', 'local_obu_application'), $data->areas);
 		$residence_code->setSelected($data->residence_code);
 		$mform->addRule('residence_code', null, 'required', null, 'server');
