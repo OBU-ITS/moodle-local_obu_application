@@ -122,6 +122,12 @@ class mdl_amend_details_form extends moodleform {
 			$errors['residence_code'] = get_string('value_required', 'local_obu_application');
 		}
 
+        if ($data['personal_email']) {
+            if (!validate_email($data['personal_email']) || ($data['personal_email'] != strtolower($data['personal_email']))) {
+                $errors['personal_email'] = get_string('invalidemail');
+            }
+        }
+
 		if (!empty($errors)) {
 			$errors['form_errors'] = get_string('form_errors', 'local_obu_application');
 		}
