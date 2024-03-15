@@ -128,10 +128,6 @@ class mdl_amend_details_form extends moodleform {
             }
         }
 
-		if (!empty($errors)) {
-			$errors['form_errors'] = get_string('form_errors', 'local_obu_application');
-		}
-
         return $errors;
     }
 }
