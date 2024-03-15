@@ -54,7 +54,7 @@ if ($source) {
         redirect($home . 'local/obu_application/mdl_process.php?source=mdl_applicant.php&id=' . $_REQUEST['id']);
     }
 	$back = $home . 'local/obu_application/' . urldecode($source);
-} 
+}
 
 if (!has_capability('local/obu_application:update', context_system::instance())) {
 	redirect($back);
@@ -128,6 +128,7 @@ if ($mform->is_cancelled()) {
 }
 
 if ($mform_data = $mform->get_data()) {
+
 	if (isset($mform_data->submitbutton) && ($mform_data->submitbutton != get_string('continue', 'local_obu_application'))) {
 		update_workflow($application, true, $mform_data); // Approved / Revoked / Reinstated
         redirect($back);
