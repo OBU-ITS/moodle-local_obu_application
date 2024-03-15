@@ -95,6 +95,7 @@
         <FIELD NAME="domicile_code" TYPE="char" LENGTH="4" NOTNULL="false" SEQUENCE="false" COMMENT="Domicile code"/>
         <FIELD NAME="domicile_country" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Country of domicile"/>
         <FIELD NAME="postcode" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="Postcode"/>
+        <FIELD NAME="personal_email" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Personal email"/>
         <FIELD NAME="birth_code" TYPE="char" LENGTH="4" NOTNULL="false" SEQUENCE="false" COMMENT="Birth code"/>
         <FIELD NAME="birth_country" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Country of birth"/>
         <FIELD NAME="birthdate" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Date of birth"/>
@@ -165,6 +166,7 @@
         <FIELD NAME="home_phone" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="Home phone"/>
         <FIELD NAME="mobile_phone" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="Mobile phone"/>
         <FIELD NAME="email" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Email"/>
+        <FIELD NAME="personal_email" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Personal email"/>
         <FIELD NAME="birth_code" TYPE="char" LENGTH="4" NOTNULL="false" SEQUENCE="false" COMMENT="Birth code"/>
         <FIELD NAME="birth_country" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Country of birth"/>
         <FIELD NAME="birthdate" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Date of birth"/>

@@ -783,7 +783,6 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
         upgrade_plugin_savepoint(true, 2024030807, 'local', 'obu_application');
     }
 
-
     if($oldversion < 2024030808) {
         $sql = "UPDATE mdl_user
                 SET institution = ''
@@ -793,6 +792,16 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
         $DB->execute($sql);
 
         upgrade_plugin_savepoint(true, 2024030808, 'local', 'obu_application');
+    }
+
+    if($oldversion < 2024030809) {
+        $table = new xmldb_table('local_obu_application');
+        $field = new xmldb_field('personal_email', XMLDB_TYPE_CHAR, '100', null, null, null, null, 'email');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        upgrade_plugin_savepoint(true, 2024030809, 'local', 'obu_application');
     }
 
     return $result;
