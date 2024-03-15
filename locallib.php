@@ -1053,7 +1053,7 @@ function get_application_status($user_id, $application, $manager=null, $revoked 
 		$type = get_application_approval_type($application->approval_level, 1);
 		if($type == 'past') {
 			$name = '('. $application->manager_email . ')';
-			if ($application->approval_state == 1) {
+			if ($application->approval_level == 1 && $application->approval_state == 1) {
 				$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('rejected', 'local_obu_application'), 'by' => $name));
 			} else {
 				$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('approved', 'local_obu_application'), 'by' => $name));
@@ -1080,7 +1080,7 @@ function get_application_status($user_id, $application, $manager=null, $revoked 
 		$type = get_application_approval_type($application->approval_level, 2);
 		if($type == 'past') {
 			$name = '('. $application->funder_email . ')';
-			if ($application->approval_state == 1) {
+			if ($application->approval_level == 2 && $application->approval_state == 1) {
 				$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('rejected', 'local_obu_application'), 'by' => $name));
 			} else {
 				$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('approved', 'local_obu_application'), 'by' => $name));
@@ -1107,12 +1107,12 @@ function get_application_status($user_id, $application, $manager=null, $revoked 
 		if ($type == 'past') {
 			$name = '(HLS approvals)';
 
-			if ($application->approval_state == 1) {
+			if ($application->approval_level == 3 && $application->approval_state == 1) {
 				$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('rejected', 'local_obu_application'), 'by' => $name));
-			} else if ($application->approval_state == 2) {
-				$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('approved', 'local_obu_application'), 'by' => $name));
-			} else {
+			} else if ($application->approval_level == 3 && $application->approval_state == 3) {
 				$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('withdrawn', 'local_obu_application'), 'by' => $name));
+			} else {
+				$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('approved', 'local_obu_application'), 'by' => $name));
 			}
 			$label .= get_application_status_comment_html($application->approval_3_comment);
 
