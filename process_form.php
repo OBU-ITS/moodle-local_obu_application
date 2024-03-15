@@ -137,6 +137,7 @@ class process_form extends moodleform {
 				'home_phone' => $data->record->home_phone,
 				'mobile_phone' => $data->record->mobile_phone,
 				'email' => $data->record->email,
+                'personal_email' => $data->record->personal_email,
 				'birth_country' => $data->record->birth_country,
 				'birthdate' => $birthdate_formatted,
 				'nationality' => $data->record->nationality,
@@ -239,6 +240,7 @@ class process_form extends moodleform {
 		$mform->addElement('static', 'home_phone', get_string('home_phone', 'local_obu_application'));
 		$mform->addElement('static', 'mobile_phone', get_string('mobile_phone', 'local_obu_application'));
 		$mform->addElement('static', 'email', get_string('email'));
+        $mform->addElement('static', 'personal_email', get_string('personalemail', 'local_obu_application'));
 
 		if ($approval_sought != 2) { // All bar the funder
 
