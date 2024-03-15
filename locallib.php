@@ -1047,7 +1047,9 @@ function get_application_status($user_id, $application, $manager=null, $revoked 
 	$text .= get_application_status_row_html($label, $type, $state);
 
 	// Administrator Approval
-	if($application->manager_email != '') {
+	if($application->manager_email != ''
+		&& ($application->approval_state == 0
+			|| ($application->approval_state > 0 && $application->approval_level >= 1))) {
 		$type = get_application_approval_type($application->approval_level, 1);
 		if($type == 'past') {
 			$name = '('. $application->manager_email . ')';
@@ -1072,7 +1074,9 @@ function get_application_status($user_id, $application, $manager=null, $revoked 
 	}
 
 	// Funding Approval
-	if($application->self_funding == '0') {
+	if($application->self_funding == '0'
+		&& ($application->approval_state == 0
+			|| ($application->approval_state > 0 && $application->approval_level >= 2))) {
 		$type = get_application_approval_type($application->approval_level, 2);
 		if($type == 'past') {
 			$name = '('. $application->funder_email . ')';
@@ -1097,40 +1101,39 @@ function get_application_status($user_id, $application, $manager=null, $revoked 
 	}
 
 	// Academic Approval
-	$type = get_application_approval_type($application->approval_level, 3, $application->approval_state);
-	if($type == 'past') {
-		$name = '(HLS approvals)';
+	if($application->approval_state == 0
+		|| ($application->approval_state > 0 && $application->approval_level >= 3)) {
+		$type = get_application_approval_type($application->approval_level, 3, $application->approval_state);
+		if ($type == 'past') {
+			$name = '(HLS approvals)';
 
-		if ($application->approval_state == 1) {
-			$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('rejected', 'local_obu_application'), 'by' => $name));
-		}
-		else if ($application->approval_state == 2) {
-			$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('approved', 'local_obu_application'), 'by' => $name));
-		}
-		else {
-			$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('withdrawn', 'local_obu_application'), 'by' => $name));
-		}
-		$label .= get_application_status_comment_html($application->approval_3_comment);
+			if ($application->approval_state == 1) {
+				$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('rejected', 'local_obu_application'), 'by' => $name));
+			} else if ($application->approval_state == 2) {
+				$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('approved', 'local_obu_application'), 'by' => $name));
+			} else {
+				$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('withdrawn', 'local_obu_application'), 'by' => $name));
+			}
+			$label .= get_application_status_comment_html($application->approval_3_comment);
 
-		date_timestamp_set($date, $application->approval_3_date);
-		$state = "Completed " . date_format($date, $format);
-	}
-	else if($type == 'current') {
-		$name = '(HLS approvals)';
+			date_timestamp_set($date, $application->approval_3_date);
+			$state = "Completed " . date_format($date, $format);
+		} else if ($type == 'current') {
+			$name = '(HLS approvals)';
 
-		if ($revoked){
-			$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('revoked', 'local_obu_application'), 'by' => $name)) . ' ';
-			$label .= $application->approval_3_comment . '<br />';
-			$label .= "Awaiting academic approval by " . $name;
+			if ($revoked) {
+				$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('revoked', 'local_obu_application'), 'by' => $name)) . ' ';
+				$label .= $application->approval_3_comment . '<br />';
+				$label .= "Awaiting academic approval by " . $name;
+			} else {
+				$label = "Awaiting academic approval by " . $name;
+			}
 		} else {
-			$label = "Awaiting academic approval by " . $name;
+			$label = "Academic approval";
 		}
-	}
-	else {
-		$label = "Academic approval";
-	}
 
-	$text .= get_application_status_row_html($label, $type, $state);
+		$text .= get_application_status_row_html($label, $type, $state);
+	}
 
 	if ($manager) {
 		$first = true;
@@ -1173,8 +1176,9 @@ function get_application_approval_type($current_level, $level, $state = 0) {
 			: 'past');
 }
 
-function get_application_status_comment_html($comment) : string {
-	if (!$comment || $comment == ' ') {
+function get_application_status_comment_html(?string $comment) : string {
+	if (!$comment || trim($comment) == '') {
+
 		return '';
 	}
 
