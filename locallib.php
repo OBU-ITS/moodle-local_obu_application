@@ -1173,8 +1173,8 @@ function get_application_approval_type($current_level, $level, $state = 0) {
 			: 'past');
 }
 
-function get_application_status_comment_html(string $comment) : string {
-	if (!$comment) {
+function get_application_status_comment_html($comment) : string {
+	if (!$comment || $comment == ' ') {
 		return '';
 	}
 
