@@ -1052,7 +1052,10 @@ function get_application_status($user_id, $application, $manager=null, $revoked 
 			|| ($application->approval_state > 0 && $application->approval_level >= 1))) {
 		$type = get_application_approval_type($application->approval_level, 1, $application->approval_state);
 		if($type == 'past') {
-			$name = '('. $application->manager_email . ')';
+			$manager_names = read_user_fullnames_by_email($application->manager_email);
+			$name = $manager_names
+				? "$manager_names->firstname ($application->manager_email)"
+				: "($application->manager_email)";
 			if ($application->approval_level == 1 && $application->approval_state == 1) {
 				$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('rejected', 'local_obu_application'), 'by' => $name));
 			} else {
@@ -1063,8 +1066,11 @@ function get_application_status($user_id, $application, $manager=null, $revoked 
 			$state = "Completed " . date_format($date, $format);
 		}
 		else if($type == 'current') {
-			$name = '('. $application->manager_email . ')';
-			$label = "Awaiting administrative approval by " . $name;
+			$manager_names = read_user_fullnames_by_email($application->manager_email);
+			$name = $manager_names
+				? "$manager_names->firstname  ($application->manager_email)"
+				: "($application->manager_email)";
+			$label = "Awaiting admin approval by " . $name;
 		}
 		else {
 			$label = "Administrative approval";

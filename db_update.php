@@ -405,7 +405,13 @@ function read_user($user_id) {
 function read_user_by_username($username) {
     global $DB;
 
-	return $DB->get_record('user', array('username' => $username), '*', IGNORE_MISSING);
+    return $DB->get_record('user', array('username' => $username), '*', IGNORE_MISSING);
+}
+
+function read_user_fullnames_by_email($email) {
+    global $DB;
+
+    return $DB->get_record('user', array('email' => $email), 'firstname, lastname', IGNORE_MISSING);
 }
 
 function write_user($user_id, $form_data) {
