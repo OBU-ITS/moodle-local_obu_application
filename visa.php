@@ -36,6 +36,7 @@ require_obu_login();
 $home = new moodle_url('/local/obu_application/');
 $url = $home . 'visa.php';
 $visa = $home . 'visa_supplement.php';
+$outside_uk_url = $home . 'outside_uk_residence.php';
 $course_url = $home . 'course.php';
 $supplement = $home . 'supplement.php';
 $apply = $home . 'apply.php';
@@ -78,6 +79,7 @@ if ($mform->is_cancelled()) {
 if ($mform_data = $mform->get_data()) {
 	if ($mform_data->submitbutton == get_string('save_continue', 'local_obu_application')) {
 		if ($mform_data->visa_requirement == '1') {
+            redirect($outside_uk_url);
 			$visa_requirement = 'Student';
 		} else if ($mform_data->visa_requirement == '2') {
 			$visa_requirement = 'Other';
