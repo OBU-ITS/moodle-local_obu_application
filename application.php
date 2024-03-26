@@ -145,7 +145,6 @@ echo $OUTPUT->header();
             if ($personalDetailsForm_data->submitbutton == get_string('save', 'local_obu_application')) {
                 $personalDetailsForm_data->birth_country = $nations[$personalDetailsForm_data->birth_code];
                 $personalDetailsForm_data->nationality = $nations[$personalDetailsForm_data->nationality_code];
-                $personalDetailsForm_data->residence_area = $areas[$personalDetailsForm_data->residence_code];
                 write_personal_details($USER->id, $personalDetailsForm_data);
                 $record->personal_details_update = time();
             }
