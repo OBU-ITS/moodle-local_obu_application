@@ -86,7 +86,11 @@ class profile_personal_details_form extends moodleform {
         $mform->addElement('select', 'gender', get_string('gender', 'local_obu_application'), $genders);
         $mform->addRule('gender', null, 'required', null, 'server');
         $mform->addElement('html', '<p><strong>' . get_string('residence_preamble', 'local_obu_application') . '</strong></p>');
-        $mform->addElement('select', 'residence_code', get_string('residence_area', 'local_obu_application'), $data->areas);
+        $options = [];
+        $options[''] = 'Please select'; // No choice made yet
+        $options['XF'] = get_string('yes', 'local_obu_application');
+        $options['AF'] = get_string('no', 'local_obu_application');
+        $mform->addElement('select', 'residence_code', get_string('residence_area', 'local_obu_application'), $options);
         $mform->addRule('residence_code', null, 'required', null, 'server');
 
         $this->add_action_buttons(true, get_string('save', 'local_obu_application'));
