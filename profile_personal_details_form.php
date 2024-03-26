@@ -50,8 +50,12 @@ class profile_personal_details_form extends moodleform {
             $data->nationality_code = $data->record->nationality_code;
         }
 
-        if (($data->record->residence_code != '') && ($data->record->residence_code != 'ZZ')) {
-            $data->residence_code = $data->record->residence_code;
+        $homeResidenciesNotEngland = array('XF', 'XH', 'XI', 'XG', 'JE', 'GG');
+        if(in_array($data->record->residence_code, $homeResidenciesNotEngland)) {
+            $data->residence_code = 'XF'; // Yes
+        }
+        else if (($data->record->residence_code != '') && ($data->record->residence_code != 'ZZ')) {
+            $data->residence_code = 'AF'; // No
         }
 
         $fields = [
