@@ -245,10 +245,15 @@ echo $OUTPUT->header();
             && $record->current_employment_update
             && $record->pro_registration_update
             && $record->criminal_record_update) {
+
+        $homeResidencies = array('XF', 'XH', 'XI', 'XG', 'JE', 'GG');
+        $link = in_array($record->residence_code, $homeResidencies)
+            ? "course.php"
+            : "outside_uk_residence.php";
     ?>
     <section class="block_html block card mb-3" >
         <div class="card-body p-3">
-            <a class="btn btn-primary" style="float:right" href="course.php">Start Application</a>
+            <a class="btn btn-primary" style="float:right" href="<?php echo $link ?>">Start Application</a>
         </div>
     </section>
 <?php
