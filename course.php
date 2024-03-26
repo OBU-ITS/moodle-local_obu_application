@@ -59,6 +59,12 @@ if (($record === false)
 	$message = '';
 }
 
+$outside_uk_url = $home . 'outside_uk_residence.php';
+$homeResidencies = array('XF', 'XH', 'XI', 'XG', 'JE', 'GG');
+if (!in_array($record->residence_code, $homeResidencies)){
+    redirect($outside_uk_url);
+}
+
 $parameters = [
 	'courses' => get_course_names(),
 	'dates' => get_course_dates(),
