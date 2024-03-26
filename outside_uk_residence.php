@@ -43,7 +43,7 @@ $message = '';
 
 $record = read_applicant($USER->id, false);
 $homeResidencies = array('XF', 'XH', 'XI', 'XG', 'JE', 'GG');
-if(!in_array($record->residence_code, $homeResidencies)) {
+if(!in_array($record->residence_code, $homeResidencies) || $record->nationality_code != 'GB') {
     $message = get_string('page_outside-uk-residence_message', 'local_obu_application');
 }
 else {
