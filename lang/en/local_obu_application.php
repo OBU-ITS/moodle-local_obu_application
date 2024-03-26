@@ -512,7 +512,7 @@ $string['index_welcome_heading_funder'] = 'Welcome to your Funder Portal account
 $string['index_welcome_text'] = 'You can apply for our HLS CPD courses using our Application Portal';
 $string['index_welcome_text_funder'] = 'You can find a written guide on approving <a href="https://docs.google.com/document/d/1Nxzv7o-ILuDYP6QaIl6-apgFTcNcuq7MyRk9zi8UESA" target="_blank">here</a>';
 $string['index_welcome_support'] = 'If you have any issues with applying, please contact <a href="mailto:hlscpdadmissions@brookes.ac.uk">hlscpdadmissions@brookes.ac.uk</a>';
-$string['index_welcome_support_funder'] = 'If you have any issues with approving your applicants, please contact <a href="mailto:hlscpdadmissions@brookes.ac.uk">hlscpdadmissions@brookes.ac.uk</a>';
+$string['index_welcome_support_funder'] = 'If you have any issues with approving your applicants, please contact <a href="mailto:hlscpdadmissions@brookes.ac.uk" target="_blank">hlscpdadmissions@brookes.ac.uk</a>';
 
 $string['index_overview_heading'] = 'Application History';
 $string['index_overview_heading_funder'] = 'Applications to Approve';
@@ -520,6 +520,9 @@ $string['index_overview_empty'] = '<p>You currently do not have any applications
 $string['index_overview_empty_funder'] = '<p>You currently do not have any applications to approve</p>';
 
 $string['submit_info'] = '<i><strong>Please note:</strong> This section will not autosave, you must click save.<br/>You can re-enter this section once saved and edit or add further details.</i>';
+
+$string['page_outside-uk-residence_heading'] = "We are sorry";
+$string['page_outside-uk-residence_message'] = '<p>Due to the structure of healthcare CPD provision, student visas, tourist visas and overseas study are not available for any of our courses.</p><p>You <strong>must</strong> have UK residency (not from a student or tourist visa) for the full duration of all CPD courses.</p><p>If you would like to discuss other courses which may better suit your needs, please contact <a href="mailto:hlscpdadmissions@brookes.ac.uk" target="_blank">hlscpdadmissions@brookes.ac.uk</a> to be put in contact with a specialist academic.</p>';
 
 $string[''] = '';
 
