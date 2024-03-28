@@ -418,8 +418,10 @@ class process_form extends moodleform {
 					$mform->setType('funding_organisation', PARAM_TEXT);
 					$mform->addElement('text', 'invoice_ref', get_string('invoice_ref', 'local_obu_application'), 'size="40" maxlength="100"');
 					$mform->setType('invoice_ref', PARAM_TEXT);
+                    $mform->addElement('html', '<p><strong><i>' . get_string('invoice_ref_info', 'local_obu_application') . '</i></strong></p>');
 					$mform->addElement('textarea', 'invoice_address', get_string('address'), 'cols="40" rows="5"');
 					$mform->setType('invoice_address', PARAM_TEXT);
+                    $mform->addElement('html', '<p><strong><i>' . get_string('invoice_email_info', 'local_obu_application') . '</i></strong></p>');
 					$mform->addElement('text', 'invoice_email', get_string('email'), 'size="40" maxlength="100"');
 					$mform->setType('invoice_email', PARAM_RAW_TRIMMED);
 					$mform->addElement('text', 'invoice_phone', get_string('phone', 'local_obu_application'), 'size="40" maxlength="100"');
@@ -428,7 +430,7 @@ class process_form extends moodleform {
 					$mform->setType('invoice_contact', PARAM_TEXT);
 				}
 				if (is_programme($data->record->course_code)) {
-					$mform->addElement('html', '<p></p><strong><i>' . get_string('programme_preamble', 'local_obu_application') . '</i></strong><p></p>');
+					$mform->addElement('html', '<p><strong><i>' . get_string('programme_preamble', 'local_obu_application') . '</i></strong></p>');
                     $mform->addElement('select', 'fund_programme', get_string('fund_programme', 'local_obu_application'), array("0"=>"No", "1"=>"Yes"));
 					$mform->addElement('text', 'fund_module_1', get_string('fund_module', 'local_obu_application'), 'size="8" maxlength="8"');
 					$mform->setType('fund_module_1', PARAM_TEXT);

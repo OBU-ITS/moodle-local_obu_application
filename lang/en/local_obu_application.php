@@ -504,6 +504,9 @@ $string['invoice_text'] = 'If \'Invoice\' enter details here:';
 $string['invoice_ref'] = 'PO number';
 $string['invoice_contact'] = 'Staff member to receive invoice';
 
+$string['invoice_ref_info'] = "PO's are not compulsory. If you have already raised your company purchase order in respect of this student's tuition fees, please ensure that you submit the postal address listed as the 'Invoice / Bill To' address on the purchase order if this differs from your company's general postal address.";
+$string['invoice_email_info'] = "Please enter a monitored email address. Brookes may need to contact the relevant funding staff member if there are any queries about the applicant's fees.";
+
 $string['actioned_by'] = '{$a->action} by {$a->by}';
 $string['submitted'] = 'Submitted';
 $string['approved'] = 'Approved';
