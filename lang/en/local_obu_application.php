@@ -43,6 +43,7 @@ $string['privacy:metadata:local_obu_application:postcode'] = 'Home postcode.';
 $string['privacy:metadata:local_obu_application:home_phone'] = 'Home phone.';
 $string['privacy:metadata:local_obu_application:mobile_phone'] = 'Mobile phone.';
 $string['privacy:metadata:local_obu_application:email'] = 'Email address.';
+$string['privacy:metadata:local_obu_application:personal_email'] = 'Personal email address.';
 $string['privacy:metadata:local_obu_application:birth_code'] = 'Birth code.';
 $string['privacy:metadata:local_obu_application:birth_country'] = 'Country of birth.';
 $string['privacy:metadata:local_obu_application:birthdate'] = 'Date of birth.';
@@ -67,15 +68,24 @@ $string['privacy:metadata:local_obu_application:emp_place'] = 'Place of employme
 $string['privacy:metadata:local_obu_application:emp_area'] = 'Clinical area.';
 $string['privacy:metadata:local_obu_application:emp_title'] = 'Job title.';
 $string['privacy:metadata:local_obu_application:emp_prof'] = 'Profession.';
+$string['privacy:metadata:local_obu_application:professional_registration'] = 'Professional registration?.';
 $string['privacy:metadata:local_obu_application:prof_reg_no'] = 'Professional body registration number.';
 $string['privacy:metadata:local_obu_application:criminal_record'] = 'Criminal record?.';
-$string['privacy:metadata:local_obu_application:profile_update'] = 'Date of last profile update.';
+$string['privacy:metadata:local_obu_application:contact_details_update'] = 'Date of last profile contact details update.';
+$string['privacy:metadata:local_obu_application:criminal_record_update'] = 'Date of last profile criminal record update.';
+$string['privacy:metadata:local_obu_application:current_employment_update'] = 'Date of last profile current employment update.';
+$string['privacy:metadata:local_obu_application:edu_establishments_update'] = 'Date of last profile education establishments update.';
+$string['privacy:metadata:local_obu_application:personal_details_update'] = 'Date of last profile personal details update.';
+$string['privacy:metadata:local_obu_application:pro_qualification_update'] = 'Date of last profile professional qualification update.';
+$string['privacy:metadata:local_obu_application:pro_registration_update'] = 'Date of last profile professional registration update.';
 $string['privacy:metadata:local_obu_application:course_code'] = 'Course code.';
 $string['privacy:metadata:local_obu_application:course_name'] = 'Course name.';
 $string['privacy:metadata:local_obu_application:course_date'] = 'Course start date.';
 $string['privacy:metadata:local_obu_application:studying'] = 'Currently studying.';
 $string['privacy:metadata:local_obu_application:student_number'] = 'Current student number.';
 $string['privacy:metadata:local_obu_application:statement'] = 'Supporting statement.';
+$string['privacy:metadata:local_obu_application:visa_requirement'] = 'Visa requirement.';
+$string['privacy:metadata:local_obu_application:visa_data'] = 'Visa data.';
 $string['privacy:metadata:local_obu_application:supplement_data'] = 'Course supplementary form data.';
 $string['privacy:metadata:local_obu_application:course_update'] = 'Date of last course update.';
 $string['privacy:metadata:local_obu_application:self_funding'] = 'Self-funding?.';
@@ -86,7 +96,23 @@ $string['privacy:metadata:local_obu_application:funding_method'] = 'Funding meth
 $string['privacy:metadata:local_obu_application:funding_id'] = 'ID of funding organisation.';
 $string['privacy:metadata:local_obu_application:funding_organisation'] = 'Funding organisation.';
 $string['privacy:metadata:local_obu_application:funder_name'] = 'Name of funder.';
+$string['privacy:metadata:local_obu_application:invoice_ref'] = 'Invoice reference number.';
+$string['privacy:metadata:local_obu_application:invoice_address'] = 'Invoice address.';
+$string['privacy:metadata:local_obu_application:invoice_email'] = 'Invoice email address.';
+$string['privacy:metadata:local_obu_application:invoice_phone'] = 'Invoice phone number.';
+$string['privacy:metadata:local_obu_application:invoice_contact'] = 'Invoice contact name.';
+$string['privacy:metadata:local_obu_application:fund_programme'] = 'Fund whole programme?.';
+$string['privacy:metadata:local_obu_application:fund_module_1'] = 'Fund module 1?.';
+$string['privacy:metadata:local_obu_application:fund_module_2'] = 'Fund module 2?.';
+$string['privacy:metadata:local_obu_application:fund_module_3'] = 'Fund module 3?.';
+$string['privacy:metadata:local_obu_application:fund_module_4'] = 'Fund module 4?.';
+$string['privacy:metadata:local_obu_application:fund_module_5'] = 'Fund module 5?.';
+$string['privacy:metadata:local_obu_application:fund_module_6'] = 'Fund module 6?.';
+$string['privacy:metadata:local_obu_application:fund_module_7'] = 'Fund module 7?.';
+$string['privacy:metadata:local_obu_application:fund_module_8'] = 'Fund module 8?.';
+$string['privacy:metadata:local_obu_application:fund_module_9'] = 'Fund module 9?.';
 $string['privacy:metadata:local_obu_application:application_date'] = 'Date of application.';
+$string['privacy:metadata:local_obu_application:approval_level'] = 'Level of application.';
 $string['privacy:metadata:local_obu_application:approval_state'] = 'Status of application.';
 $string['privacy:metadata:local_obu_application:approval_1_comment'] = 'The programme administrator/manager\'s comment.';
 $string['privacy:metadata:local_obu_application:approval_1_date'] = 'The date of the programme administrator/manager\'s approval/rejection.';
@@ -94,6 +120,8 @@ $string['privacy:metadata:local_obu_application:approval_2_comment'] = 'The fund
 $string['privacy:metadata:local_obu_application:approval_2_date'] = 'The date of the funder\'s approval/rejection.';
 $string['privacy:metadata:local_obu_application:approval_3_comment'] = 'The HLS comment.';
 $string['privacy:metadata:local_obu_application:approval_3_date'] = 'The date of HLS approval/rejection.';
+$string['privacy:metadata:local_obu_application:admissions_xfer'] = 'Admissions transfer number.';
+$string['privacy:metadata:local_obu_application:finance_xfer'] = 'Finance transfer number.';
 $string['privacy:applications'] = 'Applications';
 $string['privacy:application'] = 'Application HLS_{$a}';
 
@@ -118,6 +146,9 @@ $string['support'] = 'Support';
 $string['support_text'] = 'How to get support';
 $string['privacy'] = 'Privacy';
 $string['privacy_text'] = 'Privacy statement';
+$string['google_analytics'] = 'Google Analytics 4 Code';
+$string['google_analytics_text'] = 'G-XXXXXXXXXX';
+
 
 $string['registration'] = 'Registration';
 $string['registrationsteps'] = 'To access this site you will firstly need to take a minute to register yourself. Here are the steps: <ol> <li>Fill out the <a href="{$a}">Registration</a> form with your details.</li> <li>An email will be immediately sent to your email address.</li> <li>Read your email, and click on the web link it contains.</li> <li>Your account will be confirmed and you will be logged in.</li> <li>You can now access the site. From now on you will only need to enter your personal email and password to log in to your account.</li> </ol> Please note, do not use an NHS or previous Brookes email address for registering. The NHS firewall may filter out our replies, which will mean you cannot access the portal to apply. Once you have registered, you can enter your NHS email address in the Contact Details section, and this will become your primary contact email until you have completed enrolment.';
@@ -158,6 +189,8 @@ $string['application_by_ref'] = 'Application by reference';
 $string['redirect_application'] = 'Redirect application';
 $string['status_report'] = 'Status report';
 $string['sr_options'] = 'Status report options';
+$string['advanced_status_report'] = 'Advanced status report';
+$string['advanced_status_report_options'] = 'Advanced status report options';
 $string['funding_report'] = 'Funding report';
 $string['funding_options'] = 'Funding report options';
 $string['manager_report'] = 'Manager report';
@@ -242,7 +275,7 @@ $string['contract_code'] = 'Contract Code';
 $string['suspended'] = 'Suspended';
 $string['update_parameter'] = 'Add, Amend or Delete a Parameter';
 $string['new_parameter'] = 'New Parameter';
-$string['data_xfer'] = 'Data Transfer';
+$string['data_xfer'] = 'data transfer';
 $string['xfer_type'] = 'Transfer type';
 $string['admissions'] = 'Admissions';
 $string['finance'] = 'Finance';
@@ -261,9 +294,10 @@ $string['no'] = 'No';
 $string['confirm_delete'] = 'Confirm Deletion';
 $string['save'] = 'Save';
 $string['save_continue'] = 'Save & Continue';
+$string['show_suspended'] = 'Show suspended courses';
 
 $string['applicant'] = 'Applicant';
-$string['application'] = 'Application (Ref HLS/{$a})';
+$string['application_ref'] = 'Application (Ref HLS/{$a})';
 $string['applications'] = 'Applications';
 $string['managers_report'] = 'managersReport';
 $string['organisations_report'] = 'organisationsReport';
@@ -286,7 +320,14 @@ $string['reject'] = 'Reject';
 $string['revoke'] = 'Revoke';
 $string['withdraw'] = 'Withdraw';
 $string['reinstate'] = 'Reinstate';
-$string['comment'] = 'Comment or Reason for Rejection (for Applicant)';
+$string['export_statement'] = 'Export Statement';
+$string['statement_file'] = 'Statement';
+$string['comment'] = 'Comment:';
+$string['reject_comment'] = 'Comment or Reason for Rejection (for Applicant)';
+$string['revoke_comment'] = 'Comment or Reason for Revocation (for Applicant)';
+$string['manager_comment'] = 'Optional comment on administration/ notes (visible to applicant)';
+$string['funder_comment'] = 'Optional comment on funding details/ notes (visible to applicant)';
+$string['admin_comment'] = 'Optional comment on academic details/ notes (visible to applicant)';
 
 $string['supplement'] = 'Supplement';
 $string['suppref'] = 'Supplement Ref';
@@ -322,18 +363,21 @@ $string['registration_foot_notice_1'] = 'If you have any queries or problems ple
 $string['registration_foot_notice_2'] = 'Click here to read our <a href="privacy_notice.php" target="_blank">Privacy Notice for Health and Life Science Online Portal Oxford Brookes University</a>.';
 $string['preregistered'] = '<strong>NOTE:</strong> If you have a \'brookes.ac.uk\' email address you are pre-registered.  Click <a href="/local/obu_application/mdl_login.php">here</a> to login.';
 $string['emailandpassword'] = 'Please enter a contact email address (not NHS or previous Brookes addresses due to firewall restrictions) and choose a password';
+$string['personalemail_preamble'] = 'If you have registered with a Brookes or NHS email, please provide a personal address we can contact you on due to firewall restrictions:';
 $string['personalemail'] = 'Personal email';
 $string['professionalemail'] = 'Professional email';
 $string['newemail'] = 'Email (Note - you would need to use any new address to log in)';
 $string['confirm_email'] = 'Confirm email';
+$string['confirm_personal_email'] = 'Confirm personal email';
 $string['contactdetails'] = 'Contact details';
 $string['applicantdetails'] = 'Applicant contact details';
 $string['fullname'] = '<strong>NOTE:</strong> Please ensure that you register with your full name (as it appears on your Birth Certificate or Passport, for example).';
 $string['title'] = 'Title';
 $string['firstnames'] = 'First name(s)';
 $string['name'] = 'Name';
-$string['nameref'] = 'Name/Reference Number';
+$string['nameref'] = 'Name / Reference Number (Can include "HLS/")';
 $string['namerefsearch'] = 'Search by name or reference number';
+$string['phone_preamble'] = 'Please provide at least one phone number we can contact you on:';
 $string['phone'] = 'Phone no';
 $string['home_phone'] = 'Home phone';
 $string['mobile_phone'] = 'Mobile phone';
@@ -353,16 +397,14 @@ $string['general_head'] = 'General';
 $string['birthdate'] = 'Date of birth';
 $string['birth_country'] = 'Country of Birth';
 $string['nationality'] = 'Nationality';
-$string['nationality_note'] = 'If your nationality is not \'United Kingdom\' you will either need to apply for a Student visa or show us a copy of your visa/immigration permission which
-allows you to study in the UK - for example, Skilled Worker visa, Tier 2 visa, Dependant visa, Pre Settled or Settled Status or Indefinite leave to remain. Our International Student Compliance Team will ask you to
-fill in a Visa Information Form and send us a copy of your visa after you have accepted your unconditional offer.  For more details please see our
-<a href="https://www.brookes.ac.uk/students/isat/visas/" target="_blank">Visa and immigration advice</a> page.';
+$string['nationality_note'] = 'If your nationality is not \'United Kingdom\', you will be asked to provide evidence of your status. More information about Brookes\' visa and immigration advice can be found
+<a href="https://www.brookes.ac.uk/students/isat/visas/" target="_blank">here</a>.';
 $string['gender'] = 'Gender';
 $string['gender_not_available'] = 'Prefer not to say';
 $string['gender_female'] = 'Female';
 $string['gender_male'] = 'Male';
-$string['residence_preamble'] = 'Please choose your area of permanent residence:';
-$string['residence_area'] = 'Area of residence';
+$string['residence_preamble'] = 'Will you be a permanent resident of the UK for the duration of the course you are applying for?';
+$string['residence_area'] = 'Permanent UK residency';
 $string['education_head'] = 'Educational Establishments Attended';
 $string['period'] = 'Date from and to';
 $string['p16school'] = 'Post 16 School name (if applicable)';
@@ -390,7 +432,8 @@ $string['emp_prof'] = 'Profession';
 $string['prof_reg_head'] = 'Professional Registration';
 $string['prof_reg_no'] = 'Professional body registration number (NMC PIN; HCPC registration)';
 $string['criminal_record_head'] = 'Criminal Record';
-$string['criminal_record'] = 'Please indicate';
+$string['criminal_record'] = 'Do you have a criminal record?';
+$string['professional_registration'] = 'Do you have a professional body registration?';
 $string['course'] = 'Course';
 $string['complete_contact_details'] = 'Please complete your contact details first';
 $string['complete_profile'] = 'Please complete your personal details first';
@@ -399,12 +442,20 @@ $string['course_code'] = 'Course code/name';
 $string['course_date'] = 'Start date';
 $string['studying_preamble'] = 'Please indicate if you are currently studying at Brookes on a PGDIP, PG cert, BSc or Masters Health Care programme:';
 $string['studying'] = 'Currently studying at Brookes?';
+$string['currently_enrolled'] = 'Are you currently enrolled on a PGCert, PGDip, BSc or MSc at Brookes?';
+$string['pgcert'] = 'PGCert';
+$string['pgdip'] = 'PGDip';
+$string['bsc'] = 'BSc';
+$string['msc'] = 'MSc';
+$string['standalone_module'] = 'Standalone Module';
 $string['student_number'] = 'Brookes student number (for all previous and continuing students)';
+$string['current_student_number'] = 'Brookes student number (for all continuing students)';
+$string['previous_student_number'] = 'If you have studied with Brookes before, enter your previous student number (if known) to ensure your records are combined:';
 $string['statement_head'] = 'Supporting statement';
 $string['statement'] = 'How will your studies enhance your professional practice?';
 $string['visa_requirement'] = 'Visa Requirement';
-$string['visa_note'] = 'Please note that if your Nationality is other than United Kingdom, the University is required to see evidence of your current immigration status,
-this is usually your passport.  This is required even if you are currently working in the UK.  You will need to supply an Immigration Status document (e.g. passport) to meet the conditions
+$string['visa_note'] = 'If your Nationality is other than United Kingdom the University is required to see evidence of your current immigration status,
+this is usually your passport. This is required even if you are currently working in the UK. You will need to supply an Immigration Status document (e.g. passport) to meet the conditions
 of entry to this course.';
 $string['visa_not_required'] = 'Visa not required';
 $string['student_visa'] = 'International Student Visa required';
@@ -414,12 +465,15 @@ $string['visa_supplement'] = 'Visa Supplement';
 $string['attachments_head'] = 'File attachments';
 $string['attachments'] = 'Attachments';
 $string['apply'] = 'Apply';
+$string['application'] = 'Application';
 $string['complete_course'] = 'Please complete your course first';
 $string['self_funding'] = 'Are you a self-funding applicant?';
 $string['declaration'] = 'Declaration';
 $string['conditions'] = 'Conditions of Acceptance';
 $string['declaration_text'] = 'I confirm that the information given in this application is complete and accurate and that no information requested or other material information has been omitted. I give my consent to the processing of my data by Oxford Brookes University. I give my consent to application and progress data being shared with the employer and/or funder listed in my application. I have read the {$a} and undertake to be bound by those conditions.';
 $string['approval_head'] = 'Approval';
+$string['rejection_head'] = 'Rejection';
+$string['revocation_head'] = 'Revocation';
 $string['amend_details'] = 'Amend Details';
 $string['amend_supplement_documents'] = 'Amend Supplementary Documents';
 $string['amend_visa'] = 'Amend Visa Documents';
@@ -450,14 +504,18 @@ $string['invoice_text'] = 'If \'Invoice\' enter details here:';
 $string['invoice_ref'] = 'PO number';
 $string['invoice_contact'] = 'Staff member to receive invoice';
 
-$string['actioned_by'] = '{$a->action} by {$a->by}.';
+$string['invoice_ref_info'] = "PO's are not compulsory. If you have already raised your company purchase order in respect of this student's tuition fees, please ensure that you submit the postal address listed as the 'Invoice / Bill To' address on the purchase order if this differs from your company's general postal address.";
+$string['invoice_email_info'] = "Please enter a monitored email address. Brookes may need to contact the relevant funding staff member if there are any queries about the applicant's fees.";
+
+$string['actioned_by'] = '{$a->action} by {$a->by}';
 $string['submitted'] = 'Submitted';
 $string['approved'] = 'Approved';
 $string['rejected'] = 'Rejected';
 $string['withdrawn'] = 'Withdrawn';
+$string['revoked'] = 'Revoked';
 $string['processed'] = 'Processed';
 
-$string['awaiting_action'] = 'Awaiting {$a->action} by {$a->by}.';
+$string['awaiting_action'] = 'Awaiting {$a->action} by {$a->by}';
 $string['amendment'] = 'amendment/resubmission';
 $string['submission'] = 'submission';
 $string['approval'] = 'approval';
@@ -477,6 +535,23 @@ $string['course_start_sep'] = 'September (S1)';
 $string['course_start_jan'] = 'January (S2)';
 $string['course_start_jun'] = 'June (S3)';
 $string['semester'] = 'Semester';
+
+$string['index_welcome_heading'] = 'Welcome to your Application Portal account {$a->name}';
+$string['index_welcome_heading_funder'] = 'Welcome to your Funder Portal account {$a->name}';
+$string['index_welcome_text'] = 'You can apply for our HLS CPD courses using our Application Portal';
+$string['index_welcome_text_funder'] = 'You can find a written guide on approving <a href="https://docs.google.com/document/d/1Nxzv7o-ILuDYP6QaIl6-apgFTcNcuq7MyRk9zi8UESA" target="_blank">here</a>';
+$string['index_welcome_support'] = 'If you have any issues with applying, please contact <a href="mailto:hlscpdadmissions@brookes.ac.uk">hlscpdadmissions@brookes.ac.uk</a>';
+$string['index_welcome_support_funder'] = 'If you have any issues with approving your applicants, please contact <a href="mailto:hlscpdadmissions@brookes.ac.uk" target="_blank">hlscpdadmissions@brookes.ac.uk</a>';
+
+$string['index_overview_heading'] = 'Application History';
+$string['index_overview_heading_funder'] = 'Applications to Approve';
+$string['index_overview_empty'] = '<p>You currently do not have any applications in the portal</p>';
+$string['index_overview_empty_funder'] = '<p>You currently do not have any applications to approve</p>';
+
+$string['submit_info'] = '<i><strong>Please note:</strong> This section will not autosave, you must click save.<br/>You can re-enter this section once saved and edit or add further details.</i>';
+
+$string['page_outside-uk-residence_heading'] = "We are sorry";
+$string['page_outside-uk-residence_message'] = '<p>Due to the structure of healthcare CPD provision, student visas, tourist visas and overseas study are not available for any of our courses.</p><p>You <strong>must</strong> have UK residency (not from a student or tourist visa) for the full duration of all CPD courses.</p><p>If you would like to discuss other courses which may better suit your needs, please contact <a href="mailto:hlscpdadmissions@brookes.ac.uk" target="_blank">hlscpdadmissions@brookes.ac.uk</a> to be put in contact with a specialist academic.</p>';
 
 $string[''] = '';
 

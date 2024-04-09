@@ -38,14 +38,22 @@ if (!is_manager()) {
 
 $applications_course = get_applications_course();
 require_login($applications_course);
+
+$back = $home . 'course/view.php?id=' . $applications_course;
+
+if (!isset($_REQUEST['id'])) {
+    redirect($back);
+}
+
 $source = '';
 if (isset($_REQUEST['source'])) {
 	$source = $_REQUEST['source'];
 }
 if ($source) {
+    if (urldecode($source) == 'mdl_reference.php') {
+        redirect($home . 'local/obu_application/mdl_process.php?source=mdl_applicant.php&id=' . $_REQUEST['id']);
+    }
 	$back = $home . 'local/obu_application/' . urldecode($source);
-} else {
-	$back = $home . 'course/view.php?id=' . $applications_course;
 }
 
 if (!has_capability('local/obu_application:update', context_system::instance())) {
@@ -53,10 +61,6 @@ if (!has_capability('local/obu_application:update', context_system::instance()))
 }
 
 // We only handle an existing application (id given)
-if (!isset($_REQUEST['id'])) {
-	redirect($back);
-}
-
 $application = read_application($_REQUEST['id']);
 if ($application === false) {
 	redirect($back);
@@ -65,7 +69,7 @@ if ($application === false) {
 $url = $home . 'local/obu_application/mdl_process.php?source=' . $source . '&id=' . $application->id;
 
 $title = get_string('applications_management', 'local_obu_application');
-$heading = get_string('application', 'local_obu_application', $application->id);
+$heading = get_string('application_ref', 'local_obu_application', $application->id);
 $PAGE->set_url($url);
 $PAGE->set_pagelayout('standard');
 $PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
@@ -98,8 +102,9 @@ if ($status_text) {
 	$status_text = '<h3>' . $status_text . '</h3>';
 }
 
-get_application_status($USER->id, $application, $text, $button_text); // get the approval trail and the next action (from user's perspective)
-$status_text .= $text;
+$manager = is_manager();
+$status_text .= get_application_status($USER->id, $application, $manager);
+$button_text = get_application_button_text($USER->id, $application, $manager);
 
 $redirect = new moodle_url('/local/obu_application/mdl_redirect.php');
 if (has_capability('local/obu_application:update', context_system::instance()) && ($application->approval_level < 3)) { // Can't redirect away from final HLS approval/processing
@@ -114,6 +119,8 @@ $parameters = [
 	'button_text' => $button_text
 ];
 
+$export = false;
+
 $mform = new process_form(null, $parameters);
 
 if ($mform->is_cancelled()) {
@@ -121,12 +128,17 @@ if ($mform->is_cancelled()) {
 }
 
 if ($mform_data = $mform->get_data()) {
+
 	if (isset($mform_data->submitbutton) && ($mform_data->submitbutton != get_string('continue', 'local_obu_application'))) {
 		update_workflow($application, true, $mform_data); // Approved / Revoked / Reinstated
+        redirect($back);
 	} else if (isset($mform_data->rejectbutton) && ($mform_data->rejectbutton == get_string('reject', 'local_obu_application'))) {
-		update_workflow($application, false, $mform_data); // Rejected
-	} else if (isset($mform_data->withdrawbutton) && ($mform_data->withdrawbutton == get_string('withdraw', 'local_obu_application'))) {
+        redirect($home . 'local/obu_application/mdl_reject.php?source=' . urlencode($url) . "&id=" . $application->id);
+	} else if (isset($mform_data->revokebutton) && ($mform_data->revokebutton == get_string('revoke', 'local_obu_application'))) {
+        redirect($home . 'local/obu_application/mdl_revoke.php?source=' . urlencode($url) . "&id=" . $application->id);
+    } else if (isset($mform_data->withdrawbutton) && ($mform_data->withdrawbutton == get_string('withdraw', 'local_obu_application'))) {
 		update_workflow($application, false, $mform_data); // Withdrawn
+        redirect($back);
 	} else if (isset($mform_data->amenddetailsbutton) && ($mform_data->amenddetailsbutton == get_string('amend_details', 'local_obu_application'))) {
 		redirect($home . 'local/obu_application/mdl_amend_details.php?id=' . $application->id); // Amend the personal details
 	} else if (isset($mform_data->amendcoursebutton) && ($mform_data->amendcoursebutton == get_string('amend_course', 'local_obu_application'))) {
@@ -139,19 +151,26 @@ if ($mform_data = $mform->get_data()) {
 		redirect($home . 'local/obu_application/mdl_amend_funder.php?id=' . $application->id); // Amend the funder
 	} else if (isset($mform_data->amendfundingbutton) && ($mform_data->amendfundingbutton == get_string('amend_funding', 'local_obu_application'))) {
 		redirect($home . 'local/obu_application/mdl_amend_funding.php?id=' . $application->id); // Amend the funding
-	}
-
-	redirect($back);
+	} else if (isset($mform_data->statementbutton) && ($mform_data->statementbutton == get_string('export_statement', 'local_obu_application'))) {
+        $export = true;
+        header('Content-Type: text/plain');
+        header('Content-Disposition: attachment;filename=' . get_string('statement_file', 'local_obu_application') . '_' . 'HLS/' . $application->id . '_' . date("Ymd", $application->application_date) . '.txt');
+        $fp = fopen('php://output', 'w');
+        fwrite($fp, $application->statement);
+        fclose($fp);
+    }
 }
 
-echo $OUTPUT->header();
-echo $OUTPUT->heading($heading);
+if (!$export){
+    echo $OUTPUT->header();
+    echo $OUTPUT->heading($heading);
 
-if ($message) {
-    notice($message, $back);
-}
-else {
-    $mform->display();
-}
+    if ($message) {
+        notice($message, $back);
+    }
+    else {
+        $mform->display();
+    }
 
-echo $OUTPUT->footer();
+    echo $OUTPUT->footer();
+}

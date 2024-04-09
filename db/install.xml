@@ -95,6 +95,7 @@
         <FIELD NAME="domicile_code" TYPE="char" LENGTH="4" NOTNULL="false" SEQUENCE="false" COMMENT="Domicile code"/>
         <FIELD NAME="domicile_country" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Country of domicile"/>
         <FIELD NAME="postcode" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="Postcode"/>
+        <FIELD NAME="personal_email" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Personal email"/>
         <FIELD NAME="birth_code" TYPE="char" LENGTH="4" NOTNULL="false" SEQUENCE="false" COMMENT="Birth code"/>
         <FIELD NAME="birth_country" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Country of birth"/>
         <FIELD NAME="birthdate" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Date of birth"/>
@@ -119,9 +120,16 @@
         <FIELD NAME="emp_area" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Clinical area"/>
         <FIELD NAME="emp_title" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Job title"/>
         <FIELD NAME="emp_prof" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Profession"/>
+        <FIELD NAME="professional_registration" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Professional registration?"/>
         <FIELD NAME="prof_reg_no" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Professional body registration number"/>
         <FIELD NAME="criminal_record" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Criminal record?"/>
-        <FIELD NAME="profile_update" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Date of last profile update"/>
+        <FIELD NAME="contact_details_update" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Date of last contact details update"/>
+        <FIELD NAME="criminal_record_update" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Date of last criminal record update"/>
+        <FIELD NAME="current_employment_update" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Date of last current employment update"/>
+        <FIELD NAME="edu_establishments_update" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Date of last educational establishments update"/>
+        <FIELD NAME="personal_details_update" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Date of last personal details update"/>
+        <FIELD NAME="pro_qualification_update" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Date of last professional qualifications update"/>
+        <FIELD NAME="pro_registration_update" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Date of last professional registration update"/>
         <FIELD NAME="course_code" TYPE="char" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Course code"/>
         <FIELD NAME="course_name" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Course name"/>
         <FIELD NAME="course_date" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Course start date"/>
@@ -158,6 +166,7 @@
         <FIELD NAME="home_phone" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="Home phone"/>
         <FIELD NAME="mobile_phone" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="Mobile phone"/>
         <FIELD NAME="email" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Email"/>
+        <FIELD NAME="personal_email" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Personal email"/>
         <FIELD NAME="birth_code" TYPE="char" LENGTH="4" NOTNULL="false" SEQUENCE="false" COMMENT="Birth code"/>
         <FIELD NAME="birth_country" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Country of birth"/>
         <FIELD NAME="birthdate" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Date of birth"/>
@@ -252,5 +261,15 @@
       </INDEXES>
     </TABLE>
 
+    <TABLE NAME="local_obu_xfer" COMMENT="OBU HLS transfers">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="xfer_number" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Numeric transfer value"/>
+        <FIELD NAME="xfer_date" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Textual parameter value"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
 	</TABLES>
 </XMLDB>

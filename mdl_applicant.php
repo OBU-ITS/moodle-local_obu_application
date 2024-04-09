@@ -43,7 +43,8 @@ if (!is_siteadmin() && ($role == 'administration')) {
 $action = $_REQUEST['action'];
 
 $dir = $home . 'local/obu_application/';
-$url = $dir . 'mdl_applicant.php?role=' . $role . '&action=' . $action;
+$page_url = 'mdl_applicant.php?role=' . $role . '&action=' . $action;
+$url = $dir . $page_url;
 
 if ($role == 'administration') {
 	$title = get_string('applications_administration', 'local_obu_application');
@@ -73,34 +74,40 @@ $mform = new mdl_applicant_form(null, $parameters);
 
 if ($mform->is_cancelled()) {
     redirect($back);
-} 
+}
 else if ($mform_data = $mform->get_data()) {
-    if (preg_match('~[0-9]+~', $mform_data->nameref)) {
-        $url = $dir . 'mdl_process.php?source=mdl_applicant.php&id=' . $mform_data->nameref;
-        redirect($url);
+    if (preg_match('~^[0-9]+~', $mform_data->nameref) || preg_match('~^HLS/[0-9]+~', $mform_data->nameref)) {
+        $ref = $mform_data->nameref;
+        if(preg_match('~^HLS/[0-9]+~', $ref)) {
+            $ref = substr($ref, 4);
+        }
+
+        $redirect_url = $dir . 'mdl_process.php?source=' . urlencode($page_url) . '&id=' . $ref;
+
+        redirect($redirect_url);
     }
     $applicants = get_applicants_by_last_name($mform_data->nameref);
     if (count($applicants) == 1) {
-        $url = $dir . 'mdl_' . $action . '.php?userid=' . array_values($applicants)[0]->userid;
-        redirect($url);
+        $redirect_url = $dir . 'mdl_' . $action . '.php?userid=' . array_values($applicants)[0]->userid;
+        redirect($redirect_url);
     } else if (count($applicants) == 0){
         $applicants = get_applicants_by_first_name($mform_data->nameref);
         if (count($applicants) == 1) {
-            $url = $dir . 'mdl_' . $action . '.php?userid=' . array_values($applicants)[0]->userid;
-            redirect($url);
+            $redirect_url = $dir . 'mdl_' . $action . '.php?userid=' . array_values($applicants)[0]->userid;
+            redirect($redirect_url);
         }
     }
-}	
+}
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading($heading);
 
 if ($message) {
-    notice($message, $url);    
+    notice($message, $url);
 }
 else {
     $mform->display();
-	
+
 	if ($applicants != null) {
 		foreach ($applicants as $applicant) {
 			$url = $dir . 'mdl_' . $action . '.php?userid=' . $applicant->userid;

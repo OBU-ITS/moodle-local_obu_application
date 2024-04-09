@@ -63,14 +63,23 @@ $id = '';
 $delete = false;
 $codes = array();
 $courses = array();
+$courses_with_suspended = array();
 $record = null;
 $administrator = null;
 $applications = 0;
 
-if (isset($_REQUEST['id'])) {
-	$id = $_REQUEST['id'];
+if (isset($_REQUEST['id']) || isset($_REQUEST['id_not_suspended'])) {
+
+    $show_suspended = $_REQUEST['show_suspended'] ?? true;
+    $id =  $show_suspended ? $_REQUEST['id'] : $_REQUEST['id_not_suspended'];
+    if($id == '') {
+        $id = '0';
+    }
+
 	if ($id != '0') {
+
 		$record = read_course_record_by_id($id);
+
 		if (isset($_REQUEST['delete'])) {
 			$delete = true;
 		}
@@ -92,7 +101,9 @@ if (isset($_REQUEST['id'])) {
 } else {
 	$recs = get_course_records();
 	if ($recs) { // Do they have a choice?
-		$courses[0] = get_string('new_course', 'local_obu_application'); // The 'New Course' option
+        $courses[0] = get_string('new_course', 'local_obu_application'); // The 'New Course' option
+        $courses_with_suspended[0] = get_string('new_course', 'local_obu_application'); // The 'New Course' option
+
 		foreach ($recs as $rec) {
 			$name = $rec->name . ' [' . $rec->code . ']';
 			if ($rec->supplement) {
@@ -101,10 +112,16 @@ if (isset($_REQUEST['id'])) {
 			if ($rec->programme) {
 				$name .= ' (Programme)';
 			}
+
 			if ($rec->suspended) {
 				$name .= ' - SUSPENDED';
+
+                $courses_with_suspended[$rec->id] = $name;
 			}
-			$courses[$rec->id] = $name;
+            else{
+                $courses[$rec->id] = $name;
+                $courses_with_suspended[$rec->id] = $name;
+            }
 		}
 	} else { // No, they don't...
 		$id = '0'; // ...so it's gottabee a new one
@@ -113,8 +130,10 @@ if (isset($_REQUEST['id'])) {
 
 $parameters = [
 	'id' => $id,
+    'show_suspended' => $show_suspended,
 	'delete' => $delete,
-	'courses' => $courses,
+    'courses' => $courses,
+    'courses_with_suspended' => $courses_with_suspended,
 	'record' => $record,
 	'administrator' => $administrator,
 	'applications' => $applications
@@ -123,7 +142,7 @@ $parameters = [
 $mform = new mdl_course_form(null, $parameters);
 
 if ($mform->is_cancelled()) {
-	if ($id == '0') {
+	if (isset($_REQUEST['show_suspended'])) {
 		redirect($back);
 	} else {
 		redirect($url);
@@ -132,7 +151,8 @@ if ($mform->is_cancelled()) {
 else if ($mform_data = $mform->get_data()) {
 	if (isset($mform_data->submitbutton)) { // 'Save' or 'Confirm Deletion'
 		if ($mform_data->submitbutton == get_string('save', 'local_obu_application')) {
-			if (($mform_data->id == '0') && in_array(strtoupper($mform_data->code), $codes)) { // 'New' course already exists
+
+            if (($mform_data->id == '0') && in_array(strtoupper($mform_data->code), $codes)) { // 'New' course already exists
 				$message = get_string('existing_course', 'local_obu_application');
 			} else {
 				write_course_record($mform_data);

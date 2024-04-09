@@ -32,7 +32,7 @@ class process_form extends moodleform {
 
     function definition() {
         global $USER;
-		
+
         $mform =& $this->_form;
 
         $data = new stdClass();
@@ -41,15 +41,15 @@ class process_form extends moodleform {
 		$data->record = $this->_customdata['record'];
 		$data->status_text = $this->_customdata['status_text'];
 		$data->button_text = $this->_customdata['button_text'];
-		
+
 		$approval_sought = 0; // Level at which we are seeking approval from this user (if at all)
 		if ($data->record !== false) {
-			
+
 			// Level (if any) at which we are seeking approval from this user
 			if ($data->button_text == 'approve') {
 				$approval_sought = $data->record->approval_level;
 			}
-			
+
 			// Format the fields nicely before we load them into the form
 			$date = date_create();
 			$date_format = 'd/m/Y';
@@ -74,10 +74,10 @@ class process_form extends moodleform {
 			} else {
 				$criminal_record_formatted = get_string('no', 'local_obu_application');
 			}
-			if ($data->record->studying == '1') {
-				$studying_formatted = 'Yes';
+			if ($data->record->studying == '2') {
+                $studying_formatted = 'No';
 			} else {
-				$studying_formatted = 'No';
+                $studying_formatted = 'Yes';
 			}
 			if ($data->record->visa_requirement == '') {
 				$visa_requirement = 'NONE';
@@ -122,7 +122,7 @@ class process_form extends moodleform {
 			} else {
 				$fund_programme_formatted = '&#10008; NO'; // Cross
 			}
-			
+
 			$fields = [
 				'name' => $data->record->title . ' ' . $data->record->firstname . ' ' . $data->record->lastname,
 				'title' => $data->record->title,
@@ -137,6 +137,7 @@ class process_form extends moodleform {
 				'home_phone' => $data->record->home_phone,
 				'mobile_phone' => $data->record->mobile_phone,
 				'email' => $data->record->email,
+                'personal_email' => $data->record->personal_email,
 				'birth_country' => $data->record->birth_country,
 				'birthdate' => $birthdate_formatted,
 				'nationality' => $data->record->nationality,
@@ -164,7 +165,7 @@ class process_form extends moodleform {
 				'course_date' => $data->record->course_date,
 				'studying_formatted' => $studying_formatted,
 				'student_number' => $data->record->student_number,
-				'statement' => $data->record->statement,
+				'statement' => nl2br($data->record->statement),
 				'visa_requirement' => $visa_requirement,
 				'self_funding_formatted' => $self_funding_formatted,
 				'manager_email' => $data->record->manager_email,
@@ -191,7 +192,7 @@ class process_form extends moodleform {
 			];
 			$this->set_data($fields);
 		}
-		
+
 		// Start with the required hidden fields
 		$mform->addElement('hidden', 'source', $data->source);
 		$mform->setType('source', PARAM_RAW);
@@ -212,12 +213,12 @@ class process_form extends moodleform {
 		// - To force open the Moodle Forms invisible fieldset outside of any table on the form (corrupts display otherwise)
 		// - To let us inform the user that there are validation errors without them having to scroll down further
 		$mform->addElement('static', 'form_errors');
-		
+
 		// Application status
 		if (!empty($data->status_text)) {
 			$mform->addElement('header', 'status_head', get_string('status', 'local_obu_application'), '');
 			$mform->setExpanded('status_head');
-			$mform->addElement('html', '<p /><strong>' . $data->status_text . '</strong>'); // output any status text
+			$mform->addElement('html', $data->status_text); // output any status text
 		}
 
         // Contact details
@@ -239,9 +240,10 @@ class process_form extends moodleform {
 		$mform->addElement('static', 'home_phone', get_string('home_phone', 'local_obu_application'));
 		$mform->addElement('static', 'mobile_phone', get_string('mobile_phone', 'local_obu_application'));
 		$mform->addElement('static', 'email', get_string('email'));
+        $mform->addElement('static', 'personal_email', get_string('personalemail', 'local_obu_application'));
 
 		if ($approval_sought != 2) { // All bar the funder
-			
+
 			// General details
 			$mform->addElement('header', 'general_head', get_string('general_head', 'local_obu_application'), '');
 			if ($data->button_text == 'approve') {
@@ -252,7 +254,7 @@ class process_form extends moodleform {
 			$mform->addElement('static', 'nationality', get_string('nationality', 'local_obu_application'));
 			$mform->addElement('static', 'gender', get_string('gender', 'local_obu_application'));
 			$mform->addElement('static', 'residence_area', get_string('residence_area', 'local_obu_application'));
-			
+
 			// Education
 			$mform->addElement('header', 'education_head', get_string('education_head', 'local_obu_application'), '');
 			if ($data->button_text == 'approve') {
@@ -293,7 +295,7 @@ class process_form extends moodleform {
 				$mform->setExpanded('prof_reg_head');
 			}
 			$mform->addElement('static', 'prof_reg_no', get_string('prof_reg_no', 'local_obu_application'));
-		
+
 			// Criminal record
 			$mform->addElement('header', 'criminal_record_head', get_string('criminal_record_head', 'local_obu_application'), '');
 			if ($data->button_text == 'approve') {
@@ -309,18 +311,22 @@ class process_form extends moodleform {
 		}
 		$mform->addElement('static', 'course_name', get_string('name', 'local_obu_application'));
 		$mform->addElement('static', 'course_date', get_string('course_date', 'local_obu_application'));
-		
+
 		// Currently studying?
 		$mform->addElement('static', 'studying_formatted', get_string('studying', 'local_obu_application'));
 		$mform->addElement('static', 'student_number', get_string('student_number', 'local_obu_application'));
-		
+
         // Supporting statement
 		$mform->addElement('header', 'statement_head', get_string('statement_head', 'local_obu_application'), '');
 		if ($data->button_text == 'approve') {
 			$mform->setExpanded('statement_head');
 		}
 		$mform->addElement('static', 'statement', get_string('statement', 'local_obu_application'));
-		
+
+		if ($data->record->statement != "" && !is_funder()){
+            $mform->addElement('submit', 'statementbutton', get_string('export_statement', 'local_obu_application'));
+        }
+
 		if ($approval_sought != 2) { // All bar the funder
 
 			if ($data->record->nationality != 'GB') {
@@ -341,7 +347,7 @@ class process_form extends moodleform {
 					}
 				}
 			}
-		
+
 			// Supplementary course information (if any)
 			unpack_supplement_data($data->record->supplement_data, $fields);
 			if (!empty($fields)) {
@@ -363,7 +369,7 @@ class process_form extends moodleform {
 			$mform->addElement('static', 'self_funding_formatted', get_string('self_funding', 'local_obu_application'));
 			$mform->addElement('static', 'declaration_formatted', get_string('declaration', 'local_obu_application'));
 		}
-		
+
 		// Funder/funding
 		if (($approval_sought > 0) && ($data->record->self_funding == '1')) {
 			$mform->addElement('html', '<h2>' . get_string('self_funding', 'local_obu_application') . ' ' . get_string('applicant', 'local_obu_application') . '</h2>');
@@ -412,8 +418,10 @@ class process_form extends moodleform {
 					$mform->setType('funding_organisation', PARAM_TEXT);
 					$mform->addElement('text', 'invoice_ref', get_string('invoice_ref', 'local_obu_application'), 'size="40" maxlength="100"');
 					$mform->setType('invoice_ref', PARAM_TEXT);
+                    $mform->addElement('html', '<p><strong><i>' . get_string('invoice_ref_info', 'local_obu_application') . '</i></strong></p>');
 					$mform->addElement('textarea', 'invoice_address', get_string('address'), 'cols="40" rows="5"');
 					$mform->setType('invoice_address', PARAM_TEXT);
+                    $mform->addElement('html', '<p><strong><i>' . get_string('invoice_email_info', 'local_obu_application') . '</i></strong></p>');
 					$mform->addElement('text', 'invoice_email', get_string('email'), 'size="40" maxlength="100"');
 					$mform->setType('invoice_email', PARAM_RAW_TRIMMED);
 					$mform->addElement('text', 'invoice_phone', get_string('phone', 'local_obu_application'), 'size="40" maxlength="100"');
@@ -422,7 +430,7 @@ class process_form extends moodleform {
 					$mform->setType('invoice_contact', PARAM_TEXT);
 				}
 				if (is_programme($data->record->course_code)) {
-					$mform->addElement('html', '<p></p><strong><i>' . get_string('programme_preamble', 'local_obu_application') . '</i></strong><p></p>');
+					$mform->addElement('html', '<p><strong><i>' . get_string('programme_preamble', 'local_obu_application') . '</i></strong></p>');
                     $mform->addElement('select', 'fund_programme', get_string('fund_programme', 'local_obu_application'), array("0"=>"No", "1"=>"Yes"));
 					$mform->addElement('text', 'fund_module_1', get_string('fund_module', 'local_obu_application'), 'size="8" maxlength="8"');
 					$mform->setType('fund_module_1', PARAM_TEXT);
@@ -502,17 +510,29 @@ class process_form extends moodleform {
 
 		// Options
 		$buttonarray = array();
-		if ($data->button_text != 'cancel') {
+		if ($data->button_text != 'cancel' && $data->button_text != 'revoke') {
 			$buttonarray[] = &$mform->createElement('submit', 'submitbutton', get_string($data->button_text, 'local_obu_application'));
 		}
 		if ($data->button_text != 'continue') {
 			if ($data->button_text == 'approve') {
 				$mform->addElement('static', 'approval', '');
 				$mform->closeHeaderBefore('approval');
-				$mform->addElement('html', '<h1>' . get_string('approval_head', 'local_obu_application') . '</h1>');
-				$mform->addElement('html', '<p><strong>' . get_string('comment', 'local_obu_application') . '</strong></p>');
-				$mform->addElement('text', 'comment', '', 'size="40" maxlength="100"');
-				$mform->setType('comment', PARAM_TEXT);
+                if ($approval_sought == 1){
+                    $mform->addElement('html', '<h3>' . get_string('approval_head', 'local_obu_application') . '</h3>');
+                    $mform->addElement('html', '<p><strong>' . get_string('manager_comment', 'local_obu_application') . '</strong></p>');
+                    $mform->addElement('text', 'comment', get_string('comment', 'local_obu_application'), 'size="40" maxlength="100"');
+                    $mform->setType('comment', PARAM_TEXT);
+                } else if ($approval_sought == 2){
+                    $mform->addElement('html', '<h3>' . get_string('approval_head', 'local_obu_application') . '</h3>');
+                    $mform->addElement('html', '<p><strong>' . get_string('funder_comment', 'local_obu_application') . '</strong></p>');
+                    $mform->addElement('text', 'comment', get_string('comment', 'local_obu_application'), 'size="40" maxlength="100"');
+                    $mform->setType('comment', PARAM_TEXT);
+                } else {
+                    $mform->addElement('html', '<h3>' . get_string('approval_head', 'local_obu_application') . '</h3>');
+                    $mform->addElement('html', '<p><strong>' . get_string('admin_comment', 'local_obu_application') . '</strong></p>');
+                    $mform->addElement('text', 'comment', get_string('comment', 'local_obu_application'), 'size="40" maxlength="100"');
+                    $mform->setType('comment', PARAM_TEXT);
+                }
 				$buttonarray[] = &$mform->createElement('submit', 'rejectbutton', get_string('reject', 'local_obu_application'));
 				if (is_manager() && (($approval_sought == 1) || ($approval_sought == 3))) { // HLS
                     if ($data->record->supplement_data){
@@ -533,6 +553,7 @@ class process_form extends moodleform {
 					}
 				}
 			} else if ($data->button_text == 'revoke') { // A manager can revoke or withdraw an HLS-approved application
+                $buttonarray[] = &$mform->createElement('submit', 'revokebutton', get_string('revoke', 'local_obu_application'));
 				$buttonarray[] = &$mform->createElement('submit', 'withdrawbutton', get_string('withdraw', 'local_obu_application'));
 			}
 			$buttonarray[] = &$mform->createElement('cancel');
@@ -543,7 +564,7 @@ class process_form extends moodleform {
 
     function validation($data, $files) {
         $errors = parent::validation($data, $files);
-		
+
 		// Check that we have been given sufficient information for an approval
 		if ($data['submitbutton'] == get_string('approve', 'local_obu_application')) {
 			if ($data['approval_level'] == '2') { // Funder must give us the funding details
@@ -621,7 +642,7 @@ class process_form extends moodleform {
 		$fld_end_len = strlen($fld_end);
 		$offset = 0;
 		$date_format = 'd-m-y';
-		
+
 		do {
 			$pos = strpos($form->template, $fld_start, $offset);
 			if ($pos === false) {
@@ -657,7 +678,7 @@ class process_form extends moodleform {
 		} while(true);
 
 		$this->_form->addElement('html', substr($form->template, $offset)); // output any remaining HTML
-	
+
 		return;
 	}
 }

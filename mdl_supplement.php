@@ -67,6 +67,7 @@ if (isset($_REQUEST['ref'])) {
 	$ref = strtoupper($_REQUEST['ref']);
 	if (isset($_REQUEST['version'])) {
 		$version = strtoupper($_REQUEST['version']);
+        $record = read_supplement_form($ref, $version);
 	} else {
 		if (!isset($_REQUEST['versions']) || (isset($_REQUEST['versions']) && $_REQUEST['versions'] != 0)) {
 			$supplements = read_supplement_forms($ref);
@@ -106,6 +107,10 @@ else if ($msupplement_data = $msupplement->get_data()) {
 			write_supplement_form($USER->id, $msupplement_data);
 		}
 		redirect($url);
+    } else if ($msupplement_data->submitbutton == get_string('reinstate', 'local_obu_application')) {
+        if ($msupplement_data->already_published || is_siteadmin()) {
+            redirect(reinstate_supplement_form($USER->id, $msupplement_data));
+        }
     }
 }	
 

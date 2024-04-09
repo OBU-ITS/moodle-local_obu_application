@@ -16,83 +16,38 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * OBU Application - Course page
+ * OBU Application - Visa page
  *
  * @package    obu_application
  * @category   local
- * @author     Peter Welham
- * @copyright  2021, Oxford Brookes University
+ * @author     Joe Souch
+ * @copyright  2024, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
 
 require('../../config.php');
 require_once('./hide_moodle.php');
-require_once('./locallib.php');
-require_once('./course_form.php');
 
 require_obu_login();
 
 $home = new moodle_url('/local/obu_application/');
-$url = $home . 'course.php';
-$visa = $home . 'visa.php';
-$application_url = $home . 'application.php';
-$supplement = $home . 'supplement.php';
-$apply = $home . 'apply.php';
+$url = $home . 'outside_uk_residence.php';
+$back = $home . 'application.php';
 
 $PAGE->add_body_class('limitedwidth');
 $PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
-
 $PAGE->set_url($url);
 
+$message = '';
+
 $record = read_applicant($USER->id, false);
-if (($record === false)
-    || $record->contact_details_update == 0
-    || $record->criminal_record_update == 0
-    || $record->current_employment_update == 0
-    || $record->edu_establishments_update == 0
-    || $record->personal_details_update == 0
-    || $record->pro_qualification_update == 0
-    || $record->pro_registration_update == 0) {
-		$message = get_string('complete_profile', 'local_obu_application');
-} else {
-	$message = '';
-}
-
-$outside_uk_url = $home . 'outside_uk_residence.php';
 $homeResidencies = array('XF', 'XH', 'XI', 'XG', 'JE', 'GG');
-if (!in_array($record->residence_code, $homeResidencies)){
-    redirect($outside_uk_url);
+if(!in_array($record->residence_code, $homeResidencies) || $record->nationality_code != 'GB') {
+    $message = get_string('page_outside-uk-residence_message', 'local_obu_application');
 }
-
-$parameters = [
-	'courses' => get_course_names(),
-	'dates' => get_course_dates(),
-	'record' => $record
-];
-
-$mform = new course_form(null, $parameters);
-
-if ($mform->is_cancelled()) {
-    redirect($application_url);
-}
-
-if ($mform_data = $mform->get_data()) {
-	if ($mform_data->submitbutton == get_string('save_continue', 'local_obu_application')) {
-		$course = read_course_record($mform_data->course_code);
-		$mform_data->course_name = $course->name;
-		write_course($USER->id, $mform_data);
-		if ($record->nationality_code != 'GB') {
-			redirect($visa);
-		} else {
-			write_visa_requirement($USER->id, '');
-			if ($course->supplement != '') {
-				redirect($supplement);
-			} else {
-				redirect($apply);
-			}
-		}
-    }
+else {
+    $message = "<p>You have reached this page by accident, please continue with your application.</p>";
 }
 
 echo $OUTPUT->header();
@@ -134,31 +89,18 @@ echo $OUTPUT->header();
         }
     </style>
     <div class="hero-content">
-        <h1>Application</h1>
+        <h1><?php echo get_string('page_outside-uk-residence_heading', 'local_obu_application') ?></h1>
     </div>
     <section class="block_html block card mb-3" >
         <div class="card-body p-3">
-            <p>
-                Please complete the mandatory fields below. Detailed guidance can be <a href="application_guidance.php" target="_blank">found here</a>.
-            </p>
-            <hr class="divider">
-            <p style="margin-bottom:0">
-                If you have any queries, please contact <a href="mailto:hlscpdadmissions@brookes.ac.uk">hlscpdadmissions@brookes.ac.uk</a>.
-            </p>
-        </div>
-    </section>
-    <section class="block_html block card mb-3" >
-        <div class="card-body p-3">
 
-<?php
-if ($message) {
-    notice($message, $home);
-}
-else {
-    $mform->display();
-}
+            <?php
 
-?>
+            if ($message) {
+                notice($message, $back);
+            }
+
+            ?>
         </div>
     </section>
 

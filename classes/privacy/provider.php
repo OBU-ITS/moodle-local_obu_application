@@ -53,6 +53,7 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 				'domicile_code' => 'privacy:metadata:local_obu_application:domicile_code',
 				'domicile_country' => 'privacy:metadata:local_obu_application:domicile_country',
 				'postcode' => 'privacy:metadata:local_obu_application:postcode',
+                'personal_email' => 'privacy:metadata:local_obu_application:personal_email',
 				'birth_code' => 'privacy:metadata:local_obu_application:birth_code',
 				'birth_country' => 'privacy:metadata:local_obu_application:birth_country',
 				'birthdate' => 'privacy:metadata:local_obu_application:birthdate',
@@ -77,15 +78,24 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 				'emp_area' => 'privacy:metadata:local_obu_application:emp_area',
 				'emp_title' => 'privacy:metadata:local_obu_application:emp_title',
 				'emp_prof' => 'privacy:metadata:local_obu_application:emp_prof',
+                'professional_registration' => 'privacy:metadata:local_obu_application:professional_registration',
 				'prof_reg_no' => 'privacy:metadata:local_obu_application:prof_reg_no',
 				'criminal_record' => 'privacy:metadata:local_obu_application:criminal_record',
-				'profile_update' => 'privacy:metadata:local_obu_application:profile_update',
+				'contact_details_update' => 'privacy:metadata:local_obu_application:contact_details_update',
+                'criminal_record_update' => 'privacy:metadata:local_obu_application:criminal_record_update',
+                'current_employment_update' => 'privacy:metadata:local_obu_application:current_employment_update',
+                'edu_establishments_update' => 'privacy:metadata:local_obu_application:edu_establishments_update',
+                'personal_details_update' => 'privacy:metadata:local_obu_application:personal_details_update',
+                'pro_qualification_update' => 'privacy:metadata:local_obu_application:pro_qualification_update',
+                'pro_registration_update' => 'privacy:metadata:local_obu_application:pro_registration_update',
 				'course_code' => 'privacy:metadata:local_obu_application:course_code',
 				'course_name' => 'privacy:metadata:local_obu_application:course_name',
 				'course_date' => 'privacy:metadata:local_obu_application:course_date',
 				'studying' => 'privacy:metadata:local_obu_application:studying',
 				'student_number' => 'privacy:metadata:local_obu_application:student_number',
 				'statement' => 'privacy:metadata:local_obu_application:statement',
+                'visa_requirement' => 'privacy:metadata:local_obu_application:visa_requirement',
+                'visa_data' => 'privacy:metadata:local_obu_application:visa_data',
 				'supplement_data' => 'privacy:metadata:local_obu_application:supplement_data',
 				'course_update' => 'privacy:metadata:local_obu_application:course_update'
 			],
@@ -110,6 +120,7 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 				'home_phone' => 'privacy:metadata:local_obu_application:home_phone',
 				'mobile_phone' => 'privacy:metadata:local_obu_application:mobile_phone',
 				'email' => 'privacy:metadata:local_obu_application:email',
+                'personal_email' => 'privacy:metadata:local_obu_application:personal_email',
 				'birth_code' => 'privacy:metadata:local_obu_application:birth_code',
 				'birth_country' => 'privacy:metadata:local_obu_application:birth_country',
 				'birthdate' => 'privacy:metadata:local_obu_application:birthdate',
@@ -142,6 +153,8 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 				'studying' => 'privacy:metadata:local_obu_application:studying',
 				'student_number' => 'privacy:metadata:local_obu_application:student_number',
 				'statement' => 'privacy:metadata:local_obu_application:statement',
+                'visa_requirement' => 'privacy:metadata:local_obu_application:visa_requirement',
+                'visa_data' => 'privacy:metadata:local_obu_application:visa_data',
 				'supplement_data' => 'privacy:metadata:local_obu_application:supplement_data',
 				'self_funding' => 'privacy:metadata:local_obu_application:self_funding',
 				'manager_email' => 'privacy:metadata:local_obu_application:manager_email',
@@ -151,14 +164,32 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 				'funding_id' => 'privacy:metadata:local_obu_application:funding_id',
 				'funding_organisation' => 'privacy:metadata:local_obu_application:funding_organisation',
 				'funder_name' => 'privacy:metadata:local_obu_application:funder_name',
+                'invoice_ref' => 'privacy:metadata:local_obu_application:invoice_ref',
+                'invoice_address' => 'privacy:metadata:local_obu_application:invoice_address',
+                'invoice_email' => 'privacy:metadata:local_obu_application:invoice_email',
+                'invoice_phone' => 'privacy:metadata:local_obu_application:invoice_phone',
+                'invoice_contact' => 'privacy:metadata:local_obu_application:invoice_contact',
+                'fund_programme' => 'privacy:metadata:local_obu_application:fund_programme',
+                'fund_module_1' => 'privacy:metadata:local_obu_application:fund_module_1',
+                'fund_module_2' => 'privacy:metadata:local_obu_application:fund_module_2',
+                'fund_module_3' => 'privacy:metadata:local_obu_application:fund_module_3',
+                'fund_module_4' => 'privacy:metadata:local_obu_application:fund_module_4',
+                'fund_module_5' => 'privacy:metadata:local_obu_application:fund_module_5',
+                'fund_module_6' => 'privacy:metadata:local_obu_application:fund_module_6',
+                'fund_module_7' => 'privacy:metadata:local_obu_application:fund_module_7',
+                'fund_module_8' => 'privacy:metadata:local_obu_application:fund_module_8',
+                'fund_module_9' => 'privacy:metadata:local_obu_application:fund_module_9',
 				'application_date' => 'privacy:metadata:local_obu_application:application_date',
+                'approval_level' => 'privacy:metadata:local_obu_application:approval_level',
 				'approval_state' => 'privacy:metadata:local_obu_application:approval_state',
 				'approval_1_comment' => 'privacy:metadata:local_obu_application:approval_1_comment',
 				'approval_1_date' => 'privacy:metadata:local_obu_application:approval_1_date',
 				'approval_2_comment' => 'privacy:metadata:local_obu_application:approval_2_comment',
 				'approval_2_date' => 'privacy:metadata:local_obu_application:approval_2_date',
 				'approval_3_comment' => 'privacy:metadata:local_obu_application:approval_3_comment',
-				'approval_3_date' => 'privacy:metadata:local_obu_application:approval_3_date'
+				'approval_3_date' => 'privacy:metadata:local_obu_application:approval_3_date',
+                'admissions_xfer' => 'privacy:metadata:local_obu_application:admissions_xfer',
+                'finance_xfer' => 'privacy:metadata:local_obu_application:finance_xfer'
 			],
 			'privacy:metadata:local_obu_application'
 		);
@@ -210,6 +241,7 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 			$data->domicile_code = $rec->domicile_code;
 			$data->domicile_country = $rec->domicile_country;
 			$data->postcode = $rec->postcode;
+            $data->personal_email = $rec->personal_email;
 			$data->birth_code = $rec->birth_code;
 			$data->birth_country = $rec->birth_country;
 			if ($rec->birthdate == 0) {
@@ -247,6 +279,11 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 			$data->emp_area = $rec->emp_area;
 			$data->emp_title = $rec->emp_title;
 			$data->emp_prof = $rec->emp_prof;
+            if ($rec->professional_registration == 1) {
+                $data->professional_registration = 'Y';
+            } else {
+                $data->professional_registration = 'N';
+            }
 			$data->prof_reg_no = $rec->prof_reg_no;
 			if ($rec->criminal_record == 1) {
 				$data->criminal_record = 'Y';
@@ -261,13 +298,24 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 			$data->course_code = $rec->course_code;
 			$data->course_name = $rec->course_name;
 			$data->course_date = $rec->course_date;
-			if ($rec->studying == 1) {
-				$data->studying = 'Y';
+			if ($rec->studying == '2') {
+                $data->studying = 'N';
 			} else {
-				$data->studying = 'N';
+                $data->studying = 'Y';
 			}
 			$data->student_number = $rec->student_number;
 			$data->statement = $rec->statement;
+            $data->visa_requirement = $rec->visa_requirement;
+            if ($rec->visa_data === NULL) {
+                $data->visa_data = '';
+            } else {
+                $xml = new \SimpleXMLElement($rec->visa_data);
+                $fields = array();
+                foreach ($xml as $key => $value) {
+                    $fields[$key] = (string)$value;
+                }
+                $data->visa_data = $fields;
+            }
 			if ($rec->supplement_data === NULL) {
 				$data->supplement_data = '';
 			} else {
@@ -303,6 +351,7 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 				$data->home_phone = $rec->home_phone;
 				$data->mobile_phone = $rec->mobile_phone;
 				$data->email = $rec->email;
+                $data->personal_email = $rec->personal_email;
 				$data->birth_code = $rec->birth_code;
 				$data->birth_country = $rec->birth_country;
 				if ($rec->birthdate == 0) {
@@ -348,13 +397,24 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 				$data->course_code = $rec->course_code;
 				$data->course_name = $rec->course_name;
 				$data->course_date = $rec->course_date;
-				if ($rec->studying == 1) {
-					$data->studying = 'Y';
+				if ($rec->studying == '2') {
+                    $data->studying = 'N';
 				} else {
-					$data->studying = 'N';
+                    $data->studying = 'Y';
 				}
 				$data->student_number = $rec->student_number;
 				$data->statement = $rec->statement;
+                $data->visa_requirement = $rec->visa_requirement;
+                if ($rec->visa_data === NULL) {
+                    $data->visa_data = '';
+                } else {
+                    $xml = new \SimpleXMLElement($rec->visa_data);
+                    $fields = array();
+                    foreach ($xml as $key => $value) {
+                        $fields[$key] = (string)$value;
+                    }
+                    $data->visa_data = $fields;
+                }
 				if ($rec->supplement_data === NULL) {
 					$data->supplement_data = '';
 				} else {
@@ -380,7 +440,12 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 				$data->funding_method = $rec->funding_method;
 				$data->funding_id = $rec->funding_id;
 				$data->funding_organisation = $rec->funding_organisation;
-				$data->funder_name = $rec->funder_name;
+                $data->funder_name = $rec->funder_name;
+				$data->invoice_ref = $rec->invoice_ref;
+                $data->invoice_address = $rec->invoice_address;
+                $data->invoice_email = $rec->invoice_email;
+                $data->invoice_phone = $rec->invoice_phone;
+                $data->invoice_contact = $rec->invoice_contact;
 				if ($rec->application_date == 0) {
 					$data->application_date = '';
 				} else {

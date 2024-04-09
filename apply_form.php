@@ -33,7 +33,7 @@ require_once($CFG->libdir . '/formslib.php');
 class apply_form extends moodleform {
 
     function definition() {
-		
+
         $mform =& $this->_form;
 
         $data = new stdClass();
@@ -45,11 +45,13 @@ class apply_form extends moodleform {
 		// - To let us inform the user that there are validation errors without them having to scroll down further
 		$mform->addElement('static', 'form_errors');
 
+        $mform->addElement('header', 'funding_head', 'Funding', '');
+        $mform->setExpanded('funding_head');
         $mform->addElement('select', 'self_funding', get_string('self_funding', 'local_obu_application'), array("0"=>"No", "1"=>"Yes"));
-
 		$mform->addElement('static', 'funding', '');
-		$mform->closeHeaderBefore('funding');
-		$mform->addElement('html', '<h1>' . get_string('funding_organisation', 'local_obu_application') . '</h1>');
+
+        $mform->addElement('header', 'funding_organisation_head', get_string('funding_organisation', 'local_obu_application'), '');
+        $mform->setExpanded('funding_organisation_head');
 		$options = [];
 		$options['-1'] = get_string('select', 'local_obu_application');
 		foreach ($data->organisations as $organisation_id => $organisation_name) {
@@ -67,13 +69,14 @@ class apply_form extends moodleform {
 		$mform->setType('funder_email2', PARAM_RAW_TRIMMED);
 		$mform->disabledIf('funder_email2', 'self_funding', 'neq', '0');
 		$mform->disabledIf('funder_email2', 'funding_organisation', 'neq', '0');
-		
+
         $mform->addElement('header', 'declaration_head', get_string('declaration', 'local_obu_application'), '');
-		
+        $mform->setExpanded('declaration_head');
+
 		$conditions = '<a href="https://www.brookes.ac.uk/about-brookes/structure-and-governance/policies-and-financial-statements/terms-and-conditions-of-enrolment#other" target="_blank">' . get_string('conditions', 'local_obu_application') . '</a>';
 		$mform->addElement('checkbox', 'declaration', get_string('declaration', 'local_obu_application'), get_string('declaration_text', 'local_obu_application', $conditions));
 		$mform->addRule('declaration', null, 'required', null, 'server');
-		
+
         $this->add_action_buttons(true, get_string('apply', 'local_obu_application'));
     }
 

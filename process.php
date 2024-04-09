@@ -75,7 +75,7 @@ if (($application->approval_state == 0) && ($application->approval_level == 0)) 
 		$message = get_string('application_unavailable', 'local_obu_application');
 	}
 	$status_text = get_string('status_not_submitted', 'local_obu_application');
-	
+
 	// We currently auto-submit the application to avoid a two-stage process for the applicant
 	update_workflow($application);
 	$status_text = '';
@@ -91,8 +91,9 @@ if ($status_text) {
 	$status_text = '<h3>' . $status_text . '</h3>';
 }
 
-get_application_status($USER->id, $application, $text, $button_text); // get the approval trail and the next action (from user's perspective)
-$status_text .= $text;
+$manager = is_manager();
+$status_text .= get_application_status($USER->id, $application, $manager);
+$button_text = get_application_button_text($USER->id, $application, $manager);
 
 if ($button_text != 'approve') { // If not the next approver, check that this user is the applicant
 	if ($USER->id != $application->userid) {
@@ -112,12 +113,12 @@ $mform = new process_form(null, $parameters);
 
 if ($mform->is_cancelled()) {
     redirect($back);
-} 
+}
 else if ($mform_data = $mform->get_data()) {
 	if (($button_text == 'approve') && ($mform_data->submitbutton != get_string('continue', 'local_obu_application')) // They can do something (and they want to)
 		&& ($mform_data->approval_state == $application->approval_state) && ($mform_data->approval_level == $application->approval_level)) { // Check nothing happened while we were away (or they clicked twice)
 		if (isset($mform_data->rejectbutton) && ($mform_data->rejectbutton == get_string('reject', 'local_obu_application'))) { // Application rejected
-			update_workflow($application, false, $mform_data);
+            redirect($home . 'reject.php?source=' . urlencode($url) . "&id=" . $application->id);
 		} else {
 			update_workflow($application, true, $mform_data);
 		}
@@ -130,7 +131,51 @@ else if ($mform_data = $mform->get_data()) {
 }
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading($heading);
+
+?>
+    <div class="hero"></div>
+    <style>
+        .hero {
+            position:absolute;
+            top:0;
+            left:0;
+            height: 15vh;
+            width:100%;
+        }
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url(/local/obu_application/moodle-hls-login-bg.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center 25%;
+            filter: brightness(95%);
+        }
+        .hero-content {
+            width: 100%;
+            padding: 0.5rem 1.5rem;
+            background-color: rgba(255,255,255,.8);
+            backdrop-filter: saturate(180%) blur(20px);
+            margin-bottom: 3rem;
+        }
+        .hero-content h1 {
+            z-index: 100;
+            position: relative;
+            color: black;
+        }
+    </style>
+    <div class="hero-content">
+        <h1>Application</h1>
+    </div>
+    <section class="block_html block card mb-3" >
+        <div class="card-body p-3">
+
+<?php
+
 
 if ($message) {
     notice($message, $back);
@@ -138,5 +183,12 @@ if ($message) {
 else {
     $mform->display();
 }
+
+
+?>
+        </div>
+    </section>
+
+<?php
 
 echo $OUTPUT->footer();

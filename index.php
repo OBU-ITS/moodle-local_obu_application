@@ -20,12 +20,12 @@
  *
  * @package    obu_application
  * @category   local
- * @author     Peter Welham
- * @copyright  2016, Oxford Brookes University
+ * @author     Joe Souch
+ * @copyright  2024, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
- 
+
 require('../../config.php');
 require_once('./hide_moodle.php');
 require_once('./locallib.php');
@@ -40,44 +40,144 @@ require_obu_login();
 
 $process = new moodle_url('/local/obu_application/process.php');
 
+$PAGE->add_body_class('mediumwidth');
 $PAGE->set_url($CFG->httpswwwroot . '/local/obu_application/index.php');
 $PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
 
 echo $OUTPUT->header();
-//echo '<audio autoplay><source src="https://brookes-apps.appspot.com/say.php?' . $USER->firstname . ', please select an option." type="audio/wav"></audio>';
 
-// Display any outstanding approvals
-$approvals = get_approvals($USER->email); // get outstanding approval requests
-if ($approvals) {
-	echo '<h2>' . get_string('your_approvals', 'local_obu_application') . '</h2>';
-	foreach ($approvals as $approval) {
-		$application = read_application($approval->application_id);
-		$application_title = $application->firstname . ' ' . $application->lastname . ' (Application Ref HLS/' . $application->id . ')';
-		echo '<h4><a href="' . $process . '?id=' . $application->id . '">' . $application_title . '</a></h4>';
-		get_application_status($USER->id, $application, $text, $button); // get the approval trail and the next action (from the user's perspective)
-		echo $text;
-	}
-} else {
-	echo get_string('page_content', 'local_obu_application');
+$funder = is_funder();
+$lang_ext = $funder ? '_funder' : '';
+
+?>
+    <div class="hero"></div>
+    <style>
+        .hero {
+            position:absolute;
+            top:0;
+            left:0;
+            height: 70vh;
+            width:100%;
+        }
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url(/local/obu_application/moodle-hls-login-bg.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center 70%;
+            filter: brightness(95%);
+        }
+        .hero-content {
+            width: 100%;
+            padding: 3rem 3rem 1rem;
+            background-color: rgba(255,255,255,.8);
+            backdrop-filter: saturate(180%) blur(20px);
+            margin-bottom: 3rem;
+        }
+        .hero-content .intro {
+            font-size: 22px;
+            margin-bottom: 1rem;
+        }
+        .hero-content .cta {
+            margin-bottom: 2rem;
+        }
+        .hero-content .cta a{
+            padding: 0.5rem 1.5rem;
+            font-size: 20px;
+        }
+        .hero-content h1 {
+            z-index: 100;
+            position: relative;
+            color: black;
+            font-size: 50px;
+            margin-bottom: 2rem;
+        }
+    </style>
+    <div class="hero-content">
+        <h1><?php echo get_string('index_welcome_heading' . $lang_ext, 'local_obu_application', array('name' => $USER->firstname)); ?></h1>
+        <p class="intro">
+            <?php echo get_string('index_welcome_text' . $lang_ext, 'local_obu_application');?>
+        </p>
+        <?php
+            if (!$funder) {
+        ?>
+        <p class="cta">
+            <a class="btn btn-primary" href="application.php">Start your application</a>
+        </p>
+        <?php
+            }
+        ?>
+        <hr class="divider">
+        <p class="footer">
+            <?php echo get_string('index_welcome_support' . $lang_ext, 'local_obu_application');?>
+        </p>
+    </div>
+    <section class="block_html block card mb-3" >
+        <div class="card-body p-3">
+            <h2 class="card-title d-inline"><?php echo get_string('index_overview_heading' . $lang_ext, 'local_obu_application'); ?></h2>
+            <div class="card-text content mt-3">
+<?php
+
+$manager = is_manager();
+$process = new moodle_url('/local/obu_application/process.php');
+
+if($funder) {
+    $approvals = get_approvals($USER->email); // get outstanding approval requests
+    if ($approvals) {
+        foreach ($approvals as $approval) {
+            $application = read_application($approval->application_id);
+            $application_title = $application->firstname . ' ' . $application->lastname . ' (Application Ref HLS/' . $application->id . ')';
+
+            echo '<hr class="divider">';
+            echo '<h4><a href="' . $process . '?id=' . $application->id . '">' . $application_title . '</a></h4>';
+            echo get_application_status($USER->id, $application, $manager);
+        }
+    } else {
+        echo get_string('index_overview_empty_funder', 'local_obu_application');
+    }
+}
+else {
+    $applications = get_applications($USER->id); // get all applications for the user
+    $show_history_link = false;
+    if ($applications) {
+        foreach ($applications as $application) {
+            $button = get_application_button_text($USER->id, $application, $manager);
+            $application_title = $application->course_code . ' ' . $application->course_name . ' (Application Ref HLS/' . $application->id . ')';
+
+            echo '<hr class="divider">';
+            if (($button != 'submit') || $manager) {
+                echo '<h4><a href="' . $process . '?id=' . $application->id . '">' . $application_title . '</a></h4>';
+            }
+            else {
+                echo '<h4>' . $application_title . '</h4>';
+            }
+            echo get_application_status($USER->id, $application, $manager);
+        }
+    } else {
+        echo get_string('index_overview_empty', 'local_obu_application');
+    }
+
+    if($show_history_link) {
+?>
+    <hr class="divider">
+    <div class="footer">
+        <p><a href="#">See full history</a></p>
+    </div>
+
+<?php
+    }
 }
 
-// Display applications submitted
-$applications = get_applications($USER->id); // get all applications for the user
-if ($applications) {
-	echo '<h2>' . get_string('your_applications', 'local_obu_application') . '</h2>';
-	foreach ($applications as $application) {
-		get_application_status($USER->id, $application, $text, $button); // get the approval trail and the next action (from this user's perspective)
-		$application_title = $application->course_code . ' ' . $application->course_name . ' (Application Ref HLS/' . $application->id . ')';
-		if (($button != 'submit') || $currentuser || $manager) {
-			echo '<h4><a href="' . $process . '?id=' . $application->id . '">' . $application_title . '</a></h4>';
-		} else {
-			echo '<h4>' . $application_title . '</h4>';
-		}
-		echo $text;
-	}
-	echo '<h4>' . get_string('amend_application', 'local_obu_application') . '</h4>';
-} else {
-	echo '<h4>' . get_config('local_obu_application', 'support') . '</h4>';
-}
+?>
+
+            </div>
+        </div>
+    </section>
+<?php
 
 echo $OUTPUT->footer();
