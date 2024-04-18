@@ -686,7 +686,7 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
                 SET mdl_user.institution = 'funder'
                 WHERE mdl_local_obu_application.funder_email IS NOT NULL 
                     AND mdl_local_obu_application.funder_email <> ''
-                    AND mdl_user.username <> mdl_user.email";
+                    AND mdl_user.username == mdl_user.email";
 
         $DB->execute($sql);
 
