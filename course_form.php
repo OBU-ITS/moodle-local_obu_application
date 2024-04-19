@@ -63,6 +63,11 @@ class course_form extends moodleform {
 		$mform->setExpanded('course_head');
 		$mform->addElement('autocomplete', 'course_code', get_string('course', 'local_obu_application'), $data->courses, null);
         $mform->addRule('course_code', null, 'required', null, 'server');
+        $homeResidencies = array('XF', 'XH', 'XI', 'XG', 'JE', 'GG');
+        if(!in_array($data->record->residence_code, $homeResidencies)) {
+            $mform->addElement('static', 'course_note', null, get_string('course_note', 'local_obu_application'));
+        }
+
 		$mform->addElement('select', 'course_date', get_string('course_date', 'local_obu_application'), $data->dates, null);
         $mform->addRule('course_date', null, 'required', null, 'server');
 		$mform->addElement('html', '<p><strong>' . get_string('studying_preamble', 'local_obu_application') . '</strong></p>');

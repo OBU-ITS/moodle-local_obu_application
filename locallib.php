@@ -961,6 +961,25 @@ function get_course_names() {
 	return $courses;
 }
 
+function get_courses_for_international_students() {
+	return array(
+		'NURS7005' => null,
+		'HESC7016' => null,
+		'NURS7009' => null,
+		'CMNR7024' => null,
+		'CMNR7008' => null,
+		'CMRN7009' => null,
+		'HESC7020' => null,
+		'PGC-DRI-C' => null,
+		'CMRN7022' => null,
+		'HESC7011' => null,
+		'HESC7012' => null,
+		'NURS7067' => null,
+		'CMNR7018' => null,
+		'HESC7017' => null
+	);
+}
+
 function get_organisations() {
 
 	$organisations = array();

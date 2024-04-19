@@ -238,7 +238,7 @@ echo $OUTPUT->header();
         </div>
     </div>
     </section>
-    <?php
+<?php
         if($record->contact_details_update
             && $record->personal_details_update
             && $record->edu_establishments_update
@@ -247,10 +247,8 @@ echo $OUTPUT->header();
             && $record->pro_registration_update
             && $record->criminal_record_update) {
 
-        $homeResidencies = array('XF', 'XH', 'XI', 'XG', 'JE', 'GG');
-        $link = in_array($record->residence_code, $homeResidencies)
-            ? "course.php"
-            : "outside_uk_residence.php";
+        //$homeResidencies = array('XF', 'XH', 'XI', 'XG', 'JE', 'GG');
+        $link = "course.php"; //in_array($record->residence_code, $homeResidencies) ? "course.php" : "outside_uk_residence.php";
     ?>
     <section class="block_html block card mb-3" >
         <div class="card-body p-3">
@@ -258,6 +256,6 @@ echo $OUTPUT->header();
         </div>
     </section>
 <?php
-    }
+   }
 
 echo $OUTPUT->footer();
