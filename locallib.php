@@ -970,7 +970,7 @@ function get_courses_for_international_students() {
 		'CMNR7008' => null,
 		'CMRN7009' => null,
 		'HESC7020' => null,
-		'PG Cert' => null,
+		'PGC-DRI-C' => null,
 		'CMRN7022' => null,
 		'HESC7011' => null,
 		'HESC7012' => null,
