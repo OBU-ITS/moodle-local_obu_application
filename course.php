@@ -84,7 +84,7 @@ if ($mform_data = $mform->get_data()) {
 		$course = read_course_record($mform_data->course_code);
 		$mform_data->course_name = $course->name;
 		write_course($USER->id, $mform_data);
-		if ($record->nationality_code != 'GB') {
+		if ($record->nationality_code != 'GB' && in_array($record->residence_code, $homeResidencies)) {
 			redirect($visa);
 		} else {
 			write_visa_requirement($USER->id, '');
