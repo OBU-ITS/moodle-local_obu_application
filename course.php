@@ -59,14 +59,16 @@ if (($record === false)
 	$message = '';
 }
 
-$outside_uk_url = $home . 'outside_uk_residence.php';
+$courses = get_course_names();
+//$outside_uk_url = $home . 'outside_uk_residence.php';
 $homeResidencies = array('XF', 'XH', 'XI', 'XG', 'JE', 'GG');
 if (!in_array($record->residence_code, $homeResidencies)){
-    redirect($outside_uk_url);
+    $courses = array_intersect_key($courses, get_courses_for_international_students());
+    //redirect($outside_uk_url);
 }
 
 $parameters = [
-	'courses' => get_course_names(),
+	'courses' => $courses,
 	'dates' => get_course_dates(),
 	'record' => $record
 ];
@@ -82,7 +84,7 @@ if ($mform_data = $mform->get_data()) {
 		$course = read_course_record($mform_data->course_code);
 		$mform_data->course_name = $course->name;
 		write_course($USER->id, $mform_data);
-		if ($record->nationality_code != 'GB') {
+		if ($record->nationality_code != 'GB' && in_array($record->residence_code, $homeResidencies)) {
 			redirect($visa);
 		} else {
 			write_visa_requirement($USER->id, '');
