@@ -113,7 +113,7 @@ class process_form extends moodleform {
 			if ($approval_sought == 2) { // Funder
 				$funder_name_formatted = $USER->firstname . ' ' . $USER->lastname;
 				if ($data->record->funding_organisation != '') { // Get the address to use as the default
-					$organisation = read_organisation($data->record->funding_id);
+					$organisation = local_obu_application_read_organisation($data->record->funding_id);
 					$invoice_address = $organisation->address;
 				}
 			}
@@ -323,7 +323,7 @@ class process_form extends moodleform {
 		}
 		$mform->addElement('static', 'statement', get_string('statement', 'local_obu_application'));
 
-		if ($data->record->statement != "" && !is_funder()){
+		if ($data->record->statement != "" && !local_obu_application_is_funder()){
             $mform->addElement('submit', 'statementbutton', get_string('export_statement', 'local_obu_application'));
         }
 
@@ -338,9 +338,9 @@ class process_form extends moodleform {
 				}
 				$mform->addElement('static', 'visa_requirement', get_string('visa_requirement', 'local_obu_application'));
 				if ($visa_requirement != 'NONE') {
-					unpack_supplement_data($data->record->visa_data, $fields);
+                    local_obu_application_unpack_supplement_data($data->record->visa_data, $fields);
 					if (!empty($fields)) {
-						$supplement = read_supplement_form($fields['supplement'], $fields['version']);
+						$supplement = local_obu_application_read_supplement_form($fields['supplement'], $fields['version']);
 						if ($supplement !== false) {
 							$this->supplement_display($supplement, $fields);
 						}
@@ -349,9 +349,9 @@ class process_form extends moodleform {
 			}
 
 			// Supplementary course information (if any)
-			unpack_supplement_data($data->record->supplement_data, $fields);
+            local_obu_application_unpack_supplement_data($data->record->supplement_data, $fields);
 			if (!empty($fields)) {
-				$supplement = read_supplement_form($fields['supplement'], $fields['version']);
+				$supplement = local_obu_application_read_supplement_form($fields['supplement'], $fields['version']);
 				if ($supplement !== false) {
 					$mform->addElement('header', 'supplement_head', get_string('course_supplement', 'local_obu_application'), '');
 					if ($data->button_text == 'approve') {
@@ -429,7 +429,7 @@ class process_form extends moodleform {
 					$mform->addElement('text', 'invoice_contact', get_string('invoice_contact', 'local_obu_application'), 'size="40" maxlength="100"');
 					$mform->setType('invoice_contact', PARAM_TEXT);
 				}
-				if (is_programme($data->record->course_code)) {
+				if (local_obu_application_is_programme($data->record->course_code)) {
 					$mform->addElement('html', '<p><strong><i>' . get_string('programme_preamble', 'local_obu_application') . '</i></strong></p>');
                     $mform->addElement('select', 'fund_programme', get_string('fund_programme', 'local_obu_application'), array("0"=>"No", "1"=>"Yes"));
 					$mform->addElement('text', 'fund_module_1', get_string('fund_module', 'local_obu_application'), 'size="8" maxlength="8"');
@@ -473,7 +473,7 @@ class process_form extends moodleform {
 					$mform->addElement('static', 'invoice_phone', get_string('phone', 'local_obu_application'));
 					$mform->addElement('static', 'invoice_contact', get_string('invoice_contact', 'local_obu_application'));
 				}
-				if (is_programme($data->record->course_code)) { // Additional funding fields for a programme of study
+				if (local_obu_application_is_programme($data->record->course_code)) { // Additional funding fields for a programme of study
 					$mform->addElement('static', 'fund_programme_formatted', get_string('fund_programme', 'local_obu_application'));
 					if ($data->record->fund_programme == '0') {
 						if ($data->record->fund_module_1 != '') {
@@ -534,7 +534,7 @@ class process_form extends moodleform {
                     $mform->setType('comment', PARAM_TEXT);
                 }
 				$buttonarray[] = &$mform->createElement('submit', 'rejectbutton', get_string('reject', 'local_obu_application'));
-				if (is_manager() && (($approval_sought == 1) || ($approval_sought == 3))) { // HLS
+				if (local_obu_application_is_manager() && (($approval_sought == 1) || ($approval_sought == 3))) { // HLS
                     if ($data->record->supplement_data){
                         $buttonarray[] = &$mform->createElement('submit', 'amendsupplementdocbutton', get_string('amend_supplement_documents', 'local_obu_application'));
                     }
@@ -656,7 +656,7 @@ class process_form extends moodleform {
 			if ($pos === false) {
 				break;
 			}
-			$element = split_input_field(substr($form->template, $offset, ($pos - $offset)));
+			$element = local_obu_application_split_input_field(substr($form->template, $offset, ($pos - $offset)));
 			$offset = $pos + $fld_end_len;
 			$text = $fields[$element['id']];
 			if ($element['type'] == 'checkbox') { // map a checkbox value to a nice character
@@ -672,7 +672,7 @@ class process_form extends moodleform {
 				$text = date_format($date, $date_format);
 			}
 			if (($element['type'] == 'file') && ($text)) { // map a file pathname hash to a URL for the file
-				$text = get_file_link($text);
+				$text = local_obu_application_get_file_link($text);
 			}
 			$this->_form->addElement('static', $element['id'], $element['value'], $text);
 		} while(true);

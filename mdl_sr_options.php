@@ -32,11 +32,11 @@ require_once('./mdl_sr_options_form.php');
 require_login();
 
 $home = new moodle_url('/');
-if (!is_manager()) {
+if (!local_obu_application_is_manager()) {
 	redirect($home);
 }
 
-$applications_course = get_applications_course();
+$applications_course = local_obu_application_get_applications_course();
 require_login($applications_course);
 $back = $home . 'course/view.php?id=' . $applications_course;
 
@@ -56,19 +56,19 @@ $PAGE->navbar->add($heading);
 
 $message = '';
 
-$option_c = read_parameter_by_name('U' . $USER->id . 'src');
+$option_c = local_obu_application_read_parameter_by_name('U' . $USER->id . 'src');
 if ($option_c === false) {
 	$selected_courses = array();
 } else {
 	$selected_courses = explode(',', $option_c->text);
 }
-$option_d = read_parameter_by_name('U' . $USER->id . 'srd');
+$option_d = local_obu_application_read_parameter_by_name('U' . $USER->id . 'srd');
 if ($option_d === false) {
 	$application_date = 1466377200;
 } else {
 	$application_date = $option_d->number;
 }
-$option_o = read_parameter_by_name('U' . $USER->id . 'sro');
+$option_o = local_obu_application_read_parameter_by_name('U' . $USER->id . 'sro');
 if ($option_o === false) {
 	$sort_order = '';
 } else {
@@ -76,7 +76,7 @@ if ($option_o === false) {
 }
 
 $courses = array();
-$recs = get_course_records();
+$recs = local_obu_application_get_course_records();
 foreach ($recs as $rec) {
 	$courses['"' . $rec->code . '"'] = $rec->name . ' [' . $rec->code . ']';
 }
@@ -107,7 +107,7 @@ else if ($mform_data = $mform->get_data()) {
     $selected_courses = implode(',', $mform_data->selected_courses);
 	if ($selected_courses == '') {
 		if ($option_c !== false) {
-			delete_parameter($option_c->id);
+            local_obu_application_delete_parameter($option_c->id);
 		}
 	} else {
 		if ($option_c === false) {
@@ -117,12 +117,12 @@ else if ($mform_data = $mform->get_data()) {
 			$option_c->number = 0;
 		}
 		$option_c->text = $selected_courses;
-		write_parameter($option_c);
+        local_obu_application_write_parameter($option_c);
 	}
 
 	if ($mform_data->application_date == 1466377200) {
 		if ($option_d !== false) {
-			delete_parameter($option_d->id);
+            local_obu_application_delete_parameter($option_d->id);
 		}
 	} else {
 		if ($option_d === false) {
@@ -132,12 +132,12 @@ else if ($mform_data = $mform->get_data()) {
 			$option_d->text = '';
 		}
 		$option_d->number = $mform_data->application_date;
-		write_parameter($option_d);
+        local_obu_application_write_parameter($option_d);
 	}
 
 	if ($mform_data->sort_order == '') {
 		if ($option_o !== false) {
-			delete_parameter($option_o->id);
+            local_obu_application_delete_parameter($option_o->id);
 		}
 	} else {
 		if ($option_o === false) {
@@ -147,7 +147,7 @@ else if ($mform_data = $mform->get_data()) {
 			$option_o->number = 0;
 		}
 		$option_o->text = $mform_data->sort_order;
-		write_parameter($option_o);
+        local_obu_application_write_parameter($option_o);
 	}
 
 	redirect($back);

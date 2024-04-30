@@ -30,11 +30,11 @@ require_once('./locallib.php');
 require_login();
 
 $home = new moodle_url('/');
-if (!is_manager()) {
+if (!local_obu_application_is_manager()) {
 	redirect($home);
 }
 
-$applications_course = get_applications_course();
+$applications_course = local_obu_application_get_applications_course();
 require_login($applications_course);
 $back = $home . 'course/view.php?id=' . $applications_course;
 
@@ -69,12 +69,12 @@ echo $OUTPUT->heading($heading);
 
 $process = new moodle_url('/local/obu_application/mdl_process.php');
 $redirect = new moodle_url('/local/obu_application/mdl_redirect.php');
-$manager = is_manager();
+$manager = local_obu_application_is_manager();
 
-$applications = get_applications($user->id); // get all applications for the given user
+$applications = local_obu_application_get_applications($user->id); // get all applications for the given user
 foreach ($applications as $application) {
-    $text = get_application_status($USER->id, $application, $manager);
-    $button = get_application_button_text($USER->id, $application, $manager);
+    $text = local_obu_application_get_application_status($USER->id, $application, $manager);
+    $button = local_obu_application_get_application_button_text($USER->id, $application, $manager);
 	$application_title = $application->course_code . ' ' . $application->course_name . ' (Application Ref HLS/' . $application->id . ')';
 	if (($button != 'submit') || $currentuser) {
 		echo '<h4><a href="' . $process . '?source=' . urlencode('mdl_applications.php?userid=' . $user_id) . '&id=' . $application->id . '">' . $application_title . '</a></h4>';

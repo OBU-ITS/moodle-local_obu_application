@@ -32,14 +32,14 @@ require_once($CFG->libdir . '/moodlelib.php');
 require_login();
 
 $home = new moodle_url('/');
-if (!is_manager()) {
+if (!local_obu_application_is_manager()) {
 	redirect($home);
 }
 
-$applications_course = get_applications_course();
+$applications_course = local_obu_application_get_applications_course();
 require_login($applications_course);
 $back = $home . 'course/view.php?id=' . $applications_course;
-//if (!is_administrator()) {
+//if (!local_obu_application_is_administrator()) {
 //	redirect($back);
 //}
 
@@ -52,7 +52,7 @@ if (!isset($_REQUEST['id'])) {
 	redirect($back);
 }
 
-$application = read_application($_REQUEST['id']);
+$application = local_obu_application_read_application($_REQUEST['id']);
 if ($application === false) {
 	redirect($back);
 }
@@ -73,7 +73,7 @@ $PAGE->navbar->add($heading);
 
 $message = '';
 
-$organisations = get_organisations();
+$organisations = local_obu_application_get_organisations();
 $parameters = [
 	'organisations' => $organisations,
 	'application' => $application
@@ -128,7 +128,7 @@ if ($mform_data = $mform->get_data()) {
 		$application->fund_module_9 = $mform_data->fund_module_9;
 	}
 
-	update_application($application);
+    local_obu_application_update_application($application);
 
 	redirect($process);
 }

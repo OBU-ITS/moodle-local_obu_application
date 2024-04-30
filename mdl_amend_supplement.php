@@ -34,11 +34,11 @@ require_login();
 $home = new moodle_url('/');
 $context = context_user::instance($USER->id);
 
-if (!is_manager()) {
+if (!local_obu_application_is_manager()) {
     redirect($home);
 }
 
-$applications_course = get_applications_course();
+$applications_course = local_obu_application_get_applications_course();
 require_login($applications_course);
 $back = $home . 'course/view.php?id=' . $applications_course;
 
@@ -51,7 +51,7 @@ if (!isset($_REQUEST['id'])) {
     redirect($back);
 }
 
-$application = read_application($_REQUEST['id']);
+$application = local_obu_application_read_application($_REQUEST['id']);
 if ($application === false) {
     redirect($back);
 }
@@ -71,8 +71,8 @@ $PAGE->set_heading($title);
 $PAGE->set_url($url);
 $PAGE->navbar->add($heading);
 
-unpack_supplement_data($application->supplement_data, $current_supplement_data);
-$supplement = get_supplement_form_by_version($current_supplement_data['supplement'], $current_supplement_data['version']);
+local_obu_application_unpack_supplement_data($application->supplement_data, $current_supplement_data);
+$supplement = local_obu_application_get_supplement_form_by_version($current_supplement_data['supplement'], $current_supplement_data['version']);
 if (!$supplement) {
     redirect($process);
 }
@@ -90,7 +90,7 @@ if ($mform->is_cancelled()) {
 }
 
 if ($mform_data = (array)$mform->get_data()) {
-    $files = get_file_elements($supplement->template); // Get the list of the 'file' elements from the supplementary form's template
+    $files = local_obu_application_get_file_elements($supplement->template); // Get the list of the 'file' elements from the supplementary form's template
     $updated_supplement_data = array();
     foreach ($mform_data as $key => $value) {
         if ($key == 'submitbutton' || $key == 'id') {
@@ -109,7 +109,7 @@ if ($mform_data = (array)$mform->get_data()) {
             $updated_supplement_data[$key] = $file->get_pathnamehash(); // Store the file's pathname hash (it's unique identifier)
         }
     }
-    write_supplement_data_by_id($application->id, pack_supplement_data($updated_supplement_data));
+    local_obu_application_write_supplement_data_by_id($application->id, local_obu_application_pack_supplement_data($updated_supplement_data));
     redirect($process);
 }
 

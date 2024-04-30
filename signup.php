@@ -62,7 +62,7 @@ if (isloggedin()) {
 include('./signup_form.php');
 
 $parameters = [
-	'titles' => get_titles(),
+	'titles' => local_obu_application_get_titles(),
 ];
 
 $mform = new registration_form(null, $parameters);
@@ -87,8 +87,8 @@ if ($mform->is_cancelled()) {
 		foreach ($namefields as $namefield) {
 			$user->$namefield = '';
 		}
-	
-		application_user_signup($user); // prints notice and link to 'local/obu_application/index.php'
+
+        local_obu_application_application_user_signup($user); // prints notice and link to 'local/obu_application/index.php'
 		exit; //never reached
 	}
 }

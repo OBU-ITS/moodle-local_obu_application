@@ -31,7 +31,7 @@ require_once('./hide_moodle.php');
 require_once('./locallib.php');
 require_once('./visa_form.php');
 
-require_obu_login();
+local_obu_application_require_obu_login();
 
 $home = new moodle_url('/local/obu_application/');
 $url = $home . 'visa.php';
@@ -47,7 +47,7 @@ $PAGE->set_url($url);
 
 $message = '';
 
-$record = read_applicant($USER->id, false);
+$record = local_obu_application_read_applicant($USER->id, false);
 if (!isset($record->course_code) || ($record->course_code === '')) { // Must complete the course first
 	$message = get_string('complete_course', 'local_obu_application');
 }
@@ -88,11 +88,11 @@ if ($mform_data = $mform->get_data()) {
         } else {
 			$visa_requirement = '';
 		}
-		write_visa_requirement($USER->id, $visa_requirement);
+        local_obu_application_write_visa_requirement($USER->id, $visa_requirement);
 		if ($visa_requirement != '') {
 			redirect($visa);
 		} else {
-			$course = read_course_record($record->course_code);
+			$course = local_obu_application_read_course_record($record->course_code);
 			if ($course->supplement != '') {
 				redirect($supplement);
 			} else {

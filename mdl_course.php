@@ -32,14 +32,14 @@ require_once('./mdl_course_form.php');
 require_login();
 
 $home = new moodle_url('/');
-if (!is_manager()) {
+if (!local_obu_application_is_manager()) {
 	redirect($home);
 }
 
-$applications_course = get_applications_course();
+$applications_course = local_obu_application_get_applications_course();
 require_login($applications_course);
 $back = $home . 'course/view.php?id=' . $applications_course;
-if (!is_administrator()) {
+if (!local_obu_application_is_administrator()) {
 	redirect($back);
 }
 
@@ -78,28 +78,28 @@ if (isset($_REQUEST['id']) || isset($_REQUEST['id_not_suspended'])) {
 
 	if ($id != '0') {
 
-		$record = read_course_record_by_id($id);
+		$record = local_obu_application_read_course_record_by_id($id);
 
 		if (isset($_REQUEST['delete'])) {
 			$delete = true;
 		}
 		if ($record->administrator != '') {
-			$user = read_user_by_username($record->administrator);
+			$user = local_obu_application_read_user_by_username($record->administrator);
 			if ($user == null) {
 				$administrator = get_string('user_not_found', 'local_obu_application');
 			} else {
 				$administrator = $user->firstname . ' ' . $user->lastname;
 			}
 		}
-		$applications = count_applications_for_course($record->code);
+		$applications = local_obu_application_count_applications_for_course($record->code);
 	} else { // Store existing course codes so we can check if any given code is really new
-		$recs = get_course_records();
+		$recs = local_obu_application_get_course_records();
 		foreach ($recs as $rec) {
 			$codes[] = $rec->code;
 		}
 	}
 } else {
-	$recs = get_course_records();
+	$recs = local_obu_application_get_course_records();
 	if ($recs) { // Do they have a choice?
         $courses[0] = get_string('new_course', 'local_obu_application'); // The 'New Course' option
         $courses_with_suspended[0] = get_string('new_course', 'local_obu_application'); // The 'New Course' option
@@ -155,11 +155,11 @@ else if ($mform_data = $mform->get_data()) {
             if (($mform_data->id == '0') && in_array(strtoupper($mform_data->code), $codes)) { // 'New' course already exists
 				$message = get_string('existing_course', 'local_obu_application');
 			} else {
-				write_course_record($mform_data);
+                local_obu_application_write_course_record($mform_data);
 				redirect($url);
 			}
 		} else if ($mform_data->submitbutton == get_string('confirm_delete', 'local_obu_application')) {
-			delete_course_record($mform_data->id);
+            local_obu_application_delete_course_record($mform_data->id);
 			redirect($url);
 		}
     } else if (isset($mform_data->deletebutton) && ($mform_data->deletebutton == get_string('delete', 'local_obu_application'))) { // Delete

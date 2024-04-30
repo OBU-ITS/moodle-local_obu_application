@@ -52,21 +52,21 @@ class mdl_applicant_form extends moodleform {
 			$errors['nameref'] = get_string('value_required', 'local_obu_application');
 		}
         elseif(preg_match('~^[0-9]+~', $data['nameref'])) {
-            $application = read_application($data['nameref'], false);
+            $application = local_obu_application_read_application($data['nameref'], false);
             if ($application == null) {
                 $errors['nameref'] = get_string('application_not_found', 'local_obu_application');
             }
         }
         elseif(substr($data['nameref'], 0, 4) == 'HLS/') {
             $ref = substr($data['nameref'], 4);
-            $application = read_application($ref, false);
+            $application = local_obu_application_read_application($ref, false);
             if ($application == null) {
                 $errors['nameref'] = $ref . get_string('application_not_found', 'local_obu_application');
             }
         } else {
-			$applicants = get_applicants_by_first_name($data['nameref']);
+			$applicants = local_obu_application_get_applicants_by_first_name($data['nameref']);
 			if (count($applicants) == 0) {
-                $applicants = get_applicants_by_last_name($data['nameref']);
+                $applicants = local_obu_application_get_applicants_by_last_name($data['nameref']);
                 if (count($applicants) == 0) {
                     $errors['nameref'] = get_string('user_not_found', 'local_obu_application');
                 }

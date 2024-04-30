@@ -31,14 +31,14 @@ require_once('./mdl_manager_report_form.php');
 require_login();
 
 $home = new moodle_url('/');
-if (!is_manager()) {
+if (!local_obu_application_is_manager()) {
     redirect($home);
 }
 
-$applications_course = get_applications_course();
+$applications_course = local_obu_application_get_applications_course();
 require_login($applications_course);
 $back = $home . 'course/view.php?id=' . $applications_course;
-if (!is_manager()) {
+if (!local_obu_application_is_manager()) {
     redirect($back);
 }
 
@@ -57,7 +57,7 @@ $message = '';
 
 $managers = array();
 $managers[0] = "";
-$mgrs = get_managers();
+$mgrs = local_obu_application_get_managers();
 foreach ($mgrs as $mgr) {
     $managers[$mgr->username] = $mgr->firstname . " " . $mgr->lastname . " (" . $mgr->username . ")";
 }
@@ -76,7 +76,7 @@ if ($mform_data = $mform->get_data()) {
     if ($mform_data->application_date == $mform_data->application_second_date){
         $mform_data->application_second_date = strtotime('+1 day', $mform_data->application_second_date);
     }
-    $applications = get_applications_for_manager($mform_data->manager, $mform_data->application_date, $mform_data->application_second_date); // Get the applications
+    $applications = local_obu_application_get_applications_for_manager($mform_data->manager, $mform_data->application_date, $mform_data->application_second_date); // Get the applications
     if (empty($applications)) {
         $message = get_string('no_applications', 'local_obu_application');
     } else {

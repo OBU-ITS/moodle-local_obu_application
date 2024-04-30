@@ -81,7 +81,7 @@ if (!isloggedin()) {
 	$PAGE->set_context(context_user::instance($USER->id));
 	$CFG->custommenuitems = get_string('index_page', 'local_obu_application') . '|/local/obu_application/index.php';
 
-    if(!is_funder()) {
+    if(!local_obu_application_is_funder()) {
         $CFG->custommenuitems .= '
         ' . get_string('application', 'local_obu_application') . '|/local/obu_application/application.php';
     }

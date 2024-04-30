@@ -80,7 +80,7 @@ class supplement_form extends moodleform {
 			if ($pos === false) {
 				break;
 			}
-			$element = split_input_field(substr($data->supplement->template, $offset, ($pos - $offset)));
+			$element = local_obu_application_split_input_field(substr($data->supplement->template, $offset, ($pos - $offset)));
 			$offset = $pos + $fld_end_len;
 			switch ($element['type']) {
 				case 'area':

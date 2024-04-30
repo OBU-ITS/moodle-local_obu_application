@@ -31,11 +31,11 @@ require_once('./mdl_redirect_form.php');
 require_login();
 
 $home = new moodle_url('/');
-if (!is_manager()) {
+if (!local_obu_application_is_manager()) {
 	redirect($home);
 }
 
-$applications_course = get_applications_course();
+$applications_course = local_obu_application_get_applications_course();
 require_login($applications_course);
 $back = $home . 'course/view.php?id=' . $applications_course;
 
@@ -76,10 +76,10 @@ $PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
 $PAGE->set_heading($title);
 $PAGE->navbar->add($heading);
 
-$application = read_application($application_id);
+$application = local_obu_application_read_application($application_id);
 $application_title = $application->course_code . ' ' . $application->course_name . ' (Application Ref HLS/' . $application->id . ')';
 
-$text = get_application_status($USER->id, $application);
+$text = local_obu_application_get_application_status($USER->id, $application);
 $application_status = '<h4>' . $application_title . '</h4>' . $text;
 
 $parameters = [
@@ -109,8 +109,8 @@ if ($mform_data = $mform->get_data()) {
 		} else {
 			$application->funder_email = $approver_email;
 		}
-		update_application($application);
-		update_approver($application, $approver_email); // Update the approvals and send notification emails
+        local_obu_application_update_application($application);
+        local_obu_application_update_approver($application, $approver_email); // Update the approvals and send notification emails
 
 		redirect($back);
 	}

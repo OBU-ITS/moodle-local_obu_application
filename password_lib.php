@@ -25,7 +25,7 @@
  *
  */
 
-function password_reset_request() {
+function local_obu_application_password_reset_request() {
     global $DB, $OUTPUT, $CFG, $PAGE;
 
     $systemcontext = context_system::instance();
@@ -47,7 +47,7 @@ function password_reset_request() {
         if ($user and !empty($user->confirmed)) {
             $userauth = get_auth_plugin($user->auth);
             if (!$userauth->can_reset_password() or !has_capability('moodle/user:changeownpassword', $systemcontext, $user->id)) {
-                if (email_password_change_info($user)) {
+                if (local_obu_application_email_password_change_info($user)) {
                     $pwresetstatus = PWRESET_STATUS_OTHEREMAILSENT;
                 } else {
                     print_error('cannotmailconfirm');
@@ -58,13 +58,13 @@ function password_reset_request() {
                 $resetinprogress = $DB->get_record('user_password_resets', array('userid' => $user->id));
                 if (empty($resetinprogress)) {
                     // Completely new reset request - common case.
-                    $resetrecord = generate_password_reset($user);
+                    $resetrecord = local_obu_application_generate_password_reset($user);
                     $sendemail = true;
                 } else if ($resetinprogress->timerequested < (time() - $CFG->pwresettime)) {
                     // Preexisting, but expired request - delete old record & create new one.
                     // Uncommon case - expired requests are cleaned up by cron.
                     $DB->delete_records('user_password_resets', array('id' => $resetinprogress->id));
-                    $resetrecord = generate_password_reset($user);
+                    $resetrecord = local_obu_application_generate_password_reset($user);
                     $sendemail = true;
                 } else if (empty($resetinprogress->timererequested)) {
                     // Preexisting, valid request. This is the first time user has re-requested the reset.
@@ -81,7 +81,7 @@ function password_reset_request() {
                 }
 
                 if ($sendemail) {
-                    $sendresult = email_password_change_confirmation($user, $resetrecord);
+                    $sendresult = local_obu_application_email_password_change_confirmation($user, $resetrecord);
                     if ($sendresult) {
                         $pwresetstatus = PWRESET_STATUS_TOKENSENT;
                     } else {
@@ -151,7 +151,7 @@ function password_reset_request() {
  * @param string $token the one-use identifier which should verify the password reset request as being valid.
  * @return void
  */
-function password_set($token) {
+function local_obu_application_password_set($token) {
     global $DB, $CFG, $OUTPUT, $PAGE, $SESSION;
 
     $pwresettime = isset($CFG->pwresettime) ? $CFG->pwresettime : 1800;
@@ -230,7 +230,7 @@ function password_set($token) {
         }
         complete_user_login($user); // Triggers the login event.
 
-        $urltogo = get_return_url();
+        $urltogo = local_obu_application_get_return_url();
         unset($SESSION->wantsurl);
         redirect($urltogo, get_string('passwordset'), 1);
     }
@@ -240,7 +240,7 @@ function password_set($token) {
  * @param object $user the user record, the requester would like a new password set for.
  * @return record created.
  */
-function generate_password_reset ($user) {
+function local_obu_application_generate_password_reset ($user) {
     global $DB;
 
     $resetrecord = new stdClass();
@@ -259,7 +259,7 @@ function generate_password_reset ($user) {
  * @param stdClass $resetrecord An object tracking metadata regarding password reset request
  * @return bool Returns true if mail was sent OK and false if there was an error.
  */
-function email_password_change_confirmation($user, $resetrecord) {
+function local_obu_application_email_password_change_confirmation($user, $resetrecord) {
     global $CFG;
 
     $supportuser = core_user::get_support_user();
@@ -286,7 +286,7 @@ function email_password_change_confirmation($user, $resetrecord) {
  * @param stdClass $user A {@link $USER} object
  * @return bool Returns true if mail was sent OK and false if there was an error.
  */
-function email_password_change_info($user) {
+function local_obu_application_email_password_change_info($user) {
     global $CFG;
 
     $supportuser = core_user::get_support_user();

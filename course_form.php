@@ -105,11 +105,11 @@ class course_form extends moodleform {
 		} else if ($data['studying'] != '2') {
 			if ($data['current_student_number'] == '') {
 				$errors['current_student_number'] = get_string('value_required', 'local_obu_application');
-			} else if (read_user_by_username($data['current_student_number']) == null) {
+			} else if (local_obu_application_read_user_by_username($data['current_student_number']) == null) {
 				$errors['current_student_number'] = get_string('user_not_found', 'local_obu_application');
 			}
 		} else if ($data['studying'] == '2') {
-            if ($data['previous_student_number'] != '' && read_user_by_username($data['previous_student_number']) == null) {
+            if ($data['previous_student_number'] != '' && local_obu_application_read_user_by_username($data['previous_student_number']) == null) {
                 $errors['previous_student_number'] = get_string('user_not_found', 'local_obu_application');
             }
         }

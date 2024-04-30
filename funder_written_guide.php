@@ -36,9 +36,9 @@ if (!isset($CFG->additionalhtmlhead)) {
 }
 $CFG->additionalhtmlhead .= '<meta name="robots" content="noindex" />';
 
-require_obu_login();
+local_obu_application_require_obu_login();
 
-if(!is_funder()) {
+if(!local_obu_application_is_funder()) {
     redirect("/local/obu_application/");
 }
 

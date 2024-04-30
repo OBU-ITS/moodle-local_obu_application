@@ -31,14 +31,14 @@ require_once('./mdl_pending_approvals_report_form.php');
 require_login();
 
 $home = new moodle_url('/');
-if (!is_manager()) {
+if (!local_obu_application_is_manager()) {
     redirect($home);
 }
 
-$applications_course = get_applications_course();
+$applications_course = local_obu_application_get_applications_course();
 require_login($applications_course);
 $back = $home . 'course/view.php?id=' . $applications_course;
-if (!is_manager()) {
+if (!local_obu_application_is_manager()) {
     redirect($back);
 }
 
@@ -58,7 +58,7 @@ $message = '';
 $admins = array();
 $admins[0] = get_string('select', 'local_obu_application');
 $admins[1] = "All admins";
-$mgrs = get_managers();
+$mgrs = local_obu_application_get_managers();
 foreach ($mgrs as $mgr) {
     $admins[$mgr->username] = $mgr->firstname . " " . $mgr->lastname . " (" . $mgr->username . ")";
 }
@@ -85,10 +85,10 @@ if ($mform_data = $mform->get_data()) {
             if ($username == "0" || $username == "1"){
                 continue;
             }
-            $applications += get_applications_for_manager($username, $mform_data->application_date, $mform_data->application_second_date); // Get the applications for all admins
+            $applications += local_obu_application_get_applications_for_manager($username, $mform_data->application_date, $mform_data->application_second_date); // Get the applications for all admins
         }
     } else if($mform_data->admin != "0"){
-        $applications = get_applications_for_manager($mform_data->admin, $mform_data->application_date, $mform_data->application_second_date); // Get the applications for specific admin
+        $applications = local_obu_application_get_applications_for_manager($mform_data->admin, $mform_data->application_date, $mform_data->application_second_date); // Get the applications for specific admin
     }
 
     if (empty($applications)) {

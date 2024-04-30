@@ -36,7 +36,7 @@ if (!isset($CFG->additionalhtmlhead)) {
 }
 $CFG->additionalhtmlhead .= '<meta name="robots" content="noindex" />';
 
-require_obu_login();
+local_obu_application_require_obu_login();
 
 $process = new moodle_url('/local/obu_application/process.php');
 
@@ -46,7 +46,7 @@ $PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
 
 echo $OUTPUT->header();
 
-$funder = is_funder();
+$funder = local_obu_application_is_funder();
 $lang_ext = $funder ? '_funder' : '';
 
 ?>
@@ -123,30 +123,30 @@ $lang_ext = $funder ? '_funder' : '';
             <div class="card-text content mt-3">
 <?php
 
-$manager = is_manager();
+$manager = local_obu_application_is_manager();
 $process = new moodle_url('/local/obu_application/process.php');
 
 if($funder) {
-    $approvals = get_approvals($USER->email); // get outstanding approval requests
+    $approvals = local_obu_application_get_approvals($USER->email); // get outstanding approval requests
     if ($approvals) {
         foreach ($approvals as $approval) {
-            $application = read_application($approval->application_id);
+            $application = local_obu_application_read_application($approval->application_id);
             $application_title = $application->firstname . ' ' . $application->lastname . ' (Application Ref HLS/' . $application->id . ')';
 
             echo '<hr class="divider">';
             echo '<h4><a href="' . $process . '?id=' . $application->id . '">' . $application_title . '</a></h4>';
-            echo get_application_status($USER->id, $application, $manager);
+            echo local_obu_application_get_application_status($USER->id, $application, $manager);
         }
     } else {
         echo get_string('index_overview_empty_funder', 'local_obu_application');
     }
 }
 else {
-    $applications = get_applications($USER->id); // get all applications for the user
+    $applications = local_obu_application_get_applications($USER->id); // get all applications for the user
     $show_history_link = false;
     if ($applications) {
         foreach ($applications as $application) {
-            $button = get_application_button_text($USER->id, $application, $manager);
+            $button = local_obu_application_get_application_button_text($USER->id, $application, $manager);
             $application_title = $application->course_code . ' ' . $application->course_name . ' (Application Ref HLS/' . $application->id . ')';
 
             echo '<hr class="divider">';
@@ -156,7 +156,7 @@ else {
             else {
                 echo '<h4>' . $application_title . '</h4>';
             }
-            echo get_application_status($USER->id, $application, $manager);
+            echo local_obu_application_get_application_status($USER->id, $application, $manager);
         }
     } else {
         echo get_string('index_overview_empty', 'local_obu_application');

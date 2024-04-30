@@ -178,7 +178,7 @@ class mdl_course_form extends moodleform {
 				$errors['name'] = get_string('value_required', 'local_obu_application');
 			}
 			if ($data['administrator'] != '') {
-				$user = read_user_by_username($data['administrator']);
+				$user = local_obu_application_read_user_by_username($data['administrator']);
 				if ($user == null) {
 					$errors['administrator'] = get_string('user_not_found', 'local_obu_application');
 				}
