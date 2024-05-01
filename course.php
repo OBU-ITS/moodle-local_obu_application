@@ -59,17 +59,7 @@ if (($record === false)
 	$message = '';
 }
 
-<<<<<<< Updated upstream
-$outside_uk_url = $home . 'outside_uk_residence.php';
-$homeResidencies = array('XF', 'XH', 'XI', 'XG', 'JE', 'GG');
-if (!in_array($record->residence_code, $homeResidencies)){
-    redirect($outside_uk_url);
-}
 
-$parameters = [
-	'courses' => get_course_names(),
-	'dates' => get_course_dates(),
-=======
 $courses = local_obu_application_get_course_names();
 //$outside_uk_url = $home . 'outside_uk_residence.php';
 $homeResidencies = array('XF', 'XH', 'XI', 'XG', 'JE', 'GG');
@@ -81,7 +71,6 @@ if (!in_array($record->residence_code, $homeResidencies)){
 $parameters = [
 	'courses' => $courses,
 	'dates' => local_obu_application_get_course_dates(),
->>>>>>> Stashed changes
 	'record' => $record
 ];
 
@@ -95,13 +84,8 @@ if ($mform_data = $mform->get_data()) {
 	if ($mform_data->submitbutton == get_string('save_continue', 'local_obu_application')) {
 		$course = local_obu_application_read_course_record($mform_data->course_code);
 		$mform_data->course_name = $course->name;
-<<<<<<< Updated upstream
-		write_course($USER->id, $mform_data);
-		if ($record->nationality_code != 'GB') {
-=======
         local_obu_application_write_course($USER->id, $mform_data);
 		if ($record->nationality_code != 'GB' && in_array($record->residence_code, $homeResidencies)) {
->>>>>>> Stashed changes
 			redirect($visa);
 		} else {
             local_obu_application_write_visa_requirement($USER->id, '');

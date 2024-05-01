@@ -961,9 +961,6 @@ function local_obu_application_get_course_names() {
 	return $courses;
 }
 
-<<<<<<< Updated upstream
-function get_organisations() {
-=======
 function local_obu_application_get_courses_for_international_students() {
 	return array(
 		'NURS7005' => null,
@@ -984,7 +981,6 @@ function local_obu_application_get_courses_for_international_students() {
 }
 
 function local_obu_application_get_organisations() {
->>>>>>> Stashed changes
 
 	$organisations = array();
 	$recs = local_obu_application_get_organisation_records();
