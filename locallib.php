@@ -1018,7 +1018,7 @@ function local_obu_application_get_course_dates() {
 	$coursedatesthreshold = 1;
 
 	$month = date('m');
-	$year = date('y');
+	$year = date('Y');
 
 	$dates = array('' => get_string('select', 'local_obu_application'));
 
@@ -1026,11 +1026,11 @@ function local_obu_application_get_course_dates() {
 		$tempmonthindex = ($month - 1) - $coursedatesthreshold;
 
 		if ($months[$tempmonthindex] == 'SEP') {
-			$dates[$months[$tempmonthindex] . $year] = $months[$tempmonthindex] . $year . " (Sem 1)";
+			$dates[$months[$tempmonthindex] . $year] = "Autumn " . $year . " (Sem 1)";
 		} elseif ($months[$tempmonthindex] == 'JAN') {
-			$dates[$months[$tempmonthindex] . $year] = $months[$tempmonthindex] . $year . " (Sem 2)";
+			$dates[$months[$tempmonthindex] . $year] = "Spring " . $year . " (Sem 2)";
 		} elseif ($months[$tempmonthindex] == 'JUN') {
-			$dates[$months[$tempmonthindex] . $year] = $months[$tempmonthindex] . $year . " (Sem 3)";
+			$dates[$months[$tempmonthindex] . $year] = "Summer " . $year . " (Sem 3)";
 		}
 
 		if ($month < 12) {
