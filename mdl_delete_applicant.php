@@ -42,11 +42,11 @@ if (!has_capability('local/obu_application:update', context_system::instance()))
 	redirect($back);
 }
 
-$user = read_user($_REQUEST['userid']);
+$user = local_obu_application_read_user($_REQUEST['userid']);
 if ($user === false) {
 	redirect($back);
 }
-$applicant = read_applicant($user->id, false);
+$applicant = local_obu_application_read_applicant($user->id, false);
 
 $url = $dir . 'mdl_delete_applicant.php?userid=' . $user->id;
 
@@ -71,7 +71,7 @@ if ($mform->is_cancelled()) {
 	redirect($back);
 } else if ($mform_data = $mform->get_data()) {
 	if (isset($mform_data->submitbutton) && ($mform_data->submitbutton == get_string('confirm_delete', 'local_obu_application'))) {
-		application_user_delete($user);
+        local_obu_application_application_user_delete($user);
 	}
 	redirect($back);
 }	

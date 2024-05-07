@@ -29,7 +29,7 @@ require_once('./hide_moodle.php');
 require_once('./locallib.php');
 require_once('./supplement_form.php');
 
-require_obu_login();
+local_obu_application_require_obu_login();
 
 $home = new moodle_url('/local/obu_application/');
 $url = $home . 'visa_supplement.php';
@@ -44,7 +44,7 @@ $PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
 $PAGE->set_url($url);
 
 $message = '';
-$record = read_applicant($USER->id, false);
+$record = local_obu_application_read_applicant($USER->id, false);
 if ($record === false) { // Must complete the profile first
 	$message = get_string('complete_profile', 'local_obu_application');
 } else if (!isset($record->course_code) || ($record->course_code === '')) { // Must have completed the course
@@ -52,13 +52,13 @@ if ($record === false) { // Must complete the profile first
 } else if ($record->visa_requirement == '') {
 	$message = get_string('visa_not_required', 'local_obu_application'); // No visa supplement required so we shouldn't be here
 } else {
-	$supplement = get_supplement_form($record->visa_requirement, is_siteadmin());
+	$supplement = local_obu_application_get_supplement_form($record->visa_requirement, is_siteadmin());
 	if (!$supplement) {
 		$message = get_string('invalid_data', 'local_obu_application'); // Summutsup
 	}
 }
 
-unpack_supplement_data($record->visa_data, $fields);
+local_obu_application_unpack_supplement_data($record->visa_data, $fields);
 if (!empty($fields) && (($fields['supplement'] != $supplement->ref) || ($fields['version'] != $supplement->version))) {
 	$fields = array();
 }
@@ -75,7 +75,7 @@ if ($mform->is_cancelled()) {
 }
 
 if ($mform_data = (array)$mform->get_data()) {
-	$files = get_file_elements($supplement->template); // Get the list of the 'file' elements from the supplementary form's template
+	$files = local_obu_application_get_file_elements($supplement->template); // Get the list of the 'file' elements from the supplementary form's template
 	$data_fields = array();
 	foreach ($mform_data as $key => $value) {
 		if ($key != 'submitbutton') { // Ignore the standard field
@@ -89,8 +89,8 @@ if ($mform_data = (array)$mform->get_data()) {
 			}
 		}
 	}
-	write_visa_data($USER->id, pack_supplement_data($data_fields));
-	$course = read_course_record($record->course_code);
+    local_obu_application_write_visa_data($USER->id, local_obu_application_pack_supplement_data($data_fields));
+	$course = local_obu_application_read_course_record($record->course_code);
 	if ($course->supplement != '') {
 		redirect($course_supplement);
 	} else {

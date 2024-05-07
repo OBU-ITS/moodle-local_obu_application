@@ -32,14 +32,14 @@ require_once($CFG->libdir . '/moodlelib.php');
 require_login();
 
 $home = new moodle_url('/');
-if (!is_manager()) {
+if (!local_obu_application_is_manager()) {
 	redirect($home);
 }
 
-$applications_course = get_applications_course();
+$applications_course = local_obu_application_get_applications_course();
 require_login($applications_course);
 $back = $home . 'course/view.php?id=' . $applications_course;
-//if (!is_administrator()) {
+//if (!local_obu_application_is_administrator()) {
 //	redirect($back);
 //}
 
@@ -52,7 +52,7 @@ if (!isset($_REQUEST['id'])) {
 	redirect($back);
 }
 
-$application = read_application($_REQUEST['id']);
+$application = local_obu_application_read_application($_REQUEST['id']);
 if ($application === false) {
 	redirect($back);
 }
@@ -75,7 +75,7 @@ $message = '';
 
 $parameters = [
 	'record' => $application,
-	'organisations' => get_organisations()
+	'organisations' => local_obu_application_get_organisations()
 ];
 	
 $mform = new mdl_amend_funder_form(null, $parameters);
@@ -92,11 +92,11 @@ if ($mform_data = $mform->get_data()) {
 		$application->funding_organisation = '';
 		$application->funder_email = $mform_data->funder_email; // Must have been given
 	} else { // A known organisation with a fixed email address
-		$organisation = read_organisation($application->funding_id);
+		$organisation = local_obu_application_read_organisation($application->funding_id);
 		$application->funding_organisation = $organisation->name;
 		$application->funder_email = $organisation->email;
 	}
-	update_application($application);
+    local_obu_application_update_application($application);
 
 	redirect($process);
 }

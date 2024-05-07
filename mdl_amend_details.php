@@ -32,14 +32,14 @@ require_once($CFG->libdir . '/moodlelib.php');
 require_login();
 
 $home = new moodle_url('/');
-if (!is_manager()) {
+if (!local_obu_application_is_manager()) {
 	redirect($home);
 }
 
-$applications_course = get_applications_course();
+$applications_course = local_obu_application_get_applications_course();
 require_login($applications_course);
 $back = $home . 'course/view.php?id=' . $applications_course;
-//if (!is_administrator()) {
+//if (!local_obu_application_is_administrator()) {
 //	redirect($back);
 //}
 
@@ -52,7 +52,7 @@ if (!isset($_REQUEST['id'])) {
 	redirect($back);
 }
 
-$application = read_application($_REQUEST['id']);
+$application = local_obu_application_read_application($_REQUEST['id']);
 if ($application === false) {
 	redirect($back);
 }
@@ -73,8 +73,8 @@ $PAGE->navbar->add($heading);
 
 $message = '';
 
-$nations = get_nations();
-$areas = get_areas();
+$nations = local_obu_application_get_nations();
+$areas = local_obu_application_get_areas();
 $parameters = [
 	'record' => $application,
 	'nations' => $nations,
@@ -102,7 +102,7 @@ if ($mform_data = $mform->get_data()) {
     $application->personal_email = $mform_data->personal_email;
 	$application->residence_code = $mform_data->residence_code;
 	$application->residence_area = $areas[$mform_data->residence_code];
-	update_application($application);
+    local_obu_application_update_application($application);
 
 	redirect($process);
 }

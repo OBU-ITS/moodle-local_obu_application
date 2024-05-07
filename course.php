@@ -31,7 +31,7 @@ require_once('./hide_moodle.php');
 require_once('./locallib.php');
 require_once('./course_form.php');
 
-require_obu_login();
+local_obu_application_require_obu_login();
 
 $home = new moodle_url('/local/obu_application/');
 $url = $home . 'course.php';
@@ -45,7 +45,7 @@ $PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
 
 $PAGE->set_url($url);
 
-$record = read_applicant($USER->id, false);
+$record = local_obu_application_read_applicant($USER->id, false);
 if (($record === false)
     || $record->contact_details_update == 0
     || $record->criminal_record_update == 0
@@ -59,17 +59,19 @@ if (($record === false)
 	$message = '';
 }
 
-$courses = get_course_names();
+
+
+$courses = local_obu_application_get_course_names();
 //$outside_uk_url = $home . 'outside_uk_residence.php';
 $homeResidencies = array('XF', 'XH', 'XI', 'XG', 'JE', 'GG');
 if (!in_array($record->residence_code, $homeResidencies)){
-    $courses = array_intersect_key($courses, get_courses_for_international_students());
+    $courses = array_intersect_key($courses, local_obu_application_get_courses_for_international_students());
     //redirect($outside_uk_url);
 }
 
 $parameters = [
 	'courses' => $courses,
-	'dates' => get_course_dates(),
+	'dates' => local_obu_application_get_course_dates(),
 	'record' => $record
 ];
 
@@ -81,13 +83,13 @@ if ($mform->is_cancelled()) {
 
 if ($mform_data = $mform->get_data()) {
 	if ($mform_data->submitbutton == get_string('save_continue', 'local_obu_application')) {
-		$course = read_course_record($mform_data->course_code);
+		$course = local_obu_application_read_course_record($mform_data->course_code);
 		$mform_data->course_name = $course->name;
-		write_course($USER->id, $mform_data);
+        local_obu_application_write_course($USER->id, $mform_data);
 		if ($record->nationality_code != 'GB' && in_array($record->residence_code, $homeResidencies)) {
 			redirect($visa);
 		} else {
-			write_visa_requirement($USER->id, '');
+            local_obu_application_write_visa_requirement($USER->id, '');
 			if ($course->supplement != '') {
 				redirect($supplement);
 			} else {

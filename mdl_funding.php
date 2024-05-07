@@ -31,14 +31,14 @@ require_once('./mdl_funding_form.php');
 require_login();
 
 $home = new moodle_url('/');
-if (!is_manager()) {
+if (!local_obu_application_is_manager()) {
 	redirect($home);
 }
 
-$applications_course = get_applications_course();
+$applications_course = local_obu_application_get_applications_course();
 require_login($applications_course);
 $back = $home . 'course/view.php?id=' . $applications_course;
-if (!is_administrator()) {
+if (!local_obu_application_is_administrator()) {
 	redirect($back);
 }
 
@@ -57,7 +57,7 @@ $message = '';
 
 $organisations = array();
 $organisations[0] = get_string('self_funding', 'local_obu_application');
-$orgs = get_organisations();
+$orgs = local_obu_application_get_organisations();
 foreach ($orgs as $id => $name) {
 	$organisations[$id] = $name;
 }
@@ -73,7 +73,7 @@ if ($mform->is_cancelled()) {
 } 
 
 if ($mform_data = $mform->get_data()) {
-	$applications = get_applications_for_funder($mform_data->organisation, $mform_data->application_date); // Get the applications
+	$applications = local_obu_application_get_applications_for_funder($mform_data->organisation, $mform_data->application_date); // Get the applications
 	if (empty($applications)) {
 		$message = get_string('no_applications', 'local_obu_application');
 	} else {
@@ -106,7 +106,7 @@ if ($mform_data = $mform->get_data()) {
 				if ($application->funding_method < 3) {
 					$fields['Contract'] = '';
 				} else {
-					$organisation = read_organisation($application->funding_id);
+					$organisation = local_obu_application_read_organisation($application->funding_id);
 					if ($organisation == null) {
 						$fields['Contract'] = 'NONE';
 					} else {
@@ -132,7 +132,7 @@ if ($mform_data = $mform->get_data()) {
 				$fields['Phone_No'] = $application->invoice_phone;
 				$fields['Contact_Name'] = $application->invoice_contact;
 			}
-			if (($application->self_funding == 0) && is_programme($application->course_code)) {
+			if (($application->self_funding == 0) && local_obu_application_is_programme($application->course_code)) {
 				if ($application->fund_programme) {
 					$fields['Fund_Programme'] = 'Y';
 				} else {

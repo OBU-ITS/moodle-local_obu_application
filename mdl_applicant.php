@@ -31,7 +31,7 @@ require_once('./mdl_applicant_form.php');
 require_login();
 
 $home = new moodle_url('/');
-if (!is_manager() || !isset($_REQUEST['role']) || !isset($_REQUEST['action'])) {
+if (!local_obu_application_is_manager() || !isset($_REQUEST['role']) || !isset($_REQUEST['action'])) {
 	redirect($home);
 }
 
@@ -50,7 +50,7 @@ if ($role == 'administration') {
 	$title = get_string('applications_administration', 'local_obu_application');
 	$back = $dir . 'mdl_site_admin.php';
 } else {
-	$applications_course = get_applications_course();
+	$applications_course = local_obu_application_get_applications_course();
 	require_login($applications_course);
 	$title = get_string('applications_management', 'local_obu_application');
 	$back = $home . 'course/view.php?id=' . $applications_course;
@@ -86,12 +86,12 @@ else if ($mform_data = $mform->get_data()) {
 
         redirect($redirect_url);
     }
-    $applicants = get_applicants_by_last_name($mform_data->nameref);
+    $applicants = local_obu_application_get_applicants_by_last_name($mform_data->nameref);
     if (count($applicants) == 1) {
         $redirect_url = $dir . 'mdl_' . $action . '.php?userid=' . array_values($applicants)[0]->userid;
         redirect($redirect_url);
     } else if (count($applicants) == 0){
-        $applicants = get_applicants_by_first_name($mform_data->nameref);
+        $applicants = local_obu_application_get_applicants_by_first_name($mform_data->nameref);
         if (count($applicants) == 1) {
             $redirect_url = $dir . 'mdl_' . $action . '.php?userid=' . array_values($applicants)[0]->userid;
             redirect($redirect_url);

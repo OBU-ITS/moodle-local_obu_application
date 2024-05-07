@@ -28,9 +28,9 @@ require_once('../../config.php');
 require_once('./hide_moodle.php');
 require_once('./locallib.php');
 
-require_obu_login();
+local_obu_application_require_obu_login();
 
-$manager = is_manager();
+$manager = local_obu_application_is_manager();
 
 $user_id = optional_param('userid', 0, PARAM_INT);
 
@@ -62,10 +62,10 @@ echo $OUTPUT->heading($heading);
 
 $process = new moodle_url('/local/obu_application/process.php');
 
-$applications = get_applications($user->id); // get all applications for the given user
+$applications = local_obu_application_get_applications($user->id); // get all applications for the given user
 foreach ($applications as $application) {
-    $text = get_application_status($USER->id, $application, $manager);
-    $button = get_application_button_text($USER->id, $application, $manager);
+    $text = local_obu_application_get_application_status($USER->id, $application, $manager);
+    $button = local_obu_application_get_application_button_text($USER->id, $application, $manager);
 	if (($button != 'submit') || $currentuser || $manager) {
 		echo '<h4><a href="' . $process . '?source=' . urlencode('applications.php?userid=' . $user_id) . '&id=' . $application->id . '">Ref No ' . $application->id . '</a></h4>';
 	} else {

@@ -30,11 +30,11 @@ require_once('./locallib.php');
 require_login();
 
 $home = new moodle_url('/');
-if (!is_manager()) {
+if (!local_obu_application_is_manager()) {
 	redirect($home);
 }
 
-$applications_course = get_applications_course();
+$applications_course = local_obu_application_get_applications_course();
 require_login($applications_course);
 $back = $home . 'course/view.php?id=' . $applications_course;
 
@@ -45,25 +45,25 @@ $process = $dir . 'mdl_process.php?source=' . urlencode('mdl_status.php') . '&id
 $table = new html_table();
 $table->head = array('Ref', 'Name', 'Phone', 'Email', 'Course', 'Date', 'Employer', 'Status');
 
-$parameter = read_parameter_by_name('U' . $USER->id . 'src');
+$parameter = local_obu_application_read_parameter_by_name('U' . $USER->id . 'src');
 if ($parameter === false) {
 	$selected_courses = '';
 } else {
 	$selected_courses = $parameter->text;
 }
-$parameter = read_parameter_by_name('U' . $USER->id . 'srd');
+$parameter = local_obu_application_read_parameter_by_name('U' . $USER->id . 'srd');
 if ($parameter === false) {
 	$application_date = 1466377200;
 } else {
 	$application_date = $parameter->number;
 }
-$parameter = read_parameter_by_name('U' . $USER->id . 'sro');
+$parameter = local_obu_application_read_parameter_by_name('U' . $USER->id . 'sro');
 if ($parameter === false) {
 	$sort_order = '';
 } else {
 	$sort_order = $parameter->text;
 }
-$applications = get_applications_for_courses($selected_courses, $application_date, $sort_order);
+$applications = local_obu_application_get_applications_for_courses($selected_courses, $application_date, $sort_order);
 if ($applications != null) {
 	foreach ($applications as $application) {
 		if (!isset($_REQUEST['export'])) {

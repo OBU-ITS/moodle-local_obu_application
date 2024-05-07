@@ -30,14 +30,14 @@ require_once('./locallib.php');
 require_login();
 
 $home = new moodle_url('/');
-if (!is_manager()) {
+if (!local_obu_application_is_manager()) {
 	redirect($home);
 }
 
-$applications_course = get_applications_course();
+$applications_course = local_obu_application_get_applications_course();
 require_login($applications_course);
 $back = $home . 'course/view.php?id=' . $applications_course;
-if (!is_administrator()) {
+if (!local_obu_application_is_administrator()) {
 	redirect($back);
 }
 
@@ -47,7 +47,7 @@ $url = $dir . 'mdl_organisation_list.php';
 $table = new html_table();
 $table->head = array('Name', 'Email', 'Code', 'Address', 'Suspended');
 
-$organisations = get_organisation_records();
+$organisations = local_obu_application_get_organisation_records();
 if ($organisations != null) {
 	foreach ($organisations as $organisation) {
 		if ($organisation->suspended == 1) {

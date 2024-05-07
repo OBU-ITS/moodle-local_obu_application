@@ -31,14 +31,14 @@ require_once('./mdl_advanced_status_form.php');
 require_login();
 
 $home = new moodle_url('/');
-if (!is_manager()) {
+if (!local_obu_application_is_manager()) {
     redirect($home);
 }
 
-$applications_course = get_applications_course();
+$applications_course = local_obu_application_get_applications_course();
 require_login($applications_course);
 $back = $home . 'course/view.php?id=' . $applications_course;
-if (!is_manager()) {
+if (!local_obu_application_is_manager()) {
     redirect($back);
 }
 
@@ -56,7 +56,7 @@ $PAGE->navbar->add($heading);
 $message = '';
 
 $courses = array();
-$recs = get_course_records();
+$recs = local_obu_application_get_course_records();
 foreach ($recs as $rec) {
     $courses['"' . $rec->code . '"'] = $rec->name . ' [' . $rec->code . ']';
 }
@@ -75,7 +75,7 @@ if ($mform->is_cancelled()) {
 if ($mform_data = $mform->get_data()) {
     $selected_courses = implode(',', $mform_data->selected_courses);
     $applications = [];
-    $applications = get_applications_for_courses($selected_courses, $mform_data->application_date);
+    $applications = local_obu_application_get_applications_for_courses($selected_courses, $mform_data->application_date);
 
     if (empty($applications)) {
         $message = get_string('no_applications', 'local_obu_application');

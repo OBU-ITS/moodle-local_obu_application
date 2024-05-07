@@ -30,7 +30,7 @@ require_once('./locallib.php');
 require_once('./process_form.php');
 require_once($CFG->libdir . '/moodlelib.php');
 
-require_obu_login();
+local_obu_application_require_obu_login();
 
 $home = new moodle_url('/local/obu_application/');
 $logout = $home . 'logout.php';
@@ -47,13 +47,13 @@ if (!isset($_REQUEST['id'])) {
 	redirect($back);
 }
 
-$application = read_application($_REQUEST['id']);
+$application = local_obu_application_read_application($_REQUEST['id']);
 if ($application === false) {
 	redirect($back);
 }
 
 // Take managers to where they belong - Moodle
-if (is_manager()) {
+if (local_obu_application_is_manager()) {
 	$url = $home . 'mdl_process.php?source=' . $source . '&id=' . $application->id;
 	redirect($url);
 }
@@ -77,7 +77,7 @@ if (($application->approval_state == 0) && ($application->approval_level == 0)) 
 	$status_text = get_string('status_not_submitted', 'local_obu_application');
 
 	// We currently auto-submit the application to avoid a two-stage process for the applicant
-	update_workflow($application);
+    local_obu_application_update_workflow($application);
 	$status_text = '';
 
 } else if (($application->approval_state == 1) || ($application->approval_state == 3)) { // Application rejected or withdrawn
@@ -91,9 +91,9 @@ if ($status_text) {
 	$status_text = '<h3>' . $status_text . '</h3>';
 }
 
-$manager = is_manager();
-$status_text .= get_application_status($USER->id, $application, $manager);
-$button_text = get_application_button_text($USER->id, $application, $manager);
+$manager = local_obu_application_is_manager();
+$status_text .= local_obu_application_get_application_status($USER->id, $application, $manager);
+$button_text = local_obu_application_get_application_button_text($USER->id, $application, $manager);
 
 if ($button_text != 'approve') { // If not the next approver, check that this user is the applicant
 	if ($USER->id != $application->userid) {
@@ -103,7 +103,7 @@ if ($button_text != 'approve') { // If not the next approver, check that this us
 
 $parameters = [
 	'source' => $source,
-	'organisations' => get_organisations(),
+	'organisations' => local_obu_application_get_organisations(),
 	'record' => $application,
 	'status_text' => $status_text,
 	'button_text' => $button_text
@@ -120,9 +120,9 @@ else if ($mform_data = $mform->get_data()) {
 		if (isset($mform_data->rejectbutton) && ($mform_data->rejectbutton == get_string('reject', 'local_obu_application'))) { // Application rejected
             redirect($home . 'reject.php?source=' . urlencode($url) . "&id=" . $application->id);
 		} else {
-			update_workflow($application, true, $mform_data);
+            local_obu_application_update_workflow($application, true, $mform_data);
 		}
-		$approvals = get_approvals($USER->email); // Any more approval requests?
+		$approvals = local_obu_application_get_approvals($USER->email); // Any more approval requests?
 		if (empty($approvals)) { // No there aren't
 			redirect($logout);
 		}

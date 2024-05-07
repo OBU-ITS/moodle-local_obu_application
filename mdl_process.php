@@ -32,11 +32,11 @@ require_once($CFG->libdir . '/moodlelib.php');
 require_login();
 
 $home = new moodle_url('/');
-if (!is_manager()) {
+if (!local_obu_application_is_manager()) {
 	redirect($home);
 }
 
-$applications_course = get_applications_course();
+$applications_course = local_obu_application_get_applications_course();
 require_login($applications_course);
 
 $back = $home . 'course/view.php?id=' . $applications_course;
@@ -61,7 +61,7 @@ if (!has_capability('local/obu_application:update', context_system::instance()))
 }
 
 // We only handle an existing application (id given)
-$application = read_application($_REQUEST['id']);
+$application = local_obu_application_read_application($_REQUEST['id']);
 if ($application === false) {
 	redirect($back);
 }
@@ -86,7 +86,7 @@ if (($application->approval_state == 0) && ($application->approval_level == 0)) 
 	$status_text = get_string('status_not_submitted', 'local_obu_application');
 
 	// We currently auto-submit the application to avoid a two-stage process for the applicant
-	update_workflow($application);
+    local_obu_application_update_workflow($application);
 	$status_text = '';
 
 } else if ($application->approval_state == 1) { // Application rejected
@@ -102,9 +102,9 @@ if ($status_text) {
 	$status_text = '<h3>' . $status_text . '</h3>';
 }
 
-$manager = is_manager();
-$status_text .= get_application_status($USER->id, $application, $manager);
-$button_text = get_application_button_text($USER->id, $application, $manager);
+$manager = local_obu_application_is_manager();
+$status_text .= local_obu_application_get_application_status($USER->id, $application, $manager);
+$button_text = local_obu_application_get_application_button_text($USER->id, $application, $manager);
 
 $redirect = new moodle_url('/local/obu_application/mdl_redirect.php');
 if (has_capability('local/obu_application:update', context_system::instance()) && ($application->approval_level < 3)) { // Can't redirect away from final HLS approval/processing
@@ -113,7 +113,7 @@ if (has_capability('local/obu_application:update', context_system::instance()) &
 
 $parameters = [
 	'source' => $source,
-	'organisations' => get_organisations(),
+	'organisations' => local_obu_application_get_organisations(),
 	'record' => $application,
 	'status_text' => $status_text,
 	'button_text' => $button_text
@@ -130,14 +130,14 @@ if ($mform->is_cancelled()) {
 if ($mform_data = $mform->get_data()) {
 
 	if (isset($mform_data->submitbutton) && ($mform_data->submitbutton != get_string('continue', 'local_obu_application'))) {
-		update_workflow($application, true, $mform_data); // Approved / Revoked / Reinstated
+        local_obu_application_update_workflow($application, true, $mform_data); // Approved / Revoked / Reinstated
         redirect($back);
 	} else if (isset($mform_data->rejectbutton) && ($mform_data->rejectbutton == get_string('reject', 'local_obu_application'))) {
         redirect($home . 'local/obu_application/mdl_reject.php?source=' . urlencode($url) . "&id=" . $application->id);
 	} else if (isset($mform_data->revokebutton) && ($mform_data->revokebutton == get_string('revoke', 'local_obu_application'))) {
         redirect($home . 'local/obu_application/mdl_revoke.php?source=' . urlencode($url) . "&id=" . $application->id);
     } else if (isset($mform_data->withdrawbutton) && ($mform_data->withdrawbutton == get_string('withdraw', 'local_obu_application'))) {
-		update_workflow($application, false, $mform_data); // Withdrawn
+        local_obu_application_update_workflow($application, false, $mform_data); // Withdrawn
         redirect($back);
 	} else if (isset($mform_data->amenddetailsbutton) && ($mform_data->amenddetailsbutton == get_string('amend_details', 'local_obu_application'))) {
 		redirect($home . 'local/obu_application/mdl_amend_details.php?id=' . $application->id); // Amend the personal details

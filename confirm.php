@@ -36,23 +36,23 @@ $PAGE->set_url('/local/obu_application/confirm.php');
 $PAGE->set_pagelayout('login');
 
 if (!isset($data) || empty($data)) {
-	display_message(get_string('error'), get_string('errorwhenconfirming'));
+    local_obu_application_display_message(get_string('error'), get_string('errorwhenconfirming'));
 }
 
 $dataelements = explode('/', $data, 2); // Stop after 1st slash. Rest is username. MDL-7647
 $usersecret = $dataelements[0];
 $username = $dataelements[1];
 
-$confirmed = application_user_confirm($username, $usersecret);
+$confirmed = local_obu_application_application_user_confirm($username, $usersecret);
 
 if ($confirmed == AUTH_CONFIRM_ALREADY) {
 	if (!$user = get_complete_user_data('username', $username)) {
-		display_message(get_string('error'), get_string('cannotfinduser') . ' ' . $username);
+        local_obu_application_display_message(get_string('error'), get_string('cannotfinduser') . ' ' . $username);
 	}
-	display_message(get_string('thanks') . ', ' . fullname($user), get_string('alreadyconfirmed'));
+    local_obu_application_display_message(get_string('thanks') . ', ' . fullname($user), get_string('alreadyconfirmed'));
 } else if ($confirmed == AUTH_CONFIRM_OK) { // The user has confirmed successfully, let's log them in
 	if (!$user = get_complete_user_data('username', $username)) {
-		display_message(get_string('error'), get_string('cannotfinduser') . ' ' . $username);
+        local_obu_application_display_message(get_string('error'), get_string('cannotfinduser') . ' ' . $username);
 	}
 	complete_user_login($user);
 
@@ -62,9 +62,9 @@ if ($confirmed == AUTH_CONFIRM_ALREADY) {
 		redirect($goto);
 	}
 
-	display_message(get_string('thanks') . ', ' . fullname($user), get_string('confirmed'));
+    local_obu_application_display_message(get_string('thanks') . ', ' . fullname($user), get_string('confirmed'));
 } else {
-	display_message(get_string('error'), get_string('invalidconfirmdata'));
+    local_obu_application_display_message(get_string('error'), get_string('invalidconfirmdata'));
 }
 
 redirect($CFG->wwwroot . '/local/obu_application/');
