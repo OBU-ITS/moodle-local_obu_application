@@ -1044,6 +1044,22 @@ function local_obu_application_get_course_dates() {
 	return $dates;
 }
 
+function local_obu_application_convert_course_date($course_date){
+	if(strlen($course_date) != 7) {
+		return $course_date;
+	}
+
+	$year = substr($course_date, 3,4);
+
+	if (substr($course_date, 0, 3) == "SEP") {
+		return "Autumn " . $year . " (Sem 1)";
+	} else if (substr($course_date, 0, 3) == "JAN") {
+		return "Spring " . $year . " (Sem 2)";
+	} else if (substr($course_date, 0, 3) == "JUN") {
+		return "Summer " . $year . " (Sem 3)";
+	}
+}
+
 function local_obu_application_get_application_status($user_id, $application, $manager=null, $revoked = null) {
 	$text = "<div class='mb-4'>";
 	$date = date_create();

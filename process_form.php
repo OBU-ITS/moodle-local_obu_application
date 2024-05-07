@@ -122,6 +122,11 @@ class process_form extends moodleform {
 			} else {
 				$fund_programme_formatted = '&#10008; NO'; // Cross
 			}
+            if ($data->record->residence_code != 'XF'){
+                $residence_area = '&#10008; NO';
+            } else {
+                $residence_area = '&#10004; YES';
+            }
 
 			$fields = [
 				'name' => $data->record->title . ' ' . $data->record->firstname . ' ' . $data->record->lastname,
@@ -142,7 +147,7 @@ class process_form extends moodleform {
 				'birthdate' => $birthdate_formatted,
 				'nationality' => $data->record->nationality,
 				'gender' => $gender,
-				'residence_area' => $data->record->residence_area,
+				'residence_area' => $residence_area,
 				'p16school' => $data->record->p16school,
 				'p16schoolperiod' => $data->record->p16schoolperiod,
 				'p16fe' => $data->record->p16fe,
@@ -162,7 +167,7 @@ class process_form extends moodleform {
 				'prof_reg_no' => $data->record->prof_reg_no,
 				'criminal_record_formatted' => $criminal_record_formatted,
 				'course_name' => $data->record->course_code . ' ' . $data->record->course_name,
-				'course_date' => $data->record->course_date,
+				'course_date' => local_obu_application_convert_course_date($data->record->course_date),
 				'studying_formatted' => $studying_formatted,
 				'student_number' => $data->record->student_number,
 				'statement' => nl2br($data->record->statement),
