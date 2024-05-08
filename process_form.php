@@ -122,10 +122,11 @@ class process_form extends moodleform {
 			} else {
 				$fund_programme_formatted = '&#10008; NO'; // Cross
 			}
-            if ($data->record->residence_code != 'XF'){
-                $residence_area = '&#10008; NO';
-            } else {
+            $homeResidencies = array('XF', 'XH', 'XI', 'XG', 'JE', 'GG');
+            if (in_array($data->record->residence_code, $homeResidencies)){
                 $residence_area = '&#10004; YES';
+            } else {
+                $residence_area = '&#10008; NO';
             }
 
 			$fields = [
