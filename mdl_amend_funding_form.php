@@ -126,7 +126,7 @@ class mdl_amend_funding_form extends moodleform {
 			$mform->addElement('static', 'current_invoice_phone', get_string('phone', 'local_obu_application'));
 			$mform->addElement('static', 'current_invoice_contact', get_string('invoice_contact', 'local_obu_application'));
 		}
-		if (is_programme($data->application->course_code)) { // Additional funding fields for a programme of study
+		if (local_obu_application_is_programme($data->application->course_code)) { // Additional funding fields for a programme of study
 			$mform->addElement('static', 'current_fund_programme', get_string('fund_programme', 'local_obu_application'));
 			if ($data->application->fund_programme == '0') {
 				if ($data->application->fund_module_1 != '') {
@@ -189,7 +189,7 @@ class mdl_amend_funding_form extends moodleform {
 		$mform->setType('invoice_phone', PARAM_TEXT);
 		$mform->addElement('text', 'invoice_contact', get_string('invoice_contact', 'local_obu_application'), 'size="40" maxlength="100"');
 		$mform->setType('invoice_contact', PARAM_TEXT);
-		if (is_programme($data->application->course_code)) {
+		if (local_obu_application_is_programme($data->application->course_code)) {
 			$mform->addElement('html', '<p></p><strong><i>' . get_string('programme_preamble', 'local_obu_application') . '</i></strong><p></p>');
             $mform->addElement('select', 'fund_programme', get_string('fund_programme', 'local_obu_application'), array("0"=>"No", "1"=>"Yes"));
 			$mform->addElement('text', 'fund_module_1', get_string('fund_module', 'local_obu_application'), 'size="8" maxlength="8"');

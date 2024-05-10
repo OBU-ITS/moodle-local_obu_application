@@ -43,7 +43,7 @@ if (!isset($CFG->additionalhtmlhead)) {
 }
 $CFG->additionalhtmlhead .= '<meta name="robots" content="noindex" />';
 
-require_obu_login();
+local_obu_application_require_obu_login();
 
 $PAGE->add_body_class('limitedwidth');
 $PAGE->set_url($CFG->httpswwwroot . '/local/obu_application/application.php');
@@ -106,19 +106,19 @@ echo $OUTPUT->header();
             <div id="accordion" class="clearfix collapsible">
 <?php
 
-        $record = read_applicant($USER->id, false); // May not exist yet
+        $record = local_obu_application_read_applicant($USER->id, false); // May not exist yet
         if (($record === false) || ($record->domicile_code == '') || ($record->domicile_code == 'ZZ')) { // Must complete the contact details first
             $message = get_string('complete_contact_details', 'local_obu_application');
         } else {
             $message = '';
         }
 
-        $nations = get_nations();
-        $areas = get_areas();
+        $nations = local_obu_application_get_nations();
+        $areas = local_obu_application_get_areas();
         $parameters = [
-            'user' => read_user($USER->id),
+            'user' => local_obu_application_read_user($USER->id),
             'applicant' => $record,
-            'titles' => get_titles(),
+            'titles' => local_obu_application_get_titles(),
             'nations' => $nations,
             'record' => $record,
             'areas' => $areas
@@ -135,8 +135,8 @@ echo $OUTPUT->header();
         if ($contactDetailsForm_data = $contactDetailsForm->get_data()) {
             if ($contactDetailsForm_data->submitbutton == get_string('save', 'local_obu_application')) {
                 $contactDetailsForm_data->domicile_country = $nations[$contactDetailsForm_data->domicile_code];
-                write_user($USER->id, $contactDetailsForm_data);
-                write_contact_details($USER->id, $contactDetailsForm_data);
+                local_obu_application_write_user($USER->id, $contactDetailsForm_data);
+                local_obu_application_write_contact_details($USER->id, $contactDetailsForm_data);
                 $record->contact_details_update = time();
             }
         }
@@ -147,42 +147,42 @@ echo $OUTPUT->header();
                 $personalDetailsForm_data->nationality = $nations[$personalDetailsForm_data->nationality_code];
                 $personalDetailsForm_data->residence_area = $areas[$personalDetailsForm_data->residence_code];
                 $record->residence_code = $personalDetailsForm_data->residence_code;
-                write_personal_details($USER->id, $personalDetailsForm_data);
+                local_obu_application_write_personal_details($USER->id, $personalDetailsForm_data);
                 $record->personal_details_update = time();
             }
         }
 
         if ($educationalEstablishmentsForm_data = $educationalEstablishmentsForm->get_data()) {
             if ($educationalEstablishmentsForm_data->submitbutton == get_string('save', 'local_obu_application')) {
-                write_educational_establishments($USER->id, $educationalEstablishmentsForm_data);
+                local_obu_application_write_educational_establishments($USER->id, $educationalEstablishmentsForm_data);
                 $record->edu_establishments_update = time();
             }
         }
 
         if ($professionalQualificationForm_data = $professionalQualificationForm->get_data()) {
             if ($professionalQualificationForm_data->submitbutton == get_string('save', 'local_obu_application')) {
-                write_professional_qualification($USER->id, $professionalQualificationForm_data);
+                local_obu_application_write_professional_qualification($USER->id, $professionalQualificationForm_data);
                 $record->pro_qualification_update = time();
             }
         }
 
         if ($currentEmploymentForm_data = $currentEmploymentForm->get_data()) {
             if ($currentEmploymentForm_data->submitbutton == get_string('save', 'local_obu_application')) {
-                write_current_employment($USER->id, $currentEmploymentForm_data);
+                local_obu_application_write_current_employment($USER->id, $currentEmploymentForm_data);
                 $record->current_employment_update = time();
             }
         }
 
         if ($professionalRegistrationForm_data = $professionalRegistrationForm->get_data()) {
             if ($professionalRegistrationForm_data->submitbutton == get_string('save', 'local_obu_application')) {
-                write_professional_registration($USER->id, $professionalRegistrationForm_data);
+                local_obu_application_write_professional_registration($USER->id, $professionalRegistrationForm_data);
                 $record->pro_registration_update = time();
             }
         }
 
         if ($criminalRecordForm_data = $criminalRecordForm->get_data()) {
             if ($criminalRecordForm_data->submitbutton == get_string('save', 'local_obu_application')) {
-                write_criminal_record($USER->id, $criminalRecordForm_data);
+                local_obu_application_write_criminal_record($USER->id, $criminalRecordForm_data);
                 $record->criminal_record_update = time();
             }
         }

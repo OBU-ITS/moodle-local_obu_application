@@ -36,7 +36,7 @@ if (!isset($CFG->additionalhtmlhead)) {
 }
 $CFG->additionalhtmlhead .= '<meta name="robots" content="noindex" />';
 
-require_obu_login();
+local_obu_application_require_obu_login();
 
 $PAGE->add_body_class('limitedwidth');
 $PAGE->set_url($CFG->httpswwwroot . '/local/obu_application/application_guidance.php');

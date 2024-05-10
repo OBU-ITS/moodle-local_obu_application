@@ -31,7 +31,7 @@ require_once('./hide_moodle.php');
 require_once('./locallib.php');
 require_once('./apply_form.php');
 
-require_obu_login();
+local_obu_application_require_obu_login();
 
 $home = new moodle_url('/local/obu_application/');
 $url = $home . 'apply.php';
@@ -42,7 +42,7 @@ $PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
 $PAGE->set_url($url);
 
 $message = '';
-$record = read_applicant($USER->id, false);
+$record = local_obu_application_read_applicant($USER->id, false);
 
 // Must have completed the profile
 if (($record === false)
@@ -55,11 +55,11 @@ if (($record === false)
 }
 
 if (($message == '') && ($record->visa_requirement != '')) {
-	$supplement = get_supplement_form($record->visa_requirement, is_siteadmin());
+	$supplement = local_obu_application_get_supplement_form($record->visa_requirement, is_siteadmin());
 	if (!$supplement) {
 		$message = get_string('invalid_data', 'local_obu_application'); // Shouldn't be here
 	} else {
-		unpack_supplement_data($record->visa_data, $fields);
+        local_obu_application_unpack_supplement_data($record->visa_data, $fields);
 		if (($fields['supplement'] != $supplement->ref) || ($fields['version'] != $supplement->version)) {
 			$message = get_string('complete_course', 'local_obu_application'); // Shouldn't be here
 		}
@@ -67,13 +67,13 @@ if (($message == '') && ($record->visa_requirement != '')) {
 }
 
 if ($message == '') {
-	$course = read_course_record($record->course_code);
+	$course = local_obu_application_read_course_record($record->course_code);
 	if ($course->supplement != '') {
-		$supplement = get_supplement_form($course->supplement, is_siteadmin());
+		$supplement = local_obu_application_get_supplement_form($course->supplement, is_siteadmin());
 		if (!$supplement) {
 			$message = get_string('invalid_data', 'local_obu_application'); // Shouldn't be here
 		} else {
-			unpack_supplement_data($record->supplement_data, $fields);
+            local_obu_application_unpack_supplement_data($record->supplement_data, $fields);
 			if (($fields['supplement'] != $supplement->ref) || ($fields['version'] != $supplement->version)) {
 				$message = get_string('complete_course', 'local_obu_application'); // Shouldn't be here
 			}
@@ -82,7 +82,7 @@ if ($message == '') {
 }
 
 $parameters = [
-	'organisations' => get_organisations(),
+	'organisations' => local_obu_application_get_organisations(),
 	'record' => $record
 ];
 
@@ -93,7 +93,7 @@ if ($mform->is_cancelled()) {
 }
 else if ($mform_data = $mform->get_data()) {
 	if ($mform_data->submitbutton == get_string('apply', 'local_obu_application')) {
-		$application_id = write_application($USER->id, $mform_data);
+		$application_id = local_obu_application_write_application($USER->id, $mform_data);
 		redirect($process_url . '?id=' . $application_id); // Kick-off the processing
     }
 }

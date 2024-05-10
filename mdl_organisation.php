@@ -32,14 +32,14 @@ require_once('./mdl_organisation_form.php');
 require_login();
 
 $home = new moodle_url('/');
-if (!is_manager()) {
+if (!local_obu_application_is_manager()) {
 	redirect($home);
 }
 
-$applications_course = get_applications_course();
+$applications_course = local_obu_application_get_applications_course();
 require_login($applications_course);
 $back = $home . 'course/view.php?id=' . $applications_course;
-if (!is_administrator()) {
+if (!local_obu_application_is_administrator()) {
 	redirect($back);
 }
 
@@ -68,14 +68,14 @@ $applications = 0;
 if (isset($_REQUEST['id'])) {
 	$id = $_REQUEST['id'];
 	if ($id != '0') {
-		$record = read_organisation($id);
+		$record = local_obu_application_read_organisation($id);
 		if (isset($_REQUEST['delete'])) {
 			$delete = true;
 		}		
-		$applications = count_applications_for_funder($id);
+		$applications = local_obu_application_count_applications_for_funder($id);
 	}
 } else {
-	$recs = get_organisation_records();
+	$recs = local_obu_application_get_organisation_records();
 	if ($recs) { // Do they have a choice?
 		$organisations[0] = get_string('new_organisation', 'local_obu_application'); // The 'New Organisation' option
 		foreach ($recs as $rec) {
@@ -110,10 +110,10 @@ if ($mform->is_cancelled()) {
 else if ($mform_data = $mform->get_data()) {
 	if (isset($mform_data->submitbutton)) { // 'Save' or 'Confirm Deletion'
 		if ($mform_data->submitbutton == get_string('save', 'local_obu_application')) {
-			write_organisation($mform_data);
+            local_obu_application_write_organisation($mform_data);
 			redirect($url);
 		} else if ($mform_data->submitbutton == get_string('confirm_delete', 'local_obu_application')) {
-			delete_organisation($mform_data->id);
+            local_obu_application_delete_organisation($mform_data->id);
 			redirect($url);
 		}
     } else if (isset($mform_data->deletebutton) && ($mform_data->deletebutton == get_string('delete', 'local_obu_application'))) { // Delete

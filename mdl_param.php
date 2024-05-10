@@ -58,13 +58,13 @@ $record = null;
 if (isset($_REQUEST['id'])) {
 	$id = $_REQUEST['id'];
 	if ($id != '0') {
-		$record = read_parameter_by_id($id);
+		$record = local_obu_application_read_parameter_by_id($id);
 		if (isset($_REQUEST['delete'])) {
 			$delete = true;
 		}		
 	}
 } else {
-	$recs = get_parameter_records();
+	$recs = local_obu_application_get_parameter_records();
 	if ($recs) { // Do they have a choice?
 		$parameters[0] = get_string('new_parameter', 'local_obu_application'); // The 'New Parameter' option
 		foreach ($recs as $rec) {
@@ -94,10 +94,10 @@ if ($mform->is_cancelled()) {
 else if ($mform_data = $mform->get_data()) {
 	if (isset($mform_data->submitbutton)) { // 'Save' or 'Confirm Deletion'
 		if ($mform_data->submitbutton == get_string('save', 'local_obu_application')) {
-			write_parameter($mform_data);
+            local_obu_application_write_parameter($mform_data);
 			redirect($url);
 		} else if ($mform_data->submitbutton == get_string('confirm_delete', 'local_obu_application')) {
-			delete_parameter($mform_data->id);
+            local_obu_application_delete_parameter($mform_data->id);
 			redirect($url);
 		}
     } else if (isset($mform_data->deletebutton) && ($mform_data->deletebutton == get_string('delete', 'local_obu_application'))) { // Delete

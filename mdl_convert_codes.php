@@ -34,8 +34,8 @@ if (!is_siteadmin()) {
 	redirect($home);
 }
 
-$nations = get_nations();
-$areas = get_areas();
+$nations = local_obu_application_get_nations();
+$areas = local_obu_application_get_areas();
 
 $domicile_map = array(
 	'1615' => 'BM',
@@ -309,7 +309,7 @@ foreach ($applicants as $applicant) {
 		$applicant->nationality_code = '';
 	} else {
 		echo 'Domicile Country: ' . $applicant->domicile_code . ' ' . $applicant->domicile_country;
-		$applicant->domicile_code = convert_domicile($applicant->domicile_code);
+		$applicant->domicile_code = local_obu_application_convert_domicile($applicant->domicile_code);
 		$applicant->domicile_country = $nations[$applicant->domicile_code];
 		echo ' => ' . $applicant->domicile_code . ' ' . $applicant->domicile_country . '<br \>';
 		if ($applicant->nationality_code == '0' || $applicant->nationality_code == '') { // Personal details not entered (and, therefore, no applications)
@@ -317,34 +317,34 @@ foreach ($applicants as $applicant) {
 			$applicant->nationality_code = '';
 		} else {
 			echo 'Birth Country: ' . $applicant->birth_code . ' ' . $applicant->birth_country;
-			$applicant->birth_code = convert_birth($applicant->birth_code);
+			$applicant->birth_code = local_obu_application_convert_birth($applicant->birth_code);
 			$applicant->birth_country = $nations[$applicant->birth_code];
 			echo ' => ' . $applicant->birth_code . ' ' . $applicant->birth_country . '<br \>';
 			echo 'Nationality: ' . $applicant->nationality_code . ' ' . $applicant->nationality;
-			$applicant->nationality_code = convert_nationality($applicant->nationality_code);
+			$applicant->nationality_code = local_obu_application_convert_nationality($applicant->nationality_code);
 			$applicant->nationality = $nations[$applicant->nationality_code];
 			echo ' => ' . $applicant->nationality_code . ' ' . $applicant->nationality . '<br \>';
 			echo 'Residence Area: ' . $applicant->residence_code . ' ' . $applicant->residence_area;
-			$applicant->residence_code = convert_residence($applicant->residence_code);
+			$applicant->residence_code = local_obu_application_convert_residence($applicant->residence_code);
 			$applicant->residence_area = $areas[$applicant->residence_code];
 			echo ' => ' . $applicant->residence_code . ' ' . $applicant->residence_area . '<br \>';
-			$applications = get_applications($applicant->userid); // get all applications for the given user
+			$applications = local_obu_application_get_applications($applicant->userid); // get all applications for the given user
 			foreach ($applications as $application) {
 				echo '<h5>' . $applicant->id . '/' . $application->id . '</h5>';
 				echo 'Domicile Country: ' . $application->domicile_code . ' ' . $application->domicile_country;
-				$application->domicile_code = convert_domicile($application->domicile_code);
+				$application->domicile_code = local_obu_application_convert_domicile($application->domicile_code);
 				$application->domicile_country = $nations[$application->domicile_code];
 				echo ' => ' . $application->domicile_code . ' ' . $application->domicile_country . '<br \>';
 				echo 'Birth Country: ' . $application->birth_code . ' ' . $application->birth_country;
-				$application->birth_code = convert_birth($application->birth_code);
+				$application->birth_code = local_obu_application_convert_birth($application->birth_code);
 				$application->birth_country = $nations[$application->birth_code];
 				echo ' => ' . $application->birth_code . ' ' . $application->birth_country . '<br \>';
 				echo 'Nationality: ' . $application->nationality_code . ' ' . $application->nationality;
-				$application->nationality_code = convert_nationality($application->nationality_code);
+				$application->nationality_code = local_obu_application_convert_nationality($application->nationality_code);
 				$application->nationality = $nations[$application->nationality_code];
 				echo ' => ' . $application->nationality_code . ' ' . $application->nationality . '<br \>';
 				echo 'Residence Area: ' . $application->residence_code . ' ' . $application->residence_area;
-				$application->residence_code = convert_residence($application->residence_code);
+				$application->residence_code = local_obu_application_convert_residence($application->residence_code);
 				$application->residence_area = $areas[$application->residence_code];
 				echo ' => ' . $application->residence_code . ' ' . $application->residence_area . '<br \>';
 				$DB->update_record('local_obu_application', $application);
@@ -356,7 +356,7 @@ foreach ($applicants as $applicant) {
 
 echo $OUTPUT->footer();
 
-function convert_domicile($old) {
+function local_obu_application_convert_domicile($old) {
 	global $nations, $domicile_map;
 	
 	if ($old == '0') { // Not set
@@ -372,7 +372,7 @@ function convert_domicile($old) {
 	return $new;
 }
 
-function convert_birth($old) {
+function local_obu_application_convert_birth($old) {
 	global $nations;
 	
 	if (array_key_exists($old, $nations)) {
@@ -384,7 +384,7 @@ function convert_birth($old) {
 	return $new;
 }
 
-function convert_nationality($old) {
+function local_obu_application_convert_nationality($old) {
 	global $nations, $nationality_map;
 	
 	if ($old == '0') { // Not set
@@ -400,7 +400,7 @@ function convert_nationality($old) {
 	return $new;
 }
 
-function convert_residence($old) {
+function local_obu_application_convert_residence($old) {
 	global $areas;
 	
 	if (array_key_exists($old, $areas)) {

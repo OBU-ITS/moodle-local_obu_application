@@ -30,14 +30,14 @@ require_once('./locallib.php');
 require_login();
 
 $home = new moodle_url('/');
-if (!is_manager()) {
+if (!local_obu_application_is_manager()) {
 	redirect($home);
 }
 
-$applications_course = get_applications_course();
+$applications_course = local_obu_application_get_applications_course();
 require_login($applications_course);
 $back = $home . 'course/view.php?id=' . $applications_course;
-//if (!is_administrator()) {
+//if (!local_obu_application_is_administrator()) {
 //	redirect($back);
 //}
 
@@ -47,8 +47,8 @@ $url = $dir . 'mdl_course_list.php';
 $table = new html_table();
 $table->head = array('Name', 'Code', 'Supplement', 'Programme', 'Suspended', 'Administrator', 'Module Subject', 'Module Number', 'Campus', 'Program Code', 'Major Code', 'Level', 'Cohort Code', 'Sep', 'Jan', 'Jun');
 
-$courses = get_course_records();
-$admins = get_course_admins();
+$courses = local_obu_application_get_course_records();
+$admins = local_obu_application_get_course_admins();
 $course_admins = [];
 foreach($admins as $admin) {
     $course_admins[$admin->username] = $admin->username . ' (' . $admin->firstname . ' ' . $admin->lastname . ')';

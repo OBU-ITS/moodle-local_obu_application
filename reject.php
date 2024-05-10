@@ -38,12 +38,12 @@ if ($source) {
     $back = urldecode($source);
 }
 
-if (!is_funder()) {
+if (!local_obu_application_is_funder()) {
     redirect($back);
 }
 
 $id = $_REQUEST['id'] ?? null;
-$application = $id ? read_application($_REQUEST['id']) : null;
+$application = $id ? local_obu_application_read_application($_REQUEST['id']) : null;
 if(!$application) {
     redirect($back);
 }
@@ -69,7 +69,7 @@ if ($mform->is_cancelled()) {
 }
 
 if ($mform_data = $mform->get_data()) {
-    update_workflow($application, false, $mform_data); // Rejected
+    local_obu_application_update_workflow($application, false, $mform_data); // Rejected
 
     redirect($url);
 }

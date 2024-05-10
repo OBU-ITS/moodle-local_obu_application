@@ -30,11 +30,11 @@ require_once('./locallib.php');
 require_login();
 
 $home = new moodle_url('/');
-if (!is_manager()) {
+if (!local_obu_application_is_manager()) {
 	redirect($home);
 }
 
-$applications_course = get_applications_course();
+$applications_course = local_obu_application_get_applications_course();
 require_login($applications_course);
 $back = $home . 'course/view.php?id=' . $applications_course;
 
@@ -77,17 +77,17 @@ echo $OUTPUT->heading($heading);
 
 $process = new moodle_url('/local/obu_application/mdl_process.php');
 $redirect = new moodle_url('/local/obu_application/mdl_redirect.php');
-$approvals = get_approvals($approver_email); // get outstanding approval requests
-$manager = is_manager();
+$approvals = local_obu_application_get_approvals($approver_email); // get outstanding approval requests
+$manager = local_obu_application_is_manager();
 
 foreach ($approvals as $approval) {
 	if (($approver_email != '') || ($approval->approver != $approver->email)) {
-		$application = read_application($approval->application_id);
+		$application = local_obu_application_read_application($approval->application_id);
 		if (($approver_username == '') || ($approver_username == 'hls')
 			|| (($approver_username == 'administrator') && ($application->approval_level == 1))
 			|| (($approver_username == 'funder') && ($application->approval_level == 2))) {
-            $text = get_application_status($USER->id, $application, $manager);
-            $button = get_application_button_text($USER->id, $application, $manager);
+            $text = local_obu_application_get_application_status($USER->id, $application, $manager);
+            $button = local_obu_application_get_application_button_text($USER->id, $application, $manager);
 			echo '<h4><a href="' . $process . '?source=' . urlencode('mdl_approvals.php?approver=' . $approver_username) . '&id=' . $application->id . '">' . $application->course_code . ' ' . $application->course_name . ' (' . $application->lastname . ' - HLS/' . $application->id . ') (' . $application->course_date . ')' . '</a></h4>';
 			echo $text;
 			if (has_capability('local/obu_application:update', context_system::instance()) && ($application->approval_level < 3)) { // Can't redirect away from final HLS approval/processing

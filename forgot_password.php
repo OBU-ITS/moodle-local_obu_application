@@ -47,9 +47,9 @@ if (isloggedin() and !isguestuser()) {
 if (empty($token)) {
     // This is a new password reset request.
     // Process the request; identify the user & send confirmation email.
-    password_reset_request();
+    local_obu_application_password_reset_request();
 } else {
     // User clicked on confirmation link in email message
     // validate the token & set new password
-    password_set($token);
+    local_obu_application_password_set($token);
 }

@@ -31,14 +31,14 @@ require_once('./mdl_xfer_form.php');
 require_login();
 
 $home = new moodle_url('/');
-if (!is_manager()) {
+if (!local_obu_application_is_manager()) {
 	redirect($home);
 }
 
-$applications_course = get_applications_course();
+$applications_course = local_obu_application_get_applications_course();
 require_login($applications_course);
 $back = $home . 'course/view.php?id=' . $applications_course;
-if (!is_administrator()) {
+if (!local_obu_application_is_administrator()) {
 	redirect($back);
 }
 
@@ -56,7 +56,7 @@ $PAGE->navbar->add($heading);
 $message = '';
 
 $parameters = [
-	'dates' => get_dates()
+	'dates' => local_obu_application_get_dates()
 ];
 
 $mform = new mdl_xfer_form(null, $parameters);
@@ -90,7 +90,7 @@ else if ($mform_data = $mform->get_data()) {
 		$batch_number = 0; // No new batch number
 		$start_date = 0;
 	} else {
-		$param = read_parameter_by_name($param_name, true);
+		$param = local_obu_application_read_parameter_by_name($param_name, true);
 
         $xfer_id = 0; // No existing batch number
         $batch_number = $param->number + 1;
@@ -99,7 +99,7 @@ else if ($mform_data = $mform->get_data()) {
 
     $file_id = $xfer_id != 0 ? $xfer_id : $batch_number;
 
-	$applications = get_applications(); // Get all applications
+	$applications = local_obu_application_get_applications(); // Get all applications
 	$xfers = array();
 	foreach ($applications as $application) {
 		if ((($application->approval_level == 3) && ($application->approval_state == 2)) // Approved by HLS so is/was OK to go...
@@ -131,18 +131,18 @@ else if ($mform_data = $mform->get_data()) {
 		}
 
         if($xfer_id != 0) {
-            $previous_xfer = read_xfer_record($xfer_id);
-            write_xfer_record($file_id, $previous_xfer->id);
+            $previous_xfer = local_obu_application_read_xfer_record($xfer_id);
+            local_obu_application_write_xfer_record($file_id, $previous_xfer->id);
         }
         else {
-            write_xfer_record($file_id);
+            local_obu_application_write_xfer_record($file_id);
         }
 
 		header('Content-Type: text/csv');
 		header('Content-Disposition: attachment;filename=HLS_' . $param_name . sprintf('_%05d.', $file_id) . $extension);
 		$fp = fopen('php://output', 'w');
 		foreach ($xfers as $index => $xfer) {
-			$application = read_application($xfer);
+			$application = local_obu_application_read_application($xfer);
 
 
 
@@ -197,7 +197,7 @@ else if ($mform_data = $mform->get_data()) {
 			$fields['Gender'] = $application->gender;
 			$fields['Country_of_Birth'] = $application->birth_code;
 			$fields['Nationality'] = $application->nationality_code;
-			$course = read_course_record(trim($application->course_code));
+			$course = local_obu_application_read_course_record(trim($application->course_code));
 			$fields['Programme_Code'] = $course->programme_code;
 			$fields['Major_Code'] = $course->major_code;
 			$fields['Level'] = $course->level;
@@ -283,7 +283,7 @@ else if ($mform_data = $mform->get_data()) {
 /*					if ($application->funding_method < 3) {
 						$fields['Contract'] = '';
 					} else {
-						$organisation = read_organisation($application->funding_id);
+						$organisation = local_obu_application_read_organisation($application->funding_id);
 						if ($organisation == null) {
 							$fields['Contract'] = 'NONE';
 						} else {
@@ -317,7 +317,7 @@ else if ($mform_data = $mform->get_data()) {
 					$fields['Contact_Name'] = $application->invoice_contact;
 				}
 
-				if (($application->self_funding == 1) || !is_programme($application->course_code)) {
+				if (($application->self_funding == 1) || !local_obu_application_is_programme($application->course_code)) {
 					$fields['Fund_Programme'] = '';
 					$fields['Fund_Module_1'] = '';
 					$fields['Fund_Module_2'] = '';
@@ -358,7 +358,7 @@ else if ($mform_data = $mform->get_data()) {
 				} else {
 					$application->finance_xfer = $batch_number;
 				}
-				update_application($application);
+                local_obu_application_update_application($application);
 			}
 
 		}
@@ -367,7 +367,7 @@ else if ($mform_data = $mform->get_data()) {
 		// If a new batch, update the parameter record
 		if ($batch_number > 0) {
 			$param->number = $batch_number;
-			write_parameter($param);
+            local_obu_application_write_parameter($param);
 		}
 
 		exit();

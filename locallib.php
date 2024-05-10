@@ -29,28 +29,28 @@ require_once($CFG->dirroot . '/user/profile/lib.php');
 require_once($CFG->dirroot . '/local/obu_application/db_update.php');
 
 // Check if the user is an applications manager
-function is_manager() : bool {
+function local_obu_application_is_manager() : bool {
 	global $USER;
 
 	if (is_siteadmin()) {
 		return true;
 	}
 
-	return has_applications_role($USER->id, 4, 5);
+	return local_obu_application_has_applications_role($USER->id, 4, 5);
 }
 
 // Check if the user is an applications administrator
-function is_administrator() : bool {
+function local_obu_application_is_administrator() : bool {
 	global $USER;
 
 	if (is_siteadmin()) {
 		return true;
 	}
 
-	return has_applications_role($USER->id, 4);
+	return local_obu_application_has_applications_role($USER->id, 4);
 }
 
-function is_funder() : bool {
+function local_obu_application_is_funder() : bool {
 	global $USER;
 
 	if (is_siteadmin() && isset($_REQUEST['funder'])) {
@@ -61,14 +61,14 @@ function is_funder() : bool {
 }
 
 // Get all applications managers/administrators
-function get_managers() {
-	return get_users_by_role(4, 5);
+function local_obu_application_get_managers() {
+	return local_obu_application_get_users_by_role(4, 5);
 }
 
 /**  Determine where a user should be redirected after they have been logged in.
  * @return string url the user should be redirected to.
  */
-function get_return_url() {
+function local_obu_application_get_return_url() {
     global $CFG, $SESSION, $USER;
 
 	if (isset($SESSION->wantsurl) and ((strpos($SESSION->wantsurl, $CFG->wwwroot) === 0) or (strpos($SESSION->wantsurl, str_replace('http://', 'https://', $CFG->wwwroot)) === 0))) {
@@ -83,7 +83,7 @@ function get_return_url() {
     return $urltogo;
 }
 
-function application_user_signup($user) { // Derived from email->user_signup
+function local_obu_application_application_user_signup($user) { // Derived from email->user_signup
 	global $CFG, $PAGE, $OUTPUT;
 
 	$user->password = hash_internal_user_password($user->password);
@@ -96,9 +96,9 @@ function application_user_signup($user) { // Derived from email->user_signup
 	profile_save_data($user);
 
 	// Save contact information
-	write_contact_details($user->id, $user);
+	local_obu_application_write_contact_details($user->id, $user);
 
-	if (!send_application_confirmation_email($user)) {
+	if (!local_obu_application_send_application_confirmation_email($user)) {
 		print_error('auth_emailnoemail', 'auth_email');
 	}
 
@@ -107,7 +107,7 @@ function application_user_signup($user) { // Derived from email->user_signup
 	notice(get_string('emailconfirmsent', '', $user->email), $CFG->wwwroot . '/local/obu_application/login.php');
 }
 
-function application_user_confirm($username, $confirmsecret) { // Derived from email->user_confirm
+function local_obu_application_application_user_confirm($username, $confirmsecret) { // Derived from email->user_confirm
 	global $DB;
 
 	$user = get_complete_user_data('username', $username);
@@ -127,14 +127,14 @@ function application_user_confirm($username, $confirmsecret) { // Derived from e
 	}
 }
 
-function application_user_delete($user) {
+function local_obu_application_application_user_delete($user) {
 
-	delete_applicant($user->id); // Delete our own records first
+	local_obu_application_delete_applicant($user->id); // Delete our own records first
 
 	return user_delete_user($user);
 }
 
-function send_application_confirmation_email($user) {
+function local_obu_application_send_application_confirmation_email($user) {
 	global $CFG;
 
 	$data = new stdClass();
@@ -162,7 +162,7 @@ function send_application_confirmation_email($user) {
 	return email_to_user($user, $hls, $subject, $message, $messagehtml);
 }
 
-function authenticate_application_user($username, $password, $ignorelockout = false, &$failurereason = null) {
+function local_obu_application_authenticate_application_user($username, $password, $ignorelockout = false, &$failurereason = null) {
     global $CFG, $DB;
     require_once($CFG->libdir . '/authlib.php');
 
@@ -339,7 +339,7 @@ function authenticate_application_user($username, $password, $ignorelockout = fa
     return false;
 }
 
-function display_message($header, $message) {
+function local_obu_application_display_message($header, $message) {
 	global $CFG, $PAGE, $OUTPUT;
 
 	$PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);
@@ -355,7 +355,7 @@ function display_message($header, $message) {
 	exit;
 }
 
-function require_obu_login() {
+function local_obu_application_require_obu_login() {
 	global $CFG, $SESSION, $USER, $PAGE, $SITE, $DB, $OUTPUT;
 
 	$login_url = '/local/obu_application/login.php';
@@ -405,7 +405,7 @@ function require_obu_login() {
 	user_accesstime_log();
 }
 
-function get_titles() {
+function local_obu_application_get_titles() {
 	$titles = array (
 		'' => get_string('select', 'local_obu_application'),
 		'Mr' => 'Mr',
@@ -419,7 +419,7 @@ function get_titles() {
 	return $titles;
 }
 
-function get_areas() {
+function local_obu_application_get_areas() {
 	$areas = array (
 		'' => get_string('select', 'local_obu_application'),
 		'AF' => 'Afghanistan',
@@ -677,7 +677,7 @@ function get_areas() {
 	return $areas;
 }
 
-function get_nations() {
+function local_obu_application_get_nations() {
 	$nations = array (
 		'' => get_string('select', 'local_obu_application'),
 		'AF' => 'Afghanistan',
@@ -946,10 +946,10 @@ function get_nations() {
 	return $nations;
 }
 
-function get_course_names() {
+function local_obu_application_get_course_names() {
 
 	$courses = array();
-	$recs = get_course_records();
+	$recs = local_obu_application_get_course_records();
 	foreach ($recs as $rec) {
 		if ($rec->suspended == 0) {
 			$courses[$rec->code] = $rec->name . ' [' . $rec->code . ']';
@@ -961,7 +961,8 @@ function get_course_names() {
 	return $courses;
 }
 
-function get_courses_for_international_students() {
+
+function local_obu_application_get_courses_for_international_students() {
 	return array(
 		'NURS7005' => null,
 		'HESC7016' => null,
@@ -980,10 +981,10 @@ function get_courses_for_international_students() {
 	);
 }
 
-function get_organisations() {
 
+function local_obu_application_get_organisations() {
 	$organisations = array();
-	$recs = get_organisation_records();
+	$recs = local_obu_application_get_organisation_records();
 	foreach ($recs as $rec) {
 //		if (($rec->code != 0) && ($rec->suspended == 0)) {
 		if ($rec->suspended == 0) {
@@ -994,7 +995,7 @@ function get_organisations() {
 	return $organisations;
 }
 
-function get_dates() {
+function local_obu_application_get_dates() {
 	$months = [ 'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC' ];
 	$month = date('m');
 	$year = date('y');
@@ -1013,12 +1014,12 @@ function get_dates() {
 	return $dates;
 }
 
-function get_course_dates() {
+function local_obu_application_get_course_dates() {
 	$months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 	$coursedatesthreshold = 1;
 
 	$month = date('m');
-	$year = date('y');
+	$year = date('Y');
 
 	$dates = array('' => get_string('select', 'local_obu_application'));
 
@@ -1026,11 +1027,11 @@ function get_course_dates() {
 		$tempmonthindex = ($month - 1) - $coursedatesthreshold;
 
 		if ($months[$tempmonthindex] == 'SEP') {
-			$dates[$months[$tempmonthindex] . $year] = $months[$tempmonthindex] . $year . " (Sem 1)";
+			$dates[$months[$tempmonthindex] . $year] = "Autumn " . $year . " (Sem 1)";
 		} elseif ($months[$tempmonthindex] == 'JAN') {
-			$dates[$months[$tempmonthindex] . $year] = $months[$tempmonthindex] . $year . " (Sem 2)";
+			$dates[$months[$tempmonthindex] . $year] = "Spring " . $year . " (Sem 2)";
 		} elseif ($months[$tempmonthindex] == 'JUN') {
-			$dates[$months[$tempmonthindex] . $year] = $months[$tempmonthindex] . $year . " (Sem 3)";
+			$dates[$months[$tempmonthindex] . $year] = "Summer " . $year . " (Sem 3)";
 		}
 
 		if ($month < 12) {
@@ -1044,34 +1045,50 @@ function get_course_dates() {
 	return $dates;
 }
 
-function get_application_status($user_id, $application, $manager=null, $revoked = null) {
+function local_obu_application_convert_course_date($course_date){
+	if(strlen($course_date) != 7) {
+		return $course_date;
+	}
+
+	$year = substr($course_date, 3,4);
+
+	if (substr($course_date, 0, 3) == "SEP") {
+		return "Autumn " . $year . " (Sem 1)";
+	} else if (substr($course_date, 0, 3) == "JAN") {
+		return "Spring " . $year . " (Sem 2)";
+	} else if (substr($course_date, 0, 3) == "JUN") {
+		return "Summer " . $year . " (Sem 3)";
+	}
+}
+
+function local_obu_application_get_application_status($user_id, $application, $manager=null, $revoked = null) {
 	$text = "<div class='mb-4'>";
 	$date = date_create();
 	$format = 'd/m/y H:i';
 	$state = '';
 
 	if(!isset($manager)) {
-		$manager = is_manager();
+		$manager = local_obu_application_is_manager();
 	}
 
 	// Submitted
-	$name = get_name_and_email($user_id, $application->userid);
+	$name = local_obu_application_get_name_and_email($user_id, $application->userid);
 	$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('submitted', 'local_obu_application'), 'by' => $name));
-	$type = get_application_approval_type($application->approval_level, 0);
+	$type = local_obu_application_get_application_approval_type($application->approval_level, 0);
 	if($type == 'past') {
 		date_timestamp_set($date, $application->application_date);
 		$state = "Completed " . date_format($date, $format);
 	}
 
-	$text .= get_application_status_row_html($label, $type, $state);
+	$text .= local_obu_application_get_application_status_row_html($label, $type, $state);
 
 	// Administrator Approval
 	if($application->manager_email != ''
 		&& ($application->approval_state == 0
 			|| ($application->approval_state > 0 && $application->approval_level >= 1))) {
-		$type = get_application_approval_type($application->approval_level, 1, $application->approval_state);
+		$type = local_obu_application_get_application_approval_type($application->approval_level, 1, $application->approval_state);
 		if($type == 'past') {
-			$manager_names = read_user_fullnames_by_email($application->manager_email);
+			$manager_names = local_obu_application_read_user_fullnames_by_email($application->manager_email);
 			$name = $manager_names
 				? "$manager_names->firstname ($application->manager_email)"
 				: "($application->manager_email)";
@@ -1080,12 +1097,12 @@ function get_application_status($user_id, $application, $manager=null, $revoked 
 			} else {
 				$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('approved', 'local_obu_application'), 'by' => $name));
 			}
-			$label .= get_application_status_comment_html($application->approval_1_comment);
+			$label .= local_obu_application_get_application_status_comment_html($application->approval_1_comment);
 			date_timestamp_set($date, $application->approval_1_date);
 			$state = "Completed " . date_format($date, $format);
 		}
 		else if($type == 'current') {
-			$manager_names = read_user_fullnames_by_email($application->manager_email);
+			$manager_names = local_obu_application_read_user_fullnames_by_email($application->manager_email);
 			$name = $manager_names
 				? "$manager_names->firstname  ($application->manager_email)"
 				: "($application->manager_email)";
@@ -1095,14 +1112,14 @@ function get_application_status($user_id, $application, $manager=null, $revoked 
 			$label = "Administrative approval";
 		}
 
-		$text .= get_application_status_row_html($label, $type, $state);
+		$text .= local_obu_application_get_application_status_row_html($label, $type, $state);
 	}
 
 	// Funding Approval
 	if($application->self_funding == '0'
 		&& ($application->approval_state == 0
 			|| ($application->approval_state > 0 && $application->approval_level >= 2))) {
-		$type = get_application_approval_type($application->approval_level, 2, $application->approval_state);
+		$type = local_obu_application_get_application_approval_type($application->approval_level, 2, $application->approval_state);
 		if($type == 'past') {
 			$name = '('. $application->funder_email . ')';
 			if ($application->approval_level == 2 && $application->approval_state == 1) {
@@ -1110,7 +1127,7 @@ function get_application_status($user_id, $application, $manager=null, $revoked 
 			} else {
 				$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('approved', 'local_obu_application'), 'by' => $name));
 			}
-			$label .= get_application_status_comment_html($application->approval_2_comment);
+			$label .= local_obu_application_get_application_status_comment_html($application->approval_2_comment);
 			date_timestamp_set($date, $application->approval_2_date);
 			$state = "Completed " . date_format($date, $format);
 		}
@@ -1122,13 +1139,13 @@ function get_application_status($user_id, $application, $manager=null, $revoked 
 			$label = "Funding approval";
 		}
 
-		$text .= get_application_status_row_html($label, $type, $state);
+		$text .= local_obu_application_get_application_status_row_html($label, $type, $state);
 	}
 
 	// Academic Approval
 	if($application->approval_state == 0
 		|| ($application->approval_state > 0 && $application->approval_level >= 3)) {
-		$type = get_application_approval_type($application->approval_level, 3, $application->approval_state);
+		$type = local_obu_application_get_application_approval_type($application->approval_level, 3, $application->approval_state);
 		if ($type == 'past') {
 			$name = '(HLS approvals)';
 
@@ -1139,7 +1156,7 @@ function get_application_status($user_id, $application, $manager=null, $revoked 
 			} else {
 				$label = get_string('actioned_by', 'local_obu_application', array('action' => get_string('approved', 'local_obu_application'), 'by' => $name));
 			}
-			$label .= get_application_status_comment_html($application->approval_3_comment);
+			$label .= local_obu_application_get_application_status_comment_html($application->approval_3_comment);
 
 			date_timestamp_set($date, $application->approval_3_date);
 			$state = "Completed " . date_format($date, $format);
@@ -1157,7 +1174,7 @@ function get_application_status($user_id, $application, $manager=null, $revoked 
 			$label = "Academic approval";
 		}
 
-		$text .= get_application_status_row_html($label, $type, $state);
+		$text .= local_obu_application_get_application_status_row_html($label, $type, $state);
 	}
 
 	if ($manager) {
@@ -1165,12 +1182,12 @@ function get_application_status($user_id, $application, $manager=null, $revoked 
 		if ($application->admissions_xfer > 0) {
 			$first = false;
 			$label = get_string('admissions', 'local_obu_application') . ' ' . get_string('data_xfer', 'local_obu_application') . ': ' .$application->admissions_xfer;
-			$text .= get_application_status_row_html($label, "xfer_first", "");
+			$text .= local_obu_application_get_application_status_row_html($label, "xfer_first", "");
 		}
 		if ($application->finance_xfer > 0) {
 			$label = get_string('finance', 'local_obu_application') . ' ' . get_string('data_xfer', 'local_obu_application') . ': ' . $application->finance_xfer;
 
-			$xfer_record = read_xfer_record($application->finance_xfer);
+			$xfer_record = local_obu_application_read_xfer_record($application->finance_xfer);
 			if ($xfer_record) {
 				date_timestamp_set($date, $xfer_record->xfer_date);
 				$state = "Completed " . date_format($date, $format);
@@ -1180,7 +1197,7 @@ function get_application_status($user_id, $application, $manager=null, $revoked 
 			}
 
 			$type = $first ? "xfer_first" : "xfer";
-			$text .= get_application_status_row_html($label, $type, $state);
+			$text .= local_obu_application_get_application_status_row_html($label, $type, $state);
 		}
 	}
 
@@ -1189,7 +1206,7 @@ function get_application_status($user_id, $application, $manager=null, $revoked 
 	return $text;
 }
 
-function get_application_approval_type($current_level, $level, $state = 0) {
+function local_obu_application_get_application_approval_type($current_level, $level, $state = 0) {
 
 	if ($state > 0) {
 		return 'past';
@@ -1201,7 +1218,7 @@ function get_application_approval_type($current_level, $level, $state = 0) {
 			: 'past');
 }
 
-function get_application_status_comment_html(?string $comment) : string {
+function local_obu_application_get_application_status_comment_html(?string $comment) : string {
 	if (!$comment || trim($comment) == '') {
 
 		return '';
@@ -1210,7 +1227,7 @@ function get_application_status_comment_html(?string $comment) : string {
 	return "<br /><span class='text-muted'>Comment: " . $comment . "</span>";
 }
 
-function get_application_status_row_html($label, $type, $state) {
+function local_obu_application_get_application_status_row_html($label, $type, $state) {
 	$text = '';
 
 	if ($type == 'past') {
@@ -1255,7 +1272,7 @@ function get_application_status_row_html($label, $type, $state) {
 	return $text;
 }
 
-function get_application_button_text($user_id, $application, $manager=null) {
+function local_obu_application_get_application_button_text($user_id, $application, $manager=null) {
 	if ($application->approval_state == 0) { // Awaiting submission/rejection/approval from someone
 		if ($application->approval_level == 0) { // Applicant hasn't submitted the application
 			if ($application->userid == $user_id) {
@@ -1291,19 +1308,19 @@ function get_application_button_text($user_id, $application, $manager=null) {
 		return 'revoke';
 	}
 
-	if (($application->approval_state == 1 || $application->approval_state == 3) && is_administrator()) { // An administrator can reinstate a rejected application
+	if (($application->approval_state == 1 || $application->approval_state == 3) && local_obu_application_is_administrator()) { // An administrator can reinstate a rejected application
 		return 'reinstate';
 	}
 
 	return 'continue';
 }
 
-function get_application_status_old($user_id, $application, &$text, &$button, $manager=null) {
+function local_obu_application_get_application_status_old($user_id, $application, &$text, &$button, $manager=null) {
 
 	$text = '';
 	$button = '';
 	if(!isset($manager)) {
-		$manager = is_manager();
+		$manager = local_obu_application_is_manager();
 	}
 
 	// Prepare the submission/approval trail
@@ -1474,7 +1491,7 @@ function get_application_status_old($user_id, $application, &$text, &$button, $m
 		return;
 	}
 
-	if (($application->approval_state == 1 || $application->approval_state == 3) && is_administrator()) { // An administrator can reinstate a rejected application
+	if (($application->approval_state == 1 || $application->approval_state == 3) && local_obu_application_is_administrator()) { // An administrator can reinstate a rejected application
 		$button = 'reinstate';
 		return;
 	}
@@ -1482,7 +1499,7 @@ function get_application_status_old($user_id, $application, &$text, &$button, $m
 	$button = 'continue';
 }
 
-function update_workflow(&$application, $approved = true, $data = null) {
+function local_obu_application_update_workflow(&$application, $approved = true, $data = null) {
 
 	$approver_email = '';
 
@@ -1545,7 +1562,7 @@ function update_workflow(&$application, $approved = true, $data = null) {
 			}
 
 			// Add the additional funding fields for a programme of study
-			if (is_programme($application->course_code)) {
+			if (local_obu_application_is_programme($application->course_code)) {
 				$application->fund_programme = $data->fund_programme;
 				if ($data->fund_programme) {
 					$application->fund_module_1 = '';
@@ -1605,22 +1622,22 @@ function update_workflow(&$application, $approved = true, $data = null) {
 			}
 		}
 	}
-	update_application($application);
+	local_obu_application_update_application($application);
 
 	// Update the stored approval requests and send notification emails
-	update_approver($application, $approver_email, $revoked);
+	local_obu_application_update_approver($application, $approver_email, $revoked);
 }
 
-function update_approver($application, $approver_email, $revoked = null) {
+function local_obu_application_update_approver($application, $approver_email, $revoked = null) {
 
 	// Update the stored approval requests
-	read_approval($application->id, $approval);
+	local_obu_application_read_approval($application->id, $approval);
 	if ($approver_email == '') {
-		delete_approval($approval);
+		local_obu_application_delete_approval($approval);
 	} else {
 		$approval->approver = strtolower($approver_email);
 		$approval->request_date = time();
-		write_approval($approval);
+		local_obu_application_write_approval($approval);
 	}
 
 	// Determine the URL to use to link to the application
@@ -1642,7 +1659,7 @@ function update_approver($application, $approver_email, $revoked = null) {
 		'X-Auto-Response-Suppress: All',
 		'Auto-Submitted: auto-generated'
 	);
-	$text = get_application_status($applicant->id, $application, null, $revoked); // Get the status from the applicant's perspective
+	$text = local_obu_application_get_application_status($applicant->id, $application, null, $revoked); // Get the status from the applicant's perspective
 	$html = '<h4><a href="' . $process . '">HLS Application (Ref HLS/' . $application->id . ')</a></h4>' . $text;
 	email_to_user($applicant, $hls, 'The Status of Your HLS Application (Ref HLS/' . $application->id . ')', html_to_text($html), $html);
 
@@ -1673,15 +1690,15 @@ function update_approver($application, $approver_email, $revoked = null) {
 	}
 }
 
-function encode_xml($string) {
+function local_obu_application_encode_xml($string) {
 	return(htmlentities($string, ENT_NOQUOTES | ENT_XML1, 'UTF-8'));
 }
 
-function decode_xml($string) {
+function local_obu_application_decode_xml($string) {
 	return(html_entity_decode($string, ENT_NOQUOTES | ENT_XML1, 'UTF-8'));
 }
 
-function get_select_elements($supplement) {
+function local_obu_application_get_select_elements($supplement) {
 	$selects = array();
 
 	$fld_start = '<input ';
@@ -1700,7 +1717,7 @@ function get_select_elements($supplement) {
 		if ($pos === false) {
 			break;
 		}
-		$element = split_input_field(substr($supplement, $offset, ($pos - $offset)));
+		$element = local_obu_application_split_input_field(substr($supplement, $offset, ($pos - $offset)));
 		$offset = $pos + $fld_end_len;
 		if ($element['type'] == 'select') {
 			$selects[$element['id']] = $element['name'];
@@ -1710,7 +1727,7 @@ function get_select_elements($supplement) {
 	return $selects;
 }
 
-function get_file_elements($supplement) {
+function local_obu_application_get_file_elements($supplement) {
 	$files = array();
 
 	$fld_start = '<input ';
@@ -1729,7 +1746,7 @@ function get_file_elements($supplement) {
 		if ($pos === false) {
 			break;
 		}
-		$element = split_input_field(substr($supplement, $offset, ($pos - $offset)));
+		$element = local_obu_application_split_input_field(substr($supplement, $offset, ($pos - $offset)));
 		$offset = $pos + $fld_end_len;
 		if ($element['type'] == 'file') {
 			$files[] = $element['id'];
@@ -1739,7 +1756,7 @@ function get_file_elements($supplement) {
 	return $files;
 }
 
-function split_input_field($input_field) {
+function local_obu_application_split_input_field($input_field) {
 	$parts = str_replace('" ', '"|^|', $input_field);
 	$parts = explode('|^|', $parts);
 	$params = array();
@@ -1791,16 +1808,16 @@ function split_input_field($input_field) {
 	return $params;
 }
 
-function pack_supplement_data($fields) {
+function local_obu_application_pack_supplement_data($fields) {
 	$xml = new SimpleXMLElement('<supplement_data/>');
 	foreach ($fields as $key => $value) {
-		$xml->addChild($key, encode_xml($value));
+		$xml->addChild($key, local_obu_application_encode_xml($value));
 	}
 
     return $xml->asXML();
 }
 
-function unpack_supplement_data($data, &$fields) {
+function local_obu_application_unpack_supplement_data($data, &$fields) {
 
 	$fields = array();
 	if ($data) {
@@ -1813,7 +1830,7 @@ function unpack_supplement_data($data, &$fields) {
 	return true;
 }
 
-function get_file_link($file_pathnamehash) {
+function local_obu_application_get_file_link($file_pathnamehash) {
     global $CFG, $USER;
 
 	$fs = get_file_storage();

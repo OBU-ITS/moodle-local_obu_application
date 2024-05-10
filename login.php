@@ -82,7 +82,7 @@ if ($frm and isset($frm->username)) { // Login WITH cookies
     $frm->username = trim(core_text::strtolower($frm->username));
 
     if (empty($errormsg)) {
-            $user = authenticate_application_user($frm->username, $frm->password, false, $errorcode);
+            $user = local_obu_application_authenticate_application_user($frm->username, $frm->password, false, $errorcode);
     }
 
     // Intercept 'restored' users to provide them with info & reset password

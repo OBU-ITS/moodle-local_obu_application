@@ -29,7 +29,7 @@
 require('../../config.php');
 require_once('./hide_moodle.php');
 
-require_obu_login();
+local_obu_application_require_obu_login();
 
 $home = new moodle_url('/local/obu_application/');
 $url = $home . 'outside_uk_residence.php';
@@ -41,7 +41,7 @@ $PAGE->set_url($url);
 
 $message = '';
 
-$record = read_applicant($USER->id, false);
+$record = local_obu_application_read_applicant($USER->id, false);
 $homeResidencies = array('XF', 'XH', 'XI', 'XG', 'JE', 'GG');
 if(!in_array($record->residence_code, $homeResidencies) || $record->nationality_code != 'GB') {
     $message = get_string('page_outside-uk-residence_message', 'local_obu_application');

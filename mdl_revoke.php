@@ -30,14 +30,14 @@ require_once('./mdl_revoke_form.php');
 require_once($CFG->libdir . '/moodlelib.php');
 
 $home = new moodle_url('/');
-if (!is_manager()) {
+if (!local_obu_application_is_manager()) {
     redirect($home);
 }
 
-$applications_course = get_applications_course();
+$applications_course = local_obu_application_get_applications_course();
 require_login($applications_course);
 $back = $home . 'course/view.php?id=' . $applications_course;
-if (!is_manager()) {
+if (!local_obu_application_is_manager()) {
     redirect($back);
 }
 
@@ -49,7 +49,7 @@ if ($source) {
 }
 
 $id = $_REQUEST['id'] ?? null;
-$application = $id ? read_application($_REQUEST['id']) : null;
+$application = $id ? local_obu_application_read_application($_REQUEST['id']) : null;
 if(!$application) {
     redirect($back);
 }
@@ -75,7 +75,7 @@ if ($mform->is_cancelled()) {
 }
 
 if ($mform_data = $mform->get_data()) {
-    update_workflow($application, true, $mform_data); // Revoked
+    local_obu_application_update_workflow($application, true, $mform_data); // Revoked
 
     redirect($back);
 }

@@ -30,14 +30,14 @@ require_once('./db_update.php');
 require_once('./mdl_supplement_form.php');
 
 $home = new moodle_url('/');
-if (!is_manager()) {
+if (!local_obu_application_is_manager()) {
 	redirect($home);
 }
 
-$applications_course = get_applications_course();
+$applications_course = local_obu_application_get_applications_course();
 require_login($applications_course);
 $back = $home . 'course/view.php?id=' . $applications_course;
-if (!is_administrator()) {
+if (!local_obu_application_is_administrator()) {
 	redirect($back);
 }
 
@@ -67,10 +67,10 @@ if (isset($_REQUEST['ref'])) {
 	$ref = strtoupper($_REQUEST['ref']);
 	if (isset($_REQUEST['version'])) {
 		$version = strtoupper($_REQUEST['version']);
-        $record = read_supplement_form($ref, $version);
+        $record = local_obu_application_read_supplement_form($ref, $version);
 	} else {
 		if (!isset($_REQUEST['versions']) || (isset($_REQUEST['versions']) && $_REQUEST['versions'] != 0)) {
-			$supplements = read_supplement_forms($ref);
+			$supplements = local_obu_application_read_supplement_forms($ref);
 			if ($supplements) {
 				$versions[0] = get_string('new_version', 'local_obu_application'); // The 'New Version' option
 				foreach ($supplements as $supplement) {
@@ -78,7 +78,7 @@ if (isset($_REQUEST['ref'])) {
 				}
 				if (isset($_REQUEST['versions'])) {
 					$version = $versions[$_REQUEST['versions']];
-					$record = read_supplement_form($ref, $version);
+					$record = local_obu_application_read_supplement_form($ref, $version);
 				}
 			}
 		}
@@ -104,12 +104,12 @@ if ($msupplement->is_cancelled()) {
 else if ($msupplement_data = $msupplement->get_data()) {
 	if ($msupplement_data->submitbutton == get_string('save', 'local_obu_application')) {
 		if (!$msupplement_data->already_published || is_siteadmin()) {
-			write_supplement_form($USER->id, $msupplement_data);
+            local_obu_application_write_supplement_form($USER->id, $msupplement_data);
 		}
 		redirect($url);
     } else if ($msupplement_data->submitbutton == get_string('reinstate', 'local_obu_application')) {
         if ($msupplement_data->already_published || is_siteadmin()) {
-            redirect(reinstate_supplement_form($USER->id, $msupplement_data));
+            redirect(local_obu_application_reinstate_supplement_form($USER->id, $msupplement_data));
         }
     }
 }	

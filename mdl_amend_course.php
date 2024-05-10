@@ -32,14 +32,14 @@ require_once($CFG->libdir . '/moodlelib.php');
 require_login();
 
 $home = new moodle_url('/');
-if (!is_manager()) {
+if (!local_obu_application_is_manager()) {
 	redirect($home);
 }
 
-$applications_course = get_applications_course();
+$applications_course = local_obu_application_get_applications_course();
 require_login($applications_course);
 $back = $home . 'course/view.php?id=' . $applications_course;
-//if (!is_administrator()) {
+//if (!local_obu_application_is_administrator()) {
 //	redirect($back);
 //}
 
@@ -52,7 +52,7 @@ if (!isset($_REQUEST['id'])) {
 	redirect($back);
 }
 
-$application = read_application($_REQUEST['id']);
+$application = local_obu_application_read_application($_REQUEST['id']);
 if ($application === false) {
 	redirect($back);
 }
@@ -74,8 +74,8 @@ $PAGE->navbar->add($heading);
 $message = '';
 
 $parameters = [
-	'courses' => get_course_names(),
-	'dates' => get_course_dates(),
+	'courses' => local_obu_application_get_course_names(),
+	'dates' => local_obu_application_get_course_dates(),
 	'application' => $application
 ];
 	
@@ -88,7 +88,7 @@ if ($mform->is_cancelled()) {
 if ($mform_data = $mform->get_data()) {
 		
 	// Update the applications's course fields
-	$course = read_course_record($mform_data->course_code);
+	$course = local_obu_application_read_course_record($mform_data->course_code);
 	$application->course_code = $course->code;
 	$application->course_name = $course->name;
 	$application->course_date = $mform_data->course_date;
@@ -98,7 +98,7 @@ if ($mform_data = $mform->get_data()) {
 	} else {
 		$application->student_number = $mform_data->current_student_number;
 	}
-	update_application($application);
+    local_obu_application_update_application($application);
 
 	redirect($process);
 }
