@@ -804,5 +804,13 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
         upgrade_plugin_savepoint(true, 2024030809, 'local', 'obu_application');
     }
 
+//    if($oldversion < 2024051702) {
+//        $sql = "DELETE FROM mdl_local_obu_course WHERE code IN ('PGC-ACZ C', 'NURS7027' , 'NURS6021' , 'NURS6070' , 'NURS6071' , 'PGC-AIC' , 'MSC-ACPHE' , 'MSC-ACPHEE' , 'NURS7077' , 'CMNR7007DL' , 'CMNR7007HE' , 'NURS7030SU' , 'NURS7030SO' , 'MSCANP60' , 'MSC-ANP60' , 'MSC-ANP' , 'PGD-ANP' , 'PGC-ANP' , 'NURS7006' , 'HCTR6001' , 'CMNR7003HE' , 'NURS7098' , 'CMNR7008HE' , 'CMNR7024HE' , 'HCTR6002' , 'HPED7002' , 'ADNR5014' , 'NURS7029' , 'NURS7060' , 'CMNR7004HE' , 'PGD-DSN B' , 'PGD-DSN S' , 'PGC-ENP' , 'CMNR7006HE' , 'CMNR7022HE' , 'NUTR7101 C' , 'CMNR7005HE' , 'HCTR6001' , 'CMNR7020 C' , 'CMNR7020HE' , 'MSC-HSIARC' , 'MSC-HSI60' , 'MSC-HSI80' , 'BSC-HSI' , 'BSCH-HSI' , 'MSC-HSI PH' , 'HCTR6003' , 'HESC6018' , 'NURS7058B' , 'NURS7058FR' , 'NURS7058HE' , 'NURS7058OH' , 'NURS7057OH' , 'NURS7057B' , 'NURS7057F' , 'NURS7057HE' , 'NURS6019' , 'MSC-MHS' , 'MSC-HSC' , 'PGC-MHS' , 'PGD-MHS' , 'HESC7015' , 'NURS7040' , 'PGC-NNP' , 'NURS7008' , 'NURS7030SM' , 'RHAB7002' , 'PGC-PMH-C' , 'PGD-PMH-C' , 'PGC-PPH-C' , 'PGD-PPH-C' , 'MHNR6003' , 'HESC7014' , 'HESC6020' , 'NURS7039' , 'HESC6002 M' , 'HESC6002-M' , 'HESC6002N' , 'HESC6002SF' , 'PGD-CPS BE' , 'PGD-CPS BU' , 'PGD-CPH BE' , 'PGD-CPH BU' , 'RHAB7003')";
+//
+//        $DB->execute($sql);
+//
+//        upgrade_plugin_savepoint(true, 2024051702, 'local', 'obu_application');
+//    }
+
     return $result;
 }
