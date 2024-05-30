@@ -41,7 +41,7 @@ class mdl_organisation_report_form extends moodleform {
         $organisationOptions = [];
         $organisationOptions['-1'] = get_string('select', 'local_obu_application');
         foreach ($data->organisations as $organisation_id => $organisation_name) {
-            $organisationOptions[$organisation_name] = $organisation_name;
+            $organisationOptions[$organisation_id] = $organisation_name;
         }
 
         $mform->addElement('html', '<h2>' . get_string('organisation_options', 'local_obu_application') . '</h2>');
