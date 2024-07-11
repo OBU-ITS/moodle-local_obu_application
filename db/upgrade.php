@@ -812,5 +812,29 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
         upgrade_plugin_savepoint(true, 2024052001, 'local', 'obu_application');
     }
 
+    if($oldversion < 2024070902) {
+        //find all applicants and applications with incorrect course date format
+        $applicantsSQL = "SELECT * FROM mdl_local_obu_applicant WHERE course_date REGEXP '^[A-Z]{3}[0-9]{4}$'";
+        $applicationsSQL = "SELECT * FROM mdl_local_obu_application WHERE course_date REGEXP '^[A-Z]{3}[0-9]{4}$'";
+
+        $affectedApplicants = $DB->get_records_sql($applicantsSQL);
+        $affectedApplications = $DB->get_records_sql($applicationsSQL);
+
+        //update all affected applicants and applications with proper course date format
+        foreach ($affectedApplicants as $applicant){
+            $updatedCourseDate = substr($applicant->course_date, 0,3) . substr($applicant->course_date, 5,2);
+            $updateSQL = "UPDATE mdl_local_obu_applicant SET course_date = ? WHERE id = ?";
+            $DB->execute($updateSQL, array($updatedCourseDate, $applicant->id));
+        }
+
+        foreach ($affectedApplications as $application){
+            $updatedCourseDate = substr($application->course_date, 0,3) . substr($application->course_date, 5,2);
+            $updateSQL = "UPDATE mdl_local_obu_application SET course_date = ? WHERE id = ?";
+            $DB->execute($updateSQL, array($updatedCourseDate, $application->id));
+        }
+
+        upgrade_plugin_savepoint(true, 2024070902, 'local', 'obu_application');
+    }
+
     return $result;
 }
