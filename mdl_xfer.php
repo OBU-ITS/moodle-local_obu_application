@@ -79,6 +79,8 @@ else if ($mform_data = $mform->get_data()) {
         'NOV' => '11',
         'DEC' => '12' ];
 
+    $current_century_prefix = (int)floor((int)date('Y') / 100);
+
 	if (($mform_data->xfer_type == 1) || ($mform_data->xfer_type == 3)) {
 		$param_name = 'ADM'; // Admissions
 	} else {
@@ -94,7 +96,7 @@ else if ($mform_data = $mform->get_data()) {
 
         $xfer_id = 0; // No existing batch number
         $batch_number = $param->number + 1;
-		$start_date = (substr($mform_data->course_date, 3) * 100) + $months[substr($mform_data->course_date, 0, 3)];
+		$start_date = (($current_century_prefix . substr($mform_data->course_date, 3)) * 100) + $months[substr($mform_data->course_date, 0, 3)];
 	}
 
     $file_id = $xfer_id != 0 ? $xfer_id : $batch_number;
@@ -110,7 +112,7 @@ else if ($mform_data = $mform->get_data()) {
 			if (($start_date == 0) || !isset($months[substr($application->course_date, 0, 3)])) { // No check (or we can't)
 				$course_date = 0;
 			} else {
-				$course_date = (substr($application->course_date, 3) * 100) + $months[substr($application->course_date, 0, 3)];
+				$course_date = (($current_century_prefix . substr($application->course_date, 3)) * 100) + $months[substr($application->course_date, 0, 3)];
 			}
 			if ($course_date <= $start_date) {
 				$xfers[] = $application->id;
