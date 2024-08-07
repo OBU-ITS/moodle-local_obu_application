@@ -143,7 +143,6 @@ else if ($mform_data = $mform->get_data()) {
 		header('Content-Type: text/csv');
 		header('Content-Disposition: attachment;filename=HLS_' . $param_name . sprintf('_%05d.', $file_id) . $extension);
 		$fp = fopen('php://output', 'w');
-        try {
 
 
 		foreach ($xfers as $index => $xfer) {
@@ -368,10 +367,6 @@ else if ($mform_data = $mform->get_data()) {
 
 		}
 		fclose($fp);
-        } catch (Exception $e) {
-            var_dump($e);
-            exit();
-        }
 
 		// If a new batch, update the parameter record
 		if ($batch_number > 0) {
