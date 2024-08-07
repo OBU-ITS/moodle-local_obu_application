@@ -139,7 +139,6 @@ else if ($mform_data = $mform->get_data()) {
         else {
             local_obu_application_write_xfer_record($file_id);
         }
-        try {
 		header('Content-Type: text/csv');
 		header('Content-Disposition: attachment;filename=HLS_' . $param_name . sprintf('_%05d.', $file_id) . $extension);
 		$fp = fopen('php://output', 'w');
@@ -147,7 +146,6 @@ else if ($mform_data = $mform->get_data()) {
 
 		foreach ($xfers as $index => $xfer) {
 			$application = local_obu_application_read_application($xfer);
-            echo $application->id;
 
 
 			$fields = array();
@@ -366,13 +364,7 @@ else if ($mform_data = $mform->get_data()) {
 			}
 
 		}
-        } catch (Exception $e){
-            var_dump($e);
-            exit();
-        } finally {
-            fclose($fp);
-            exit();
-        }
+        fclose($fp);
 
 		// If a new batch, update the parameter record
 		if ($batch_number > 0) {
@@ -380,7 +372,6 @@ else if ($mform_data = $mform->get_data()) {
             local_obu_application_write_parameter($param);
 		}
 
-		exit();
 	}
 }
 
