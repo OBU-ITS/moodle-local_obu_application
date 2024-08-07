@@ -376,7 +376,7 @@ else if ($mform_data = $mform->get_data()) {
 		// If a new batch, update the parameter record
 		if ($batch_number > 0) {
 			$param->number = $batch_number;
-//            local_obu_application_write_parameter($param);
+            local_obu_application_write_parameter($param);
 		}
 
 		exit();
