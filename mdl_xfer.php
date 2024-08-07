@@ -140,12 +140,15 @@ else if ($mform_data = $mform->get_data()) {
             local_obu_application_write_xfer_record($file_id);
         }
 
-		header('Content-Type: text/csv');
-		header('Content-Disposition: attachment;filename=HLS_' . $param_name . sprintf('_%05d.', $file_id) . $extension);
-		$fp = fopen('php://output', 'w');
+//		header('Content-Type: text/csv');
+//		header('Content-Disposition: attachment;filename=HLS_' . $param_name . sprintf('_%05d.', $file_id) . $extension);
+//		$fp = fopen('php://output', 'w');
+        try {
+
+
 		foreach ($xfers as $index => $xfer) {
 			$application = local_obu_application_read_application($xfer);
-
+            echo $application->id;
 
 
 			$fields = array();
@@ -199,7 +202,7 @@ else if ($mform_data = $mform->get_data()) {
 			$fields['Gender'] = $application->gender;
 			$fields['Country_of_Birth'] = $application->birth_code;
 			$fields['Nationality'] = $application->nationality_code;
-			$course = local_obu_application_read_course_record(trim($application->course_code));
+            $course = local_obu_application_read_course_record(trim($application->course_code));
 			$fields['Programme_Code'] = $course->programme_code;
 			$fields['Major_Code'] = $course->major_code;
 			$fields['Level'] = $course->level;
@@ -348,10 +351,10 @@ else if ($mform_data = $mform->get_data()) {
 				}
 			}
 
-			if ($index == 0) { // First record
-				fputcsv($fp, array_keys($fields), $delimiter);
-			}
-			fputcsv($fp, $fields, $delimiter);
+//			if ($index == 0) { // First record
+//				fputcsv($fp, array_keys($fields), $delimiter);
+//			}
+//			fputcsv($fp, $fields, $delimiter);
 
 			// If a new batch, flag the application as processed
 			if ($batch_number > 0) {
@@ -360,16 +363,20 @@ else if ($mform_data = $mform->get_data()) {
 				} else {
 					$application->finance_xfer = $batch_number;
 				}
-                local_obu_application_update_application($application);
+//                local_obu_application_update_application($application);
 			}
 
 		}
-		fclose($fp);
+//		fclose($fp);
+        } catch (Exception $e) {
+            var_dump($e);
+            exit();
+        }
 
 		// If a new batch, update the parameter record
 		if ($batch_number > 0) {
 			$param->number = $batch_number;
-            local_obu_application_write_parameter($param);
+//            local_obu_application_write_parameter($param);
 		}
 
 		exit();
