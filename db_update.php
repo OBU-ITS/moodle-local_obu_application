@@ -966,8 +966,7 @@ function local_obu_application_get_applications($user_id = null) {
 	if ($user_id != null) { // Required for just this user
 		$applications = $DB->get_records('local_obu_application', array('userid' => $user_id), 'application_date DESC');
 	} else { // All applications
-        $sql = 'SELECT * FROM {local_obu_application} WHERE approval_level = 3 and approval_state = 2 and course_date = "SEP24" and finance_xfer = 0';
-		$applications = $DB->get_records_sql($sql);
+		$applications = $DB->get_records('local_obu_application');
 	}
 
 	return $applications;
