@@ -79,6 +79,8 @@ else if ($mform_data = $mform->get_data()) {
         'NOV' => '11',
         'DEC' => '12' ];
 
+    $current_century_prefix = (int)floor((int)date('Y') / 100);
+
 	if (($mform_data->xfer_type == 1) || ($mform_data->xfer_type == 3)) {
 		$param_name = 'ADM'; // Admissions
 	} else {
@@ -94,29 +96,29 @@ else if ($mform_data = $mform->get_data()) {
 
         $xfer_id = 0; // No existing batch number
         $batch_number = $param->number + 1;
-		$start_date = (substr($mform_data->course_date, 3) * 100) + $months[substr($mform_data->course_date, 0, 3)];
+		$start_date = (($current_century_prefix . substr($mform_data->course_date, 3)) * 100) + $months[substr($mform_data->course_date, 0, 3)];
 	}
 
     $file_id = $xfer_id != 0 ? $xfer_id : $batch_number;
 
-	$applications = local_obu_application_get_applications(); // Get all applications
-	$xfers = array();
-	foreach ($applications as $application) {
-		if ((($application->approval_level == 3) && ($application->approval_state == 2)) // Approved by HLS so is/was OK to go...
-				&& (((($mform_data->xfer_type == 1) || ($mform_data->xfer_type == 3))
-					&& ($application->studying <> 2) && ($application->admissions_xfer == $xfer_id)) // Admissions or Process (Admissions data processing)
-				|| (($mform_data->xfer_type == 2) && ($application->finance_xfer == $xfer_id)))) { // Finance
-			// OK - check the date if necessary
-			if (($start_date == 0) || !isset($months[substr($application->course_date, 0, 3)])) { // No check (or we can't)
-				$course_date = 0;
-			} else {
-				$course_date = (substr($application->course_date, 3) * 100) + $months[substr($application->course_date, 0, 3)];
-			}
-			if ($course_date <= $start_date) {
-				$xfers[] = $application->id;
-			}
-		}
-	}
+        $applications = local_obu_application_get_applications(); // Get all applications
+        $xfers = array();
+        foreach ($applications as $application) {
+            if ((($application->approval_level == 3) && ($application->approval_state == 2)) // Approved by HLS so is/was OK to go...
+                && (((($mform_data->xfer_type == 1) || ($mform_data->xfer_type == 3))
+                        && ($application->studying <> 2) && ($application->admissions_xfer == $xfer_id)) // Admissions or Process (Admissions data processing)
+                    || (($mform_data->xfer_type == 2) && ($application->finance_xfer == $xfer_id)))) { // Finance
+                // OK - check the date if necessary
+                if (($start_date == 0) || !isset($months[substr($application->course_date, 0, 3)])) { // No check (or we can't)
+                    $course_date = 0;
+                } else {
+                    $course_date = (($current_century_prefix . substr($application->course_date, 3)) * 100) + $months[substr($application->course_date, 0, 3)];
+                }
+                if ($course_date <= $start_date) {
+                    $xfers[] = $application->id;
+                }
+            }
+        }
 
 
 	if (empty($xfers)) {
@@ -137,13 +139,13 @@ else if ($mform_data = $mform->get_data()) {
         else {
             local_obu_application_write_xfer_record($file_id);
         }
-
 		header('Content-Type: text/csv');
 		header('Content-Disposition: attachment;filename=HLS_' . $param_name . sprintf('_%05d.', $file_id) . $extension);
 		$fp = fopen('php://output', 'w');
+
+
 		foreach ($xfers as $index => $xfer) {
 			$application = local_obu_application_read_application($xfer);
-
 
 
 			$fields = array();
@@ -197,7 +199,7 @@ else if ($mform_data = $mform->get_data()) {
 			$fields['Gender'] = $application->gender;
 			$fields['Country_of_Birth'] = $application->birth_code;
 			$fields['Nationality'] = $application->nationality_code;
-			$course = local_obu_application_read_course_record(trim($application->course_code));
+            $course = local_obu_application_read_course_record(trim($application->course_code));
 			$fields['Programme_Code'] = $course->programme_code;
 			$fields['Major_Code'] = $course->major_code;
 			$fields['Level'] = $course->level;
@@ -362,7 +364,7 @@ else if ($mform_data = $mform->get_data()) {
 			}
 
 		}
-		fclose($fp);
+        fclose($fp);
 
 		// If a new batch, update the parameter record
 		if ($batch_number > 0) {
@@ -370,7 +372,6 @@ else if ($mform_data = $mform->get_data()) {
             local_obu_application_write_parameter($param);
 		}
 
-		exit();
 	}
 }
 

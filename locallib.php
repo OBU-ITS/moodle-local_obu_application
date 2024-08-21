@@ -1014,13 +1014,18 @@ function local_obu_application_get_dates() {
 	return $dates;
 }
 
-function local_obu_application_get_course_dates() {
+/**
+ * See test/show_dates.php for testing
+ */
+function local_obu_application_get_course_dates($timestamp = null) {
 	$months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 	$coursedatesthreshold = 1;
 
-	$month = date('m');
-	$year = date('y');
-	$displayyear = date('Y');
+	$timestamp = isset($timestamp) ? $timestamp : time();
+
+	$month = date('m', $timestamp);
+	$year = date('y', $timestamp);
+	$displayyear = date('Y', $timestamp);
 
 	$dates = array('' => get_string('select', 'local_obu_application'));
 
@@ -1039,6 +1044,7 @@ function local_obu_application_get_course_dates() {
 			$month++;
 		} else {
 			$year++;
+			$displayyear++;
 			$month = 1;
 		}
 	}
