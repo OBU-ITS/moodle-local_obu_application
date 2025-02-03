@@ -393,6 +393,47 @@ function local_obu_application_get_organisation_records() {
 	return $DB->get_records('local_obu_organisation', null, 'name');
 }
 
+function local_obu_application_read_qualification($qualification_id) {
+    global $DB;
+
+    return $DB->get_record('local_obu_qualifications', array('id' => $qualification_id), '*');
+}
+
+function local_obu_application_write_qualification($qualification) {
+    global $DB;
+
+    $record = new stdClass();
+    $id = $qualification->id;
+    $record->code = $qualification->code;
+    $record->label = $qualification->label;
+    $record->priority = $qualification->priority;
+    $record->admissions_type = $qualification->admissions_type;
+    $record->cpd_subset = $qualification->cpd_subset;
+    $record->crm_dropdown_text = $qualification->crm_dropdown_text;
+    $record->notes = $qualification->notes;
+
+    if ($id == '0') {
+        $id = $DB->insert_record('local_obu_qualifications', $record);
+    } else {
+        $record->id = $id;
+        $DB->update_record('local_obu_qualifications', $record);
+    }
+
+    return $id;
+}
+
+function local_obu_application_delete_qualification($qualification_id) {
+    global $DB;
+
+    $DB->delete_records('local_obu_qualifications', array('id' => $qualification_id));
+}
+
+function local_obu_application_get_qualification_records() {
+    global $DB;
+
+    return $DB->get_records('local_obu_qualifications', null, 'code');
+}
+
 function local_obu_application_read_user($user_id) {
     global $DB;
 
