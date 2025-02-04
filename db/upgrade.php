@@ -911,5 +911,15 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
         upgrade_plugin_savepoint(true, 2025020401, 'local', 'obu_application');
     }
 
+    if ($oldversion < 2025020402) {
+        $table = new xmldb_table('local_obu_application');
+        $field = new xmldb_field('highest_prof_qualification', XMLDB_TYPE_TEXT, null, null, null, null, null, 'prof_level');
+
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        upgrade_plugin_savepoint(true, 2025020402, 'local', 'obu_application');
+    }
     return $result;
 }

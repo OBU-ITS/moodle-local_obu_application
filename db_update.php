@@ -921,6 +921,7 @@ function local_obu_application_write_application($user_id, $form_data) {
     $record->p16feperiod = $applicant->p16feperiod;
     $record->training = $applicant->training;
     $record->trainingperiod = $applicant->trainingperiod;
+    $record->highest_prof_qualification = $applicant->highest_prof_qualification;
     $record->prof_level = $applicant->prof_level;
     $record->prof_award = $applicant->prof_award;
     $record->prof_date = $applicant->prof_date;

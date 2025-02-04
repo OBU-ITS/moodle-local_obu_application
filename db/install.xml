@@ -182,6 +182,7 @@
         <FIELD NAME="p16feperiod" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Post 16 Further Education period"/>
         <FIELD NAME="training" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="University/professional training body"/>
         <FIELD NAME="trainingperiod" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Training period"/>
+        <FIELD NAME="highest_prof_qualification" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="New highest professional qualification field"/>
         <FIELD NAME="prof_level" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Level of qualification"/>
         <FIELD NAME="prof_award" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Award name"/>
         <FIELD NAME="prof_date" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Date qualified"/>

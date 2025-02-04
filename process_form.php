@@ -155,6 +155,7 @@ class process_form extends moodleform {
 				'p16feperiod' => $data->record->p16feperiod,
 				'training' => $data->record->training,
 				'trainingperiod' => $data->record->trainingperiod,
+                'highest_prof_qualification' => $data->record->highest_prof_qualification,
 				'prof_level' => $data->record->prof_level,
 				'prof_award' => $data->record->prof_award,
 				'prof_date_formatted' => $prof_date_formatted,
@@ -278,8 +279,13 @@ class process_form extends moodleform {
 			if ($data->button_text == 'approve') {
 				$mform->setExpanded('prof_qual_head');
 			}
-			$mform->addElement('static', 'prof_level', get_string('prof_level', 'local_obu_application'));
-			$mform->addElement('static', 'prof_award', get_string('prof_award', 'local_obu_application'));
+            $highest_prof_qualification = $data->record->highest_prof_qualification ?? null;
+            if (!empty($highest_prof_qualification)) {
+                $mform->addElement('static', 'highest_prof_qualification', get_string('qualification', 'local_obu_application'));
+            } else {
+                $mform->addElement('static', 'prof_level', get_string('prof_level', 'local_obu_application'));
+                $mform->addElement('static', 'prof_award', get_string('prof_award', 'local_obu_application'));
+            }
 			$mform->addElement('static', 'prof_date_formatted', get_string('prof_date', 'local_obu_application'));
 			$mform->addElement('static', 'credit_formatted', get_string('credit', 'local_obu_application'));
 			$mform->addElement('static', 'credit_name', get_string('credit_name', 'local_obu_application'));
