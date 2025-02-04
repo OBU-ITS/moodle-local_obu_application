@@ -836,7 +836,7 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
         $table = new xmldb_table('local_obu_qualifications');
 
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
-        $table->add_field('code', XMLDB_TYPE_CHAR, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('code', XMLDB_TYPE_CHAR, '5', null, XMLDB_NOTNULL, null, null);
         $table->add_field('label', XMLDB_TYPE_TEXT, null, null, XMLDB_NOTNULL, null, null);
         $table->add_field('priority', XMLDB_TYPE_INTEGER, '2', null, XMLDB_NOTNULL, null, null);
         $table->add_field('admissions_type', XMLDB_TYPE_CHAR, '10', null, XMLDB_NOTNULL, null, null);
@@ -898,6 +898,17 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
         }
 
         upgrade_plugin_savepoint(true, 2025013101, 'local', 'obu_application');
+    }
+
+    if ($oldversion < 2025020401) {
+        $table = new xmldb_table('local_obu_applicant');
+        $field = new xmldb_field('highest_prof_qualification', XMLDB_TYPE_TEXT, null, null, null, null, null, 'prof_level');
+
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        upgrade_plugin_savepoint(true, 2025020401, 'local', 'obu_application');
     }
 
     return $result;

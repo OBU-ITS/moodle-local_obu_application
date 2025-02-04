@@ -33,7 +33,7 @@ require_once($CFG->libdir . '/formslib.php');
 class profile_professional_qualification_form extends moodleform {
 
     function definition() {
-        global $CFG;
+        global $CFG, $DB;
 
         $mform =& $this->_form;
 
@@ -41,6 +41,7 @@ class profile_professional_qualification_form extends moodleform {
         $data->record = $this->_customdata['record'];
 
         $fields = [
+            'highest_prof_qualification' => $data->record->highest_prof_qualification ?? '',
             'prof_level' => $data->record->prof_level,
             'prof_award' => $data->record->prof_award,
             'prof_date' => $data->record->prof_date,
@@ -51,6 +52,11 @@ class profile_professional_qualification_form extends moodleform {
         $this->set_data($fields);
 
         $date_options = array('startyear' => 1931, 'stopyear'  => 2030, 'timezone'  => 99, 'optional' => false);
+        $qualification_records = $DB->get_records_sql("SELECT label FROM {local_obu_qualifications} ORDER BY priority ASC");
+        $qualification_options = ['' => get_string('select', 'local_obu_application')];
+        foreach ($qualification_records as $record) {
+            $qualification_options[$record->label] = $record->label;
+        }
 
         // This 'dummy' element has two purposes:
         // - To force open the Moodle Forms invisible fieldset outside of any table on the form (corrupts display otherwise)
@@ -58,14 +64,14 @@ class profile_professional_qualification_form extends moodleform {
         $mform->addElement('static', 'form_errors');
 
         // Professional qualification
-        $mform->addElement('html', '<p><strong>' . get_string('prof_level_preamble', 'local_obu_application') . '</strong></p>');
-        $mform->addElement('text', 'prof_level', get_string('prof_level', 'local_obu_application'), 'size="40" maxlength="100"');
+        $mform->addElement('html', '<p><strong>' . get_string('prof_qual_preamble', 'local_obu_application') . '</strong></p>');
+        $mform->addElement('select', 'highest_prof_qualification', '', $qualification_options);
+        $mform->setType('highest_prof_qualification', PARAM_TEXT);
+        $mform->addRule('highest_prof_qualification', null, 'required', null, 'server');
+        $mform->addElement('hidden', 'prof_level');
         $mform->setType('prof_level', PARAM_TEXT);
-        $mform->addRule('prof_level', null, 'required', null, 'server');
-        $mform->addElement('html', '<p><strong>' . get_string('prof_award_preamble', 'local_obu_application') . '</strong></p>');
-        $mform->addElement('text', 'prof_award', get_string('prof_award', 'local_obu_application'), 'size="40" maxlength="100"');
+        $mform->addElement('hidden', 'prof_award');
         $mform->setType('prof_award', PARAM_TEXT);
-        $mform->addRule('prof_award', null, 'required', null, 'server');
         $mform->addElement('date_selector', 'prof_date', get_string('prof_date', 'local_obu_application'));
         $mform->addRule('prof_date', null, 'required', null, 'server');
         $mform->addElement('html', '<p \><strong>' . get_string('credit_preamble', 'local_obu_application') . '</strong>');

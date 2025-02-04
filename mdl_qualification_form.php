@@ -76,7 +76,6 @@ class mdl_qualification_form extends moodleform {
             $mform->addElement('static', 'label', get_string('label', 'local_obu_application'));
             $mform->addElement('static', 'priority', get_string('priority', 'local_obu_application'));
             $mform->addElement('static', 'admissions_type', get_string('admissions_type', 'local_obu_application'));
-            $mform->addElement('static', 'cpd_subset', get_string('cpd_subset', 'local_obu_application'));
             if ($data->record->cpd_subset == '1') {
                 $cpd_subset_formatted = '&#10004;'; // Tick
             } else {
@@ -88,7 +87,7 @@ class mdl_qualification_form extends moodleform {
         } else {
             $mform->addElement('text', 'code', get_string('code', 'local_obu_application'), 'size="10" maxlength="5"');
             $mform->setType('code', PARAM_TEXT);
-            $mform->addElement('text', 'label', get_string('label', 'local_obu_application'), 'size="75" maxlength="100"');
+            $mform->addElement('text', 'label', get_string('label', 'local_obu_application'), 'size="75" maxlength="255"');
             $mform->setType('label', PARAM_TEXT);
             $mform->addElement('text', 'priority', get_string('priority', 'local_obu_application'), 'size="1" maxlength="2"');
             $mform->setType('priority', PARAM_INT);
@@ -114,30 +113,54 @@ class mdl_qualification_form extends moodleform {
         $mform->closeHeaderBefore('buttonarray');
     }
 
-//    function validation($data, $files) {
-//        global $CFG, $DB;
-//        $errors = parent::validation($data, $files);
-//
-//        // Check that we have been given sufficient information
-//        if (isset($data['submitbutton']) && ($data['submitbutton'] == get_string('save', 'local_obu_application'))) {
-//            if ($data['name'] == '') {
-//                $errors['name'] = get_string('value_required', 'local_obu_application');
-//            }
-//            if ($data['email'] == '') {
-//                $errors['email'] = get_string('value_required', 'local_obu_application');
-//            }
-//            if ($data['code'] == '') {
-//                $errors['code'] = get_string('value_required', 'local_obu_application');
-//            }
-//            if ($data['address'] == '') {
-//                $errors['address'] = get_string('value_required', 'local_obu_application');
-//            }
-//        }
-//
-//        if (!empty($errors)) {
-//            $errors['form_errors'] = get_string('form_errors', 'local_obu_application');
-//        }
-//
-//        return $errors;
-//    }
+    function validation($data, $files) {
+        global $DB;
+
+        $errors = parent::validation($data, $files);
+
+        if (isset($data['submitbutton']) && ($data['submitbutton'] == get_string('save', 'local_obu_application'))) {
+            if ($data['code'] == '') {
+                $errors['code'] = get_string('value_required', 'local_obu_application');
+            } elseif (!preg_match('/^[A-Z][0-9]{4}$/', $data['code'])) { // Example: D0000, M0016
+                $errors['code'] = get_string('invalid_code_format', 'local_obu_application');
+            } else {
+                $existingCode = $DB->record_exists('local_obu_qualifications', ['code' => $data['code']]);
+                if ($existingCode && empty($data['id'])) { // New record
+                    $errors['code'] = get_string('existing_qualification_code', 'local_obu_application');
+                } elseif ($existingCode && !$DB->record_exists('local_obu_qualifications', ['id' => $data['id'], 'code' => $data['code']])) {
+                    $errors['code'] = get_string('existing_qualification_code', 'local_obu_application');
+                }
+            }
+            if ($data['label'] == '') {
+                $errors['label'] = get_string('value_required', 'local_obu_application');
+            } else {
+                $sql = "SELECT id FROM {local_obu_qualifications} WHERE " . $DB->sql_compare_text('label') . " = " . $DB->sql_compare_text(':label');
+                $existingLabel = $DB->get_record_sql($sql, ['label' => $data['label']], IGNORE_MULTIPLE);
+
+                if ($existingLabel && empty($data['id'])) { // New record
+                    $errors['label'] = get_string('existing_qualification_label', 'local_obu_application');
+                } elseif ($existingLabel && $existingLabel->id != $data['id']) {
+                    $errors['label'] = get_string('existing_qualification_label', 'local_obu_application');
+                }
+            }
+            if ($data['priority'] == '') {
+                $errors['priority'] = get_string('value_required', 'local_obu_application');
+            } elseif (!ctype_digit((string)$data['priority']) || (int)$data['priority'] < 1 || (int)$data['priority'] > 99) {
+                $errors['priority'] = get_string('invalid_number', 'local_obu_application');
+            }
+            if ($data['admissions_type'] == 0) {
+                $errors['admissions_type'] = get_string('value_required', 'local_obu_application');
+            }
+            if ($data['crm_dropdown_text'] == '') {
+                $errors['crm_dropdown_text'] = get_string('value_required', 'local_obu_application');
+            }
+
+        }
+
+        if (!empty($errors)) {
+            $errors['form_errors'] = get_string('form_errors', 'local_obu_application');
+        }
+
+        return $errors;
+    }
 }

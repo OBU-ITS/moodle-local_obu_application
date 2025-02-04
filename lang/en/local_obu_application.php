@@ -227,6 +227,9 @@ $string['logout_message'] = '<h1>Thank you.</h1>This application has been passed
 
 $string['invalid_data'] = 'Invalid Data';
 $string['invalid_date'] = 'Invalid Date';
+$string['invalid_code_format'] = 'Please use the correct code format (e.g A1000, B1234).';
+$string['existing_qualification_code'] = 'A qualification with this code already exists.';
+$string['existing_qualification_label'] = 'A qualification with this label already exists.';
 
 $string['title_required'] = 'Title required';
 $string['firstname_required'] = 'First name(s) required';
@@ -423,6 +426,7 @@ $string['p16fe'] = 'Post 16 Further Education (if applicable)';
 $string['training'] = 'University/professional training body';
 $string['period'] = 'Date from and to';
 $string['prof_qual_head'] = 'Highest Professional Qualification';
+$string['prof_qual_preamble'] = 'Highest professional qualification you have:';
 $string['prof_level_preamble'] = 'Level of qualification (Diploma/Degree/REPs):';
 $string['prof_level'] = 'Level';
 $string['prof_award_preamble'] = 'Award name (eg Adult Nursing/Social Work):';

@@ -632,6 +632,7 @@ function local_obu_application_write_professional_qualification($user_id, $form_
         $record->userid = $user_id;
     }
 
+    $record->highest_prof_qualification = $form_data->highest_prof_qualification;
     $record->prof_level = $form_data->prof_level;
     $record->prof_award = $form_data->prof_award;
     $record->prof_date = $form_data->prof_date;
