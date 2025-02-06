@@ -47,7 +47,8 @@ $url = $dir . 'mdl_qualification_list.php';
 $table = new html_table();
 $table->head = array('Code', 'Label', 'Priority', 'Admissions Type', 'CPD Subset?', 'CRM Dropdown Text', 'Notes');
 
-$qualifications = local_obu_application_get_qualification_records();
+$sort_by = "code";
+$qualifications = local_obu_application_get_qualification_records($sort_by);
 if ($qualifications != null) {
     foreach ($qualifications as $qualification) {
         if ($qualification->cpd_subset == 1) {

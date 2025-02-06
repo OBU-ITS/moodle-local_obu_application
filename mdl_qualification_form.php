@@ -41,12 +41,21 @@ class mdl_qualification_form extends moodleform {
         $data->qualifications = $this->_customdata['qualifications'];
         $data->record = $this->_customdata['record'];
 
+        $admissions_type_map = [
+            'PG' => 1,
+            'UG' => 2,
+            'UG and PG' => 3
+        ];
+
+        $admissions_type = $data->record->admissions_type ?? '';
+        $mapped_admissions_type = $admissions_type_map[$admissions_type] ?? 0;
+
         if ($data->record != null) {
             $fields = [
                 'code' => $data->record->code,
                 'label' => $data->record->label,
                 'priority' => $data->record->priority,
-                'admissions_type' => $data->record->admissions_type,
+                'admissions_type' => $mapped_admissions_type,
                 'cpd_subset' => $data->record->cpd_subset,
                 'crm_dropdown_text' => $data->record->crm_dropdown_text,
                 'notes' => $data->record->notes
@@ -91,8 +100,14 @@ class mdl_qualification_form extends moodleform {
             $mform->setType('label', PARAM_TEXT);
             $mform->addElement('text', 'priority', get_string('priority', 'local_obu_application'), 'size="1" maxlength="2"');
             $mform->setType('priority', PARAM_INT);
-            $select = $mform->addElement('select', 'admissions_type', get_string('admissions_type', 'local_obu_application'), ['Please select', 'PG', 'UG', 'UG and PG'], null);
-            $select->setSelected(0);
+            $admissions_options = [
+                0 => 'Please select',
+                1 => 'PG',
+                2 => 'UG',
+                3 => 'UG and PG'
+            ];
+            $mform->addElement('select', 'admissions_type', get_string('admissions_type', 'local_obu_application'), $admissions_options);
+            $mform->setType('admissions_type', PARAM_INT);
             $mform->addElement('advcheckbox', 'cpd_subset', get_string('cpd_subset', 'local_obu_application'), null, null, array(0, 1));
             $mform->addElement('text', 'crm_dropdown_text', get_string('crm_dropdown_text', 'local_obu_application'), 'size="75" maxlength="100"');
             $mform->addElement('text', 'notes', get_string('notes', 'local_obu_application'), 'size="75" maxlength="100"');

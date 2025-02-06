@@ -73,7 +73,8 @@ if (isset($_REQUEST['id'])) {
         }
     }
 } else {
-    $recs = local_obu_application_get_qualification_records();
+    $sort_by = "priority";
+    $recs = local_obu_application_get_qualification_records($sort_by);
     if ($recs) { // Do they have a choice?
         $qualifications[0] = get_string('new_qualification', 'local_obu_application'); // The 'New Qualification' option
         foreach ($recs as $rec) {

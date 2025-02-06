@@ -402,12 +402,19 @@ function local_obu_application_read_qualification($qualification_id) {
 function local_obu_application_write_qualification($qualification) {
     global $DB;
 
+    $reverse_admissions_type_map = [
+        1 => 'PG',
+        2 => 'UG',
+        3 => 'UG and PG'
+    ];
+    $admissions_type = $reverse_admissions_type_map[$qualification->admissions_type] ?? '';
+
     $record = new stdClass();
     $id = $qualification->id;
     $record->code = $qualification->code;
     $record->label = $qualification->label;
     $record->priority = $qualification->priority;
-    $record->admissions_type = $qualification->admissions_type;
+    $record->admissions_type = $admissions_type;
     $record->cpd_subset = $qualification->cpd_subset;
     $record->crm_dropdown_text = $qualification->crm_dropdown_text;
     $record->notes = $qualification->notes;
@@ -428,10 +435,10 @@ function local_obu_application_delete_qualification($qualification_id) {
     $DB->delete_records('local_obu_qualifications', array('id' => $qualification_id));
 }
 
-function local_obu_application_get_qualification_records() {
+function local_obu_application_get_qualification_records($sort_by) {
     global $DB;
 
-    return $DB->get_records('local_obu_qualifications', null, 'code');
+    return $DB->get_records('local_obu_qualifications', null, $sort_by);
 }
 
 function local_obu_application_read_user($user_id) {
