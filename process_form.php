@@ -283,8 +283,15 @@ class process_form extends moodleform {
             $highest_prof_qualification = $data->record->highest_prof_qualification ?? null;
             if (!empty($highest_prof_qualification)) {
                 $mform->addElement('static', 'highest_prof_qualification', get_string('qualification', 'local_obu_application'));
-                if ($data->button_text == 'approve') {
+                if ($data->button_text == 'approve' && $data->record->approval_level == 1) {
                     $mform->addElement('advcheckbox', 'qualification_verified', get_string('qualification_verified', 'local_obu_application'), null, null, array(0, 1));
+                } else {
+                    if ($data->record->qualification_verified == 1) {
+                        $qualification_verified_formatted = '&#10004;'; // Tick
+                    } else {
+                        $qualification_verified_formatted = '&#10008;'; // Cross
+                    }
+                    $mform->addElement('static', 'qualification_verified_formatted', get_string('qualification_verified', 'local_obu_application'), $qualification_verified_formatted);
                 }
             } else {
                 $mform->addElement('static', 'prof_level', get_string('prof_level', 'local_obu_application'));

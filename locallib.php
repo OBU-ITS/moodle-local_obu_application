@@ -1509,6 +1509,10 @@ function local_obu_application_get_application_status_old($user_id, $application
 function local_obu_application_update_workflow(&$application, $approved = true, $data = null) {
 
 	$approver_email = '';
+	// ✅ Only update `qualification_verified` if it is set as a checkbox input
+	if (isset($data->qualification_verified) && is_numeric($data->qualification_verified)) {
+		$application->qualification_verified = ($data->qualification_verified == 1) ? 1 : 0;
+	}
 
 	// Update the application record
 	if (($application->approval_level == 0) && ($application->manager_email != '')) { // Submitter (with a programme administrator/manager)
