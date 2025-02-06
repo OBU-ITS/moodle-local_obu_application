@@ -428,6 +428,7 @@ $string['period'] = 'Date from and to';
 $string['prof_qual_head'] = 'Highest Professional Qualification';
 $string['prof_qual_preamble'] = 'Highest professional qualification you have:';
 $string['qualification'] = 'Qualification';
+$string['qualification_verified'] = 'Qualification certificate verified?';
 $string['prof_level_preamble'] = 'Level of qualification (Diploma/Degree/REPs):';
 $string['prof_level'] = 'Level';
 $string['prof_award_preamble'] = 'Award name (eg Adult Nursing/Social Work):';

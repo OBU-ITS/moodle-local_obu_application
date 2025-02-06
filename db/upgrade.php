@@ -921,5 +921,51 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
 
         upgrade_plugin_savepoint(true, 2025020402, 'local', 'obu_application');
     }
+
+    if ($oldversion < 2025020601) {
+        $application_table = new xmldb_table('local_obu_application');
+        $applicant_table = new xmldb_table('local_obu_applicant');
+
+        // Move 'highest_prof_qualification' in 'local_obu_application' before 'prof_level'
+        $temp_field_application = new xmldb_field('temp_highest_prof_qualification', XMLDB_TYPE_TEXT, null, null, null, null, null, 'prof_level');
+
+        if (!$dbman->field_exists($application_table, $temp_field_application)) {
+            $dbman->add_field($application_table, $temp_field_application);
+        }
+
+        $DB->execute("UPDATE {local_obu_application} SET temp_highest_prof_qualification = highest_prof_qualification");
+
+        $old_field_application = new xmldb_field('highest_prof_qualification');
+        if ($dbman->field_exists($application_table, $old_field_application)) {
+            $dbman->drop_field($application_table, $old_field_application);
+        }
+
+        $dbman->rename_field($application_table, $temp_field_application, 'highest_prof_qualification');
+
+        // Move 'highest_prof_qualification' in 'local_obu_applicant' before 'prof_level'
+        $temp_field_applicant = new xmldb_field('temp_highest_prof_qualification', XMLDB_TYPE_TEXT, null, null, null, null, null, 'prof_level');
+
+        if (!$dbman->field_exists($applicant_table, $temp_field_applicant)) {
+            $dbman->add_field($applicant_table, $temp_field_applicant);
+        }
+
+        $DB->execute("UPDATE {local_obu_applicant} SET temp_highest_prof_qualification = highest_prof_qualification");
+
+        $old_field_applicant = new xmldb_field('highest_prof_qualification');
+        if ($dbman->field_exists($applicant_table, $old_field_applicant)) {
+            $dbman->drop_field($applicant_table, $old_field_applicant);
+        }
+
+        $dbman->rename_field($applicant_table, $temp_field_applicant, 'highest_prof_qualification');
+
+        // Add 'qualification_verified' after 'highest_prof_qualification' only in 'local_obu_application'
+        $verified_field = new xmldb_field('qualification_verified', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0', 'highest_prof_qualification');
+
+        if (!$dbman->field_exists($application_table, $verified_field)) {
+            $dbman->add_field($application_table, $verified_field);
+        }
+
+        upgrade_plugin_savepoint(true, 2025020601, 'local', 'obu_application');
+    }
     return $result;
 }
