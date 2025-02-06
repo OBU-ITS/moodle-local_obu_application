@@ -203,6 +203,7 @@ $string['pending_approval_report'] = 'Pending approvals report';
 $string['pending_approval_options'] = 'Pending approvals options';
 $string['combo_code_report'] = 'Combo codes report';
 $string['combo_code'] = 'Combo code';
+$string['qualification_report'] = 'Applicant highest qualifications report';
 $string['courses'] = 'Courses';
 $string['course_list'] = 'Course list';
 $string['all_courses'] = 'All courses';
@@ -297,6 +298,7 @@ $string['xfer_id'] = 'If re-transferring, enter the Transfer ID';
 $string['no_xfer'] = 'No data to transfer';
 $string['no_applications'] = 'No relevant applications';
 $string['no_courses'] = 'No relevant courses';
+$string['no_applicants'] = 'No relevant applicants';
 
 $string['add'] = 'Add';
 $string['amend'] = 'Amend';
