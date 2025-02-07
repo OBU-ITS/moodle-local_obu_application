@@ -832,5 +832,58 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
         upgrade_plugin_savepoint(true, 2024071101, 'local', 'obu_application');
     }
 
+    if ($oldversion < 2025020604) {
+        global $CFG;
+
+        require_once($CFG->dirroot . '/local/obu_application/db/data/prefill_qualifications.php');
+
+        $qual_table = new xmldb_table('local_obu_qualifications');
+
+        $qual_table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $qual_table->add_field('code', XMLDB_TYPE_CHAR, '5', null, XMLDB_NOTNULL, null, null);
+        $qual_table->add_field('label', XMLDB_TYPE_TEXT, null, null, XMLDB_NOTNULL, null, null);
+        $qual_table->add_field('priority', XMLDB_TYPE_INTEGER, '2', null, XMLDB_NOTNULL, null, null);
+        $qual_table->add_field('admissions_type', XMLDB_TYPE_CHAR, '10', null, XMLDB_NOTNULL, null, null);
+        $qual_table->add_field('cpd_subset', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
+        $qual_table->add_field('crm_dropdown_text', XMLDB_TYPE_TEXT, null, null, XMLDB_NOTNULL, null, null);
+        $qual_table->add_field('notes', XMLDB_TYPE_TEXT, null, null, null, null, null);
+
+        $qual_table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $qual_table->add_key('code_unique', XMLDB_KEY_UNIQUE, ['code']);
+
+        if (!$dbman->table_exists($qual_table)) {
+            $dbman->create_table($qual_table);
+        }
+
+        $qualifications = get_prefill_qualifications_data();
+        install_prefill_qualifications_data($qualifications);
+
+        $applicant_table = new xmldb_table('local_obu_applicant');
+        $applicant_qual_field = new xmldb_field('highest_prof_qualification', XMLDB_TYPE_TEXT, null, null, null, null, null, 'trainingperiod');
+        $applicant_verified_field = new xmldb_field('qualification_verified', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0', 'highest_prof_qualification');
+
+        if (!$dbman->field_exists($applicant_table, $applicant_qual_field)) {
+            $dbman->add_field($applicant_table, $applicant_qual_field);
+        }
+
+        if (!$dbman->field_exists($applicant_table, $applicant_verified_field)) {
+            $dbman->add_field($applicant_table, $applicant_verified_field);
+        }
+
+        $application_table = new xmldb_table('local_obu_application');
+        $application_qual_field = new xmldb_field('highest_prof_qualification', XMLDB_TYPE_TEXT, null, null, null, null, null, 'trainingperiod');
+        $application_verified_field = new xmldb_field('qualification_verified', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0', 'highest_prof_qualification');
+
+        if (!$dbman->field_exists($application_table, $application_qual_field)) {
+            $dbman->add_field($application_table, $application_qual_field);
+        }
+
+        if (!$dbman->field_exists($application_table, $application_verified_field)) {
+            $dbman->add_field($application_table, $application_verified_field);
+        }
+
+        upgrade_plugin_savepoint(true, 2025020604, 'local', 'obu_application');
+    }
+
     return $result;
 }

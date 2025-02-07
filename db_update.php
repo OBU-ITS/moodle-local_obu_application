@@ -330,6 +330,35 @@ function local_obu_application_get_course_records() {
     return $DB->get_records('local_obu_course', null, 'name');
 }
 
+function local_obu_application_get_qualification_report_info() {
+    global $DB;
+
+    $sql = "
+    SELECT 
+        a.userid,
+        a.title,
+        a.personal_email,
+        a.highest_prof_qualification,
+        q.code AS qualification_code,
+        a.qualification_verified,
+        COALESCE(app.firstname, 'N/A') AS firstname,
+        COALESCE(app.lastname, 'N/A') AS lastname
+    FROM {local_obu_applicant} a
+    LEFT JOIN {local_obu_application} app
+        ON app.userid = a.userid
+    INNER JOIN (
+        SELECT userid, MAX(id) AS latest_id
+        FROM {local_obu_application}
+        GROUP BY userid
+    ) latest 
+        ON app.id = latest.latest_id
+    LEFT JOIN {local_obu_qualifications} q
+        ON q.label = a.highest_prof_qualification
+";
+
+    return $DB->get_records_sql($sql);
+}
+
 function local_obu_application_get_course_admins() {
     global $DB;
 
@@ -391,6 +420,54 @@ function local_obu_application_get_organisation_records() {
 	global $DB;
 
 	return $DB->get_records('local_obu_organisation', null, 'name');
+}
+
+function local_obu_application_read_qualification($qualification_id) {
+    global $DB;
+
+    return $DB->get_record('local_obu_qualifications', array('id' => $qualification_id), '*');
+}
+
+function local_obu_application_write_qualification($qualification) {
+    global $DB;
+
+    $reverse_admissions_type_map = [
+        1 => 'PG',
+        2 => 'UG',
+        3 => 'UG and PG'
+    ];
+    $admissions_type = $reverse_admissions_type_map[$qualification->admissions_type] ?? '';
+
+    $record = new stdClass();
+    $id = $qualification->id;
+    $record->code = $qualification->code;
+    $record->label = $qualification->label;
+    $record->priority = $qualification->priority;
+    $record->admissions_type = $admissions_type;
+    $record->cpd_subset = $qualification->cpd_subset;
+    $record->crm_dropdown_text = $qualification->crm_dropdown_text;
+    $record->notes = $qualification->notes;
+
+    if ($id == '0') {
+        $id = $DB->insert_record('local_obu_qualifications', $record);
+    } else {
+        $record->id = $id;
+        $DB->update_record('local_obu_qualifications', $record);
+    }
+
+    return $id;
+}
+
+function local_obu_application_delete_qualification($qualification_id) {
+    global $DB;
+
+    $DB->delete_records('local_obu_qualifications', array('id' => $qualification_id));
+}
+
+function local_obu_application_get_qualification_records($sort_by) {
+    global $DB;
+
+    return $DB->get_records('local_obu_qualifications', null, $sort_by);
 }
 
 function local_obu_application_read_user($user_id) {
@@ -591,6 +668,7 @@ function local_obu_application_write_professional_qualification($user_id, $form_
         $record->userid = $user_id;
     }
 
+    $record->highest_prof_qualification = $form_data->highest_prof_qualification;
     $record->prof_level = $form_data->prof_level;
     $record->prof_award = $form_data->prof_award;
     $record->prof_date = $form_data->prof_date;
@@ -879,6 +957,7 @@ function local_obu_application_write_application($user_id, $form_data) {
     $record->p16feperiod = $applicant->p16feperiod;
     $record->training = $applicant->training;
     $record->trainingperiod = $applicant->trainingperiod;
+    $record->highest_prof_qualification = $applicant->highest_prof_qualification;
     $record->prof_level = $applicant->prof_level;
     $record->prof_award = $applicant->prof_award;
     $record->prof_date = $applicant->prof_date;
