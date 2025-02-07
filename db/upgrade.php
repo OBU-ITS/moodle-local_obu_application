@@ -832,163 +832,50 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
         upgrade_plugin_savepoint(true, 2024071101, 'local', 'obu_application');
     }
 
-    if ($oldversion < 2025013101) {
-        $table = new xmldb_table('local_obu_qualifications');
-
-        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
-        $table->add_field('code', XMLDB_TYPE_CHAR, '5', null, XMLDB_NOTNULL, null, null);
-        $table->add_field('label', XMLDB_TYPE_TEXT, null, null, XMLDB_NOTNULL, null, null);
-        $table->add_field('priority', XMLDB_TYPE_INTEGER, '2', null, XMLDB_NOTNULL, null, null);
-        $table->add_field('admissions_type', XMLDB_TYPE_CHAR, '10', null, XMLDB_NOTNULL, null, null);
-        $table->add_field('cpd_subset', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
-        $table->add_field('crm_dropdown_text', XMLDB_TYPE_TEXT, null, null, XMLDB_NOTNULL, null, null);
-        $table->add_field('notes', XMLDB_TYPE_TEXT, null, null, null, null, null);
-
-        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
-        $table->add_key('code_unique', XMLDB_KEY_UNIQUE, ['code']);
-
-        if (!$dbman->table_exists($table)) {
-            $dbman->create_table($table);
-        }
-
-        $qualifications = [
-            ['D0000', 'UK doctorate degree', 1, 'PG', 1, 'UK PHD', ''],
-            ['D0001', 'Non-UK doctorate degree', 1, 'PG', 1, 'Non-UK PHD', ''],
-            ['D0002', 'Other qualification at level D', 1, 'PG', 1, 'Other research qualification', ''],
-            ['M0000', 'UK masters degree', 2, 'PG', 1, 'UK Masters', ''],
-            ['M0001', 'Non-UK masters degree', 2, 'PG', 1, 'Non-UK Masters', ''],
-            ['M0016', 'Postgraduate Certificate in Education or Professional Graduate Diploma in Education', 2, 'PG', 1, 'PGCE/PGDipEd', ''],
-            ['M0021', 'Other taught qualification at level M', 2, 'PG', 1, 'Other qualification at Masters level', ''],
-            ['H0000', 'UK first degree with honours', 3, 'PG', 1, 'UK honours degree', ''],
-            ['H0001', 'Non-UK first degree', 3, 'PG', 1, 'Non-UK degree', ''],
-            ['H0002', 'First degree with honours leading to Qualified Teacher Status (QTS)/registration with a General Teaching Council (GTC)', 3, 'PG', 1, 'UK undergraduate teacher training degree', ''],
-            ['H0016', 'Other qualification at level H', 3, 'PG', 0, 'Other degree level qualification (e.g. Affiliate)', ''],
-            ['M0002', 'Integrated undergraduate/postgraduate taught masters degree on the enhanced/extended pattern', 3, 'PG', 1, 'Integrated Masters (e.g. MEng, MChem)', ''],
-            ['J0002', 'Diploma of Higher Education (DipHE)', 4, 'UG', 0, 'DipHE', ''],
-            ['J0003', 'Higher National Diploma (HND)', 4, 'UG', 0, 'HND', ''],
-            ['C0000', 'Certificate of Higher Education (CertHE)', 5, 'UG', 0, 'CertHE', ''],
-            ['C0001', 'Higher National Certificate (HNC)', 5, 'UG', 0, 'HNC', ''],
-            ['C0008', 'Credits at level C', 5, 'UG', 1, 'University level credits', ''],
-            ['J0000', 'Foundation degree', 5, 'UG', 0, 'Foundation Degree', ''],
-            ['P0000', 'Diploma at level 3', 6, 'UG', 0, 'Level 3 Diploma (e.g. BTEC Diploma)', ''],
-            ['P0001', 'Certificate at level 3', 6, 'UG', 0, 'Level 3 Certificate (e.g. BTEC Cert)', ''],
-            ['P0004', 'A/AS level', 6, 'UG', 0, 'A/AS level', ''],
-            ['P0008', 'International Baccalaureate (IB) Diploma', 6, 'UG', 0, 'International Baccalaureate', ''],
-            ['P0013', 'Other qualification at level 3', 6, 'UG', 0, 'Other A-level equivalent qualification (e.g. foundation course or non-UK qualification)', ''],
-            ['P0014', 'Level 3 qualifications of which none are subject to UCAS Tariff', 6, 'UG', 0, 'UK Advanced level equivalent quals (not in UCAS tariff)', 'e.g. vocational quals'],
-            ['P0015', 'Level 3 qualifications of which all are subject to UCAS Tariff', 6, 'UG', 0, 'Mixed A-level equiv. quals all tariffable', ''],
-            ['P0016', 'Level 3 qualifications of which some are subject to UCAS Tariff', 6, 'UG', 1, 'Mixed A-level equiv. quals, some are in UCAS Tariff', ''],
-            ['X0000', 'Higher education (HE) access course, Quality Assurance Agency (QAA) recognised', 6, 'UG', 0, 'Access Diploma', ''],
-            ['Q0002', 'Other qualification at level 2', 7, 'UG', 0, 'Below Advanced-level qualification (e.g. GCSE)', ''],
-            ['X0002', 'Mature student admitted on basis of previous experience and/or admissions test', 8, 'UG and PG', 0, 'Mature student w experience', ''],
-            ['X0004', 'Student has no formal qualification', 8, 'UG', 0, 'No formal qualifications', 'Is this likely - maybe for foundation entry? Or would they be admitted on mature age and experience?'],
-        ];
-
-        foreach ($qualifications as $qual) {
-            $record = new stdClass();
-            $record->code = $qual[0];
-            $record->label = $qual[1];
-            $record->priority = $qual[2];
-            $record->admissions_type = $qual[3];
-            $record->cpd_subset = $qual[4];
-            $record->crm_dropdown_text = $qual[5];
-            $record->notes = $qual[6];
-
-            $DB->insert_record('local_obu_qualifications', $record, false);
-        }
-
-        upgrade_plugin_savepoint(true, 2025013101, 'local', 'obu_application');
-    }
-
-    if ($oldversion < 2025020401) {
-        $table = new xmldb_table('local_obu_applicant');
-        $field = new xmldb_field('highest_prof_qualification', XMLDB_TYPE_TEXT, null, null, null, null, null, 'prof_level');
-
-        if (!$dbman->field_exists($table, $field)) {
-            $dbman->add_field($table, $field);
-        }
-
-        upgrade_plugin_savepoint(true, 2025020401, 'local', 'obu_application');
-    }
-
-    if ($oldversion < 2025020402) {
-        $table = new xmldb_table('local_obu_application');
-        $field = new xmldb_field('highest_prof_qualification', XMLDB_TYPE_TEXT, null, null, null, null, null, 'prof_level');
-
-        if (!$dbman->field_exists($table, $field)) {
-            $dbman->add_field($table, $field);
-        }
-
-        upgrade_plugin_savepoint(true, 2025020402, 'local', 'obu_application');
-    }
-
-    if ($oldversion < 2025020602) {
-        $application_table = new xmldb_table('local_obu_application');
-        $applicant_table = new xmldb_table('local_obu_applicant');
-
-        // Move 'highest_prof_qualification' in 'local_obu_application' after 'trainingperiod'
-        $temp_field_application = new xmldb_field('temp_qualification', XMLDB_TYPE_TEXT, null, null, null, null, null, 'trainingperiod');
-
-        if (!$dbman->field_exists($application_table, $temp_field_application)) {
-            $dbman->add_field($application_table, $temp_field_application);
-        }
-
-        $DB->execute("UPDATE {local_obu_application} SET temp_qualification = highest_prof_qualification");
-
-        $old_field_application = new xmldb_field('highest_prof_qualification');
-        if ($dbman->field_exists($application_table, $old_field_application)) {
-            $dbman->drop_field($application_table, $old_field_application);
-        }
-
-        $dbman->rename_field($application_table, $temp_field_application, 'highest_prof_qualification');
-
-        // Move 'highest_prof_qualification' in 'local_obu_applicant' after 'trainingperiod'
-        $temp_field_applicant = new xmldb_field('temp_qualification', XMLDB_TYPE_TEXT, null, null, null, null, null, 'trainingperiod');
-
-        if (!$dbman->field_exists($applicant_table, $temp_field_applicant)) {
-            $dbman->add_field($applicant_table, $temp_field_applicant);
-        }
-
-        $DB->execute("UPDATE {local_obu_applicant} SET temp_qualification = highest_prof_qualification");
-
-        $old_field_applicant = new xmldb_field('highest_prof_qualification');
-        if ($dbman->field_exists($applicant_table, $old_field_applicant)) {
-            $dbman->drop_field($applicant_table, $old_field_applicant);
-        }
-
-        $dbman->rename_field($applicant_table, $temp_field_applicant, 'highest_prof_qualification');
-
-        upgrade_plugin_savepoint(true, 2025020602, 'local', 'obu_application');
-    }
-
-    if ($oldversion < 2025020603) {
-        $application_table = new xmldb_table('local_obu_application');
-
-        // Move 'qualification_verified' AFTER 'highest_prof_qualification'
-        $temp_field_verified = new xmldb_field('temp_qual_verified', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0', 'highest_prof_qualification');
-
-        if (!$dbman->field_exists($application_table, $temp_field_verified)) {
-            $dbman->add_field($application_table, $temp_field_verified);
-        }
-
-        $DB->execute("UPDATE {local_obu_application} SET temp_qual_verified = qualification_verified");
-
-        $old_field_verified = new xmldb_field('qualification_verified');
-        if ($dbman->field_exists($application_table, $old_field_verified)) {
-            $dbman->drop_field($application_table, $old_field_verified);
-        }
-
-        $dbman->rename_field($application_table, $temp_field_verified, 'qualification_verified');
-
-        upgrade_plugin_savepoint(true, 2025020603, 'local', 'obu_application');
-    }
-
     if ($oldversion < 2025020604) {
-        $table = new xmldb_table('local_obu_applicant');
-        $field = new xmldb_field('qualification_verified', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0', 'highest_prof_qualification');
+        $qual_table = new xmldb_table('local_obu_qualifications');
 
-        if (!$dbman->field_exists($table, $field)) {
-            $dbman->add_field($table, $field);
+        $qual_table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $qual_table->add_field('code', XMLDB_TYPE_CHAR, '5', null, XMLDB_NOTNULL, null, null);
+        $qual_table->add_field('label', XMLDB_TYPE_TEXT, null, null, XMLDB_NOTNULL, null, null);
+        $qual_table->add_field('priority', XMLDB_TYPE_INTEGER, '2', null, XMLDB_NOTNULL, null, null);
+        $qual_table->add_field('admissions_type', XMLDB_TYPE_CHAR, '10', null, XMLDB_NOTNULL, null, null);
+        $qual_table->add_field('cpd_subset', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
+        $qual_table->add_field('crm_dropdown_text', XMLDB_TYPE_TEXT, null, null, XMLDB_NOTNULL, null, null);
+        $qual_table->add_field('notes', XMLDB_TYPE_TEXT, null, null, null, null, null);
+
+        $qual_table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $qual_table->add_key('code_unique', XMLDB_KEY_UNIQUE, ['code']);
+
+        if (!$dbman->table_exists($qual_table)) {
+            $dbman->create_table($qual_table);
+        }
+
+        $qualifications = get_prefill_qualifications_data();
+        install_prefill_qualifications_data($qualifications);
+
+        $applicant_table = new xmldb_table('local_obu_applicant');
+        $applicant_qual_field = new xmldb_field('highest_prof_qualification', XMLDB_TYPE_TEXT, null, null, null, null, null, 'trainingperiod');
+        $applicant_verified_field = new xmldb_field('qualification_verified', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0', 'highest_prof_qualification');
+
+        if (!$dbman->field_exists($applicant_table, $applicant_qual_field)) {
+            $dbman->add_field($applicant_table, $applicant_qual_field);
+        }
+
+        if (!$dbman->field_exists($applicant_table, $applicant_verified_field)) {
+            $dbman->add_field($applicant_table, $applicant_verified_field);
+        }
+
+        $application_table = new xmldb_table('local_obu_application');
+        $application_qual_field = new xmldb_field('highest_prof_qualification', XMLDB_TYPE_TEXT, null, null, null, null, null, 'trainingperiod');
+        $application_verified_field = new xmldb_field('qualification_verified', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0', 'highest_prof_qualification');
+
+        if (!$dbman->field_exists($application_table, $application_qual_field)) {
+            $dbman->add_field($application_table, $application_qual_field);
+        }
+
+        if (!$dbman->field_exists($application_table, $application_verified_field)) {
+            $dbman->add_field($application_table, $application_verified_field);
         }
 
         upgrade_plugin_savepoint(true, 2025020604, 'local', 'obu_application');
