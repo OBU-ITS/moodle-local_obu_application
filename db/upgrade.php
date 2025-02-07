@@ -833,6 +833,10 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
     }
 
     if ($oldversion < 2025020604) {
+        global $CFG;
+
+        require_once($CFG->dirroot . '/local/obu_application/db/data/prefill_qualifications.php');
+
         $qual_table = new xmldb_table('local_obu_qualifications');
 
         $qual_table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
