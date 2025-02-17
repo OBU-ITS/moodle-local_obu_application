@@ -885,5 +885,23 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
         upgrade_plugin_savepoint(true, 2025020604, 'local', 'obu_application');
     }
 
+    if ($oldversion < 2025021401) {
+        $applicant_table = new xmldb_table('local_obu_applicant');
+        $applicant_pdf_field = new xmldb_field('qualification_pdf', XMLDB_TYPE_CHAR, '255', null, null, null, null, 'highest_prof_qualification');
+
+        if (!$dbman->field_exists($applicant_table, $applicant_pdf_field)) {
+            $dbman->add_field($applicant_table, $applicant_pdf_field);
+        }
+
+        $application_table = new xmldb_table('local_obu_application');
+        $application_pdf_field = new xmldb_field('qualification_pdf', XMLDB_TYPE_CHAR, '255', null, null, null, null, 'highest_prof_qualification');
+
+        if (!$dbman->field_exists($application_table, $application_pdf_field)) {
+            $dbman->add_field($application_table, $application_pdf_field);
+        }
+
+        upgrade_plugin_savepoint(true, 2025021401, 'local', 'obu_application');
+    }
+
     return $result;
 }

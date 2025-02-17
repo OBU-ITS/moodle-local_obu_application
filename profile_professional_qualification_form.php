@@ -33,15 +33,31 @@ require_once($CFG->libdir . '/formslib.php');
 class profile_professional_qualification_form extends moodleform {
 
     function definition() {
-        global $CFG, $DB;
+        global $CFG, $DB, $USER;
+        require_once($CFG->libdir . '/filelib.php'); // Ensure file API is included
 
         $mform =& $this->_form;
-
         $data = new stdClass();
         $data->record = $this->_customdata['record'];
 
+        $context = context_user::instance($USER->id);
+
+        $draftitemid = file_get_submitted_draft_itemid('qualification_pdf'); // Fetch draft area ID
+
+        if (!empty($data->record->qualification_pdf)) { // Check if a file exists
+            file_prepare_draft_area(
+                $draftitemid, // Assign draft area
+                $context->id,
+                'local_obu_application',
+                'qualification_pdf',
+                $data->record->id,
+                ['subdirs' => false, 'maxbytes' => 5242880, 'maxfiles' => 1] // 5MB limit
+            );
+        }
+
         $fields = [
             'highest_prof_qualification' => $data->record->highest_prof_qualification ?? '',
+            'qualification_certificate' => $draftitemid,
             'prof_level' => $data->record->prof_level,
             'prof_award' => $data->record->prof_award,
             'prof_date' => $data->record->prof_date,
@@ -51,11 +67,10 @@ class profile_professional_qualification_form extends moodleform {
         ];
         $this->set_data($fields);
 
-        $date_options = array('startyear' => 1931, 'stopyear'  => 2030, 'timezone'  => 99, 'optional' => false);
-        $qualification_records = $DB->get_records_sql("SELECT label FROM {local_obu_qualifications} ORDER BY priority ASC");
+        $qualification_records = $DB->get_records_sql("SELECT crm_dropdown_text FROM {local_obu_qualifications} ORDER BY priority ASC");
         $qualification_options = ['' => get_string('select', 'local_obu_application')];
         foreach ($qualification_records as $record) {
-            $qualification_options[$record->label] = $record->label;
+            $qualification_options[$record->crm_dropdown_text] = $record->crm_dropdown_text;
         }
 
         // This 'dummy' element has two purposes:
@@ -68,6 +83,12 @@ class profile_professional_qualification_form extends moodleform {
         $mform->addElement('select', 'highest_prof_qualification', '', $qualification_options);
         $mform->setType('highest_prof_qualification', PARAM_TEXT);
         $mform->addRule('highest_prof_qualification', null, 'required', null, 'server');
+        $mform->addElement('html', '<p><strong>' . get_string('qual_cert_preamble', 'local_obu_application') . '</strong></p>');
+        $mform->addElement('filepicker', 'qualification_pdf', '', null, [
+            'maxbytes' => 5242880, // 5MB
+            'accepted_types' => ['.pdf']
+        ]);
+        $mform->setDefault('qualification_pdf', $draftitemid);
         $mform->addElement('hidden', 'prof_level');
         $mform->setType('prof_level', PARAM_TEXT);
         $mform->addElement('hidden', 'prof_award');
