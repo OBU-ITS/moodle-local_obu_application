@@ -27,6 +27,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/formslib.php');
+require_once($CFG->libdir . '/filelib.php');
 
 class process_form extends moodleform {
 
@@ -127,6 +128,26 @@ class process_form extends moodleform {
                 $residence_area = '&#10004; YES';
             } else {
                 $residence_area = '&#10008; NO';
+            }
+
+            $fs = get_file_storage();
+            $context = context_system::instance();
+
+            $files = $fs->get_area_files($context->id, 'local_obu_application', 'qualification_pdf', $data->record->id, 'timemodified', false);
+
+            if (!empty($files)) {
+                $file = reset($files); // Get the first file (should be only one)
+                if ($file) {
+                    $qualification_pdf_url = moodle_url::make_pluginfile_url(
+                        $file->get_contextid(),
+                        $file->get_component(),
+                        $file->get_filearea(),
+                        $file->get_itemid(),
+                        $file->get_filepath(),
+                        $file->get_filename(),
+                        true
+                    );
+                }
             }
 
 			$fields = [
@@ -283,6 +304,14 @@ class process_form extends moodleform {
             $highest_prof_qualification = $data->record->highest_prof_qualification ?? null;
             if (!empty($highest_prof_qualification)) {
                 $mform->addElement('static', 'highest_prof_qualification', get_string('qualification', 'local_obu_application'));
+                if ($qualification_pdf_url) {
+                    $mform->addElement('static', 'qualification_pdf', get_string('qual_cert_preamble', 'local_obu_application'),
+                        html_writer::tag('a', get_string('view_qual_cert', 'local_obu_application'), ['href' => $qualification_pdf_url, 'target' => '_blank'])
+                    );
+                } else {
+                    $mform->addElement('static', 'qualification_pdf', get_string('qual_cert_preamble', 'local_obu_application'),
+                        get_string('no_qual_cert', 'local_obu_application'));
+                }
                 if ($data->button_text == 'approve' && $data->record->approval_level == 1) {
                     $mform->addElement('advcheckbox', 'qualification_verified', get_string('qualification_verified', 'local_obu_application'), null, null, array(0, 1));
                 } else {
