@@ -691,17 +691,18 @@ function local_obu_application_write_professional_qualification($user_id, $form_
 
     if (!empty($form_data->qualification_pdf)) {
         $fs = get_file_storage();
+        $context = context_user::instance($user_id);
 
         file_save_draft_area_files(
             $form_data->qualification_pdf,
-            context_system::instance()->id,
+            $context->id,
             'local_obu_application',
             'qualification_pdf',
             $record->id,
             ['subdirs' => false, 'maxfiles' => 1, 'accepted_types' => ['.pdf']]
         );
 
-        $files = $fs->get_area_files(context_system::instance()->id, 'local_obu_application', 'qualification_pdf', $record->id, 'timemodified', false);
+        $files = $fs->get_area_files($context->id, 'local_obu_application', 'qualification_pdf', $record->id, 'timemodified', false);
         if ($files) {
             $file = reset($files);
             $record->qualification_pdf = $file->get_pathnamehash();
@@ -1042,7 +1043,6 @@ function local_obu_application_write_application($user_id, $form_data) {
 	$application_id = $DB->insert_record('local_obu_application', $record); // The remaining fields will have default values
 
     if (!empty($applicant->qualification_pdf)) {
-        $context = context_system::instance(); // Use system context for global access
         $fs = get_file_storage();
 
         // Get the existing file from the applicant's stored hash
@@ -1050,11 +1050,11 @@ function local_obu_application_write_application($user_id, $form_data) {
         if ($file) {
             // Copy the file to associate it with the newly created application ID
             $newfile_record = [
-                'contextid' => $context->id,
-                'component' => 'local_obu_application',
-                'filearea'  => 'qualification_pdf',
+                'contextid' => $file->get_contextid(),
+                'component' => $file->get_component(),
+                'filearea'  => $file->get_filearea(),
                 'itemid'    => $application_id,  // Associate file with the new application
-                'filepath'  => '/',
+                'filepath'  => $file->get_filepath(),
                 'filename'  => $file->get_filename(),
             ];
 

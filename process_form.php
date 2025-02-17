@@ -130,13 +130,9 @@ class process_form extends moodleform {
                 $residence_area = '&#10008; NO';
             }
 
-            $fs = get_file_storage();
-            $context = context_system::instance();
-
-            $files = $fs->get_area_files($context->id, 'local_obu_application', 'qualification_pdf', $data->record->id, 'timemodified', false);
-
-            if (!empty($files)) {
-                $file = reset($files); // Get the first file (should be only one)
+            if ($data->record->qualification_pdf) {
+                $fs = get_file_storage();
+                $file = $fs->get_file_by_hash($data->record->qualification_pdf);
                 if ($file) {
                     $qualification_pdf_url = moodle_url::make_pluginfile_url(
                         $file->get_contextid(),
@@ -144,8 +140,7 @@ class process_form extends moodleform {
                         $file->get_filearea(),
                         $file->get_itemid(),
                         $file->get_filepath(),
-                        $file->get_filename(),
-                        true
+                        $file->get_filename()
                     );
                 }
             }

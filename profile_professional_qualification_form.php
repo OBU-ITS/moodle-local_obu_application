@@ -33,19 +33,21 @@ require_once($CFG->libdir . '/formslib.php');
 class profile_professional_qualification_form extends moodleform {
 
     function definition() {
-        global $CFG, $DB;
+        global $CFG, $DB, $USER;
         require_once($CFG->libdir . '/filelib.php'); // Ensure file API is included
 
         $mform =& $this->_form;
         $data = new stdClass();
         $data->record = $this->_customdata['record'];
 
+        $context = context_user::instance($USER->id);
+
         $draftitemid = file_get_submitted_draft_itemid('qualification_pdf'); // Fetch draft area ID
 
         if (!empty($data->record->qualification_pdf)) { // Check if a file exists
             file_prepare_draft_area(
                 $draftitemid, // Assign draft area
-                context_system::instance()->id,
+                $context->id,
                 'local_obu_application',
                 'qualification_pdf',
                 $data->record->id,
