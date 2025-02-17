@@ -335,25 +335,26 @@ function local_obu_application_get_qualification_report_info() {
 
     $sql = "
     SELECT 
-        a.userid,
-        a.title,
-        a.personal_email,
-        a.highest_prof_qualification,
-        q.code AS qualification_code,
-        a.qualification_verified,
-        COALESCE(app.firstname, 'N/A') AS firstname,
-        COALESCE(app.lastname, 'N/A') AS lastname
-    FROM {local_obu_applicant} a
-    LEFT JOIN {local_obu_application} app
-        ON app.userid = a.userid
-    INNER JOIN (
-        SELECT userid, MAX(id) AS latest_id
-        FROM {local_obu_application}
-        GROUP BY userid
-    ) latest 
-        ON app.id = latest.latest_id
-    LEFT JOIN {local_obu_qualifications} q
-        ON q.label = a.highest_prof_qualification
+    app.userid,
+    app.title,
+    app.personal_email,
+    app.highest_prof_qualification,
+    q.code AS qualification_code,
+    app.qualification_verified,
+    COALESCE(app.firstname, 'N/A') AS firstname,
+    COALESCE(app.lastname, 'N/A') AS lastname
+FROM {local_obu_applicant} a
+LEFT JOIN {local_obu_application} app
+    ON app.userid = a.userid
+INNER JOIN (
+    SELECT userid, MAX(id) AS latest_id
+    FROM {local_obu_application}
+    GROUP BY userid
+) latest 
+    ON app.id = latest.latest_id
+LEFT JOIN {local_obu_qualifications} q
+    ON q.crm_dropdown_text = app.highest_prof_qualification
+WHERE app.highest_prof_qualification IS NOT NULL
 ";
 
     return $DB->get_records_sql($sql);

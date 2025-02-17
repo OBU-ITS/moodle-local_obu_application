@@ -67,10 +67,10 @@ class profile_professional_qualification_form extends moodleform {
         ];
         $this->set_data($fields);
 
-        $qualification_records = $DB->get_records_sql("SELECT label FROM {local_obu_qualifications} ORDER BY priority ASC");
+        $qualification_records = $DB->get_records_sql("SELECT crm_dropdown_text FROM {local_obu_qualifications} ORDER BY priority ASC");
         $qualification_options = ['' => get_string('select', 'local_obu_application')];
         foreach ($qualification_records as $record) {
-            $qualification_options[$record->label] = $record->label;
+            $qualification_options[$record->crm_dropdown_text] = $record->crm_dropdown_text;
         }
 
         // This 'dummy' element has two purposes:
