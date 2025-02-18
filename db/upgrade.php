@@ -903,5 +903,27 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
         upgrade_plugin_savepoint(true, 2025021401, 'local', 'obu_application');
     }
 
+    if ($oldversion < 2025021801) {
+
+        $applicant_table = new xmldb_table('local_obu_applicant');
+        $qualification_verified_field = new xmldb_field('qualification_verified', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0', 'highest_prof_qualification');
+
+        if (!$dbman->field_exists($applicant_table, $qualification_verified_field)) {
+            $dbman->drop_field($applicant_table, $qualification_verified_field);
+        }
+
+        $highest_prof_qual_code_field = new xmldb_field('highest_prof_qual_code', XMLDB_TYPE_CHAR, '20', null, null, null, null, 'highest_prof_qualification');
+        if (!$dbman->field_exists($applicant_table, $highest_prof_qual_code_field)) {
+            $dbman->add_field($applicant_table, $highest_prof_qual_code_field);
+        }
+
+        $application_table = new xmldb_table('local_obu_application');
+        if (!$dbman->field_exists($application_table, $highest_prof_qual_code_field)) {
+            $dbman->add_field($application_table, $highest_prof_qual_code_field);
+        }
+
+        upgrade_plugin_savepoint(true, 2025021801, 'local', 'obu_application');
+    }
+
     return $result;
 }

@@ -1509,10 +1509,9 @@ function local_obu_application_get_application_status_old($user_id, $application
 function local_obu_application_update_workflow(&$application, $approved = true, $data = null) {
 
 	$approver_email = '';
-	// Only update `qualification_verified` if it is set as a checkbox input
+
 	if (isset($data->qualification_verified) && is_numeric($data->qualification_verified)) {
 		$application->qualification_verified = ($data->qualification_verified == 1) ? 1 : 0;
-		local_obu_application_update_applicant_qual_verified($application->userid, $application->qualification_verified);
 	}
 
 	// Update the application record
@@ -1638,15 +1637,6 @@ function local_obu_application_update_workflow(&$application, $approved = true, 
 
 	// Update the stored approval requests and send notification emails
 	local_obu_application_update_approver($application, $approver_email, $revoked);
-}
-
-function local_obu_application_update_applicant_qual_verified($userid, $verified){
-	global $DB;
-
-	$DB->execute(
-		"UPDATE {local_obu_applicant} SET qualification_verified = ? WHERE userid = ?",
-		[$verified, $userid]
-	);
 }
 
 function local_obu_application_update_approver($application, $approver_email, $revoked = null) {

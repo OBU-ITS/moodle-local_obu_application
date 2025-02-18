@@ -86,7 +86,7 @@ class profile_professional_qualification_form extends moodleform {
         $mform->addElement('html', '<p><strong>' . get_string('qual_cert_preamble', 'local_obu_application') . '</strong></p>');
         $mform->addElement('filepicker', 'qualification_pdf', '', null, [
             'maxbytes' => 5242880, // 5MB
-            'accepted_types' => ['.pdf']
+            'accepted_types' => ['.pdf','.png','.jpg','.jpeg']
         ]);
         $mform->setDefault('qualification_pdf', $draftitemid);
         $mform->addElement('hidden', 'prof_level');
