@@ -111,8 +111,8 @@
         <FIELD NAME="training" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="University/professional training body"/>
         <FIELD NAME="trainingperiod" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Training period"/>
         <FIELD NAME="highest_prof_qualification" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="New highest professional qualification field"/>
+        <FIELD NAME="highest_prof_qual_code" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="Highest professional qualification code field"/>
         <FIELD NAME="qualification_pdf" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Pathname hash of qualification certificate"/>
-        <FIELD NAME="qualification_verified" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Qualification certificate verified?"/>
         <FIELD NAME="prof_level" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Level of qualification"/>
         <FIELD NAME="prof_award" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Award name"/>
         <FIELD NAME="prof_date" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Date qualified"/>
@@ -185,6 +185,7 @@
         <FIELD NAME="training" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="University/professional training body"/>
         <FIELD NAME="trainingperiod" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Training period"/>
         <FIELD NAME="highest_prof_qualification" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="New highest professional qualification field"/>
+        <FIELD NAME="highest_prof_qual_code" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="Highest professional qualification code field"/>
         <FIELD NAME="qualification_pdf" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Pathname hash of qualification certificate at time of application"/>
         <FIELD NAME="qualification_verified" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Qualification certificate verified?"/>
         <FIELD NAME="prof_level" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Level of qualification"/>

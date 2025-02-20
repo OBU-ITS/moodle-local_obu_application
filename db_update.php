@@ -335,26 +335,24 @@ function local_obu_application_get_qualification_report_info() {
 
     $sql = "
     SELECT 
-    app.userid,
-    app.title,
-    app.personal_email,
-    app.highest_prof_qualification,
-    q.code AS qualification_code,
-    app.qualification_verified,
-    COALESCE(app.firstname, 'N/A') AS firstname,
-    COALESCE(app.lastname, 'N/A') AS lastname
-FROM {local_obu_applicant} a
-LEFT JOIN {local_obu_application} app
-    ON app.userid = a.userid
-INNER JOIN (
-    SELECT userid, MAX(id) AS latest_id
-    FROM {local_obu_application}
-    GROUP BY userid
-) latest 
-    ON app.id = latest.latest_id
-LEFT JOIN {local_obu_qualifications} q
-    ON q.crm_dropdown_text = app.highest_prof_qualification
-WHERE app.highest_prof_qualification IS NOT NULL
+        app.userid,
+        app.title,
+        app.personal_email,
+        app.highest_prof_qualification,
+        app.highest_prof_qual_code AS qualification_code,
+        app.qualification_verified,
+        COALESCE(app.firstname, 'N/A') AS firstname,
+        COALESCE(app.lastname, 'N/A') AS lastname
+    FROM {local_obu_applicant} a
+    LEFT JOIN {local_obu_application} app
+        ON app.userid = a.userid
+    INNER JOIN (
+        SELECT userid, MAX(id) AS latest_id
+        FROM {local_obu_application}
+        GROUP BY userid
+    ) latest 
+        ON app.id = latest.latest_id
+    WHERE app.highest_prof_qualification IS NOT NULL
 ";
 
     return $DB->get_records_sql($sql);
@@ -981,6 +979,7 @@ function local_obu_application_write_application($user_id, $form_data) {
     $record->training = $applicant->training;
     $record->trainingperiod = $applicant->trainingperiod;
     $record->highest_prof_qualification = $applicant->highest_prof_qualification;
+    $record->highest_prof_qual_code = $applicant->highest_prof_qual_code;
     $record->qualification_pdf = $applicant->qualification_pdf;
     $record->prof_level = $applicant->prof_level;
     $record->prof_award = $applicant->prof_award;
