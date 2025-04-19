@@ -330,6 +330,34 @@ function local_obu_application_get_course_records() {
     return $DB->get_records('local_obu_course', null, 'name');
 }
 
+function local_obu_application_get_qualification_report_info() {
+    global $DB;
+
+    $sql = "
+    SELECT 
+        app.userid,
+        app.title,
+        app.personal_email,
+        app.highest_prof_qualification,
+        app.highest_prof_qual_code AS qualification_code,
+        app.qualification_verified,
+        COALESCE(app.firstname, 'N/A') AS firstname,
+        COALESCE(app.lastname, 'N/A') AS lastname
+    FROM {local_obu_applicant} a
+    LEFT JOIN {local_obu_application} app
+        ON app.userid = a.userid
+    INNER JOIN (
+        SELECT userid, MAX(id) AS latest_id
+        FROM {local_obu_application}
+        GROUP BY userid
+    ) latest 
+        ON app.id = latest.latest_id
+    WHERE app.highest_prof_qualification IS NOT NULL
+";
+
+    return $DB->get_records_sql($sql);
+}
+
 function local_obu_application_get_course_admins() {
     global $DB;
 
@@ -391,6 +419,54 @@ function local_obu_application_get_organisation_records() {
 	global $DB;
 
 	return $DB->get_records('local_obu_organisation', null, 'name');
+}
+
+function local_obu_application_read_qualification($qualification_id) {
+    global $DB;
+
+    return $DB->get_record('local_obu_qualifications', array('id' => $qualification_id), '*');
+}
+
+function local_obu_application_write_qualification($qualification) {
+    global $DB;
+
+    $reverse_admissions_type_map = [
+        1 => 'PG',
+        2 => 'UG',
+        3 => 'UG and PG'
+    ];
+    $admissions_type = $reverse_admissions_type_map[$qualification->admissions_type] ?? '';
+
+    $record = new stdClass();
+    $id = $qualification->id;
+    $record->code = $qualification->code;
+    $record->label = $qualification->label;
+    $record->priority = $qualification->priority;
+    $record->admissions_type = $admissions_type;
+    $record->cpd_subset = $qualification->cpd_subset;
+    $record->crm_dropdown_text = $qualification->crm_dropdown_text;
+    $record->notes = $qualification->notes;
+
+    if ($id == '0') {
+        $id = $DB->insert_record('local_obu_qualifications', $record);
+    } else {
+        $record->id = $id;
+        $DB->update_record('local_obu_qualifications', $record);
+    }
+
+    return $id;
+}
+
+function local_obu_application_delete_qualification($qualification_id) {
+    global $DB;
+
+    $DB->delete_records('local_obu_qualifications', array('id' => $qualification_id));
+}
+
+function local_obu_application_get_qualification_records($sort_by) {
+    global $DB;
+
+    return $DB->get_records('local_obu_qualifications', null, $sort_by);
 }
 
 function local_obu_application_read_user($user_id) {
@@ -582,7 +658,8 @@ function local_obu_application_write_educational_establishments($user_id, $form_
 }
 
 function local_obu_application_write_professional_qualification($user_id, $form_data) {
-    global $DB;
+    global $DB, $CFG;
+    require_once("{$CFG->libdir}/filelib.php");
 
     $record = local_obu_application_read_applicant($user_id, false); // May not exist yet
     if ($record === false) {
@@ -591,6 +668,11 @@ function local_obu_application_write_professional_qualification($user_id, $form_
         $record->userid = $user_id;
     }
 
+    $selected_code = $form_data->highest_prof_qualification;
+    $qualification_text = $DB->get_field('local_obu_qualifications', 'crm_dropdown_text', ['code' => $selected_code]);
+
+    $record->highest_prof_qualification = $qualification_text;
+    $record->highest_prof_qual_code = $selected_code;
     $record->prof_level = $form_data->prof_level;
     $record->prof_award = $form_data->prof_award;
     $record->prof_date = $form_data->prof_date;
@@ -605,13 +687,33 @@ function local_obu_application_write_professional_qualification($user_id, $form_
     $record->pro_qualification_update = time();
 
     if ($record->id == 0) { // New record
-        $id = $DB->insert_record('local_obu_applicant', $record);
+        $record->id = $DB->insert_record('local_obu_applicant', $record);
     } else {
-        $id = $record->id;
         $DB->update_record('local_obu_applicant', $record);
     }
 
-    return $id;
+    if (!empty($form_data->qualification_pdf)) {
+        $fs = get_file_storage();
+        $context = context_user::instance($user_id);
+
+        file_save_draft_area_files(
+            $form_data->qualification_pdf,
+            $context->id,
+            'local_obu_application',
+            'qualification_pdf',
+            $record->id,
+            ['subdirs' => false, 'maxfiles' => 1, 'accepted_types' => ['.pdf']]
+        );
+
+        $files = $fs->get_area_files($context->id, 'local_obu_application', 'qualification_pdf', $record->id, 'timemodified', false);
+        if ($files) {
+            $file = reset($files);
+            $record->qualification_pdf = $file->get_pathnamehash();
+            $DB->update_record('local_obu_applicant', $record);
+        }
+    }
+
+    return $record->id;
 }
 
 function local_obu_application_write_current_employment($user_id, $form_data) {
@@ -838,7 +940,8 @@ function local_obu_application_read_application($application_id, $must_exist = t
 }
 
 function local_obu_application_write_application($user_id, $form_data) {
-	global $DB;
+	global $DB, $CFG;
+    require_once("{$CFG->libdir}/filelib.php");
 
 	$user = local_obu_application_read_user($user_id); // Contact details
 	$applicant = local_obu_application_read_applicant($user_id, true); // Profile & course must exist
@@ -879,6 +982,9 @@ function local_obu_application_write_application($user_id, $form_data) {
     $record->p16feperiod = $applicant->p16feperiod;
     $record->training = $applicant->training;
     $record->trainingperiod = $applicant->trainingperiod;
+    $record->highest_prof_qualification = $applicant->highest_prof_qualification;
+    $record->highest_prof_qual_code = $applicant->highest_prof_qual_code;
+    $record->qualification_pdf = $applicant->qualification_pdf;
     $record->prof_level = $applicant->prof_level;
     $record->prof_award = $applicant->prof_award;
     $record->prof_date = $applicant->prof_date;
@@ -938,7 +1044,35 @@ function local_obu_application_write_application($user_id, $form_data) {
 
     $record->application_date = time();
 
-	return $DB->insert_record('local_obu_application', $record); // The remaining fields will have default values
+	$application_id = $DB->insert_record('local_obu_application', $record); // The remaining fields will have default values
+
+    if (!empty($applicant->qualification_pdf)) {
+        $fs = get_file_storage();
+
+        // Get the existing file from the applicant's stored hash
+        $file = $fs->get_file_by_hash($applicant->qualification_pdf);
+        if ($file) {
+            // Copy the file to associate it with the newly created application ID
+            $newfile_record = [
+                'contextid' => $file->get_contextid(),
+                'component' => $file->get_component(),
+                'filearea'  => $file->get_filearea(),
+                'itemid'    => $application_id,  // Associate file with the new application
+                'filepath'  => $file->get_filepath(),
+                'filename'  => $file->get_filename(),
+            ];
+
+            // Copy the file into the new application storage area
+            $new_file = $fs->create_file_from_storedfile($newfile_record, $file);
+
+            if ($new_file) {
+                $record->qualification_pdf = $new_file->get_pathnamehash();
+                $DB->set_field('local_obu_application', 'qualification_pdf', $record->qualification_pdf, ['id' => $application_id]);
+            }
+        }
+    }
+
+    return $application_id;
 }
 
 function local_obu_application_get_name_and_email($current_user_id, $id) {

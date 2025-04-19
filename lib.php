@@ -42,7 +42,7 @@ function local_obu_application_pluginfile($course, $cm, $context, $filearea, $ar
 	global $USER;
 	
     // Check that the context is a 'user' one and that the filearea is valid
-    if (($context->contextlevel != CONTEXT_USER) || ($filearea !== 'file')) {
+    if (($context->contextlevel != CONTEXT_USER) || !in_array($filearea, ['file', 'qualification_pdf'])) {
         return false; 
     }
  

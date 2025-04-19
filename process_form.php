@@ -27,6 +27,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/formslib.php');
+require_once($CFG->libdir . '/filelib.php');
 
 class process_form extends moodleform {
 
@@ -129,6 +130,21 @@ class process_form extends moodleform {
                 $residence_area = '&#10008; NO';
             }
 
+            if ($data->record->qualification_pdf) {
+                $fs = get_file_storage();
+                $file = $fs->get_file_by_hash($data->record->qualification_pdf);
+                if ($file) {
+                    $qualification_pdf_url = moodle_url::make_pluginfile_url(
+                        $file->get_contextid(),
+                        $file->get_component(),
+                        $file->get_filearea(),
+                        $file->get_itemid(),
+                        $file->get_filepath(),
+                        $file->get_filename()
+                    );
+                }
+            }
+
 			$fields = [
 				'name' => $data->record->title . ' ' . $data->record->firstname . ' ' . $data->record->lastname,
 				'title' => $data->record->title,
@@ -155,6 +171,8 @@ class process_form extends moodleform {
 				'p16feperiod' => $data->record->p16feperiod,
 				'training' => $data->record->training,
 				'trainingperiod' => $data->record->trainingperiod,
+                'highest_prof_qualification' => $data->record->highest_prof_qualification,
+                'qualification_verified' => $data->record->qualification_verified,
 				'prof_level' => $data->record->prof_level,
 				'prof_award' => $data->record->prof_award,
 				'prof_date_formatted' => $prof_date_formatted,
@@ -278,8 +296,31 @@ class process_form extends moodleform {
 			if ($data->button_text == 'approve') {
 				$mform->setExpanded('prof_qual_head');
 			}
-			$mform->addElement('static', 'prof_level', get_string('prof_level', 'local_obu_application'));
-			$mform->addElement('static', 'prof_award', get_string('prof_award', 'local_obu_application'));
+            $highest_prof_qualification = $data->record->highest_prof_qualification ?? null;
+            if (!empty($highest_prof_qualification)) {
+                $mform->addElement('static', 'highest_prof_qualification', get_string('qualification', 'local_obu_application'));
+                if ($qualification_pdf_url) {
+                    $mform->addElement('static', 'qualification_pdf', get_string('qual_cert_preamble', 'local_obu_application'),
+                        html_writer::tag('a', get_string('view_qual_cert', 'local_obu_application'), ['href' => $qualification_pdf_url, 'target' => '_blank'])
+                    );
+                } else {
+                    $mform->addElement('static', 'qualification_pdf', get_string('qual_cert_preamble', 'local_obu_application'),
+                        get_string('no_qual_cert', 'local_obu_application'));
+                }
+                if ($data->button_text == 'approve' && $data->record->approval_level == 1) {
+                    $mform->addElement('advcheckbox', 'qualification_verified', get_string('qualification_verified', 'local_obu_application'), null, null, array(0, 1));
+                } else {
+                    if ($data->record->qualification_verified == 1) {
+                        $qualification_verified_formatted = '&#10004;'; // Tick
+                    } else {
+                        $qualification_verified_formatted = '&#10008;'; // Cross
+                    }
+                    $mform->addElement('static', 'qualification_verified_formatted', get_string('qualification_verified', 'local_obu_application'), $qualification_verified_formatted);
+                }
+            } else {
+                $mform->addElement('static', 'prof_level', get_string('prof_level', 'local_obu_application'));
+                $mform->addElement('static', 'prof_award', get_string('prof_award', 'local_obu_application'));
+            }
 			$mform->addElement('static', 'prof_date_formatted', get_string('prof_date', 'local_obu_application'));
 			$mform->addElement('static', 'credit_formatted', get_string('credit', 'local_obu_application'));
 			$mform->addElement('static', 'credit_name', get_string('credit_name', 'local_obu_application'));

@@ -1510,6 +1510,10 @@ function local_obu_application_update_workflow(&$application, $approved = true, 
 
 	$approver_email = '';
 
+	if (isset($data->qualification_verified) && is_numeric($data->qualification_verified)) {
+		$application->qualification_verified = ($data->qualification_verified == 1) ? 1 : 0;
+	}
+
 	// Update the application record
 	if (($application->approval_level == 0) && ($application->manager_email != '')) { // Submitter (with a programme administrator/manager)
 		$application->approval_level = 1;
@@ -1847,5 +1851,4 @@ function local_obu_application_get_file_link($file_pathnamehash) {
 
 	return '<a href="' . $url . '">' . $file->get_filename() . '</a>';
 }
-
 ?>
