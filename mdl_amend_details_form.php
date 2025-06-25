@@ -110,7 +110,7 @@ class mdl_amend_details_form extends moodleform {
 			$errors['birth_code'] = get_string('value_required', 'local_obu_application');
 		}
 		
-		if ((mktime() - $data['birthdate']) < 504921600) { // Must be at least 16 years old!
+		if ((time() - $data['birthdate']) < 504921600) { // Must be at least 16 years old!
 			$errors['birthdate'] = get_string('invalid_date', 'local_obu_application');
 		}
 		
