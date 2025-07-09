@@ -36,8 +36,6 @@ class registration_form extends moodleform {
 
         $mform = $this->_form;
 
-        $mform->
-
         $data = new stdClass();
 		$data->titles = $this->_customdata['titles'];
         $data->email_label = $this->_customdata['email_label'];
