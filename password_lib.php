@@ -25,12 +25,7 @@
  *
  */
 
-if (!defined('PWRESET_STATUS_NOEMAILSENT')) {
-    define('PWRESET_STATUS_NOEMAILSENT', 0);
-    define('PWRESET_STATUS_TOKENSENT', 1);
-    define('PWRESET_STATUS_ALREADYSENT', 2);
-    define('PWRESET_STATUS_OTHEREMAILSENT', 3);
-}
+require_once(__DIR__ . '/../../login/lib.php');
 
 function local_obu_application_password_reset_request() {
     global $DB, $OUTPUT, $CFG, $PAGE;
