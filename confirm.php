@@ -25,8 +25,10 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
- 
-require('../../config.php');
+
+require(__DIR__ . '/../../config.php');
+require_once($CFG->libdir . '/authlib.php');
+
 require_once('./hide_moodle.php');
 require_once('./locallib.php');
 
