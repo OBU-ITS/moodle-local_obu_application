@@ -25,6 +25,8 @@
  *
  */
 
+require_once(__DIR__ . '/../../login/lib.php');
+
 function local_obu_application_password_reset_request() {
     global $DB, $OUTPUT, $CFG, $PAGE;
 
