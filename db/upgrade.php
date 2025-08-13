@@ -925,7 +925,7 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
         upgrade_plugin_savepoint(true, 2025021801, 'local', 'obu_application');
     }
 
-    if ($oldversion < 2025081301) {
+    if ($oldversion < 2025081302) {
 
         // ---- Table: local_obu_applicant ----
         $table = new xmldb_table('local_obu_applicant');
@@ -950,15 +950,15 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
                 null,
                 null,          // now nullable
                 null,
-                ''             // keep default in object for next step
+                null             // keep default in object for next step
             );
             $dbman->change_field_notnull($table, $fieldnullable);
 
             // 2) Normalise data: '' -> NULL.
             $DB->execute("UPDATE {local_obu_applicant} SET visa_requirement = NULL WHERE visa_requirement = ''");
 
-            // 3) Drop default.
-            $dbman->drop_field_default($table, $fieldnullable);
+            // 3) Change default.
+            $dbman->change_field_default($table, $fieldnullable);
         }
 
         // ---- Table: local_obu_application ----
@@ -984,19 +984,19 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
                 null,
                 null,          // now nullable
                 null,
-                ''             // keep default in object for next step
+                null             // keep default in object for next step
             );
             $dbman->change_field_notnull($table2, $fieldnullable2);
 
             // 2) Normalise data: '' -> NULL.
             $DB->execute("UPDATE {local_obu_application} SET visa_requirement = NULL WHERE visa_requirement = ''");
 
-            // 3) Drop default.
-            $dbman->drop_field_default($table2, $fieldnullable2);
+            // 3) Change default.
+            $dbman->change_field_default($table2, $fieldnullable2);
         }
 
         // Savepoint.
-        upgrade_plugin_savepoint(true, 2025081301, 'local', 'obu_application');
+        upgrade_plugin_savepoint(true, 2025081302, 'local', 'obu_application');
     }
 
     return $result;
