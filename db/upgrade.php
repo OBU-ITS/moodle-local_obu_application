@@ -925,5 +925,79 @@ function xmldb_local_obu_application_upgrade($oldversion = 0) {
         upgrade_plugin_savepoint(true, 2025021801, 'local', 'obu_application');
     }
 
+    if ($oldversion < 2025081301) {
+
+        // ---- Table: local_obu_applicant ----
+        $table = new xmldb_table('local_obu_applicant');
+
+        // Define field as it currently exists: CHAR(10) NOT NULL DEFAULT ''.
+        $fieldcurrent = new xmldb_field(
+            'visa_requirement',
+            XMLDB_TYPE_CHAR,
+            '10',
+            null,
+            XMLDB_NOTNULL,   // currently NOT NULL
+            null,
+            ''               // current default is empty string
+        );
+
+        if ($dbman->field_exists($table, $fieldcurrent)) {
+            // 1) Change NOT NULL -> NULLABLE.
+            $fieldnullable = new xmldb_field(
+                'visa_requirement',
+                XMLDB_TYPE_CHAR,
+                '10',
+                null,
+                null,          // now nullable
+                null,
+                ''             // keep default in object for next step
+            );
+            $dbman->change_field_notnull($table, $fieldnullable);
+
+            // 2) Normalise data: '' -> NULL.
+            $DB->execute("UPDATE {local_obu_applicant} SET visa_requirement = NULL WHERE visa_requirement = ''");
+
+            // 3) Drop default.
+            $dbman->drop_field_default($table, $fieldnullable);
+        }
+
+        // ---- Table: local_obu_application ----
+        $table2 = new xmldb_table('local_obu_application');
+
+        // Define field as it currently exists: CHAR(10) NOT NULL DEFAULT ''.
+        $fieldcurrent2 = new xmldb_field(
+            'visa_requirement',
+            XMLDB_TYPE_CHAR,
+            '10',
+            null,
+            XMLDB_NOTNULL,   // currently NOT NULL
+            null,
+            ''               // current default is empty string
+        );
+
+        if ($dbman->field_exists($table2, $fieldcurrent2)) {
+            // 1) Change NOT NULL -> NULLABLE.
+            $fieldnullable2 = new xmldb_field(
+                'visa_requirement',
+                XMLDB_TYPE_CHAR,
+                '10',
+                null,
+                null,          // now nullable
+                null,
+                ''             // keep default in object for next step
+            );
+            $dbman->change_field_notnull($table2, $fieldnullable2);
+
+            // 2) Normalise data: '' -> NULL.
+            $DB->execute("UPDATE {local_obu_application} SET visa_requirement = NULL WHERE visa_requirement = ''");
+
+            // 3) Drop default.
+            $dbman->drop_field_default($table2, $fieldnullable2);
+        }
+
+        // Savepoint.
+        upgrade_plugin_savepoint(true, 2025081301, 'local', 'obu_application');
+    }
+
     return $result;
 }
