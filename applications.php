@@ -46,7 +46,7 @@ if (($user_id == 0) || ($user_id == $USER->id)) {
 } else {
     $user = $DB->get_record('user', array('id' => $user_id));
     if (!$user) {
-        print_error('invaliduserid');
+        throw new \moodle_exception('invaliduserid');
     }
     $currentuser = false; // If we're looking at someone else's forms we may need to lock/remove some UI elements
 	$heading = get_string('applications', 'local_obu_application') . ': ' . $user->firstname . ' ' . $user->lastname;

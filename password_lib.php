@@ -52,7 +52,7 @@ function local_obu_application_password_reset_request() {
                 if (local_obu_application_email_password_change_info($user)) {
                     $pwresetstatus = PWRESET_STATUS_OTHEREMAILSENT;
                 } else {
-                    print_error('cannotmailconfirm');
+                    throw new \moodle_exception('cannotmailconfirm');
                 }
             } else {
                 // The account the requesting user claims to be is entitled to change their password.
@@ -87,7 +87,7 @@ function local_obu_application_password_reset_request() {
                     if ($sendresult) {
                         $pwresetstatus = PWRESET_STATUS_TOKENSENT;
                     } else {
-                        print_error('cannotmailconfirm');
+                        throw new \moodle_exception('cannotmailconfirm');
                     }
                 }
             }
@@ -184,13 +184,13 @@ function local_obu_application_password_set($token) {
     if ($user->auth === 'nologin') {
         // Bad luck - user is not able to login, do not let them set password.
         echo $OUTPUT->header();
-        print_error('forgotteninvalidurl');
+        throw new \moodle_exception('forgotteninvalidurl');
         die; // Never reached.
     }
 
     // Check this isn't guest user.
     if (isguestuser($user)) {
-        print_error('cannotresetguestpwd');
+        throw new \moodle_exception('cannotresetguestpwd');
     }
 
     // Token is correct, and unexpired.
@@ -218,7 +218,7 @@ function local_obu_application_password_set($token) {
         $DB->delete_records('user_password_resets', array('id' => $user->tokenid));
         $userauth = get_auth_plugin($user->auth);
         if (!$userauth->user_update_password($user, $data->password)) {
-            print_error('errorpasswordupdate', 'auth');
+            throw new \moodle_exception('errorpasswordupdate', 'auth');
         }
         // Reset login lockout (if present) before a new password is set.
         login_unlock_account($user);
