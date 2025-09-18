@@ -90,6 +90,7 @@ class profile_professional_qualification_form extends moodleform {
             'accepted_types' => ['.pdf','.png','.jpg','.jpeg']
         ]);
         $mform->hideIf('qualification_pdf', 'highest_prof_qualification', 'eq', self::NOQUAL_CODE);
+        $mform->disabledIf('qualification_pdf', 'highest_prof_qualification', 'eq', self::NOQUAL_CODE);
         $mform->setDefault('qualification_pdf', $draftitemid);
         $mform->addElement('hidden', 'prof_level');
         $mform->setType('prof_level', PARAM_TEXT);
@@ -127,11 +128,14 @@ class profile_professional_qualification_form extends moodleform {
             }
         }
 
-        $draftid = (int)($data['qualification_pdf'] ?? 0);
+        $selectedQualification = $data['highest_prof_qualification'];
+        if ($selectedQualification !== self::NOQUAL_CODE) {
+            $draftid = (int)($data['qualification_pdf'] ?? 0);
 
-        $info = file_get_draft_area_info($draftid);
-        if (empty($info['filecount'])) {
-            $errors['qualification_pdf'] = get_string('value_required', 'local_obu_application');
+            $info = file_get_draft_area_info($draftid);
+            if (empty($info['filecount'])) {
+                $errors['qualification_pdf'] = get_string('value_required', 'local_obu_application');
+            }
         }
 
         if (!empty($errors)) {
