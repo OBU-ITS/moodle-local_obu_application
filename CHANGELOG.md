@@ -5,6 +5,12 @@
 
 ---
 
+## 3.3.0.1 – Hotfix
+**Date:** 2025-09-18  
+**Highlights:**
+- Prevent Highest Qualification certificate upload when 'No formal qualifications' is selected.
+- Making Highest Qualification Certificate field mandatory
+
 ## 3.3.0.0 – Minor Change
 **Date:** 2025-09-09  
 **Highlights:**
