@@ -27,12 +27,12 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
+global $CFG;
 
 require_once($CFG->libdir . '/formslib.php');
+require_once($CFG->dirroot . '/local/obu_application/lib.php');
 
 class mdl_qualification_form extends moodleform {
-
-    const NOQUAL_CODE = 'X0004';
 
     function definition() {
         $mform =& $this->_form;
@@ -100,11 +100,11 @@ class mdl_qualification_form extends moodleform {
             $mform->setType('code', PARAM_TEXT);
 
             //making sure 'No qualifications' code can't be changed as it will break pdf box for applicants.
-            $isreserved = !empty($data->record) && ($data->record->code === self::NOQUAL_CODE);
+            $isreserved = !empty($data->record) && ($data->record->code === LOCAL_OBU_APPLICATION_NOQUAL_CODE);
             if ($isreserved) {
                 $mform->freeze('code');
                 $mform->addElement('static', 'code_locked_note', '',
-                    get_string('reserved_noqual_code_locked', 'local_obu_application', self::NOQUAL_CODE));
+                    get_string('reserved_noqual_code_locked', 'local_obu_application', LOCAL_OBU_APPLICATION_NOQUAL_CODE));
             }
 
             $mform->addElement('text', 'label', get_string('label', 'local_obu_application'), 'size="75" maxlength="255"');
@@ -146,9 +146,9 @@ class mdl_qualification_form extends moodleform {
 
         if (isset($data['submitbutton']) && ($data['submitbutton'] == get_string('save', 'local_obu_application'))) {
             if (!empty($data['id'])) {
-                $current = $DB->get_record('local_obu_qualifications', ['id' => $data['id']], 'id, code', MUST_EXIST);
-                if ($current->code === self::NOQUAL_CODE && $data['code'] !== self::NOQUAL_CODE) {
-                    $errors['code'] = get_string('reserved_noqual_code_cannot_edit', 'local_obu_application', self::NOQUAL_CODE);
+                $currentQualification = $DB->get_record('local_obu_qualifications', ['id' => $data['id']], 'id, code', MUST_EXIST);
+                if ($currentQualification->code === LOCAL_OBU_APPLICATION_NOQUAL_CODE && $data['code'] !== LOCAL_OBU_APPLICATION_NOQUAL_CODE) {
+                    $errors['code'] = get_string('reserved_noqual_code_cannot_edit', 'local_obu_application', LOCAL_OBU_APPLICATION_NOQUAL_CODE);
                 }
             }
             if ($data['code'] == '') {

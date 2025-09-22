@@ -24,6 +24,10 @@
  * @copyright  2021, Oxford Brookes University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+if (!defined('LOCAL_OBU_APPLICATION_NOQUAL_CODE')) {
+    define('LOCAL_OBU_APPLICATION_NOQUAL_CODE', 'X0004');
+}
  
 function local_obu_application_extend_navigation($navigation) {
 	

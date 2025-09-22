@@ -660,8 +660,7 @@ function local_obu_application_write_educational_establishments($user_id, $form_
 function local_obu_application_write_professional_qualification($user_id, $form_data) {
     global $DB, $CFG;
     require_once("{$CFG->libdir}/filelib.php");
-
-    $no_formal_qual_code = 'X0004';
+    require_once($CFG->dirroot . '/local/obu_application/lib.php');
 
     $record = local_obu_application_read_applicant($user_id, false); // May not exist yet
     if ($record === false) {
@@ -696,7 +695,7 @@ function local_obu_application_write_professional_qualification($user_id, $form_
 
     $context = context_user::instance($user_id);
     $draftid = (int)($form_data->qualification_pdf ?? 0);
-    $isNoQual = ($selected_code === $no_formal_qual_code);
+    $isNoQual = ($selected_code === LOCAL_OBU_APPLICATION_NOQUAL_CODE);
 
     if ($isNoQual) {
 

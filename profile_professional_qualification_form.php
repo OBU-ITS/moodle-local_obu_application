@@ -27,12 +27,13 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
+global $CFG;
 
 require_once($CFG->libdir . '/formslib.php');
+require_once($CFG->dirroot . '/local/obu_application/lib.php');
 
 class profile_professional_qualification_form extends moodleform {
 
-    const NOQUAL_CODE = 'X0004';
     function definition() {
         global $CFG, $DB, $USER;
         require_once($CFG->libdir . '/filelib.php'); // Ensure file API is included
@@ -89,8 +90,8 @@ class profile_professional_qualification_form extends moodleform {
             'maxbytes' => 5242880, // 5MB
             'accepted_types' => ['.pdf','.png','.jpg','.jpeg']
         ]);
-        $mform->hideIf('qualification_pdf', 'highest_prof_qualification', 'eq', self::NOQUAL_CODE);
-        $mform->disabledIf('qualification_pdf', 'highest_prof_qualification', 'eq', self::NOQUAL_CODE);
+        $mform->hideIf('qualification_pdf', 'highest_prof_qualification', 'eq', LOCAL_OBU_APPLICATION_NOQUAL_CODE);
+        $mform->disabledIf('qualification_pdf', 'highest_prof_qualification', 'eq', LOCAL_OBU_APPLICATION_NOQUAL_CODE);
         $mform->setDefault('qualification_pdf', $draftitemid);
         $mform->addElement('hidden', 'prof_level');
         $mform->setType('prof_level', PARAM_TEXT);
@@ -129,7 +130,7 @@ class profile_professional_qualification_form extends moodleform {
         }
 
         $selectedQualification = $data['highest_prof_qualification'];
-        if ($selectedQualification !== self::NOQUAL_CODE) {
+        if ($selectedQualification !== LOCAL_OBU_APPLICATION_NOQUAL_CODE) {
             $draftid = (int)($data['qualification_pdf'] ?? 0);
 
             $info = file_get_draft_area_info($draftid);
