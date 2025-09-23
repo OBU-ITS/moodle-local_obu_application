@@ -58,7 +58,7 @@ class profile_professional_qualification_form extends moodleform {
         }
 
         $fields = [
-            'highest_prof_qualification' => $data->record->highest_prof_qualification ?? '',
+            'highest_prof_qualification' => $data->record->highest_prof_qual_code ?? '',
             'qualification_certificate' => $draftitemid,
             'prof_level' => $data->record->prof_level,
             'prof_award' => $data->record->prof_award,
@@ -83,7 +83,7 @@ class profile_professional_qualification_form extends moodleform {
         // Professional qualification
         $mform->addElement('html', '<p><strong>' . get_string('prof_qual_preamble', 'local_obu_application') . '</strong></p>');
         $mform->addElement('select', 'highest_prof_qualification', '', $qualification_options);
-        $mform->setType('highest_prof_qualification', PARAM_TEXT);
+        $mform->setType('highest_prof_qualification', PARAM_ALPHANUMEXT);
         $mform->addRule('highest_prof_qualification', null, 'required', null, 'server');
         $mform->addElement('html', '<p><strong>' . get_string('qual_cert_preamble', 'local_obu_application') . '</strong></p>');
         $mform->addElement('filepicker', 'qualification_pdf', '', null, [
