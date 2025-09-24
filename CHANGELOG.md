@@ -5,13 +5,13 @@
 
 ---
 
-## 3.3.1.0 – Hotfix
+## 3.3.1 – Hotfix
 **Date:** 2025-09-18  
 **Highlights:**
 - Prevent Highest Qualification certificate upload when 'No formal qualifications' is selected.
 - Making Highest Qualification Certificate field mandatory
 
-## 3.3.0.0 – Minor Change
+## 3.3.0 – Minor Change
 **Date:** 2025-09-09  
 **Highlights:**
 - Removing use of deprecated <b>print_error</b> function, replacing with Moodle exception.
