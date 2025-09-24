@@ -669,7 +669,7 @@ function local_obu_application_write_professional_qualification($user_id, $form_
         $record->userid = $user_id;
     }
 
-    $selected_code = trim($form_data->highest_prof_qualification ?? '');
+    $selected_code = $form_data->highest_prof_qualification ?? '';
     $qualification_text = $DB->get_field('local_obu_qualifications', 'crm_dropdown_text', ['code' => $selected_code]);
 
     $record->highest_prof_qualification = $qualification_text;
@@ -696,9 +696,9 @@ function local_obu_application_write_professional_qualification($user_id, $form_
     $context = context_user::instance($user_id);
     $draftid = (int)($form_data->qualification_pdf ?? 0);
 
-    $profQualCode = ($record->highest_prof_qual_code ?? '');
+    $professionalQualificationCode = $record->highest_prof_qual_code;
 
-    if ($profQualCode === LOCAL_OBU_APPLICATION_NOQUAL_CODE || $profQualCode === '') {
+    if ($professionalQualificationCode === LOCAL_OBU_APPLICATION_NOQUAL_CODE || $professionalQualificationCode === '') {
 
         if ($draftid) {
             $usercontext = context_user::instance($user_id);

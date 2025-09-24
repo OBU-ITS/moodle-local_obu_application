@@ -1,11 +1,11 @@
 # Student Experience Team | OBU Application ChangeLog
 
-> Keep entries newest → oldest. Use 4-part versions (e.g., 2.1.4.2).  
-> Release types: Major Release | Minor Release | Revision | Hotfix
+> Keep entries newest → oldest.
+> For release type definitions, see [Release Number Guidance](https://docs.google.com/document/d/1euRIJDufVxGANp1hyOA0arLS_4nlu1INFMZSadTvwdw/edit?tab=t.0)
 
 ---
 
-## 3.3.0.1 – Hotfix
+## 3.3.1.0 – Hotfix
 **Date:** 2025-09-18  
 **Highlights:**
 - Prevent Highest Qualification certificate upload when 'No formal qualifications' is selected.
