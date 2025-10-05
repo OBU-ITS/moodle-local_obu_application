@@ -36,6 +36,9 @@ require_once ('./profile_professional_qualification_form.php');
 require_once ('./profile_current_employment_form.php');
 require_once ('./profile_professional_registration_form.php');
 require_once ('./profile_criminal_record_form.php');
+require_once ('./lib.php');
+
+global $CFG, $USER;
 
 // Try to prevent searching for sites that allow sign-up.
 if (!isset($CFG->additionalhtmlhead)) {
@@ -166,6 +169,25 @@ echo $OUTPUT->header();
             }
         }
 
+        //refresh record after possible form inputs to ensure latest info
+        $record = local_obu_application_read_applicant($USER->id, false);
+
+        $professionalQualificationComplete  = false;
+
+        if ($professionalQualificationForm->is_submitted() && !$professionalQualificationForm->is_validated()){
+            $professionalQualificationComplete = false;
+        } elseif (!empty($record) && !empty($record->highest_prof_qual_code)) {
+            $professionalQualificationComplete = true;
+
+            if ($record->highest_prof_qual_code !== LOCAL_OBU_APPLICATION_NOQUAL_CODE) {
+                // Otherwise require at least one file saved in the file area.
+                $fs      = get_file_storage();
+                $context = context_user::instance($USER->id);
+                $files   = $fs->get_area_files($context->id, 'local_obu_application', 'qualification_pdf', $record->id, 'id DESC', false);
+                $professionalQualificationComplete = !empty($files);
+            }
+        }
+
         if ($currentEmploymentForm_data = $currentEmploymentForm->get_data()) {
             if ($currentEmploymentForm_data->submitbutton == get_string('save', 'local_obu_application')) {
                 local_obu_application_write_current_employment($USER->id, $currentEmploymentForm_data);
@@ -243,6 +265,7 @@ echo $OUTPUT->header();
             && $record->personal_details_update
             && $record->edu_establishments_update
             && $record->pro_qualification_update
+            && $professionalQualificationComplete
             && $record->current_employment_update
             && $record->pro_registration_update
             && $record->criminal_record_update) {

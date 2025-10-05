@@ -27,8 +27,10 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
+global $CFG;
 
 require_once($CFG->libdir . '/formslib.php');
+require_once($CFG->dirroot . '/local/obu_application/lib.php');
 
 class mdl_qualification_form extends moodleform {
 
@@ -96,6 +98,15 @@ class mdl_qualification_form extends moodleform {
         } else {
             $mform->addElement('text', 'code', get_string('code', 'local_obu_application'), 'size="10" maxlength="5"');
             $mform->setType('code', PARAM_TEXT);
+
+            //making sure 'No qualifications' code can't be changed as it will break pdf box for applicants.
+            $isreserved = !empty($data->record) && ($data->record->code === LOCAL_OBU_APPLICATION_NOQUAL_CODE);
+            if ($isreserved) {
+                $mform->freeze('code');
+                $mform->addElement('static', 'code_locked_note', '',
+                    get_string('reserved_noqual_code_locked', 'local_obu_application', LOCAL_OBU_APPLICATION_NOQUAL_CODE));
+            }
+
             $mform->addElement('text', 'label', get_string('label', 'local_obu_application'), 'size="75" maxlength="255"');
             $mform->setType('label', PARAM_TEXT);
             $mform->addElement('text', 'priority', get_string('priority', 'local_obu_application'), 'size="1" maxlength="2"');
@@ -134,6 +145,12 @@ class mdl_qualification_form extends moodleform {
         $errors = parent::validation($data, $files);
 
         if (isset($data['submitbutton']) && ($data['submitbutton'] == get_string('save', 'local_obu_application'))) {
+            if (!empty($data['id'])) {
+                $currentQualification = $DB->get_record('local_obu_qualifications', ['id' => $data['id']], 'id, code', MUST_EXIST);
+                if ($currentQualification->code === LOCAL_OBU_APPLICATION_NOQUAL_CODE && $data['code'] !== LOCAL_OBU_APPLICATION_NOQUAL_CODE) {
+                    $errors['code'] = get_string('reserved_noqual_code_cannot_edit', 'local_obu_application', LOCAL_OBU_APPLICATION_NOQUAL_CODE);
+                }
+            }
             if ($data['code'] == '') {
                 $errors['code'] = get_string('value_required', 'local_obu_application');
             } elseif (!preg_match('/^[A-Z][0-9]{4}$/', $data['code'])) { // Example: D0000, M0016

@@ -99,7 +99,7 @@ function local_obu_application_application_user_signup($user) { // Derived from 
 	local_obu_application_write_contact_details($user->id, $user);
 
 	if (!local_obu_application_send_application_confirmation_email($user)) {
-		print_error('auth_emailnoemail', 'auth_email');
+        throw new \moodle_exception('auth_emailnoemail', 'auth_email');
 	}
 
 	$PAGE->set_title(get_string('browsertitle', 'local_obu_application'), false);

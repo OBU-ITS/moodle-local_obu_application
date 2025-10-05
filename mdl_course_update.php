@@ -59,9 +59,9 @@ if ($form_data = $mform->get_data()) {
 	$readcount = $cir->load_csv_content($content, 'UTF-8', 'comma');
 	unset($content);
 	if ($readcount === false) {
-		print_error('csvfileerror', 'local_obu_application', $url, $cir->get_error());
+        throw new \moodle_exception('csvfileerror', 'local_obu_application', $url, $cir->get_error());
 	} else if ($readcount == 0) {
-		print_error('csvemptyfile', 'error', $url, $cir->get_error());
+        throw new \moodle_exception('csvemptyfile', 'error', $url, $cir->get_error());
 	}
 
 	// Loop over the CSV lines

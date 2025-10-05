@@ -660,6 +660,7 @@ function local_obu_application_write_educational_establishments($user_id, $form_
 function local_obu_application_write_professional_qualification($user_id, $form_data) {
     global $DB, $CFG;
     require_once("{$CFG->libdir}/filelib.php");
+    require_once($CFG->dirroot . '/local/obu_application/lib.php');
 
     $record = local_obu_application_read_applicant($user_id, false); // May not exist yet
     if ($record === false) {
@@ -668,7 +669,7 @@ function local_obu_application_write_professional_qualification($user_id, $form_
         $record->userid = $user_id;
     }
 
-    $selected_code = $form_data->highest_prof_qualification;
+    $selected_code = $form_data->highest_prof_qualification ?? '';
     $qualification_text = $DB->get_field('local_obu_qualifications', 'crm_dropdown_text', ['code' => $selected_code]);
 
     $record->highest_prof_qualification = $qualification_text;
@@ -692,24 +693,54 @@ function local_obu_application_write_professional_qualification($user_id, $form_
         $DB->update_record('local_obu_applicant', $record);
     }
 
-    if (!empty($form_data->qualification_pdf)) {
+    $context = context_user::instance($user_id);
+    $draftid = (int)($form_data->qualification_pdf ?? 0);
+
+    $professionalQualificationCode = $record->highest_prof_qual_code;
+
+    if ($professionalQualificationCode === LOCAL_OBU_APPLICATION_NOQUAL_CODE || $professionalQualificationCode === '') {
+
+        if ($draftid) {
+            $usercontext = context_user::instance($user_id);
+            $fs = get_file_storage();
+            $fs->delete_area_files($usercontext->id, 'user', 'draft', $draftid);
+        }
+
         $fs = get_file_storage();
-        $context = context_user::instance($user_id);
+        $fs->delete_area_files($context->id, 'local_obu_application', 'qualification_pdf', $record->id);
 
-        file_save_draft_area_files(
-            $form_data->qualification_pdf,
-            $context->id,
-            'local_obu_application',
-            'qualification_pdf',
-            $record->id,
-            ['subdirs' => false, 'maxfiles' => 1, 'accepted_types' => ['.pdf']]
-        );
-
-        $files = $fs->get_area_files($context->id, 'local_obu_application', 'qualification_pdf', $record->id, 'timemodified', false);
-        if ($files) {
-            $file = reset($files);
-            $record->qualification_pdf = $file->get_pathnamehash();
+        if (!empty($record->qualification_pdf)) {
+            $record->qualification_pdf = null;
             $DB->update_record('local_obu_applicant', $record);
+        }
+    } else {
+        if ($draftid) {
+            file_save_draft_area_files(
+                $draftid,
+                $context->id,
+                'local_obu_application',
+                'qualification_pdf',
+                $record->id,
+                [
+                    'subdirs'   => 0,
+                    'maxfiles'  => 1,
+                ]
+            );
+
+            $fs = get_file_storage();
+            $files = $fs->get_area_files(
+                $context->id,
+                'local_obu_application',
+                'qualification_pdf',
+                $record->id,
+                'timemodified',
+                false
+            );
+            if ($files) {
+                $file = reset($files);
+                $record->qualification_pdf = $file->get_pathnamehash();
+                $DB->update_record('local_obu_applicant', $record);
+            }
         }
     }
 

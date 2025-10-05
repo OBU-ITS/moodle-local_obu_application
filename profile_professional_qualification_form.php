@@ -27,8 +27,10 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
+global $CFG;
 
 require_once($CFG->libdir . '/formslib.php');
+require_once($CFG->dirroot . '/local/obu_application/lib.php');
 
 class profile_professional_qualification_form extends moodleform {
 
@@ -56,7 +58,7 @@ class profile_professional_qualification_form extends moodleform {
         }
 
         $fields = [
-            'highest_prof_qualification' => $data->record->highest_prof_qualification ?? '',
+            'highest_prof_qualification' => $data->record->highest_prof_qual_code ?? '',
             'qualification_certificate' => $draftitemid,
             'prof_level' => $data->record->prof_level,
             'prof_award' => $data->record->prof_award,
@@ -81,13 +83,15 @@ class profile_professional_qualification_form extends moodleform {
         // Professional qualification
         $mform->addElement('html', '<p><strong>' . get_string('prof_qual_preamble', 'local_obu_application') . '</strong></p>');
         $mform->addElement('select', 'highest_prof_qualification', '', $qualification_options);
-        $mform->setType('highest_prof_qualification', PARAM_TEXT);
+        $mform->setType('highest_prof_qualification', PARAM_ALPHANUMEXT);
         $mform->addRule('highest_prof_qualification', null, 'required', null, 'server');
         $mform->addElement('html', '<p><strong>' . get_string('qual_cert_preamble', 'local_obu_application') . '</strong></p>');
         $mform->addElement('filepicker', 'qualification_pdf', '', null, [
             'maxbytes' => 5242880, // 5MB
             'accepted_types' => ['.pdf','.png','.jpg','.jpeg']
         ]);
+        $mform->hideIf('qualification_pdf', 'highest_prof_qualification', 'eq', LOCAL_OBU_APPLICATION_NOQUAL_CODE);
+        $mform->disabledIf('qualification_pdf', 'highest_prof_qualification', 'eq', LOCAL_OBU_APPLICATION_NOQUAL_CODE);
         $mform->setDefault('qualification_pdf', $draftitemid);
         $mform->addElement('hidden', 'prof_level');
         $mform->setType('prof_level', PARAM_TEXT);
@@ -122,6 +126,16 @@ class profile_professional_qualification_form extends moodleform {
             }
             if ($data['credit_organisation'] == '') {
                 $errors['credit_organisation'] = get_string('value_required', 'local_obu_application');
+            }
+        }
+
+        $selectedQualification = $data['highest_prof_qualification'];
+        if ($selectedQualification !== LOCAL_OBU_APPLICATION_NOQUAL_CODE) {
+            $draftid = (int)($data['qualification_pdf'] ?? 0);
+
+            $info = file_get_draft_area_info($draftid);
+            if (empty($info['filecount'])) {
+                $errors['qualification_pdf'] = get_string('value_required', 'local_obu_application');
             }
         }
 
