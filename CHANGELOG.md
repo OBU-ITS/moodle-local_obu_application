@@ -8,6 +8,7 @@
 **Date:** 2026-04-22  
 **Highlights:**
 - Adding more courses to drop-down for international / distance learning students.
+- Fixed an issue with forms not saving text when publishing.
 
 ## 3.3.1 – Hotfix
 **Date:** 2025-09-18  
