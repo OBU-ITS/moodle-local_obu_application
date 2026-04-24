@@ -9,6 +9,7 @@
 **Highlights:**
 - Adding more courses to drop-down for international / distance learning students.
 - Fixed an issue with forms not saving text when publishing.
+- Fixing re-instate functionality and ensuring compatibility with formats of YYYYMMDDVV to allow for multiple updates in one date.
 
 ## 3.3.1 – Hotfix
 **Date:** 2025-09-18  

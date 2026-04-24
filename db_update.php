@@ -222,18 +222,22 @@ function local_obu_application_reinstate_supplement_form($author, $supplement) {
     global $DB;
     $home = new moodle_url('/');
 
-    $latest_version = local_obu_application_get_supplement_form($supplement->ref, true)->version;
-    $current_date_version = date('Ymd');
+    $latest_form = local_obu_application_get_supplement_form($supplement->ref, true);
 
-    if ($current_date_version <= $latest_version) {
-        $new_version = ++$latest_version;
-    } else {
-        $new_version = $current_date_version;
+    $current_date_version = (int)(date('Ymd') . '00');
+    $new_version = $current_date_version;
+
+    if ($latest_form){
+        $latest_form_version = (int)$latest_form->version;
+
+        if ($latest_form_version >= $current_date_version) {
+            $new_version = $latest_form_version + 1;
+        }
     }
 
     $record = new stdClass();
     $record->ref = $supplement->ref;
-    $record->version = $new_version;
+    $record->version = (string)$new_version;
     $record->author = $author;
     $record->date = time();
     $record->published = 0;
@@ -245,22 +249,23 @@ function local_obu_application_reinstate_supplement_form($author, $supplement) {
 }
 
 function local_obu_application_get_supplement_form($ref, $include_unpublished = false) { // Return the latest version of the supplement form
-    global $DB;
-
-    // Return the latest version
 	$supplement = null;
+    $latest_form_version = 0;
+
 	$supplements = local_obu_application_read_supplement_forms($ref);
+
 	foreach ($supplements as $s) {
-		if ($s->published || $include_unpublished) {
-			$supplement = $s;
+		if (!$s->published && !$include_unpublished) {
+			continue;
 		}
+
+        if ((int)$s->version > $latest_form_version) {
+            $latest_form_version = (int)$s->version;
+            $supplement = $s;
+        }
 	}
 
-	if ($supplement) {
-		return $supplement;
-	}
-
-	return false;
+	return $supplement ?: false;
 }
 
 function local_obu_application_get_supplement_form_by_version($ref, $version) {
