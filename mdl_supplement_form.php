@@ -77,9 +77,9 @@ class mdl_supplement_form extends moodleform {
 		
 		$mform->addElement('editor', 'template', get_string('supplement', 'local_obu_application'));
 		$mform->setType('template', PARAM_RAW);
-		$mform->disabledIf('template', 'published', 'checked');
 
 		if ($already_published) {
+            $mform->freeze('template');
 			$mform->addElement('hidden', 'already_published', 1);
 			$mform->setType('already_published', PARAM_RAW);
 			$mform->addElement('hidden', 'published', 1);
@@ -89,7 +89,6 @@ class mdl_supplement_form extends moodleform {
 			$mform->addElement('hidden', 'already_published', 0);
 			$mform->setType('already_published', PARAM_RAW);
 			$mform->addElement('advcheckbox', 'published', get_string('publish', 'local_obu_application'), get_string('publish_note', 'local_obu_application'), null, array(0, 1));
-			$mform->disabledIf('published', 'published', 'checked');
 		}
 
         if ($already_published) {
